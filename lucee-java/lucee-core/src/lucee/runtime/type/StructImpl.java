@@ -175,6 +175,14 @@ public class StructImpl extends StructSupport {
 		return map.remove(key);
 	}
 	
+	public Object remove(Collection.Key key, Object defaultValue) {
+		if(NullSupportHelper.full())return map.r(key,defaultValue);
+		Object obj= map.remove(key);
+		if(obj==null) return defaultValue;
+		return obj;
+	}
+	
+	
 	@Override
 	public void clear() {
 		map.clear();
