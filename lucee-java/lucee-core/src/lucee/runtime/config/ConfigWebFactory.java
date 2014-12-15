@@ -1155,27 +1155,6 @@ public final class ConfigWebFactory extends ConfigFactory {
 		 * "/resource/context/admin/plugin/DDNS/Action.cfc",f);
 		 */
 
-		// Plugin Simon
-		Resource simon = pluginDir.getRealResource("Simon");
-		if (!simon.exists())
-			simon.mkdirs();
-
-		f = simon.getRealResource("language.xml");
-		if (!f.exists())
-			createFileFromResourceEL("/resource/context/admin/plugin/Simon/language.xml", f);
-
-		f = simon.getRealResource("overview.cfm");
-		if (!f.exists())
-			createFileFromResourceEL("/resource/context/admin/plugin/Simon/overview.cfm", f);
-
-		f = simon.getRealResource("simon.swf.cfm");
-		if (!f.exists())
-			createFileFromResourceEL("/resource/context/admin/plugin/Simon/simon.swf.cfm", f);
-
-		f = simon.getRealResource("Action.cfc");
-		if (!f.exists())
-			createFileFromResourceEL("/resource/context/admin/plugin/Simon/Action.cfc", f);
-
 		// Plugin Note
 		Resource note = pluginDir.getRealResource("Note");
 		if (!note.exists())
