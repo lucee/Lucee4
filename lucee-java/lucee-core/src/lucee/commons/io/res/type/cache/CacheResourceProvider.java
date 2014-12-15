@@ -32,6 +32,7 @@ import lucee.commons.io.res.Resources;
 import lucee.commons.io.res.util.ResourceLockImpl;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
+import lucee.runtime.PageContext;
 import lucee.runtime.cache.ram.RamCache;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.engine.ThreadLocalPageContext;
@@ -55,7 +56,7 @@ public final class CacheResourceProvider implements ResourceProviderPro {
 	private ResourceLockImpl lock=new ResourceLockImpl(lockTimeout,caseSensitive);
 	private Map arguments;
 
-	private final Cache DEFAULT_CACHE=new RamCache();
+	private Cache defaultCache;
 
 	private Set<Integer> inits=new HashSet<Integer>();
 
@@ -223,7 +224,14 @@ public final class CacheResourceProvider implements ResourceProviderPro {
 	
 
 	public Cache getCache() {
-		Cache c = Util.getDefault(ThreadLocalPageContext.get(),ConfigImpl.CACHE_DEFAULT_RESOURCE,DEFAULT_CACHE);
+		
+		PageContext pc = ThreadLocalPageContext.get();
+		Cache c = Util.getDefault(pc,ConfigImpl.CACHE_DEFAULT_RESOURCE,null);
+		if(c==null) {
+			if(defaultCache==null)defaultCache=new RamCache().init(0, 0, RamCache.DEFAULT_CONTROL_INTERVAL);
+			c=defaultCache;
+		}
+		
 		if(!inits.contains(c.hashCode())){
 			String k = toKey("null","");
 			if(!c.contains(k)) {
