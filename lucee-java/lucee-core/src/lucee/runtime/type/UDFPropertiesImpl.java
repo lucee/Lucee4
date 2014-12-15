@@ -71,7 +71,6 @@ public final class UDFPropertiesImpl implements UDFProperties {
 		
 	}
 	
-	
 	public UDFPropertiesImpl(
 	        PageSource pageSource,
 	        FunctionArgument[] arguments,

@@ -127,7 +127,6 @@ public abstract class Function extends StatementBaseNoFinal implements Opcodes, 
 				}
     		);
 	
-	
 	private static final Method INIT_UDF_PROPERTIES_STRTYPE = new Method(
 			"<init>",
 			Types.VOID,
