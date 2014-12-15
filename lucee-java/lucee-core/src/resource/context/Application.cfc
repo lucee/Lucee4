@@ -26,6 +26,7 @@ component  {
 		,'thumbnail.cfm':''
 		,'admin.cfm':''
 		,'graph.cfm':''
+		,'update.cfm':''
 	};
 
 	this.name="webadmin";
