@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.lang.ParserString;
 import lucee.commons.lang.StringUtil;
+import lucee.runtime.db.driver.ConnectionProxy;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.sql.BlobImpl;
@@ -168,6 +169,7 @@ public class SQLUtil {
 	}
 	
 	public static boolean isOracle(Connection conn) {
+		if(conn instanceof ConnectionProxy) conn=((ConnectionProxy)conn).getConnection();
 		return StringUtil.indexOfIgnoreCase(conn.getClass().getName(), "oracle")!=-1;
 	}
 

@@ -50,9 +50,10 @@ public class ConnectionProxy implements Connection {
 		this.conn=conn;
 		this.factory=factory;
 	}
-
 	
-
+	public Connection getConnection() {
+		return conn;
+	}
 
 	@Override
 	public Statement createStatement() throws SQLException {
