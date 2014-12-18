@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfsilent>
+<cfsilent>
 	<cfset mapping=struct()>
 	<cfloop query="mappings">
 		<cfif mappings.virtual EQ url.virtual>
@@ -127,8 +110,8 @@
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="submit" name="subAction" value="#stText.Buttons.Update#">
-							<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="button cancel" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="bl button submit" name="subAction" value="#stText.Buttons.Update#">
+							<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="br button cancel" name="cancel" value="#stText.Buttons.Cancel#">
 						</td>
 					</tr>
 				</tfoot>
@@ -167,8 +150,8 @@ this.customtagpaths=["#mapping.virtual#"]=<cfif len(mapping.strPhysical) && !len
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.compileAll#">
-							<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="button cancel" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="bl button submit" name="subAction" value="#stText.Buttons.compileAll#">
+							<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="br button cancel" name="cancel" value="#stText.Buttons.Cancel#">
 						</td>
 					</tr>
 				</tfoot>
@@ -202,9 +185,9 @@ this.customtagpaths=["#mapping.virtual#"]=<cfif len(mapping.strPhysical) && !len
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button cancel" name="subAction" value="#stText.Buttons.downloadArchive#">
-							<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.addArchive#">
-							<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="button cancel" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="bl button cancel" name="subAction" value="#stText.Buttons.downloadArchive#">
+							<input type="submit" class="bm button submit" name="subAction" value="#stText.Buttons.addArchive#">
+							<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="br button cancel" name="cancel" value="#stText.Buttons.Cancel#">
 						</td>
 					</tr>
 				</tfoot>

@@ -53,8 +53,7 @@ public class DeployHandler {
 	
 	
 
-	private static final ResourceFilter ALL_EXT = new ExtensionResourceFilter(new String[]{".re",".ra",".ras"});
-	//private static final ResourceFilter ARCHIVE_EXT = new ExtensionResourceFilter(new String[]{".ra",".ras"});
+	private static final ResourceFilter ALL_EXT = new ExtensionResourceFilter(new String[]{".lex",".lar"});
 
 
 	public static void deploy(Config config){

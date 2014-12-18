@@ -244,7 +244,7 @@ Path placeholders:
  -->	
 		<mapping
 			readonly="yes"
-			virtual="/lucee-server-context/"
+			virtual="/lucee-server/"
 			physical="{lucee-server}/context/"
 			archive=""
 			primary="physical"
@@ -253,9 +253,9 @@ Path placeholders:
 			inspect-template="once"/>
 		<mapping
 			readonly="yes"
-			virtual="/lucee-context/"
+			virtual="/lucee/"
 			physical="{lucee-config}/context/"
-			archive="{lucee-config}/context/lucee-context.ra"
+			archive="{lucee-config}/context/lucee-context.lar"
 			primary="physical"
 			listener-mode="modern"
 			listener-type="curr2root"
@@ -282,9 +282,9 @@ Path placeholders:
 			access type of component data member (variables in this scope)
 	-->
 	<component 
-        base="/lucee-context/Component.cfc"
+        base="/lucee/Component.cfc"
 		data-member-default-access="public"
-		dump-template="/lucee-context/component-dump.cfm">
+		dump-template="/lucee/component-dump.cfm">
   		<mapping virtual="/default" physical="{lucee-web}/components/" primary="physical" inspect-template="never"/>
 	</component>
 	
@@ -322,7 +322,7 @@ Path placeholders:
 	 -->
 	<debugging
 		log-memory-usage="no"
-		template="/lucee-context/templates/debugging/debugging.cfm"
+		template="/lucee/templates/debugging/debugging.cfm"
 		debug="no"
 		show-query-usage="no"/>
 	

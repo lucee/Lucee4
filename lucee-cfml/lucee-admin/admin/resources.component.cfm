@@ -1,28 +1,10 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- --->
 <cfset stText.Components.name="Name">
-<cfset stText.Components.nameMissing="Missing the name for the new Mapping, this name is used when you deploy a lucee Archive (.ra,.ras) based on this Mapping.">
-<cfset stText.Components.nameDesc="The name is used as identifier when you automaticly import a lucee Archive build based on this Mapping.">
+<cfset stText.Components.nameMissing="Missing the name for the new Mapping, this name is used when you deploy a Lucee Archive (.ra,.ras) based on this Mapping.">
+<cfset stText.Components.nameDesc="The name is used as identifier when you automaticly import a Lucee Archive build based on this Mapping.">
 <cfset stText.Components.PhysicalDesc="Directory path where the components are located, this path should not include the package.">
-<cfset stText.Components.archiveDesc="File path to a components lucee Archive (.ra or .ras).">
-<cfset stText.Components.PrimaryDesc="Defines where lucee does looks first for a requested component">
-<cfset stText.Components.trustedDesc="When does lucee checks for changes in the source file for a already loaded component">
+<cfset stText.Components.archiveDesc="File path to a components Lucee Archive (.ra or .ras).">
+<cfset stText.Components.PrimaryDesc="Defines where Lucee does looks first for a requested component">
+<cfset stText.Components.trustedDesc="When does Lucee checks for changes in the source file for a already loaded component">
 
 
 
@@ -110,11 +92,11 @@ Defaults --->
 					
 					
 					<cfif not doDownload>
-						<cfset target=expandPath("#cgi.context_path#/lucee-context/archives/"&filename)>
+						<cfset target=expandPath("#cgi.context_path#/lucee/archives/"&filename)>
 						<cfset count=0>
 						<cfwhile fileExists(target)>
 							<cfset count=count+1>
-							<cfset target="#cgi.context_path#/lucee-context/archives/"&filename>
+							<cfset target="#cgi.context_path#/lucee/archives/"&filename>
 							<cfset target=replace(target,'.'&ext,count&'.'&ext)>
 							<cfset target=expandPath(target)>
 						</cfwhile>

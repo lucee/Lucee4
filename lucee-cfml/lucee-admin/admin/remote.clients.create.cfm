@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfparam name="error" default="#struct(message:"",detail:"")#">
+<cfparam name="error" default="#struct(message:"",detail:"")#">
 <cfparam name="form.run" default="">
 <cfset stars="****************">
 
@@ -148,7 +131,7 @@ Error Output--->
 	<cfelse>
 		<cfset actionType="create">
 		<cfset rc.url_server="">
-		<cfset rc.url_path="/lucee-context/admin.cfc?wsdl">
+		<cfset rc.url_path="/lucee/admin.cfc?wsdl">
 		<cfset rc.serverpassword="">
 		<cfset rc.serverpasswordh="">
 		<cfset rc.adminpassword="">
@@ -315,8 +298,8 @@ Error Output--->
 			<tfoot>
 				<tr>
 					<td colspan="2">
-						<input type="submit" class="button submit" name="_run" value="#stText.Buttons[actionType]#">
-						<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="button cancel" name="cancel" value="#stText.Buttons.Cancel#">
+						<input type="submit" class="bl button submit" name="_run" value="#stText.Buttons[actionType]#">
+						<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="br button cancel" name="cancel" value="#stText.Buttons.Cancel#">
 					</td>
 				</tr>
 			</tfoot>

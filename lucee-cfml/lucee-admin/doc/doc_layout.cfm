@@ -1,35 +1,18 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfif thistag.executionmode == "start">
+<cfif thistag.executionmode == "start">
 
 	<cfexit method="exittemplate">
 </cfif>
 
 <cfparam name="cookie.lucee_admin_lang" default="en">
 <cfset session.lucee_admin_lang = cookie.lucee_admin_lang>
-<cfinclude template="/lucee-context/admin/resources/text.cfm">
+<cfinclude template="/lucee/admin/resources/text.cfm">
 
 <cfcontent reset="#true#">
 
 <cfset luceeVersion = listFirst( server.lucee.version, '.' ) & '.' & listGetAt( server.lucee.version, 2, '.' )>
 
-<cfparam name="Attributes.title" default="lucee Doc Refernce #luceeVersion#">
-<cfparam name="Attributes.description" default="lucee Tag, Function, and Member Methods Refernce for lucee #luceeVersion#">
+<cfparam name="Attributes.title" default="Lucee Doc Refernce #luceeVersion#">
+<cfparam name="Attributes.description" default="Lucee Tag, Function, and Member Methods Refernce for Lucee #luceeVersion#">
 
 
 <!DOCTYPE HTML>
@@ -60,7 +43,7 @@
 					&middot;
 					<a href="objects.cfm" class="objects">Objects</a>
 				</nav>
-				<div id="header-title">lucee #luceeVersion# Reference</div>
+				<div id="header-title">Lucee #luceeVersion# Reference</div>
 			</header>
 			<div id="content">
 				#thistag.generatedcontent#
@@ -78,9 +61,9 @@
 				</nav>
 				<br>
 				<div class="x-small" style="text-align: center;">
-					lucee Doc reference version #server.lucee.version#
+					Lucee Doc reference version #server.lucee.version#
 					<br>
-					&copy; #year( now() )# <a href="http://www.lucee.org/">Lucee Foundation</a>. All Rights Reserved.
+					&copy; #year( now() )# <a href="http://www.getlucee.com/">Lucee Technologies GmbH Switzerland</a>. All Rights Reserved.
 				</div>
 			</footer>
 		</div>	<!--- #wrapper !--->

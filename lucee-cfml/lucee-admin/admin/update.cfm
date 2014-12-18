@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfsetting showdebugoutput="false">
+<cfsetting showdebugoutput="false">
 
 <cfparam name="session.alwaysNew" default="true" type="boolean">
 
@@ -24,6 +7,7 @@
 	<cfargument name="update">
 	<cfset var http="">
 	<cftry>
+		<cfset systemOutput("HEREEE",true,true)>
 		<cfhttp 
 			url="#update.location#/lucee/remote/version/Info.cfc?method=getpatchversionfor&level=#server.ColdFusion.ProductLevel#&version=#server.lucee.version#" 
 			method="get" resolveurl="no" result="http">
@@ -70,7 +54,7 @@
 
 	<!--- Extensions --->
 		<cfparam name="err" default="#struct(message:"",detail:"")#">
-		<cfinclude template="extension.functions.cfm">
+		<cfinclude template="ext.functions.cfm">
 		<cfadmin 
 			action="getExtensions"
 			type="#adminType#"
@@ -83,11 +67,16 @@
 				type="#adminType#"
 				password="#password#"
 				returnVariable="providers">
-			<cfset data=getData(providers,err)>
-
+			<cfset request.adminType=url.adminType>
+			<cfset data=getAllExternalData()>
 			<cfsavecontent variable="ext" trim="true">
 				<cfloop query="extensions">
-					<cfif !updateAvailable(extensions)>
+					<cfset sct={}>
+					<cfloop list="#extensions.columnlist()#" item="key">
+						<cfset sct[key]=extensions[key]>
+					</cfloop>
+
+					<cfif !updateAvailable(sct,extensions)>
 						<cfcontinue>
 					</cfif>
 					<cfset uid=createId(extensions.provider,extensions.id)>
@@ -181,7 +170,7 @@
 
 	<cfoutput>#content#</cfoutput>
 	
-	<cfcatch>
+	<cfcatch><cfrethrow>
 		<cfoutput>
 			<div class="error">
 				Failed to retrieve update information:

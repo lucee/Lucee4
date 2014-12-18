@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfparam name="url.action2" default="none">
+<cfparam name="url.action2" default="none">
 <cfswitch expression="#url.action2#">
 	<cfcase value="update">
 		<cfadmin 
@@ -69,7 +52,7 @@
 <h2>Update</h2>
 <a href="#go(url.action,"update")#">Update to #getAvailableVersion()#</a><br>
 Das Update wird in einem eigenen Prozess ablaufen. 
-Wenn das System gepatcht wird, werden Sie Ihre Session verliehren und muessen Sie sich frisch einloggen.
+Wenn das System gepatcht wird, werden Sie Ihre Session verliehren und m�ssen Sie sich frisch einloggen.
 
 <br><br>
 <h2>Update Info</h2>

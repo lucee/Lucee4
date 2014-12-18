@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **/
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	
 
 	public function testEmptyListFirst() {
@@ -134,16 +134,16 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 
 	public function testCount7() {
 
-		var list = "http://localhost:8888/railo-tests/index.cfm";
+		var list = "http://localhost:8888/lucee-tests/index.cfm";
 
 		assertEquals("http://localhost:8888", listFirst(list, "/", true, 3));
 	}
 
 	public function testCount8() {
 
-		var list = "http://localhost:8888/railo-tests/index.cfm";
+		var list = "http://localhost:8888/lucee-tests/index.cfm";
 
-		assertEquals("railo-tests/index.cfm", listRest(list, "/", true, 3));
+		assertEquals("lucee-tests/index.cfm", listRest(list, "/", true, 3));
 	}
 
 	public function testCount9() {

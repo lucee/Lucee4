@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfset error.message="">
+<cfset error.message="">
 <cfset error.detail="">
 
 <cfadmin 
@@ -229,7 +212,6 @@ Error Output --->
 <cfsavecontent variable="codeSample">
 	this.scriptprotect="#appSettings.scriptProtect#";
 </cfsavecontent>
-<cfset renderCodingTip( codeSample)>
 					</td>
 				</tr>
 <!---			</tbody>
@@ -240,7 +222,7 @@ Error Output --->
 			<tbody>--->
 				<!--- request timeout --->
 				<tr>
-					<th scope="row">ww#stText.application.RequestTimeout#</th>
+					<th scope="row">#stText.application.RequestTimeout#</th>
 					<td>
 						<cfset timeout=appSettings.requestTimeout>
 						<table class="maintbl" style="width:auto">
@@ -316,9 +298,9 @@ Error Output --->
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button submit" name="mainAction1" value="#stText.Buttons.Update#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-							<cfif request.adminType EQ "web"><input class="button submit" type="submit" name="mainAction1" value="#stText.Buttons.resetServerAdmin#"></cfif>
+							<input type="submit" class="bl button submit" name="mainAction1" value="#stText.Buttons.Update#">
+							<input type="reset" class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<cfif request.adminType EQ "web"><input class="br button submit" type="submit" name="mainAction1" value="#stText.Buttons.resetServerAdmin#"></cfif>
 						</td>
 					</tr>
 				</tfoot>
@@ -398,9 +380,9 @@ Error Output --->
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button submit" name="mainAction2" value="#stText.Buttons.Update#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-							<cfif request.adminType EQ "web"><input class="button submit" type="submit" name="mainAction2" value="#stText.Buttons.resetServerAdmin#"></cfif>
+							<input type="submit" class="bl button submit" name="mainAction2" value="#stText.Buttons.Update#">
+							<input type="reset" class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<cfif request.adminType EQ "web"><input class="br button submit" type="submit" name="mainAction2" value="#stText.Buttons.resetServerAdmin#"></cfif>
 						</td>
 					</tr>
 				</tfoot>

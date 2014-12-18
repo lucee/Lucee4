@@ -27,7 +27,7 @@
 				<striplinebreaks/>
 			</filterchain>
 		</loadfile>
-		<echo message="Version is: ${core.version}.rc" />
+		<echo message="Version is: ${core.version}.lar" />
     </target>
 
 	<!-- ================================= 
@@ -62,7 +62,7 @@
 	<!-- ================================= 
           target: createadmin              
          ================================= -->
-    <target name="createadmin" depends="compile" description="Create the lucee-context.ra">
+    <target name="createadmin" depends="compile" description="Create the lucee-context.lar">
     	
     	<property name="lucee.admin_source_abs" location="${lucee.admin_source}"/>
     	
@@ -72,9 +72,9 @@
 		<get src="${lucee.url}?password=${lucee.password}&amp;admin_source=${lucee.admin_source_abs}" verbose="on" dest="generate.html"/>
     	<loadfile property="lucee.compile_message" srcFile="generate.html" />
 		<echo>Message from Lucee: ${lucee.compile_message}</echo>
-    	<echo>Admin compiled to: ${lucee.admin_source_abs}/lucee-context.ra</echo>
+    	<echo>Admin compiled to: ${lucee.admin_source_abs}/lucee-context.lar</echo>
     	<echo>Copying Lucee Admin archive...</echo>
-		<copy tofile="${src.dir}/resource/context/lucee-context.ra" file="${lucee.admin_source_abs}/lucee-context.ra" overwrite="yes"/>
+		<copy tofile="${src.dir}/resource/context/lucee-context.lar" file="${lucee.admin_source_abs}/lucee-context.lar" overwrite="yes"/>
 		<copy todir="${src.dir}/resource/context/admin/dbdriver">
 			<fileset dir="${lucee.admin_source_abs}/admin/dbdriver"/>
 		</copy>
@@ -95,7 +95,7 @@
     	<copy todir="${build.dir}/classes/resource">
     		<fileset dir="${src.dir}/resource"/>
     	</copy>
-		<echo>Copy lucee-context.ra (admin) to context (Not yet implemented).</echo>
+		<echo>Copy lucee-context.lar (admin) to context (Not yet implemented).</echo>
 		<copy todir="${build.dir}/classes/resource/context">
 			<fileset dir="${build.dir}/admin"/>
 		</copy>
@@ -106,9 +106,9 @@
 	<!-- ================================= 
           target: package lucee.rc              
          ================================= -->
-    <target name="package" depends="copy" description="Creates the the core.rc file.">
-        <echo>Packaging the core.rc</echo>
-    	<jar destfile="${dist.dir}/${core.version}.rc">
+    <target name="package" depends="copy" description="Creates the the core.lar file.">
+        <echo>Packaging the core.lar</echo>
+    	<jar destfile="${dist.dir}/${core.version}.lar">
 			<fileset dir="${build.dir}/classes" excludes="**/servlet/**"/>
 		</jar>
     </target>

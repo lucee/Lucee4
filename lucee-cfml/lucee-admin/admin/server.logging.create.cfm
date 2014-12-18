@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cffunction name="addZero">
+<cffunction name="addZero">
 	<cfargument name="str">
  <!---   <while len(str) LT 2>
     	<cfset str="0"&str>
@@ -128,12 +111,12 @@ function enable(btn,type,id){
 	active[type]=id;
 	
 	
-	 
 	
 	$(document).ready(function(){
 			//$('.button submit').css('background','url("")');
-			$(btn).css('background','url("")');
-			$('##button_'+old).css('background','');
+			$(btn).css('background-color','#request.adminType=="web"?'##39c':'##c00'#');
+			$(btn).css('color','white');
+			$('##button_'+old).css('background-color','');
 			
 			bodies[old]=$('##div_'+old).detach();
 			
@@ -179,14 +162,20 @@ function enable(btn,type,id){
 		<br />
 		
 		<h3>#ucFirst(_name)#</h3>
+		<cfset count=0>
+		<cfset len=structCount(drivers)>
 		<cfloop collection="#drivers#" index="driverClass" item="driver">
+			<cfset count++>
+			<cfset orientation="bm">
+			<cfif count==1><cfset orientation="bl"></cfif>
+			<cfif count==len><cfset orientation="br"></cfif>
 			<cfset id="#_name#_#hash(driver.getClass(),'quick')#">
 			<cfset active=driver.getClass() EQ _driver.getClass()>
 		<input id="button_#id#" onclick="enable(this,'#_name#','#id#');"
 				type="button"
-				class="button submit" 
+				class="#orientation# button submit" 
 				name="change#_name#" 
-				<cfif driver.getClass() EQ _driver.getClass()> style="background: url('');"</cfif> 
+				<cfif driver.getClass() EQ _driver.getClass()> style="color:white;background-color:#request.adminType=="web"?'##39c':'##c00'#;"</cfif> 
 				value="#driver.getLabel()#">
 		</cfloop>
 		<div id="group_#_name#">

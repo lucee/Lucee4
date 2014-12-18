@@ -1,25 +1,9 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfif request.admintype EQ "web"><cflocation url="#request.self#" addtoken="no"></cfif>
+<cfif request.admintype EQ "web"><cflocation url="#request.self#" addtoken="no"></cfif>
 
 <cfparam name="url.action2" default="none">
 <cfset error.message="">
 <cfset error.detail="">
+<cfset restBasePath="/rest/update/provider/">
 
 <cftry>
 <cfswitch expression="#url.action2#">
@@ -45,14 +29,7 @@
 			password="#session["password"&request.adminType]#"
 			remoteClients="#request.getRemoteClients()#">
 	</cfcase>
-	<cfcase value="updateJars">
-		<cfsetting requesttimeout="10000">
-		<cfadmin 
-			action="updateJars"
-			type="#request.adminType#"
-			password="#session["password"&request.adminType]#"
-			remoteClients="#request.getRemoteClients()#">
-	</cfcase>
+	
 	<cfcase value="remove">
 		<cfadmin 
 			action="removeUpdate"
@@ -95,48 +72,60 @@ because this is only about optional updates, we do this only in background from 
 ---->
 <cfset needNewJars=false>
 
+<cfscript>
+stText.services.update.serverNotReachable="Could not reach server {url}.";
+stText.services.update.serverFailed="server {url} failed to return a valid response.";
 
-<cffunction name="getAvailableVersion" output="false">
-	
-	<cfset var http="">
-	<cftry>
-	<cfhttp 
-			url="#update.location#/lucee/remote/version/Info.cfc?method=getpatchversionfor&level=#server.ColdFusion.ProductLevel#&version=#server.lucee.version#" 
-		method="get" resolveurl="no" result="http">
-	<cfwddx action="wddx2cfml" input="#http.fileContent#" output="local.wddx">
-	<cfset session.availableVersion=wddx>
-	<cfreturn session.availableVersion>
-		<cfcatch>
-			<cfreturn "">
-		</cfcatch>
-	</cftry>
-</cffunction>
+	struct function getAvailableVersion() localmode="true"{
+		try{
+			
+			admin 
+				action="getAPIKey"
+				type="#request.adminType#"
+				password="#session["password"&request.adminType]#"
+				returnVariable="apiKey";
 
-<cffunction name="getAvailableVersionDoc" output="false">
-	
-	<cfset var http="">
-	<cftry>
-	<cfhttp 
-		url="#update.location#/lucee/remote/version/Info.cfc?method=getPatchVersionDocFor&level=#server.ColdFusion.ProductLevel#&version=#server.lucee.version#" 
-		method="get" resolveurl="no" result="http"><!--- #server.lucee.version# --->
-	<cfwddx action="wddx2cfml" input="#http.fileContent#" output="wddx">
-	<cfreturn wddx>
-		<cfcatch>
-			<cfreturn "-">
-		</cfcatch>
-	</cftry>
-</cffunction>
+			http 
+			url="#update.location##restBasePath#info/#server.lucee.version#" 
+			method="get" resolveurl="no" result="local.http" {
+				httpparam type="header" name="ioid" value="#apikey#";
 
-<cfadmin 
+			}
+			// i have a response
+			if(isJson(http.filecontent)) {
+				rsp=deserializeJson(http.filecontent);
+			}
+			// service not available
+			else if(http.status_code==404) {
+				rsp={"type":"warning","message":replace(stText.services.update.serverNotReachable,'{url}',update.location)};
+			}
+			// server failed
+			else {
+				rsp={"type":"warning","message":replace(stText.services.update.serverFailed,'{url}',update.location)&" "&http.filecontent};
+			}
+		}
+		catch(e){
+			rsp={"type":"warning","message":replace(stText.services.update.serverFailed,'{url}',update.location)&" "&e.message};
+		}
+		return rsp;
+	}
+
+// get info for the update location
+admin 
 	action="getUpdate"
 	type="#request.adminType#"
 	password="#session["password"&request.adminType]#"
-	returnvariable="update">
+	returnvariable="update";
 
-<cfset curr=server.lucee.version>
-<cfset avi=getAvailableVersion()>
-<cfset hasAccess=1>
-<cfset hasUpdate=curr LT avi>
+
+curr=server.lucee.version;
+updateData=getAvailableVersion();
+hasAccess=1;
+hasUpdate=structKeyExists(updateData,"available");
+
+</cfscript>
+
+
 
 <cfoutput>
 	<div class="pageintro">#stText.services.update.desc#</div>
@@ -155,21 +144,21 @@ because this is only about optional updates, we do this only in background from 
 							<ul class="radiolist" id="updatelocations">
 								<li>
 									<label>
-										<input type="radio" class="radio" name="location" value="http://www.lucee.org"<cfif update.location EQ 'http://www.lucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
+										<input type="radio" class="radio" name="location" value="http://www.getlucee.org"<cfif update.location EQ 'http://www.getlucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
 										<b>#stText.services.update.location_www#</b>
 									</label>
 									<div class="comment">#stText.services.update.location_wwwdesc#</div>
 								</li>
 								<li>
 									<label>
-										<input type="radio" class="radio" name="location" value="http://preview.lucee.org"<cfif update.location EQ 'http://preview.lucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
+										<input type="radio" class="radio" name="location" value="http://preview.getlucee.org"<cfif update.location EQ 'http://preview.getlucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
 										<b>#stText.services.update.location_preview#</b>
 									</label>
 									<div class="comment">#stText.services.update.location_previewdesc#</div>
 								</li>
 								<li>
 									<label>
-										<input type="radio" class="radio" name="location" value="http://dev.lucee.org"<cfif update.location EQ 'http://dev.lucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
+										<input type="radio" class="radio" name="location" value="http://dev.getlucee.org"<cfif update.location EQ 'http://dev.getlucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
 										<b>#stText.services.update.location_dev#</b>
 									</label>
 									<div class="comment">#stText.services.update.location_devdesc#</div>
@@ -225,8 +214,8 @@ because this is only about optional updates, we do this only in background from 
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Update#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Update#">
+							<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
 						</td>
 					</tr>
 				</tfoot>
@@ -240,36 +229,21 @@ because this is only about optional updates, we do this only in background from 
 		<cfscript>
 			// Jira
 			jira=stText.services.update.jira;
-			jira=replace(jira,'{a}','<a href="http://jira.jboss.org/jira/browse/LUCEE" target="_blank">');
+			jira=replace(jira,'{a}','<a href="http://jira.jboss.org/jira/browse/RAILO" target="_blank">');
 			jira=replace(jira,'{/a}','</a>');
-			try	{
-				// Changelog
-				content=getAvailableVersionDoc();
-				start=1;
-				arr=array();
-				matches=REMatchNoCase("\[\ *(LUCEE-([0-9]*)) *\]",content);
-				
-				for(i=arrayLen(matches);i>=1;i--){
-					match=trim(matches[i]);
-					nbr=mid(match,8,len(match)-8);
-					content=replace(content,match,'<a target="_blank" href="http://jira.jboss.org/jira/browse/LUCEE-'&nbr&'">'& mid(match,2,len(match)-2) & '</a>',"all");
-				}
-					content=replace(content,"
-Version ","
-
-Version ","all");
-			}
-			catch(e){}
 		</cfscript>
 		<h2>#stText.services.update.infoTitle#</h2>
 		<div class="text">
-			#replace(replace(replace(stText.services.update.update,'{available}','<b>(#avi#)</b>'),'{current}','<b>(#curr#)</b>'),'{available}','<b>(#avi#)</b>')#
+			#updatedata.message#
 		</div>
-		<div style="overflow:auto;height:200px;border-style:solid;border-width:1px;padding:10px"><pre>#trim(content)#</pre></div>
+		<div style="overflow:auto;height:200px;border-style:solid;border-width:1px;padding:10px">
+<pre><cfloop list="#listSort(structKeyList(updateData.changelog),'textnocase')#" item="key"><!--- 
+			---><a target="_blank" href="http://jira.jboss.org/jira/browse/RAILO-#key#">#key#</a> - #updateData.changelog[key]#
+</cfloop></pre></div>
 		#jira#
-	<cfelseif not needNewJars>
+	<cfelse>
 		<h2>#stText.services.update.infoTitle#</h2>
-		<div class="text">#replace(stText.services.update.noUpdate,'{current}',curr)#</div>
+		<div class="text">#updateData.message#</div>
 	</cfif>
 	
 	
@@ -285,7 +259,7 @@ Version ","all");
 				<tfoot>
 					<tr>
 						<td>
-							<input type="submit" class="button submit" name="mainAction" value="#stText.services.update.exeRun#">
+							<input type="submit" class="bs button submit" name="mainAction" value="#stText.services.update.exeRun#">
 						</td>
 					</tr>
 				</tfoot>

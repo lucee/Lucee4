@@ -79,12 +79,12 @@ function selectAll(field) {
          <table border="0" cellpadding="0" cellspacing="0">
          <tr>
             <td>&nbsp;</td>		
-            <td><cfmodule template="/lucee-context/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="1" height="20"></td>
+            <td><cfmodule template="/lucee/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="1" height="20"></td>
             <td></td>
          </tr>
          <tr>
             <td></td>
-            <td valign="top"><cfmodule template="/lucee-context/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="1" height="14"><cfmodule template="/lucee-context/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="36" height="1"></td>
+            <td valign="top"><cfmodule template="/lucee/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="1" height="14"><cfmodule template="/lucee/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="36" height="1"></td>
              <td>&nbsp;
             <input type="submit" class="submit" name="delete" value="#lang.btnDelete#">
             </td>	

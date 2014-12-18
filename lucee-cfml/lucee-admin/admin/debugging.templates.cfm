@@ -1,21 +1,3 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- --->
 <cfset error.message="">
 <cfset error.detail="">
 <cfparam name="url.action2" default="list">
@@ -69,8 +51,8 @@ You can define IPv4 or IPv6 IPs, a IPv4 can not be converted to a IPv6 and visa 
     
 <!--- load available drivers --->
 <cfset driverNames=structnew("linked")>
-<cfset driverNames=ComponentListPackageAsStruct("lucee-server-context.admin.debug",driverNames)>
-<cfset driverNames=ComponentListPackageAsStruct("lucee-context.admin.debug",driverNames)>
+<cfset driverNames=ComponentListPackageAsStruct("lucee-server.admin.debug",driverNames)>
+<cfset driverNames=ComponentListPackageAsStruct("lucee.admin.debug",driverNames)>
 <cfset driverNames=ComponentListPackageAsStruct("debug",driverNames)>
 
 
@@ -85,7 +67,7 @@ You can define IPv4 or IPv6 IPs, a IPv4 can not be converted to a IPv6 and visa 
 <!--- 
 <span class="CheckError">
 The Gateway Implementation is currently in Beta State. Its functionality can change before it's final release.
-If you have any problems while using the Gateway Implementation, please post the bugs and errors in our <a href="https://jira.jboss.org/jira/browse/LUCEE" target="_blank" class="CheckError">bugtracking system</a>. 
+If you have any problems while using the Gateway Implementation, please post the bugs and errors in our <a href="https://jira.jboss.org/jira/browse/RAILO" target="_blank" class="CheckError">bugtracking system</a>. 
 </span><br /><br />
 --->
 

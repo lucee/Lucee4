@@ -82,4 +82,3 @@
 		<cfreturn "lucee.extension.gateway.MailWatcherListener">
 	</cffunction>
 </cfcomponent>
-

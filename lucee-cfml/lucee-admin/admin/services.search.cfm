@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfif request.admintype EQ "server"><cflocation url="#request.self#" addtoken="no"></cfif>
+<cfif request.admintype EQ "server"><cflocation url="#request.self#" addtoken="no"></cfif>
 
 <cfparam name="form.run" default="none">
 <cfparam name="error" default="#struct(message:"",detail:"")#">
@@ -180,7 +163,8 @@
 									<td>#DateFormat(collections.LastModified,"yyyy-mm-dd")# #TimeFormat(collections.LastModified,"HH:mm")#</td>
 									<!---<td width="400" style=" white-space:;overflow: hidden;text-overflow: ellipsis;"<cfif len(collections.path) GT 40> title="#collections.path#"</cfif>>#collections.path##collections.path#</td>--->
 									<td>
-										<a href="#request.self#?action=#url.action#&collection=#collections.name#" class="btn-mini edit"><span>edit</span></a>
+										#renderEditButton("#request.self#?action=#url.action#&collection=#collections.name#")#
+										
 									</td>
 								</tr>
 							</cfloop>
@@ -190,11 +174,11 @@
 							 <tr>
 								<td colspan="8">
 									<input type="hidden" name="run" value="action">
-									<input type="submit" class="button submit" name="action" value="#stText.Buttons.Repair#">
-									<input type="submit" class="button submit" name="action" value="#stText.Buttons.Optimize#">
-									<input type="submit" class="button submit" name="action" value="#stText.Buttons.Purge#">
-									<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-									<input type="submit" class="button submit" name="action" value="#stText.Buttons.Delete#">
+									<input type="submit" class="bl button submit" name="action" value="#stText.Buttons.Repair#">
+									<input type="submit" class="bm button submit" name="action" value="#stText.Buttons.Optimize#">
+									<input type="submit" class="bm button submit" name="action" value="#stText.Buttons.Purge#">
+									<input type="reset" class="bm button reset" name="cancel" value="#stText.Buttons.Cancel#">
+									<input type="submit" class="br button submit" name="action" value="#stText.Buttons.Delete#">
 								</td>	
 							</tr>
 						</tfoot>
@@ -234,8 +218,8 @@
 					<tfoot>
 						<tr>
 							<td colspan="2">
-								<input type="submit" class="button submit" name="run" value="#stText.Buttons.Create#">
-								<input type="reset" class="vutton reset" name="cancel" value="#stText.Buttons.Cancel#">
+								<input type="submit" class="bl button submit" name="run" value="#stText.Buttons.Create#">
+								<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
 							</td>
 						</tr>
 					</tfoot>
@@ -328,9 +312,9 @@
 									@todo kein funktioneller javascript
 									 --->
 									<input onclick="window.location='#request.self#?action=#url.action#';" 
-										type="button" class="button cancel" name="canel" value="#stText.Buttons.Cancel#">
+										type="button" class="bl button cancel" name="canel" value="#stText.Buttons.Cancel#">
 									<input type="hidden" name="run" value="index">
-									<input type="submit" class="button submit" name="_run" value="#stText.Buttons.Update#">
+									<input type="submit" class="br button submit" name="_run" value="#stText.Buttons.Update#">
 								</td>
 							</tr>
 						</tfoot>
@@ -365,7 +349,7 @@
 						</tbody>
 						<tfoot>
 							<tr><td colspan="2">
-								<input type="submit" class="button submit" name="search" value="#stText.Buttons.Search#">
+								<input type="submit" class="bs button submit" name="search" value="#stText.Buttons.Search#">
 							</td></tr>
 						</tfoot>
 					</table>

@@ -1,22 +1,3 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- --->
-
 <!--- list all mappings and display necessary edit fields --->
 <cfoutput>
 	<cfif not hasAccess><cfset noAccess(stText.setting.noAccess)></cfif>
@@ -95,7 +76,7 @@
 							<!--- edit --->
 							<td>
 								<cfif not mappings.readOnly>
-									<a href="#request.self#?action=#url.action#&action2=create&virtual=#mappings.virtual#" class="btn-mini edit"><span>edit</span></a>
+									#renderEditButton("#request.self#?action=#url.action#&action2=create&virtual=#mappings.virtual#")#
 								</cfif>
 							</td>
 						</tr>
@@ -105,7 +86,7 @@
 				
 <cfsavecontent variable="codeSample">
 
-<cfloop query="mappings"><cfif mappings.hidden || mappings.virtual=="/lucee-context" || mappings.virtual=="/lucee-server-context"><cfcontinue></cfif><cfset del="">
+<cfloop query="mappings"><cfif mappings.hidden || mappings.virtual=="/lucee" || mappings.virtual=="/lucee-server"><cfcontinue></cfif><cfset del="">
 this.mappings=["#mappings.virtual#"]={<cfif len(mappings.strPhysical)>
 &nbsp;&nbsp;&nbsp;physical:"#mappings.strPhysical#"<cfset del=","></cfif><cfif len(mappings.strArchive)>
 &nbsp;&nbsp;&nbsp;#del#archive:"#mappings.strArchive#"<cfset del=","></cfif>};
@@ -125,9 +106,9 @@ this.mappings=["#mappings.virtual#"]={<cfif len(mappings.strPhysical)>
 							<input type="hidden" name="mainAction" value="#stText.Buttons.save#">
 							<!---<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.save#">
 							--->
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-							<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.Delete#">
-							<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.compileAll#">
+							<input type="reset" class="bl button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="bm button submit" name="subAction" value="#stText.Buttons.Delete#">
+							<input type="submit" class="br button submit" name="subAction" value="#stText.Buttons.compileAll#">
 						</td>
 					</tr>
 				</tfoot>
@@ -193,7 +174,7 @@ this.mappings=["#mappings.virtual#"]={<cfif len(mappings.strPhysical)>
 					<tr>
 						<td colspan="2">
 							<input type="hidden" name="mainAction" value="#stText.Buttons.save#">
-							<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.save#">
+							<input type="submit" class="bs button submit" name="subAction" value="#stText.Buttons.save#">
 						</td>
 					</tr>
 				</tfoot>

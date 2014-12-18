@@ -18,7 +18,7 @@
  **/
 
 
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public function setUp(){
 		variables.arr=['Text 1','Text 2','Text 3','Text 4','Text 5'];
@@ -92,4 +92,4 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 	private function nodesToList(xml nodes){
 		return arrayToList(nodesToArray(nodes));
 	}
-} 
+}

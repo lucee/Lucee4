@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfset stText.mail.LogFileDesc="Destination file where the log information get stored.">
+<cfset stText.mail.LogFileDesc="Destination file where the log information get stored.">
 <cfset stText.mail.LogLevelDesc="Log level used for the log file.">
 <cfset stText.mail.SpoolEnabledDesc="If enabled the mails are sent in a background thread and the main request does not have to wait until the mails are sent.">
 <cfset stText.mail.maxThreads="Maximum concurrent threads">
@@ -289,9 +272,9 @@ Defaults --->
 					<tr>
 						<td colspan="2"><cfoutput>
 							<input type="hidden" name="mainAction" value="#stText.Buttons.Setting#">
-							<input type="submit" class="button submit" name="_mainAction" value="#stText.Buttons.Update#">
-							<input type="reset" class="reset" name="canel" value="#stText.Buttons.Cancel#">
-							<cfif request.adminType EQ "web"><input class="button submit" type="submit" name="_mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
+							<input type="submit" class="bl button submit" name="_mainAction" value="#stText.Buttons.Update#">
+							<input type="reset" class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> button reset" name="canel" value="#stText.Buttons.Cancel#">
+							<cfif request.adminType EQ "web"><input class="br button submit" type="submit" name="_mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
 						</cfoutput></td>
 					</tr>
 				</tfoot>
@@ -307,7 +290,7 @@ Defaults --->
 	<cfloop collection="#stVeritfyMessages#" item="hostname">
 		<cfif stVeritfyMessages[hostname].label eq "OK">
 			<div class="message">
-				Verification of mail server [#hostname#] was succesfull.
+				Verification of mail server [#hostname#] was succesful.
 			</div>
 		<cfelse>
 			<div class="error">
@@ -434,10 +417,10 @@ Defaults --->
 					<tr>
 						<td colspan="7">
 							<input type="hidden" name="mainAction" value="#stText.Buttons.Update#">
-							<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.Verify#">
-							<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.Update#">
-							<input type="reset" class="button reset" name="cancel" value="#stText.Buttons.Cancel#">
-							<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.Delete#">
+							<input type="submit" class="bl button submit" name="subAction" value="#stText.Buttons.Verify#">
+							<input type="submit" class="bm button submit" name="subAction" value="#stText.Buttons.Update#">
+							<input type="reset" class="bm button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="br button submit" name="subAction" value="#stText.Buttons.Delete#">
 						</td>	
 					</tr>
 				</tfoot>

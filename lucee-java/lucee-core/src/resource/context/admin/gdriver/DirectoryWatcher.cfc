@@ -74,4 +74,3 @@
 		<cfreturn "lucee.extension.gateway.DirectoryWatcherListener">
 	</cffunction>
 </cfcomponent>
-

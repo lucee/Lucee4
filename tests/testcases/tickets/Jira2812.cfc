@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **/
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 
 	function testLowerIfAllUppercase() {
@@ -33,10 +33,10 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 
 	function testOldFunctionality() {
 
-		assertEquals( compare( ucFirst( "railo technologies" ), "Railo technologies" ), 0 );
-		assertEquals( compare( ucFirst( "railo technologies", true ), "Railo Technologies" ), 0 );
-		assertEquals( compare( ucFirst( "railo 		technologies", true ), "Railo Technologies" ), 0 );
-		assertEquals( compare( ucFirst( "the 		railo   company", true ), "The Railo Company" ), 0 );
+		assertEquals( compare( ucFirst( "lucee technologies" ), "Lucee technologies" ), 0 );
+		assertEquals( compare( ucFirst( "lucee technologies", true ), "Lucee Technologies" ), 0 );
+		assertEquals( compare( ucFirst( "lucee 		technologies", true ), "Lucee Technologies" ), 0 );
+		assertEquals( compare( ucFirst( "the 		lucee   company", true ), "The Lucee Company" ), 0 );
 		assertEquals( compare( ucFirst( "michael offner-streit", false ), "Michael offner-streit" ), 0 );
 		assertEquals( compare( ucFirst( "michael			offner-streit", true ), "Michael Offner-Streit" ), 0 );
 		assertEquals( compare( ucFirst( "international  business 		machines (i.b.m.)", true ), "International Business Machines (I.B.M.)" ), 0 );

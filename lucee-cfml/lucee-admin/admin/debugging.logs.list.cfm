@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfoutput>
+<cfoutput>
 	<h2>#stText.debug.settingTitle#</h2>
 	<div class="pageintro">
 		#stText.debug.settingDesc#
@@ -52,9 +35,9 @@
 			<tfoot>
 				<tr>
 					<td colspan="2">
-						<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Update#">
-						<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-						<cfif request.adminType EQ "web"><input class="button submit" type="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
+						<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Update#">
+						<input type="reset" class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> button reset" name="cancel" value="#stText.Buttons.Cancel#">
+						<cfif request.adminType EQ "web"><input class="br button submit" type="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
 					</td>
 				</tr>
 			</tfoot>
@@ -123,7 +106,7 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="5"><input type="submit" name="mainAction" class="button submit" value="#stText.Debug.filter#" /></th>
+						<td colspan="5"><input type="submit" name="mainAction" class="bs button submit" value="#stText.Debug.filter#" /></th>
 					</tr>
 				</tfoot>
 				<cfif not arrayIsEmpty(logs)>

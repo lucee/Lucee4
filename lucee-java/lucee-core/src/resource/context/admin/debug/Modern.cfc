@@ -767,7 +767,7 @@
 
 
 		<script>
-			<cfset this.includeFileInline( "/lucee-context/res/js/util.min.js" )>
+			<cfset this.includeFileInline( "/lucee/res/js/util.min.js" )>
 			
 			var __LUCEE = __LUCEE || {};
 

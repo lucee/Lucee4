@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<!---
 	<cffunction name="beforeTests"></cffunction>
 	<cffunction name="afterTests"></cffunction>
@@ -24,7 +24,7 @@
 	<cffunction name="testBeat" localMode="modern">
 
 <!--- begin old test code --->
-<cfif server.ColdFusion.ProductName EQ "railo"> 
+<cfif server.ColdFusion.ProductName EQ "lucee"> 
 	<cfset valueEquals(left="#beat(createDateTime(2000,1,1,12,0,0))#", right="500")>
 	<cfset valueEquals(left="#beat('13:12:12')#", right="550.138")>
 	<cfset valueEquals(left="#beat() GTE 0#", right="true")>

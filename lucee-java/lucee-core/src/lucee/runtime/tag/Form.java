@@ -48,7 +48,7 @@ public final class Form extends BodyTagImpl {
 	public static final int FORMAT_HTML = 0;
     public static final int FORMAT_FLASH = 1;
     public static final int FORMAT_XML = 2;
-	private static final String DEFAULT_ARCHIVE = "/lucee-context/lucee-applet.cfm";
+	private static final String DEFAULT_ARCHIVE = "/lucee/lucee-applet.cfm";
 	
 	private static final int WMODE_WINDOW = 0;
 	private static final int WMODE_TRANSPARENT = 1;
@@ -455,7 +455,7 @@ public final class Form extends BodyTagImpl {
             //hasListener=true;
         }
         
-        if(scriptSrc==null)scriptSrc=contextPath+"/lucee-context/form.cfm";
+        if(scriptSrc==null)scriptSrc=contextPath+"/lucee/form.cfm";
         attributes.setEL("method",method);
         
         pageContext.forceWrite("<script language = \"JavaScript\" type=\"text/javascript\" src=\""+scriptSrc+"\"></script>");

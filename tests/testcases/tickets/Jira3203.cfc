@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  ---><cfscript>
-component extends="org.railo.cfml.test.RailoTestCase" accessors=true	{
+component extends="org.lucee.cfml.test.LuceeTestCase" accessors=true	{
 	property string StringProperty;
     this.setStringProperty("test");
 

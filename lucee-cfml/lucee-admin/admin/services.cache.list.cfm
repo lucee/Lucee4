@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cftry>
+<cftry>
 	<cfset stVeritfyMessages = StructNew()>
 	<cfswitch expression="#form.mainAction#">
 	<!--- UPDATE --->
@@ -37,6 +20,9 @@
                 resource="#StructKeyExists(form,'default_resource')?form.default_resource:''#"
                 function="#StructKeyExists(form,'default_function')?form.default_function:''#"
                 include="#StructKeyExists(form,'default_include')?form.default_include:''#"
+                http="#StructKeyExists(form,'default_http')?form.default_http:''#"
+                file="#StructKeyExists(form,'default_file')?form.default_file:''#"
+                webservice="#StructKeyExists(form,'default_webservice')?form.default_webservice:''#"
                 remoteClients="#request.getRemoteClients()#">				
 		</cfcase>
 	<!--- delete --->
@@ -117,7 +103,6 @@ Redirtect to entry --->
 	<cfif access NEQ "yes">
 		<cfset noAccess(stText.Settings.cache.noAccess)>
 	</cfif>
-	
 	<!---- READ ONLY ---->
 	<cfif request.adminType EQ "web" and srcGlobal.recordcount>
 		<h2>#stText.Settings.cache.titleReadOnly#</h2>
@@ -172,8 +157,8 @@ Redirtect to entry --->
 					<tfoot>
 						<tr>
 							<td colspan="4">
-								<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.verify#">
-								<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+								<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.verify#">
+								<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
 							</td>	
 						</tr>
 					</tfoot>
@@ -228,7 +213,7 @@ Redirtect to entry --->
 								</cfif>
 							</td>
 							<td>
-								<a href="#request.self#?action=#url.action#&action2=create&name=#Hash(srcLocal.name)#" class="btn-mini edit"><span>edit</span></a>
+								#renderEditButton("#request.self#?action=#url.action#&action2=create&name=#Hash(srcLocal.name)#")#
 							</td>
 						</tr>
 					</cfloop>
@@ -236,9 +221,9 @@ Redirtect to entry --->
 				<tfoot>
 					<tr>
 						<td colspan="4">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.verify#">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.delete#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.verify#">
+							<input type="submit" class="bm button submit" name="mainAction" value="#stText.Buttons.delete#">
+							<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
 						</td>	
 					</tr>
 				</tfoot>
@@ -267,8 +252,8 @@ function defaultValue(field) {
 		<cfform onerror="customError" action="#request.self#?action=#url.action#" method="post">
 			<table class="maintbl">
 				<tbody>
-	<cfset defaults={}>
-    <cfloop index="type" list="object,template,query,resource,function,include">
+	<cfset defaults={}>		
+    <cfloop index="type" list="object,template,query,resource,function,include,http,file,webservice">
 						<tr>
 							<th scope="row">#stText.Settings.cache['defaulttype'& type]#</th>
 							<td>
@@ -291,6 +276,10 @@ hasQry=!isNull(defaults.query) && len(defaults.query);
 hasRes=!isNull(defaults.resource) && len(defaults.resource);
 hasFun=!isNull(defaults.function) && len(defaults.function);
 hasInc=!isNull(defaults.include) && len(defaults.include);
+hasHTT=!isNull(defaults.http) && len(defaults.http);
+hasFil=!isNull(defaults.file) && len(defaults.file);
+hasWSe=!isNull(defaults.webservice) && len(defaults.webservice);
+
 </cfscript>
 <cfsavecontent variable="codeSample">
 this.cache.object = "#!hasObj?"&lt;cache-name>":defaults.object#";
@@ -299,6 +288,9 @@ this.cache.query = "#!hasQry?"&lt;cache-name>":defaults.query#";
 this.cache.resource = "#!hasRes?"&lt;cache-name>":defaults.resource#";
 this.cache.function = "#!hasFun?"&lt;cache-name>":defaults.function#";
 this.cache.include = "#!hasInc?"&lt;cache-name>":defaults.include#";	
+this.cache.http = "#!hasHTT?"&lt;cache-name>":defaults.http#";	
+this.cache.file = "#!hasFil?"&lt;cache-name>":defaults.file#";	
+this.cache.webservice = "#!hasWSe?"&lt;cache-name>":defaults.webservice#";	
 </cfsavecontent>
 <cfset renderCodingTip( codeSample )>
 
@@ -308,9 +300,9 @@ this.cache.include = "#!hasInc?"&lt;cache-name>":defaults.include#";
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.update#">
+							<input type="submit" class="<cfif request.adminType EQ "web">bl<cfelse>bs</cfif> button submit" name="mainAction" value="#stText.Buttons.update#">
 							<cfif request.adminType EQ "web">
-								<input class="button submit" type="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#">
+								<input class="br button submit" type="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#">
 							</cfif>
 						</td>
 					</tr>
@@ -356,8 +348,8 @@ this.cache.include = "#!hasInc?"&lt;cache-name>":defaults.include#";
 					<tfoot>
 						<tr>
 							<td colspan="2">
-								<input type="submit" class="button submit" name="run" value="#stText.Buttons.create#">
-								<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+								<input type="submit" class="bl button submit" name="run" value="#stText.Buttons.create#">
+								<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
 							</td>
 						</tr>
 					</tfoot>

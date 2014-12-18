@@ -1,21 +1,83 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- --->	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+<cfsetting showdebugoutput="no">
+<cfsilent>
+		
+	<cfapplication name='__RAILO_STATIC_CONTENT' sessionmanagement='#false#' clientmanagement='#false#' applicationtimeout='#createtimespan( 1, 0, 0, 0 )#'>
+	
+	<cfset mimetype = "text/css" />
+	<cfset etag = hash( getCurrentTemplatePath() & '-' & Server.Lucee.Version ) />
+
+	<cfheader name='Expires' value='#getHttpTimeString( now() + 100 )#'>
+	<cfheader name='Cache-Control' value='max-age=#86400 * 100#'>		
+	<cfheader name='ETag' value='#etag#'>
+	
+	<cfif false and len( CGI.HTTP_IF_NONE_MATCH ) && ( CGI.HTTP_IF_NONE_MATCH == '#etag#' )>
+
+		<!--- etag matches, return 304 !--->
+		<cfheader statuscode='304' statustext='Not Modified'>
+		<cfcontent reset='#true#' type='#mimetype#'><cfabort>
+	</cfif>
+	
+	<!--- file was not cached; send the data --->
+	<cfcontent reset="yes" type="#mimetype#" />
+	
+	<!--- PK: this style tag is here, so my editor color-codes the content underneath. (it won't get outputted) --->
+	<style type="text/css">
+	
+</cfsilent><!---
+
+--->html, body {
+	min-height: 450px;
+	height: 100%;
+}
+body {
+	min-width:600px;
+	background:#f7f7f7 url(../img/web-back.png.cfm) repeat-x top;
+	margin:0;
+	padding:0;
+}
+body.server {
+	background-image:url(../img/server-back.png.cfm);
+}
+body, td, th {
+	font-family:'Helvetica Neue', Arial, Helvetica, sans-serif;
+	font-size : 12px;
+	color:#3c3e40;
+}
+table {
+	border-collapse:collapse;
+}
+h1, h2, h3, h4, h5 {
+	font-weight:normal;
+	font-size : 18px;
+	color:#007bb7;
+	margin:0;
+	padding:0 0 4px 0;
+}
+h1 {padding-bottom:10px}
+h2 {font-size:16px;}
+h3 {font-size:14px;}
+h4 {font-size:12px;}
+h5 {font-size:10px;}
+* + h1, * + h2 {
+	padding-top: 20px;
+}
+div.pageintro + h2 {
+	padding-top:0;
+}
+
+table + h3, div + h3 {
+	padding-top: 10px;
+}
+a {
+	color:#007bb7;
+	text-decoration:underline
+}
+img, a img { border:0; }
+form, div { margin:0; padding:0; }
+pre {
+	padding: 0px;
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
 	white-space: -pre-wrap; /* Opera 4-6 */
 	white-space: -o-pre-wrap; /* Opera 7 */
 	word-wrap: break-word; /* Internet Explorer 5.5+ */
@@ -76,10 +138,10 @@ body.full td#logotd {
 	display:none;
 }
 body.server #logo a {
-	background-image:url(../img/lucee.png.cfm);
+	background-image:url(../img/server-lucee.png.cfm);
 }
 body.server.full #logo a {
-	background-image:url(../img/lucee-small.png.cfm);
+	background-image:url(../img/server-lucee-small.png.cfm);
 }
 
 #layouttbl td#tabstd {
@@ -719,7 +781,7 @@ tbody#extproviderlist td {
 	margin-bottom: 20px;
 }
 .extensionthumb {
-	width:108px;
+	width:148px;
 	height:108px;
 	overflow: hidden;
 	margin:5px 5px 0px 0px;
@@ -874,7 +936,7 @@ div.tooltip {
 			#header			{ position: relative; height: 100px; -padding: 0 22px; -margin: 0 22px 0 22px; }
 			body.full #header { height: 50px; }
 
-			#logo			{ display: block; position: absolute; top: 0; left: 0; width: 150px; height: 168px; padding: 0; }
+			#logo			{ display: block; position: absolute; top: 0; left: 0; width: 100px; height: 68px; padding: 0; }
 			body.full #logo { width: 70px; height:48px; background-size: 150px; background-position: -18px -50px; }
 
 			#admin-tabs		{ width: 370px; position: absolute; bottom: -10px; right: -7px; }

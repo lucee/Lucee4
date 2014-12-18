@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  ---><cfscript>
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public function setUp(){
 		variables.qry=queryNew("str,nbr,dat","varchar,integer,date");
@@ -88,7 +88,7 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 	
 	
 	private void function hasFullNullSupport(){
-		return server.ColdFusion.ProductName EQ "Railo" && getPageContext().getConfig().getFullNullSupport();
+		return server.ColdFusion.ProductName EQ "Lucee" && getPageContext().getConfig().getFullNullSupport();
 	}
 } 
 

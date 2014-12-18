@@ -1,21 +1,22 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- --->function printError(error,boolean longversion=false) {
+<cfscript>
+function ComponentListPackageAsStruct(string package, cfcNames=structnew("linked")){
+	try{
+		local._cfcNames=ComponentListPackage(package);
+		loop array="#_cfcNames#" index="i" item="el" {
+			cfcNames[el]=package&"."&el;
+		}
+	}
+	catch(e){}
+	return cfcNames;
+	
+}
+	
+/**
+* cast a String to a File Object
+* @param strFile string to cast
+* @return File Object
+*/
+function printError(error,boolean longversion=false) {
 	if(IsSimpleValue(arguments.error))arguments.error=struct(message:arguments.error);
 	if(not StructKeyExists(arguments.error,'detail'))arguments.error.detail="";
 	else if(arguments.error.message EQ arguments.error.detail)arguments.error.detail="";
@@ -321,3 +322,8 @@ ACCESS.CFX_USAGE=securityManager.getAccess(smClass.TYPE_CFX_USAGE);
 	</div>
 </cffunction>
 
+<cffunction name="renderEditButton" output="true">
+	<cfargument name="href"   default="">
+	
+	<a class="btn-mini sprite edit" title="Edit" href="#arguments.href#"><span>Edit</span></a>
+</cffunction>

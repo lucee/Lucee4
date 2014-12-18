@@ -262,18 +262,18 @@ public final class DebuggerImpl implements DebuggerPro {
 				if(path!=null) {
 					boolean changed=false;
 					if(path.endsWith("/Modern.cfc") || path.endsWith("\\Modern.cfc")) {
-						path="/lucee-server-context/admin/debug/Modern.cfc";
-						fullname="lucee-server-context.admin.debug.Modern";
+						path="/lucee-server/admin/debug/Modern.cfc";
+						fullname="lucee-server.admin.debug.Modern";
 						changed=true;
 					}
 					else if(path.endsWith("/Classic.cfc") || path.endsWith("\\Classic.cfc")) {
-						path="/lucee-server-context/admin/debug/Classic.cfc";
-						fullname="lucee-server-context.admin.debug.Classic";
+						path="/lucee-server/admin/debug/Classic.cfc";
+						fullname="lucee-server.admin.debug.Classic";
 						changed=true;
 					}
 					else if(path.endsWith("/Comment.cfc") || path.endsWith("\\Comment.cfc")) {
-						path="/lucee-server-context/admin/debug/Comment.cfc";
-						fullname="lucee-server-context.admin.debug.Comment";
+						path="/lucee-server/admin/debug/Comment.cfc";
+						fullname="lucee-server.admin.debug.Comment";
 						changed=true;
 					}
 					if(changed)pc.write("<span style='color:red'>Please update your debug template defintions in the lucee admin by going into the detail view and hit the \"update\" button.</span>");

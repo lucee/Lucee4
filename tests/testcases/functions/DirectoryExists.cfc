@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<!---
 	<cffunction name="beforeTests"></cffunction>
 	<cffunction name="afterTests"></cffunction>
@@ -37,7 +37,7 @@
 
 <cfset valueEquals(left="#directoryExists(path.real)#", right="true")>
 
-<cfif server.ColdFusion.ProductName EQ "Railo">
+<cfif server.ColdFusion.ProductName EQ "Lucee">
     <cfset valueEquals(left="#evaluate('directoryExists(path.real,false)')#", right="false")>
     <cfset valueEquals(left="#evaluate('directoryExists(path.real,true)')#", right="true")>
 </cfif>

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<!---
 	<cffunction name="beforeTests"></cffunction>
 	<cffunction name="afterTests"></cffunction>
@@ -70,7 +70,7 @@
 
 <cfset setLocale(org)>
 
-<cfif left(server.railo.version,1) GTE 3>
+<cfif left(server.lucee.version,1) GTE 3>
 	<cfset valueEquals(left="#evaluate('DayOfWeekAsString(7,"de")')#", right="Samstag")> 
 	<cfset valueEquals(left="#evaluate('DayOfWeekAsString(7,"en")')#", right="Saturday")> 
 </cfif>

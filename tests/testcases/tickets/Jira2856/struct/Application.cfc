@@ -24,4 +24,4 @@ component {
 	
 	this.componentpaths = {a:request.currentPath&"cfcs1/",b:request.currentPath&"cfcs2/"};
 
-} 
+}

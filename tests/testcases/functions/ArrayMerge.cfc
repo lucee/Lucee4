@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<!---
 	<cffunction name="beforeTests"></cffunction>
 	<cffunction name="afterTests"></cffunction>
@@ -24,7 +24,7 @@
 	<cffunction name="testArrayMerge">
 
 <!--- begin old test code --->
-<cfif server.ColdFusion.ProductName EQ "railo">
+<cfif server.ColdFusion.ProductName EQ "lucee">
 <cfset var arr1=arrayNew(1)>
 <cfset ArrayAppend( arr1, 1 )>
 <cfset ArrayAppend( arr1, 2 )>

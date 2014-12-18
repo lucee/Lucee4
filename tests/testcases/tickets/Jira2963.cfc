@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **/
-component extends="org.railo.cfml.test.RailoTestCase" hint="Tests calling a web service that accepts a typed array,
+component extends="org.lucee.cfml.test.LuceeTestCase" hint="Tests calling a web service that accepts a typed array,
 			which would error." {
 
 	function testSendMyItemStruct() {

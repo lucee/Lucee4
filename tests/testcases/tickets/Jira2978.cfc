@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **/
-component extends="org.railo.cfml.test.RailoTestCase" {
+component extends="org.lucee.cfml.test.LuceeTestCase" {
 
 	function giveIntegerPropertyAsIntegerTest () {
 		local.result = CreateObject( 'webservice', createURL("Jira2978/service.cfc?wsdl")).acceptNestedArray({items:[{name:"item1",id:1},{name:"item2",id:2}]});

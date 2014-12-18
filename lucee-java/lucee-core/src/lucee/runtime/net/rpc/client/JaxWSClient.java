@@ -67,7 +67,7 @@ public class JaxWSClient extends WSClient {
 	private String wsdlUrl;
 	
 	public static void main(String[] args) throws PageException {
-		JaxWSClient client = new JaxWSClient("http://www.lucee.org/lucee-context/Admin.cfc?wsdl", null, null, null);
+		JaxWSClient client = new JaxWSClient("http://www.lucee.org/lucee/Admin.cfc?wsdl", null, null, null);
 	}
 	
 	public JaxWSClient( String wsdlUrl, String username, String password, ProxyData proxyData) throws PageException {

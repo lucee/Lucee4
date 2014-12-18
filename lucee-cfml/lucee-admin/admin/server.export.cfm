@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfsilent>
+<cfsilent>
 <!--- 
 Defaults --->
 <cfparam name="url.action2" default="list">
@@ -166,7 +149,7 @@ component {
 	this.compression = #outputSetting.AllowCompression#;
 	this.suppressRemoteComponentContent = #outputSetting.suppressContent#;
 	
-	// If set to false lucee ignores type defintions with function arguments and return values
+	// If set to false Lucee ignores type defintions with function arguments and return values
 	this.typeChecking = #PerformanceSettings.typeChecking#;
 	
 	
@@ -219,7 +202,7 @@ if(datasources.readOnly) optional.append('readOnly:#datasources.readOnly# // def
 //////////////////////////////////////////////
 //               MAPPINGS                   //
 //////////////////////////////////////////////
-<cfloop query="mappings"><cfif mappings.hidden || mappings.virtual=="/lucee-context" || mappings.virtual=="/lucee-server-context"><cfcontinue></cfif><cfset del=""><cfset count=0>
+<cfloop query="mappings"><cfif mappings.hidden || mappings.virtual=="/lucee" || mappings.virtual=="/lucee-server"><cfcontinue></cfif><cfset del=""><cfset count=0>
 this.mappings=["#mappings.virtual#"]=<cfif len(mappings.strPhysical) && !len(mappings.strArchive)>"#mappings.strPhysical#"<cfelse>{<cfif len(mappings.strPhysical)><cfset count++>
 		physical:"#mappings.strPhysical#"<cfset del=","></cfif><cfif len(mappings.strArchive)><cfset count++>
 		#del#archive:"#mappings.strArchive#"<cfset del=","></cfif><cfif count==2 && !mappings.PhysicalFirst>

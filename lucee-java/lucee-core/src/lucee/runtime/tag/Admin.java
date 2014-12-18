@@ -3288,7 +3288,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     }
 
     private void doGetDatasourceDriverList() throws PageException {
-    	Resource luceeContext = ResourceUtil.toResourceExisting(pageContext ,"/lucee-context/admin/dbdriver/");
+    	Resource luceeContext = ResourceUtil.toResourceExisting(pageContext ,"/lucee/admin/dbdriver/");
     	Resource[] children = luceeContext.listResources(new ExtensionResourceFilter("cfc"));
     	String rtnVar=getString("admin",action,"returnVariable");
     	
@@ -3303,7 +3303,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     }
 
 	private void doGetDebuggingList() throws PageException {
-    	Resource luceeContext = ResourceUtil.toResourceExisting(pageContext ,"/lucee-context/templates/debugging/");
+    	Resource luceeContext = ResourceUtil.toResourceExisting(pageContext ,"/lucee/templates/debugging/");
     	Resource[] children = luceeContext.listResources(new ExtensionResourceFilter("cfm"));
     	String rtnVar=getString("admin",action,"returnVariable");
     	

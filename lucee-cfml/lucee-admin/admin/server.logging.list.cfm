@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cftry>
+<cftry>
 	<cfset stVeritfyMessages = StructNew()>
 	<cfswitch expression="#form.mainAction#">
 	<!--- delete --->
@@ -141,7 +124,7 @@ Redirtect to entry --->
 							<td>#appender.getLabel()#</td>
 							<td>#logs.level#</td>
 							<td>
-								<a href="#request.self#?action=#url.action#&action2=create&name=#Hash(logs.name)#" class="btn-mini edit"><span>edit</span></a>
+								<a href="#request.self#?action=#url.action#&action2=create&name=#Hash(logs.name)#" class="sprite edit"></a>
 							</td>
 						</tr>
 					</cfloop>
@@ -149,8 +132,8 @@ Redirtect to entry --->
 				<tfoot>
 					<tr>
 						<td colspan="4">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.delete#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.delete#">
+							<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
 						</td>	
 					</tr>
 				</tfoot>
@@ -213,8 +196,8 @@ function defaultValue(field) {
 					<tfoot>
 						<tr>
 							<td colspan="2">
-								<input type="submit" class="button submit" name="run" value="#stText.Buttons.create#">
-								<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+								<input type="submit" class="bl button submit" name="run" value="#stText.Buttons.create#">
+								<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
 							</td>
 						</tr>
 					</tfoot>

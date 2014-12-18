@@ -24,4 +24,4 @@ component {
 
 	this.sameFormFieldsAsArray=isDefined("url.sameFormFieldsAsArray") && url.sameFormFieldsAsArray;
 	this.sameURLFieldsAsArray=isDefined("url.sameURLFieldsAsArray") && url.sameURLFieldsAsArray;
-} 
+}

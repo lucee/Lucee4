@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfadmin 
+<cfadmin 
 	action="getRemoteClients"
 	type="#request.adminType#"
 	password="#session["password"&request.adminType]#"
@@ -177,7 +160,7 @@ list all mappings and display necessary edit fields --->
 							</cfif>
 							<td>
 								<cfif hasAccess>
-									<a href="#request.self#?action=#url.action#&action2=create&url=#hash(clients.url)#" class="btn-mini edit"><span>edit</span></a>
+									#renderEditButton("#request.self#?action=#url.action#&action2=create&url=#hash(clients.url)#")#
 								</cfif>
 							</td>
 						</tr>
@@ -187,9 +170,9 @@ list all mappings and display necessary edit fields --->
 					<tfoot>
 						<tr>
 							<td colspan="#4+usage.recordcount#">
-								<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Verify#">
-								<input type="reset" class="button reset" name="cancel" value="#stText.Buttons.Cancel#">
-								<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Delete#">
+								<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Verify#">
+								<input type="reset" class="bm button reset" name="cancel" value="#stText.Buttons.Cancel#">
+								<input type="submit" class="br button submit" name="mainAction" value="#stText.Buttons.Delete#">
 							</td>	
 						</tr>
 					</tfoot>

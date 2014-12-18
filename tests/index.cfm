@@ -89,7 +89,7 @@ testbox = new testbox.system.testing.TestBox();
 	<meta charset="utf-8">
 	<meta name="generator" content="TestBox v#testbox.getVersion()#">
 	<title>TestBox Global Runner</title>
-	<script src="/railo-context/admin/resources/js/jquery-1.7.2.min.js.cfm" type="text/javascript"></script><!--- TODO use version indepent file --->
+	<script src="/lucee/admin/resources/js/jquery-1.7.2.min.js.cfm" type="text/javascript"></script><!--- TODO use version indepent file --->
 	<script>
 	$(document).ready(function() {
 		

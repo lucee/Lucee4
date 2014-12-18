@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfparam name="error" default="#struct(message:"",detail:"")#">
+<cfparam name="error" default="#struct(message:"",detail:"")#">
 
 <!--- ACTIONS --->
 <cftry>
@@ -297,7 +280,7 @@
 							This feature is currently in Beta State.
 							If you have any problems while using this Implementation,
 							please post the bugs and errors in our
-							<a href="https://jira.jboss.org/jira/browse/LUCEE" target="_blank">bugtracking system</a>. 
+							<a href="https://jira.jboss.org/jira/browse/RAILO" target="_blank">bugtracking system</a>. 
 						</div>--->
 					</td>
 				</tr>
@@ -522,8 +505,8 @@
 					<td colspan="2">
 						<input type="hidden" name="mark" value="#structKeyExists(form,'mark')?form.mark:'update'#">
 						<input type="hidden" name="run" value="create2">
-						<input type="submit" class="button submit" name="_run" value="#stText.Buttons[actionType]#">
-						<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="button" name="cancel" value="#stText.Buttons.Cancel#">
+						<input type="submit" class="bl button submit" name="_run" value="#stText.Buttons[actionType]#">
+						<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="br button" name="cancel" value="#stText.Buttons.Cancel#">
 					</td>
 				</tr>
 			</tfoot>

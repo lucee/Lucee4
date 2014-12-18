@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<!---
 	<cffunction name="beforeTests"></cffunction>
 	<cffunction name="afterTests"></cffunction>
 	<cffunction name="setUp"></cffunction>
 	--->
 	<cffunction name="testArrayFindNoCase">
-<cfif server.ColdFusion.ProductName EQ "railo">
+<cfif server.ColdFusion.ProductName EQ "lucee">
 <cfset valueEquals (left="#ArrayFindNoCase(listToArray('abba,bb'),'bb')#", right="2")>
 <cfset valueEquals (left="#ArrayFindNoCase(listToArray('abba,bb,AABBCC,BB'),'BB')#", right="2")>
 <cfset valueEquals (left="#ArrayFindNoCase(listToArray('abba,bb,AABBCC'),'ZZ')#", right="0")>

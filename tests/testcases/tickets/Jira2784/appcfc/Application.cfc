@@ -23,4 +23,4 @@ component {
 	request.currentPath=GetDirectoryFromPath(getCurrentTemplatePath());
 	
 	this.compression=url.compression;
-} 
+}

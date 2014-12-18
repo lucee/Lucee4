@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<!---
 	<cffunction name="beforeTests"></cffunction>
 	<cffunction name="afterTests"></cffunction>
@@ -94,7 +94,7 @@
 <cfset valueEquals(left="#evaluate('local[''qry'']["aaa"][2]')#", right="2")>
 
 <cfset valueEquals(left="#evaluate('local[''qry'']["aaa"][2]')#", right="2")>
-<cfif server.ColdFusion.ProductName EQ "railo">
+<cfif server.ColdFusion.ProductName EQ "lucee">
 <cfset valueEquals(left="#evaluate('local[''qry'']["aaa"]=1')#", right="1")>
 <cfset valueEquals(left="#evaluate('local[''qry'']["aaa"][2]=1')#", right="1")>
 <cfset valueEquals(left="#evaluate('local[''qry'']["aaa"][2]')#", right="1")>
@@ -159,7 +159,7 @@
 <cfdump var="#qry.recordcount#">
  --->
  
-<cfif server.ColdFusion.ProductName EQ "railo">
+<cfif server.ColdFusion.ProductName EQ "lucee">
 <cfset valueEquals(left="#evaluate('qry.recordcount[2]')#", right="#qry.recordcount[2]#")>
 <cfset valueEquals(left="#evaluate('qry.currentrow[2]')#", right="2")>
 <cfset valueEquals(left="#evaluate('qry.columnlist[2]')#", right="aaa")>

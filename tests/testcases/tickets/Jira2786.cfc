@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  ---><cfscript>
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public void function testSuppressOnAppCFC(){
 		http method="get" result="local.result" url="#createURL("Jira2786/appcfc/Test.cfc?method=test&suppress=true")#" addtoken="false";

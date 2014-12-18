@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<!---
 	<cffunction name="beforeTests"></cffunction>
 	<cffunction name="afterTests"></cffunction>
@@ -119,7 +119,7 @@ str&=asc(mid(data.text,i,1))></cfloop>
 <cfset str='"\u2765\u263a\u00ae\u00ae\u2716"'>
 <cfset data=deserializejson(str)>
 
-<!--- railo only escapes when necessary --->
+<!--- lucee only escapes when necessary --->
 <cfset valueEquals(left="#toAsc(str)#", right="#toAsc(serializeJson(data,false,"us-ascii"))#")>
 
 <!--- end old test code --->

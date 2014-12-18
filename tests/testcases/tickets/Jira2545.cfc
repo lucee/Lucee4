@@ -18,7 +18,7 @@
  **/
 
 
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public function setUp(){
 		variables.arr=['Text 1'];
@@ -109,4 +109,4 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 	assertEquals(isNull(variables.arr[three]),false);
 	}
 	
-} 
+}

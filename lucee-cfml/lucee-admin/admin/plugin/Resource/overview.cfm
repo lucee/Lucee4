@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfoutput>
+<cfoutput>
 <script>
 
 function selectAll(field) {
@@ -79,12 +62,12 @@ function selectAll(field) {
          <table border="0" cellpadding="0" cellspacing="0">
          <tr>
             <td>&nbsp;</td>		
-            <td><cfmodule template="/lucee-context/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="1" height="20"></td>
+            <td><cfmodule template="/lucee/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="1" height="20"></td>
             <td></td>
          </tr>
          <tr>
             <td></td>
-            <td valign="top"><cfmodule template="/lucee-context/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="1" height="14"><cfmodule template="/lucee-context/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="36" height="1"></td>
+            <td valign="top"><cfmodule template="/lucee/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="1" height="14"><cfmodule template="/lucee/admin/img.cfm" src="#request.adminType#-bgcolor.gif" width="36" height="1"></td>
              <td>&nbsp;
             <input type="submit" class="button submit" name="delete" value="#lang.btnDelete#">
             </td>	

@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><!--- <cfif isDefined("form")>
+<!--- <cfif isDefined("form")>
 	<cfinclude template="act/resources.act_mapping.cfm">
 </cfif> --->
 
@@ -248,10 +231,10 @@ Redirtect to entry --->
 							<td colspan="4">
 								<input type="hidden" name="type_#idx#" value="java">
 								<input type="hidden" name="mainAction" value="updateJava">
-								<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.Verify#">
-								<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.save#">
-								<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-								<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.Delete#">
+								<input type="submit" class="bl button submit" name="subAction" value="#stText.Buttons.Verify#">
+								<input type="submit" class="bm button submit" name="subAction" value="#stText.Buttons.save#">
+								<input type="reset" class="bm reset" name="cancel" value="#stText.Buttons.Cancel#">
+								<input type="submit" class="br button submit" name="subAction" value="#stText.Buttons.Delete#">
 							</td>
 						</tr>
 					</tfoot>
@@ -263,7 +246,7 @@ Redirtect to entry --->
 			<h2>#stText.CFX.cpp.CFXTags#</h2>
 			<div class="warning nohighlight">
 				The C++ CFX tags Implementation is currently in Beta State. Its functionality can change before it's final release.
-				If you have any problems while using the C++ CFX tags Implementation, please post the bugs and errors in our <a href="https://jira.jboss.org/jira/browse/LUCEE" target="_blank" class="CheckError">bugtracking system</a>. 
+				If you have any problems while using the C++ CFX tags Implementation, please post the bugs and errors in our <a href="https://jira.jboss.org/jira/browse/RAILO" target="_blank" class="CheckError">bugtracking system</a>. 
 			</div>
 			<!------------------------------ C++ ------------------------------->
 			<cfform onerror="customError" name="cpp" action="#request.self#?action=#url.action#" method="post">
@@ -388,10 +371,10 @@ Redirtect to entry --->
 								<td colspan="6">
 									<input type="hidden" name="type_#idx#" value="cpp">
 									<input type="hidden" name="mainAction" value="updateJava">
-									<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.Verify#">
-									<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.save#">
-									<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-									<input type="submit" class="button submit" name="subAction" value="#stText.Buttons.Delete#">
+									<input type="submit" class="bl button submit" name="subAction" value="#stText.Buttons.Verify#">
+									<input type="submit" class="bm button submit" name="subAction" value="#stText.Buttons.save#">
+									<input type="reset" class="bm button reset" name="cancel" value="#stText.Buttons.Cancel#">
+									<input type="submit" class="br button submit" name="subAction" value="#stText.Buttons.Delete#">
 								 </td>
 							</tr>
 						</tfoot>

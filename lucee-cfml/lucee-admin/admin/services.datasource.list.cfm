@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cftry>
+<cftry>
 	<cfset stVeritfyMessages = StructNew()>
 	<cfswitch expression="#form.mainAction#">
 	<!--- UPDATE --->
@@ -139,10 +122,10 @@ Error Output --->
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Update#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Update#">
+							<input type="reset" class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> reset" name="cancel" value="#stText.Buttons.Cancel#">
 							<cfif request.adminType EQ "web">
-								<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#">
+								<input type="submit" class="br button submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#">
 							</cfif>
 						</td>
 					</tr>
@@ -281,7 +264,7 @@ list all mappings and display necessary edit fields --->
 						<!--- and now display --->
 						<tr>
 							<td>
-								<input type="checkbox" class="checkbox" name="row_#srcLocal.currentrow#" value="#srcLocal.currentrow#">
+								 <input type="checkbox" class="checkbox" name="row_#srcLocal.currentrow#" value="#srcLocal.currentrow#">
 								<input type="hidden" name="username_#srcLocal.currentrow#" value="#srcLocal.Username#">
 								<input type="hidden" name="password_#srcLocal.currentrow#" value="#srcLocal.Password#">
 							</td>
@@ -309,7 +292,9 @@ list all mappings and display necessary edit fields --->
 									&nbsp;				
 								</cfif>
 							</td>
-							<td><a class="btn-mini edit" href="#request.self#?action=#url.action#&action2=create&name=#srcLocal.name#" title="edit"><span>edit</span></a></td>
+							<td>#renderEditButton("#request.self#?action=#url.action#&action2=create&name=#srcLocal.name#")#
+					
+
 						</tr>						
 					</cfloop>
 					<cfmodule template="remoteclients.cfm" colspan="6" line="true">
@@ -317,9 +302,10 @@ list all mappings and display necessary edit fields --->
 				<tfoot>
 					<tr>
 						<td colspan="6">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Verify#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Delete#">
+
+							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Verify#">
+							<input type="reset" class="bm reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="br button submit" name="mainAction" value="#stText.Buttons.Delete#">
 						 </td>
 					</tr>
 				</tfoot>
@@ -362,8 +348,8 @@ list all mappings and display necessary edit fields --->
 					<tr>
 						<td colspan="2">
 							<input type="hidden" name="mark" value="create">
-							<input type="submit" class="button submit" name="run" value="#stText.Buttons.Create#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="bl button submit" name="run" value="#stText.Buttons.Create#">
+							<input type="reset" class="br reset" name="cancel" value="#stText.Buttons.Cancel#">
 						</td>
 					</tr>
 				</tfoot>

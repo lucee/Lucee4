@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfif request.adminType EQ "web">
+<cfif request.adminType EQ "web">
 	<cfset resetLabel=stText.Buttons.resetServerAdmin>
 	<cfelse>
 	<cfset resetLabel=stText.Buttons.reset>
@@ -243,9 +226,9 @@ Redirtect to entry  --->
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Update#">
-							<input type="reset" class="button reset" name="cancel" value="#stText.Buttons.Cancel#">
-							<input class="button submit" type="submit" name="mainAction" value="#resetLabel#">
+							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Update#">
+							<input type="reset" class="bm button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input class="br button submit" type="submit" name="mainAction" value="#resetLabel#">
 						</td>
 					</tr>
 				</tfoot>

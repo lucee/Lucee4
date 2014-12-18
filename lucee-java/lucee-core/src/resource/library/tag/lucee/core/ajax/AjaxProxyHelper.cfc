@@ -59,7 +59,7 @@
 		
 		<cfset var i = "" /> 
 		  
-	 	<cfif arguments.meta['name'] neq 'WEB-INF.cftags.component ' and arguments.meta['name'] neq 'lucee-context.component'>
+	 	<cfif arguments.meta['name'] neq 'WEB-INF.cftags.component ' and arguments.meta['name'] neq 'lucee.component'>
 			<cfif structkeyExists(arguments.meta,'functions')>
 				<cfset arr = filterFunction(arguments.meta.functions,arguments.methods) />
 				<cfset arguments.functions.addAll(arr)/>

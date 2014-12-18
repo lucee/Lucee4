@@ -3,14 +3,14 @@
 	<language key="de">
 		<title>Dynamic DNS</title>
 		<description>
-			Verbinden Sie lucee mit dem Dynamic DNS Service DNSExchanges.
+			Verbinden Sie Railo mit dem Dynamic DNS Service DNSExchanges.
 			Registrieren Sie sich dazu unter {link} und tragen Sie die ID, welche Sie erhalten in das Feld unterhalb ein.
 		</description>
 		<custom key="id">ID</custom>
 		<custom key="commentId">Geben Sie hier die ID ein, welche Sie nach der Anmeldung auf {link} erhalten haben.</custom>
 		<custom key="btnSubmit">Speichern</custom>
 		<custom key="btnCancel">Abbrechen</custom>
-		<custom key="messageId">Das Feld ID enthaelt keinen Wert</custom>
+		<custom key="messageId">Das Feld ID enthält keinen Wert</custom>
 		<custom key="onOff">Einschalten</custom>
 		<custom key="commentOnOff">Schalten Sie hiermit den Dienst ein oder aus.</custom>
 		
@@ -23,7 +23,7 @@
 	<language key="en">
 		<title>Dynamic DNS</title>
 		<description>
-			Connect with lucee to the Dynamic DNS DNSExchange.
+			Connect with Railo to the Dynamic DNS DNSExchange.
 			For that register at {link} and ad the ID to the Filed Below.
 		</description>
 		<custom key="id">ID</custom>

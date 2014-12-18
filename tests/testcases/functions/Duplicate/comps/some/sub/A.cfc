@@ -23,4 +23,4 @@
    <cffunction name="getsome" displayname="susiFuncto">
    		<cfreturn "super.getVariableList">
    </cffunction> 
-</cfcomponent> 
+</cfcomponent>

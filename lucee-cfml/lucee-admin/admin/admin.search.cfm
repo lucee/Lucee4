@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cffunction name="searchLang" returntype="array" output="no">
+<cffunction name="searchLang" returntype="array" output="no">
 	<cfargument name="q" type="string" />
 	<cfargument name="data" type="any" required="yes" />
 	<cfargument name="prefix" type="string" required="no" default="" />
@@ -31,7 +14,7 @@
 	<cfreturn ret />
 </cffunction>
 
-<cfset luceeArchivePath = expandPath("{lucee-web}/context/lucee-context.ra") />
+<cfset luceeArchivePath = expandPath("{lucee-web}/context/lucee-context.lar") />
 <cfset luceeArchiveZipPath = "zip://" & luceeArchivePath & "!" />
 <cfset dataDir = expandPath("{lucee-server}/searchdata") & server.separator.file />
 
@@ -49,7 +32,7 @@
 <cfif structKeyExists(url, 'q') and len(url.q)>
 	<cfset variables.indexFile = '#dataDir#searchindex.cfm' />
 
-	<!--- do initial or new indexing when a new lucee version is detected --->
+	<!--- do initial or new indexing when a new Lucee version is detected --->
 	<cfif not fileExists(variables.indexFile)
 	or structKeyExists(url, "reindex")
 	or fileRead('#dataDir#indexed-lucee-version.cfm') neq server.lucee.version & server.lucee['release-date']>
@@ -117,6 +100,6 @@
 		This feature is currently in Beta State.
 		If you have any problems while using this Implementation,
 		please post the bugs and errors in our
-		<a href="https://jira.jboss.org/jira/browse/LUCEE" target="_blank">bugtracking system</a>. 
+		<a href="https://jira.jboss.org/jira/browse/RAILO" target="_blank">bugtracking system</a>. 
 	</div>
 </cfif>

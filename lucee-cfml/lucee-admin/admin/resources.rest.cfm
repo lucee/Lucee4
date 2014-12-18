@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfset hasAccess=true>
+<cfset hasAccess=true>
 <cfset newRecord="sd812jvjv23uif2u32d">
 <cfparam name="form.mainAction" default="none">
 <cfparam name="form.subAction" default="none">
@@ -189,9 +172,9 @@ list all mappings and display necessary edit fields --->
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Update#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-							<cfif request.adminType EQ "web"><input class="button submit" type="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
+							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Update#">
+							<input type="reset" class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<cfif request.adminType EQ "web"><input class="br button submit" type="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
 						</td>
 					</tr>
 				</tfoot>
@@ -252,7 +235,8 @@ list all mappings and display necessary edit fields --->
 							<!--- edit
 							<td>
 								<cfif not rest.readOnly>
-									<a href="#request.self#?action=#url.action#&action2=create&virtual=#rest.virtual#" class="btn-mini edit"><span>edit</span></a>
+									#renderEditButton("#request.self#?action=#url.action#&action2=create&virtual=#rest.virtual#")#
+									
 								</cfif>
 							</td> --->
 						</tr>
@@ -266,9 +250,9 @@ list all mappings and display necessary edit fields --->
 				<tfoot>
 					<tr>
 						<td colspan="5">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.save#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Delete#">
+							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.save#">
+							<input type="reset" class="bm button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="br button submit" name="mainAction" value="#stText.Buttons.Delete#">
 						</td>	
 					</tr>
 				</tfoot>
@@ -302,7 +286,7 @@ list all mappings and display necessary edit fields --->
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.save#">
+							<input type="submit" class="bs button submit" name="mainAction" value="#stText.Buttons.save#">
 						</td>
 					</tr>
 				</tfoot>

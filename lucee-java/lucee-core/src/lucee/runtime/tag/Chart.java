@@ -750,7 +750,7 @@ public final class Chart extends BodyTagImpl implements Serializable {
 		
 		String contextPath = pageContext.getHttpServletRequest().getContextPath();
 		contextPath = StringUtil.isEmpty(contextPath) ? "/" : contextPath+"/";
-		String src=contextPath+"lucee-context/graph.cfm?img="+id+"&type="+formatToString(format);
+		String src=contextPath+"lucee/graph.cfm?img="+id+"&type="+formatToString(format);
 		
 		if(!StringUtil.isEmpty(source)) {
 			pageContext.setVariable(source, src);

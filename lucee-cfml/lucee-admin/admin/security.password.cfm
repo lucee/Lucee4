@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><!--- <cfset classConfig=createObject("java","lucee.runtime.config.ConfigWeb")>
+<!--- <cfset classConfig=createObject("java","lucee.runtime.config.ConfigWeb")>
 <cfset STRICT=classConfig.SCOPE_STRICT>
 <cfset SMALL=classConfig.SCOPE_SMALL>
 <cfset STANDART=classConfig.SCOPE_STANDART> --->
@@ -41,8 +24,8 @@ Defaults --->
 					type="#request.adminType#"
 					password="#session["password"&request.adminType]#"
                     
-					captcha="#structKeyExists(form,"captcha") and form.captcha#"
 					rememberme="#structKeyExists(form,"remembermeEnable") and form.remembermeEnable#"
+					captcha="#structKeyExists(form,"captcha") and form.captcha#"
 					delay="#form.delay#">
 			
 		</cfcase>
@@ -154,8 +137,8 @@ Error Output --->
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.save#">
-							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.save#">
+							<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
 						</td>
 					</tr>
 				</tfoot>
@@ -199,8 +182,8 @@ Error Output --->
 			<tfoot>
 				<tr>
 					<td colspan="2">
-						<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Change#">
-						<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+						<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Change#">
+						<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
 					</td>
 				</tr>
 			</tfoot>
@@ -240,9 +223,9 @@ Error Output --->
 					<tfoot>
 						<tr>
 							<td colspan="2">
-								<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Update#">
-								<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.delete#">
-								<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+								<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Update#">
+								<input type="submit" class="bm button submit" name="mainAction" value="#stText.Buttons.delete#">
+								<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
 							</td>
 						</tr>
 					</tfoot>
@@ -293,8 +276,8 @@ Error Output --->
 					<tfoot>
 						<tr>
 							<td colspan="2">
-								<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Reset#">
-								<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
+								<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Reset#">
+								<input type="reset" class="br reset" name="cancel" value="#stText.Buttons.Cancel#">
 							</td>
 						</tr>
 					</tfoot>

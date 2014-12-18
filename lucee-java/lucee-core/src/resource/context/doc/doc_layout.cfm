@@ -22,7 +22,7 @@
 
 <cfparam name="cookie.lucee_admin_lang" default="en">
 <cfset session.lucee_admin_lang = cookie.lucee_admin_lang>
-<cfinclude template="/lucee-context/admin/resources/text.cfm">
+<cfinclude template="/lucee/admin/resources/text.cfm">
 
 <cfcontent reset="#true#">
 

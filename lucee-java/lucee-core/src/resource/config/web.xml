@@ -126,9 +126,9 @@ Path placeholders:
 		<mapping
 			readonly="yes"
 			trusted="true"
-			virtual="/lucee-context/"
+			virtual="/lucee/"
 			physical="{lucee-web}/context/"
-			archive="{lucee-web}/context/lucee-context.ra"
+			archive="{lucee-web}/context/lucee-context.lar"
 			primary="physical"
 			toplevel="yes"/>
 	</mappings>	
@@ -153,7 +153,7 @@ Path placeholders:
 		use-shadow: if true component variable scope has a second scope, not only the this scope
 	-->
 	<component 
-        base="/lucee-context/Component.cfc"
+        base="/lucee/Component.cfc"
 		data-member-default-access="public"
 		use-shadow="yes"> 
 	</component>
@@ -175,7 +175,7 @@ Path placeholders:
 		enable and disable debugging
 	 -->
 	<debugging
-		template="/lucee-context/templates/debugging/debugging.cfm"/>
+		template="/lucee/templates/debugging/debugging.cfm"/>
 		
 	<application
 		cache-directory="{lucee-web}/cache/"

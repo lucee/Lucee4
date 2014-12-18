@@ -34,4 +34,3 @@ echo(';');
 echo(isDefined('script_name'));
 echo(';');
 </cfscript>
-

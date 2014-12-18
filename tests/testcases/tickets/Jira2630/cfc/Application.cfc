@@ -23,4 +23,4 @@ component {
 	request.currentPath=GetDirectoryFromPath(getCurrentTemplatePath());
 	if(isDefined('url.locale'))this.locale=url.locale;
 	if(isDefined('url.timeZone'))this.timeZone=url.timeZone;
-} 
+}

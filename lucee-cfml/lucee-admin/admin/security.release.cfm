@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfif request.adminType EQ "web">
+<cfif request.adminType EQ "web">
 	<cfthrow message="no access to this functionality">
 </cfif>
 <cfscript>
@@ -156,13 +139,13 @@ Error Output --->
 <table class="tbl" width="600">
 <form action="#request.self#?action=#url.action#" method="post">
 <tr>
-	<td colspan="2">Definieren Sie hier, wie der Zugriff der einzelnen Webs auf lucee prinzipiell geregelt ist.</td>
+	<td colspan="2">Definieren Sie hier, wie der Zugriff der einzelnen Webs auf Lucee prinzipiell geregelt ist.</td>
 </tr>
 <tr>
 	<td colspan="2">
 	<select name="web_access">
-	<option value="yes" <cfif access.web_access>selected</cfif>>Alle Webs duerfen lucee verwenden</option>
-	<option value="no" <cfif not access.web_access>selected</cfif>>Nur folgende Webs duerfen lucee verwenden</option>
+	<option value="yes" <cfif access.web_access>selected</cfif>>Alle Webs d�rfen Lucee verwenden</option>
+	<option value="no" <cfif not access.web_access>selected</cfif>>Nur folgende Webs d�rfen Lucee verwenden</option>
 </select>
 <input type="submit" class="button submit" name="subAction" value="#stText.Buttons.Update#">
 	</td>
@@ -175,14 +158,14 @@ Error Output --->
 	
 <cfif access.web_access>
 <h2>Einzelne Webs freigeben</h2>
-Alle Webs koennen lucee verwenden.
+Alle Webs k�nnen Lucee verwenden.
 <cfelse>
 <cfoutput><form action="#cgi.script_name#" method="post"></cfoutput>
 <table class="tbl">
 <tr>
 	<td colspan="2">
 	<h2>Einzelne Webs freigeben</h2>
-	Nur die Webs, welche hier eine explizite Freigabe haben, koennen lucee auch verwenden.
+	Nur die Webs, welche hier eine explizite Freigabe haben, k�nnen Lucee auch verwenden.
 	</td>
 </tr>
 <tr>

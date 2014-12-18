@@ -1,24 +1,7 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><!--- TODO: cleanup! !--->
+<!--- TODO: cleanup! !--->
 <!--- language files are deployed to {lucee-web}/context/admin/resources/language by ConfigWebFactory.java and are read from there !--->
 
-<cfset sHelpURL = "http://www.lucee.org/help/stHelp.json">
+<cfset sHelpURL = "http://www.getlucee.com/help/stHelp.json">
 <cfparam name="request.stLocalHelp" default="#structNew()#">
 <cfparam name="request.stWebMediaHelp" default="#structNew()#">
 <cfparam name="request.stWebHelp" default="#structNew()#">
@@ -218,7 +201,7 @@ You can use this code in order to write the structs into an XML file correspondi
 	<cfset var result = {}>
 	<cfloop query="qDir">
 
-		<cffile action="read" file="language/#qDir.name#" variable="local.sContent">
+		<cffile action="read" file="language/#qDir.name#" charset="UTF-8" variable="local.sContent">
 		
 		<cfset var xml  = XMLParse(sContent)>
 		<cfset var lang = xml.language.XMLAttributes.Key>

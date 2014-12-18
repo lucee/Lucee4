@@ -1,21 +1,49 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- --->function nullIfEmpty(str) {
+<cfscript>
+function toFile(path,file) {
+	if(len(arguments.path) EQ 0) return arguments.file;
+	if(right(arguments.path,1) NEQ server.separator.file) arguments.path=arguments.path&server.separator.file;
+	return arguments.path&arguments.file;
+	
+}
+
+function translateDateTime(task,dateName,timeName,newName) {
+	var sct=struct();
+	var d=0;
+	// Date
+	if(structKeyExists(arguments.task,arguments.dateName) and IsDate(arguments.task[arguments.dateName])) {
+		d=arguments.task[arguments.dateName];
+		sct.year=year(d);
+		sct.month=two(month(d));
+		sct.day=two(day(d));	
+	}
+	else {
+		sct.year='';
+		sct.month='';
+		sct.day='';
+	}
+	// Time
+	if(structKeyExists(arguments.task,arguments.timeName) and IsDate(arguments.task[arguments.timeName])) {
+		d=arguments.task[arguments.timeName];
+		sct.hour=two(hour(d));
+		sct.minute=two(minute(d));
+		sct.second=two(second(d));	
+	}
+	else {
+		sct.hour='';
+		sct.minute='';
+		sct.second='';
+	}
+	arguments.task[arguments.newName]=sct;
+}
+
+function formBool(formName) {
+	
+	return structKeyExists(form,formName) and form[formName];
+}
+/**
+* returns null if string is empty (no return is equal to return null)
+*/
+function nullIfEmpty(str) {
 	str=trim(str);
 	if(len(str) GT 0) return str;
 }
@@ -259,21 +287,18 @@ Error Output--->
 			<br />
 			#stText.Schedule.CurrentDateTime#&nbsp;
 			#dateFormat(now(),'mmmm dd yyyy')# #timeFormat(now(),'HH:mm:ss')# <!---(mmmm dd yyyy HH:mm:ss)--->
-		</div>
-		<table border="0" cellpadding="0" cellspacing="0">
-			<tr><cfset css="background-color:white;background: url('');">
-				<td><input style="tbl#iif(task.interval EQ 'once','css',de(''))#" 
-					type="submit" class="button submit" name="interval" value="once">&nbsp;</td>
-				<td>&nbsp;<input style="tbl#iif(task.interval EQ 'daily','css',de(''))#" 
-					type="submit" class="button submit" name="interval" value="daily">&nbsp;</td>
-				<td>&nbsp;<input style="tbl#iif(task.interval EQ 'weekly','css',de(''))#"  
-					type="submit" class="button submit" name="interval" value="weekly">&nbsp;</td>
-				<td>&nbsp;<input style="tbl#iif(task.interval EQ 'monthly','css',de(''))#" 
-					type="submit" class="button submit" name="interval" value="monthly">&nbsp;</td>
-				<td>&nbsp;<input style="tbl#iif(isNumeric(task.interval),'css',de(''))#" 
-					type="submit" class="button submit" name="interval" value="every ..."></td>
-			</tr>
-		</table>
+		</div><cfset css="color:white;background-color:#request.adminType EQ "web"?'##39c':'##c00'#;">
+		
+			<input style="margin-left:0px;#iif(task.interval EQ 'once','css',de(''))#" 
+					type="submit" class="bl button submit" name="interval" value="once">
+			<input style="#iif(task.interval EQ 'daily','css',de(''))#" 
+					type="submit" class="bm button submit" name="interval" value="daily">
+			<input style="#iif(task.interval EQ 'weekly','css',de(''))#"  
+					type="submit" class="bm button submit" name="interval" value="weekly">
+			<input style="#iif(task.interval EQ 'monthly','css',de(''))#" 
+					type="submit" class="bm button submit" name="interval" value="monthly">
+			<input style="#iif(isNumeric(task.interval),'css',de(''))#" 
+					type="submit" class="br button submit" name="interval" value="every ...">
 		
 		<table class="maintbl">
 			<tbody>
@@ -527,8 +552,8 @@ Error Output--->
 			<tfoot>
 				<tr>
 					<td colspan="2">
-						<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="button cancel" name="cancel" value="#stText.Buttons.Cancel#">
-						<input type="submit" class="button submit" name="run" value="#stText.Buttons.Update#">
+						<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="bl button cancel" name="cancel" value="#stText.Buttons.Cancel#">
+						<input type="submit" class="br button submit" name="run" value="#stText.Buttons.Update#">
 					</td>
 				</tr>
 			</tfoot>

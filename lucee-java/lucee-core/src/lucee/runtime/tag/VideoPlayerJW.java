@@ -313,7 +313,7 @@ public class VideoPlayerJW extends BodyTagSupport {
 		
 		StringBuffer sb=new StringBuffer();
 		
-		write(sb,"<script type=\"text/javascript\" src=\"/lucee-context/swfobject.js.cfm\"></script>");
+		write(sb,"<script type=\"text/javascript\" src=\"/lucee/swfobject.js.cfm\"></script>");
 		write(sb,"<div ");			
 		
 		
@@ -333,7 +333,7 @@ public class VideoPlayerJW extends BodyTagSupport {
 		
 		
 		write(sb,"<script type=\"text/javascript\">\n");			
-		write(sb,"var so = new SWFObject(\"/lucee-context/mediaplayer.swf.cfm\", \""+flashId+"\", \""+width+"\", \""+(height)+"\", \"8\", \""+format("#",bgcolor)+"\");\n");			
+		write(sb,"var so = new SWFObject(\"/lucee/mediaplayer.swf.cfm\", \""+flashId+"\", \""+width+"\", \""+(height)+"\", \"8\", \""+format("#",bgcolor)+"\");\n");			
 		
 		// script
 		addParam(sb,"allowscriptaccess","always");

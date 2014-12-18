@@ -24,4 +24,4 @@ component {
 
 	this.charset.web="UTF-16";
 	this.charset.resource="UTF-16";
-} 
+}

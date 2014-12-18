@@ -17,7 +17,7 @@
  * 
  ---><cfscript>
 	pageencoding "utf-8"; 
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	// processingdirective pageencoding="utf-8";
 	
 	//public function beforeTests(){}

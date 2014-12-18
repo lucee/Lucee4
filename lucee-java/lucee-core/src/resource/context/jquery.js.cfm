@@ -1,21 +1,19 @@
-<!--- 
+<cfcontent type="text/javascript"><cfsetting showdebugoutput="no">/*!
+ * jQuery JavaScript Library v1.6.2
+ * http://jquery.com/
  *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
+ * Copyright 2011, John Resig
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- --->(function( window, undefined ) {
+ * Includes Sizzle.js
+ * http://sizzlejs.com/
+ * Copyright 2011, The Dojo Foundation
+ * Released under the MIT, BSD, and GPL Licenses.
+ *
+ * Date: Thu Jun 30 14:16:56 2011 -0400
+ */
+(function( window, undefined ) {
 
 // Use the correct document accordingly with window argument (sandbox)
 var document = window.document,

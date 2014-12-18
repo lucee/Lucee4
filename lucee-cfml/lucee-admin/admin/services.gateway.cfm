@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfif request.admintype EQ "server"><cflocation url="#request.self#" addtoken="no"></cfif>
+<cfif request.admintype EQ "server"><cflocation url="#request.self#" addtoken="no"></cfif>
 
 <cfset error.message="">
 <cfset error.detail="">
@@ -43,8 +26,8 @@
 <!--- load available drivers --->
 <cfset variables.drivers={}>
 <cfset driverNames=structnew("linked")>
-<cfset driverNames=ComponentListPackageAsStruct("lucee-server-context.admin.gdriver",driverNames)>
-<cfset driverNames=ComponentListPackageAsStruct("lucee-context.admin.gdriver",driverNames)>
+<cfset driverNames=ComponentListPackageAsStruct("lucee-server.admin.gdriver",driverNames)>
+<cfset driverNames=ComponentListPackageAsStruct("lucee.admin.gdriver",driverNames)>
 <cfset driverNames=ComponentListPackageAsStruct("gdriver",driverNames)>
 
 <cfloop collection="#driverNames#" index="n" item="fn">
@@ -73,7 +56,7 @@
 
 <!---<span class="CheckError">
 The Gateway Implementation is currently in Beta State. Its functionality can change before it's final release.
-If you have any problems while using the Gateway Implementation, please post the bugs and errors in our <a href="https://jira.jboss.org/jira/browse/LUCEE" target="_blank" class="CheckError">bugtracking system</a>. 
+If you have any problems while using the Gateway Implementation, please post the bugs and errors in our <a href="https://jira.jboss.org/jira/browse/RAILO" target="_blank" class="CheckError">bugtracking system</a>. 
 </span><br /><br />--->
 
 <cfswitch expression="#url.action2#">

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="renameAll" basedir="." name="AddLicense">
+	<description>Add license header</description>
+ <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+  <property name="src" location="."/>
+
+  <scriptdef name="replace" language="javascript">
+     <attribute name="haystack" />
+     <attribute name="needle" />
+     <attribute name="repl" />
+     <attribute name="property" />
+     <![CDATA[
+      var text = attributes.get("haystack");
+      var needle = attributes.get("needle");
+      var repl = attributes.get("repl");
+      text=text.trim();
+      text=text.replace(needle,repl);
+      project.setProperty(attributes.get("property"), text);
+     ]]>
+  </scriptdef>
+
+
+
+  <target name="init" description="">
+    
+  </target>
+
+  <target name="rename" description="rename a single file">
+    <loadfile property="content" srcFile="${file}"/>
+    <echo message="----- ${file} -----"/>
+
+    <replace haystack="${content}" needle="railo-context.ra" repl="lucee-context.lar" property="res0"/>
+    <replace haystack="${res0}" needle="railo-context" repl="lucee" property="res1"/>
+    <replace haystack="${res1}" needle="Railo" repl="Lucee" property="res2"/>
+    <replace haystack="${res2}" needle="railo" repl="lucee" property="res3"/>
+    <replace haystack="${res3}" needle="the Lucee Company LLC" repl="the Railo Company LLC" property="res4"/>
+    <replace haystack="${res4}" needle="lucee-server-context" repl="lucee-server" property="res5"/>
+
+    <echo message="${res5}" file="${file}"/> <!--   -->
+    
+  </target>
+
+  
+  <target name="renameAll" description="rename all cfml files"  depends="init">
+    <foreach target="rename" param="file">
+      <path>
+        <fileset dir="${src}" casesensitive="yes">
+          <include name="**/*.cfs"/>
+          <include name="**/*.cfm"/>
+          <include name="**/*.cfml"/>
+          <include name="**/*.cfc"/>
+        </fileset>
+      </path>
+    </foreach>
+  </target>
+
+</project>

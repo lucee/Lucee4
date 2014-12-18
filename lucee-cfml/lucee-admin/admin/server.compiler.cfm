@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfset error.message="">
+<cfset error.message="">
 <cfset error.detail="">
 
 <cfadmin 
@@ -33,6 +16,12 @@ Defaults --->
 <cfparam name="form.mainAction" default="none">
 <cfparam name="form.subAction" default="none">
 
+<cfset stText.setting.handleUnquotedAttrValueAsString="Tag attribute values">
+<cfset stText.setting.handleUnquotedAttrValueAsStringDesc='Handle unquoted tag attribute values as strings.
+<br>Example:<br>
+&lt;cfmail subject=sub from="##f##" to="##t##"/><br>
+<br>The value from attribute "subject" is not quoted, in that case if enabled the string "sub" submitted to the tag, if not enabled lucee looks for a variable "sub".'>
+
 <cftry>
 	<cfswitch expression="#form.mainAction#">
 	<!--- UPDATE --->
@@ -48,7 +37,6 @@ Defaults --->
             	<cfset form.nullSupport=false>
             </cfif>
 			
-            
 			<cfadmin 
 				action="updateCompilerSettings"
 				type="#request.adminType#"
@@ -57,7 +45,7 @@ Defaults --->
 				nullSupport="#form.nullSupport#"
 				dotNotationUpperCase="#dotNotUpper#"
                 suppressWSBeforeArg="#form.suppressWSBeforeArg#"
-				templateCharset="#form.templateCharset#"
+                templateCharset="#form.templateCharset#"
 				remoteClients="#request.getRemoteClients()#">
 	
 		</cfcase>
@@ -210,13 +198,15 @@ Redirtect to entry --->
 					<th scope="row">#stText.setting.suppressWSBeforeArg#</th>
 					<td>
 						<cfif hasAccess>
-        					<input type="checkbox" name="suppressWSBeforeArg" value="true" <cfif setting.suppressWSBeforeArg>checked="checked"</cfif> />
+        					<input class="checkbox" type="checkbox" name="suppressWSBeforeArg" value="true" <cfif setting.suppressWSBeforeArg>checked="checked"</cfif> />
 						<cfelse>
 							<b>#yesNoFormat(setting.suppressWSBeforeArg)#</b><br /><input type="hidden" name="suppressWSBeforeArg" value="#setting.suppressWSBeforeArg#">
 						</cfif>
 						<div class="comment">#stText.setting.suppressWSBeforeArgDesc#</div>
 					</td>
 				</tr>
+				
+				
 
 				<cfif hasAccess>
 					<cfmodule template="remoteclients.cfm" colspan="2">
@@ -226,9 +216,9 @@ Redirtect to entry --->
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input class="submit" type="submit" class="submit" name="mainAction" value="#stText.Buttons.Update#">
-							<input type="reset" class="button reset" name="cancel" value="#stText.Buttons.Cancel#">
-							<cfif request.adminType EQ "web"><input class="submit" type="submit" class="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
+							<input type="submit" class="bl submit" name="mainAction" value="#stText.Buttons.Update#">
+							<input type="reset" class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<cfif request.adminType EQ "web"><input class="br submit" type="submit" class="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
 						</td>
 					</tr>
 				</tfoot>

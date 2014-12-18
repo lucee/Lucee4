@@ -1,26 +1,9 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfsilent>
+<cfsilent>
 <cfset error.message="">
 <cfset error.detail="">
 
 <cfset stText.setting.typeChecking="UDF Type Checking">
-<cfset stText.setting.typeCheckingDesc="If disabled lucee ignores type defintions with function arguments and return values">
+<cfset stText.setting.typeCheckingDesc="If disabled Lucee ignores type defintions with function arguments and return values">
 <cfparam name="stText.general.elements" default="item(s)">
 
 <cfadmin 
@@ -346,9 +329,9 @@ Create Datasource --->
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input class="button submit" type="submit" name="mainAction" value="#stText.Buttons.update#">
-							<input class="button reset" type="reset" name="cancel" value="#stText.Buttons.Cancel#">
-							<cfif request.adminType EQ "web"><input class="button submit" type="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
+							<input class="bl button submit" type="submit" name="mainAction" value="#stText.Buttons.update#">
+							<input class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> button reset" type="reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<cfif request.adminType EQ "web"><input class="br button submit" type="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
 						</td>
 					</tr>
 				</tfoot>

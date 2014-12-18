@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  ---><cfscript>
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	
 	public function beforeTests(){
 		variables.serviceURL =createURL("Jira1563/TestService.cfc?wsdl");
@@ -26,13 +26,13 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 	public void function testSendComponent() localMode="modern" {
 		bd=now();
 		version = new Jira1563.Version();
-		version.application = 'railo';
+		version.application = 'lucee';
 		version.version = '76';
 		version.build = '21';
 		version.builddate = bd;
 
 		data=service.returnVersion(version:version);
-		assertEquals("railo",data.application);
+		assertEquals("lucee",data.application);
 		assertEquals("76",data.version);
 		assertEquals("21",data.build);
 		assertEquals(dateTimeFormat(bd),dateTimeFormat(data.builddate));
@@ -41,9 +41,9 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 	public void function testSendStruct() localMode="modern" {
 		// send a struct
 		bd=now();
-		sct={application:'railo',version:'76',build:'21',builddate:bd};
+		sct={application:'lucee',version:'76',build:'21',builddate:bd};
 		data=service.returnVersion(version:sct);
-		assertEquals("railo",data.application);
+		assertEquals("lucee",data.application);
 		assertEquals("76",data.version);
 		assertEquals("21",data.build);
 		assertEquals(dateTimeFormat(bd),dateTimeFormat(data.builddate));

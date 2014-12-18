@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<!---
 	<cffunction name="beforeTests"></cffunction>
 	<cffunction name="afterTests"></cffunction>
@@ -56,11 +56,11 @@
 	right="#server.coldfusion.rootdir#/jm")>
 
 <cfset valueEquals(
-	left="#ExpandPath("\railo-context\")#" ,
-		right="#server.coldfusion.rootdir#/WEB-INF/railo/context/")>
+	left="#ExpandPath("\lucee\")#" ,
+		right="#server.coldfusion.rootdir#/WEB-INF/lucee/context/")>
 <cfset valueEquals(
-	left="#ExpandPath("\railo-context")#" ,
-		right="#server.coldfusion.rootdir#/WEB-INF/railo/context")>
+	left="#ExpandPath("\lucee")#" ,
+		right="#server.coldfusion.rootdir#/WEB-INF/lucee/context")>
 
 <!--- end old test code --->
 	

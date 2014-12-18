@@ -23,4 +23,4 @@ component {
 	request.currentPath=GetDirectoryFromPath(getCurrentTemplatePath());
 	
 	this.typeChecking=url.typeChecking;
-} 
+}

@@ -2,35 +2,35 @@
 <language key="en" label="English">
 	<!-- this file contains the English/default language definition for the Admin March-2013 !-->
 
-	<data key="admin.search.label">Search the lucee Administrator</data>
-	<data key="admin.search.desc">Search for keywords within the lucee Administrator</data>
+	<data key="admin.search.label">Search the Railo Administrator</data>
+	<data key="admin.search.desc">Search for keywords within the Railo Administrator</data>
 
 	<data key="services.update.type_manually">Manual</data>
-	<data key="services.update.locdesc">Define the URL where lucee gets its updates. Typically &quot;http://www.lucee.ch&quot;</data>
+	<data key="services.update.locdesc">Define the URL where Railo gets its updates. Typically &quot;http://www.railo.ch&quot;</data>
 	<data key="services.update.location">URL</data>
 	<data key="services.update.settitle">Properties</data>
 	<data key="services.update.type">Type</data>
 	<data key="services.update.patch">Installed patches</data>
 	<data key="services.update.type_auto">Automatic</data>
 	<data key="services.update.removerun">Remove patches</data>
-	<data key="services.update.exedesc">Apply the latest patch for your version. After the update has been installed lucee will be restarted, all sessions will be cleared and you have to login again.</data>
+	<data key="services.update.exedesc">Apply the latest patch for your version. After the update has been installed Railo will be restarted, all sessions will be cleared and you have to login again.</data>
 	<data key="services.update.update">A patch {available} is available for your current version {current}.</data>
 	<data key="services.update.infotitle">Info</data>
-	<data key="services.update.restartdesc">Restart the lucee engine. All sessions will be cleared and you will have to login again.</data>
+	<data key="services.update.restartdesc">Restart the Railo engine. All sessions will be cleared and you will have to login again.</data>
 	<data key="services.update.exe">Execute update</data>
 	<data key="services.update.jira">For details go to our {a}Bug Tracking System{/a}</data>
 	<data key="services.update.removedesc">Remove all installed patches or only latest.</data>
 	<data key="services.update.noupdate">There is no patch available for version {current}</data>
-	<data key="services.update.restart">Restart lucee</data>
-	<data key="services.update.desc">You can patch lucee in order to receive the latest bugfixes and improved version.</data>
-	<data key="services.update.setdesc">Define where lucee gets its patches. lucee will restart automatically after the update in order for the changes to take effect.</data>
+	<data key="services.update.restart">Restart Railo</data>
+	<data key="services.update.desc">You can patch Railo in order to receive the latest bugfixes and improved version.</data>
+	<data key="services.update.setdesc">Define where Railo gets its patches. Railo will restart automatically after the update in order for the changes to take effect.</data>
 	<data key="services.update.removelatest">Remove latest patch {version}</data>
 	<data key="services.update.remove">Remove installed patches</data>
 	<data key="services.update.exerun">execute update</data>
-	<data key="services.update.typedesc">Define how lucee will be patched. &quot;Automatic&quot; means that lucee searches automatically for updates once a day. &quot;Manual&quot; means that you can update lucee only manually here.</data>
+	<data key="services.update.typedesc">Define how Railo will be patched. &quot;Automatic&quot; means that Railo searches automatically for updates once a day. &quot;Manual&quot; means that you can update Railo only manually here.</data>
 	<data key="services.certificate.desc">List SSL Certificates for a specific Host or install them.</data>
 	<data key="services.certificate.host">Host</data>
-	<data key="services.certificate.hostDesc">The host server, for example "www.lucee.org"</data>
+	<data key="services.certificate.hostDesc">The host server, for example "www.getrailo.org"</data>
 	<data key="services.certificate.port">Port</data>
 	<data key="services.certificate.portDesc">The port of the server.</data>
 	<data key="services.certificate.install">install</data>
@@ -51,13 +51,13 @@
 	
 <data key="mappings.topleveldesc">Make this mapping web-accessible (i.e., accessible via a browser or remote HTTP call)</data>
 	<data key="mappings.archiveheaddescription">Name of the archive file (ra or ras), (absolute or relative to the webroot)</data>
-	<data key="mappings.primaryheaddescription">Sets where lucee-files will first be searched</data>
+	<data key="mappings.primaryheaddescription">Sets where Railo-files will first be searched</data>
 	<data key="mappings.trustedheaddescription"></data>
 	<data key="mappings.physical">Resource</data>
 	<data key="mappings.archivetitle">create archive</data>
 	<data key="mappings.compilestoponerrordesc">Sets whether the compile process should be aborted on errors</data>
-	<data key="mappings.editdesc">Here you can edit a certain mapping or create a lucee archive out of an existing one.</data>
-	<data key="mappings.archivedesc">Generate a lucee archive (ra) from an existing mapping</data>
+	<data key="mappings.editdesc">Here you can edit a certain mapping or create a Railo archive out of an existing one.</data>
+	<data key="mappings.archivedesc">Generate a Railo archive (ra) from an existing mapping</data>
 	<data key="mappings.physicalhead">Resource</data>
 	<data key="mappings.archivesecure">Secured</data>
 	<data key="mappings.compiledesc">Compile all cfm and cfc files inside the mapping</data>
@@ -71,7 +71,7 @@
 	<data key="mappings.compilestoponerror">Stop on error</data>
 	<data key="mappings.archivemissing">Please enter a value for the archive name (row </data>
 	<data key="mappings.trustedhead">Inspect</data>
-	<data key="mappings.introtext">Please note, that only pages processed by lucee are aware of these mappings (cfm, cfml, cfc). If you want to use files not processed by lucee for these special mapping directories, you have to add virtual mappings to these directories to your application server.</data>
+	<data key="mappings.introtext">Please note, that only pages processed by Railo are aware of these mappings (cfm, cfml, cfc). If you want to use files not processed by Railo for these special mapping directories, you have to add virtual mappings to these directories to your application server.</data>
 	<data key="mappings.physicalheaddescription">Path of the resource to map (absolute or relative to the webroot)</data>
 	<data key="customtags.physical">Resource</data>
 	<data key="customtags.archive">Archive</data>
@@ -88,12 +88,12 @@
 	<data key="customtags.mode.standard">CFML standard</data>
 	<data key="customtags.mode.mixed">Mixed</data>
 	<data key="customtags.mode.modern">Modern</data>
-	<data key="customtags.mode.classic">Classic (lucee 1.0 - 3.0)</data>
+	<data key="customtags.mode.classic">Classic (Railo 1.0 - 3.0)</data>
 	<data key="customtags.mode.custom">Custom</data>
 	<data key="customtags.customtagmappings">Additional Resources</data>
 	<data key="customtags.physicalmissing">Please enter a value for the resource (row </data>
 	<data key="customtags.extensions">Extensions</data>
-	<data key="customtags.customtagmappingsdesc">Directories that lucee checks for Custom Tags.</data>
+	<data key="customtags.customtagmappingsdesc">Directories that Railo checks for Custom Tags.</data>
 	<data key="customtags.customtagsetting">Settings</data>
 	<data key="customtags.extensionsdesc">These are the extensions used for Custom Tags, in the order they are searched.</data>
 	<data key="security.customtagdescription">The custom tag settings can be changed in the &quot;web administrator&quot;</data>
@@ -122,10 +122,10 @@
 	<data key="security.speclistnewtitle">create new web context</data>
 	<data key="security.accesswritedesc">define the access for writing data</data>
 	<data key="security.tagimport">Tag CFImport</data>
-	<data key="security.cfmlenvironmentdescription">Settings that have an effect on how lucee code interacts with the host enviroment</data>
+	<data key="security.cfmlenvironmentdescription">Settings that have an effect on how Railo code interacts with the host enviroment</data>
 	<data key="security.functions">Tags &amp;amp; Functions</data>
 	<data key="security.functionsdescription">Tags and Functions that might be a potential risk to the host system</data>
-	<data key="security.filedescription">Defines how lucee can interact with the local filesystem in a web context.&lt;br/&gt;- none: allows no access to the filesystem at all&lt;br/&gt;- local: allows only access to the filesystem within the webroot&lt;br/&gt;- all: allows full file access on the hosts filesystem&lt;br/&gt;</data>
+	<data key="security.filedescription">Defines how Railo can interact with the local filesystem in a web context.&lt;br/&gt;- none: allows no access to the filesystem at all&lt;br/&gt;- local: allows only access to the filesystem within the webroot&lt;br/&gt;- all: allows full file access on the hosts filesystem&lt;br/&gt;</data>
 	<data key="security.cfmlenvironment">CFML Enviroment</data>
 	<data key="security.file">File access</data>
 	<data key="security.settingsdescription">The settings (regional,component and scope) can be changed in the &quot;web administrator&quot;</data>
@@ -134,7 +134,7 @@
 	<data key="security.maildescription">The mail settings can be changed in the &quot;web administrator&quot;</data>
 	<data key="security.mapping">Mapping</data>
 	<data key="security.tagobjectdescription">With the tag CFObject and the function CreateObject you can load Java objects. If disabled, you only can create objects of type &quot;component&quot;</data>
-	<data key="security.remotedescription">It allows the settings in the administrator to be synchronized with other lucee contexts</data>
+	<data key="security.remotedescription">It allows the settings in the administrator to be synchronized with other Railo contexts</data>
 	<data key="security.tagregistry">Tag CFRegistry</data>
 	<data key="security.accessread">Access Read</data>
 	<data key="security.speclisttitle">specific web context</data>
@@ -153,12 +153,12 @@
 	<data key="security.accesswrite">Access Write</data>
 	<data key="security.specialdesc">Define the security settings for a specific web context (webapps).</data>
 	<data key="security.mappingdescription">Allows adding, removing and updating of mappings in the &quot;web administrator&quot;.</data>
-	<data key="security.javaaccessdescription">Allows access to Java methods and properties from the lucee code (Example: stringValue.substring(2,5)). Allowing access to Java methods and properties might be a potential security risk</data>
+	<data key="security.javaaccessdescription">Allows access to Java methods and properties from the Railo code (Example: stringValue.substring(2,5)). Allowing access to Java methods and properties might be a potential security risk</data>
 	<data key="security.filelocal">local</data>
 	<data key="security.tabgeneral">General</data>
 	<data key="security.scheduledtask">Scheduled task</data>
 	<data key="security.datasource">Datasource</data>
-	<data key="security.tagimportdescription">This tag can be used to import JSP and lucee tag libraries</data>
+	<data key="security.tagimportdescription">This tag can be used to import JSP and Railo tag libraries</data>
 	<data key="security.webadministrator">Web administrator</data>
 	<data key="security.speclisttext">Security settings for a specific web context. You can edit or delete these contexts.</data>
 	<data key="security.searchdescription">The search settings can be changed in the &quot;web administrator&quot;</data>
@@ -167,6 +167,8 @@
 	<data key="security.search">Search</data>
 	<data key="security.javaaccess">Direct Java access</data>
 	<data key="security.cfx">CFX</data>
+	<data key="menu.info.label">Info</data>
+	<data key="menu.info.bundle">Bundle (jar)</data>
 	<data key="menu.server.label">Settings</data>
 	<data key="menu.server.cache">Performance/Caching</data>
 	<data key="menu.server.regional">Regional</data>
@@ -236,7 +238,10 @@
 	<data key="err.errortemplatedescription.404">Template that will be invoked in case of a missing error. This setting can be overridden by the tag CFError.</data>
 	<data key="ext.updateavailabledesc">There is an update {update} available for your installed version {installed}.</data>
 	<data key="ext.prov.url">URL</data>
-	<data key="ext.prov.urldesc">URL to the ExtensionProvider incl. path</data>
+	<data key="ext.prov.urldesc">URL to the Extension Provider incl. path</data>
+	<data key="ext.prov.new">New Extension Provider</data>
+	<data key="ext.prov.host">Provider URL</data>
+	<data key="ext.prov.hostdesc">URL to the Extension Provider (Example: http://www.myhost.com)</data>
 	<data key="ext.prov.introtext"></data>
 	<data key="ext.forum">Forum</data>
 	<data key="ext.appinstall">Install/Uninstall</data>
@@ -280,7 +285,7 @@
 	<data key="ext.noConfigXMLInExtension">There is no config.xml file available in the extension!</data>
 	<data key="ext.configNotParsed">The Config xml file within the extension could not be parsed</data>
 	<data key="ext.configHasNoInfoTag">The Config xml file within the extension does not contain the necessary [info] section within the [config] tag.</data>
-	<data key="ext.reviewdocumentation">Please review the documentation for creating lucee Extensions.</data>
+	<data key="ext.reviewdocumentation">Please review the documentation for creating Railo Extensions.</data>
 	<data key="ext.requiredKeyMissing">The required field [config.info.$key$] does not exist within the Config xml file of the extension.</data>
 	<data key="ext.requiredKeyEmpty">The required field [config.info.$key$] does not contain a value within the Config xml file of the extension.</data>
 	<data key="ext.typeFieldInvalid">The field [config.info.type] within the Config xml file contains an invalid value. Only [web, server, all] are supported.</data>
@@ -303,11 +308,11 @@
 	<data key="remote.passwordmissing">The Administrator password for the remote client is missing</data>
 	<data key="remote.securitykey">Security Key</data>
 	<data key="remote.serverusernamedesc">Http Access Authentication</data>
-	<data key="remote.adminpassworddesc.web">Password for the access to the remote lucee Web Administrator</data>
-	<data key="remote.adminpassworddesc.server">Password for the access to the remote lucee Server Administrator</data>
+	<data key="remote.adminpassworddesc.web">Password for the access to the remote Railo Web Administrator</data>
+	<data key="remote.adminpassworddesc.server">Password for the access to the remote Railo Server Administrator</data>
 	<data key="remote.urlpath">Path</data>
 	<data key="remote.urlmissing">The remote client URL is missing</data>
-	<data key="remote.urlserverdesc">Remote Client Server (e.g. http://lucee.org)</data>
+	<data key="remote.urlserverdesc">Remote Client Server (e.g. http://getrailo.com)</data>
 	<data key="remote.proxyport">Port</data>
 	<data key="remote.labelmissing">The label for the remote client is missing</data>
 	<data key="remote.proxypassword">Password</data>
@@ -352,7 +357,7 @@
 	<data key="remote.detail.updatedesc"></data>
 	<data key="remote.detail.update">Update Remote Client</data>
 	<data key="remote.securitykeydesc">Please enter the key of the remote clients. You can find it under Remote security key in the administrator of the remote clients</data>
-	<data key="remote.urlpathdesc">Path to Admin.cfc (example: /lucee-context/admin.cfc?wsdl)</data>
+	<data key="remote.urlpathdesc">Path to Admin.cfc (example: /railo-context/admin.cfc?wsdl)</data>
 	<data key="remote.from">from</data>
 	<data key="remote.to">to</data>
 	<data key="remote.previous">previous</data>
@@ -369,30 +374,30 @@
 	<data key="application.listenermodedescription_currorroot">Looks for the file &quot;Application.cfc/Application.cfm&quot; in the current directory and in the webroot directory.</data>
 	
 	<data key="application.requesttimeout">Request timeout</data>
-	<data key="application.listenertypedescription_none">When a request is called no other initialization template will be invoked by lucee</data>
+	<data key="application.listenertypedescription_none">When a request is called no other initialization template will be invoked by Railo</data>
 	<data key="application.scriptprotectnone">Script-protect is not active</data>
-	<data key="application.listenertypedescription_modern">Modern handling. lucee only looks for the file &quot;Application.cfc&quot;</data>
+	<data key="application.listenertypedescription_modern">Modern handling. Railo only looks for the file &quot;Application.cfc&quot;</data>
 	<data key="application.listenerdescription">Sets how requests are handled and which templates are invoked by default.</data>
 	<data key="application.listenertype_none">None</data>
 	<data key="application.listenermode">Mode</data>
 	<data key="application.listenermode_root">Root</data>
-	<data key="application.requesttimeoutdescription">Sets the amount of time lucee will wait for a request to finish before a request timeout will be raised. This means that the execution of the request will be stopped. This behaviour can be overridden by the tag cfsetting.</data>
+	<data key="application.requesttimeoutdescription">Sets the amount of time Railo will wait for a request to finish before a request timeout will be raised. This means that the execution of the request will be stopped. This behaviour can be overridden by the tag cfsetting.</data>
 	<data key="request.description">Settings that affect the execution of a request.</data>
 		
 
 <data key="application.scriptprotectdescription">The configuration of Script protect, secures your system from &quot;cross-site scripting&quot;</data>
 	<data key="application.scriptprotect">Script-protect</data>
 	<data key="application.scriptprotectall">Script-protect checks in all scopes for external data (cgi,cookie,form,url)</data>
-	<data key="application.listenertypedescription_mixed">Mixed handling. lucee looks for a file &quot;Application.cfm/OnRequestEnd.cfm&quot; as well as for the file &quot;Application.cfc&quot;</data>
+	<data key="application.listenertypedescription_mixed">Mixed handling. Railo looks for a file &quot;Application.cfm/OnRequestEnd.cfm&quot; as well as for the file &quot;Application.cfc&quot;</data>
 	<data key="application.listenermode_curr">Current</data>
 	<data key="application.listenermode_curr2root">Current to root (CFML default)</data>
 	<data key="application.listenermode_currorroot">Current or root</data>
-	<data key="application.listenermodedescription">Defines where lucee looks for the files &quot;Application.cfc/Application.cfm&quot;. In case of type &quot;none&quot; this setting is meaningless.</data>
+	<data key="application.listenermodedescription">Defines where Railo looks for the files &quot;Application.cfc/Application.cfm&quot;. In case of type &quot;none&quot; this setting is meaningless.</data>
 	<data key="application.missingscriptprotect">Please select a value for script-protect</data>
 	<data key="application.listenermodedescription_root">Looks for the file &quot;Application.cfc/Application.cfm&quot; only in the webroot .</data>
 	<data key="application.listenertype_mixed">Mixed (CFML &amp;gt;= 7)</data>
 	<data key="application.listenertype_classic">Classical (CFML &amp;lt; 7)</data>
-	<data key="application.listenertypedescription_classic">Classic handling. lucee looks for the file &quot;Application.cfm&quot; and a coresponding file &quot;OnRequestEnd.cfm&quot;</data>
+	<data key="application.listenertypedescription_classic">Classic handling. Railo looks for the file &quot;Application.cfm&quot; and a coresponding file &quot;OnRequestEnd.cfm&quot;</data>
 	<data key="application.listenermodedescription_curr">Looks for the file &quot;Application.cfc/Application.cfm&quot; only in the current template directory .</data>
 	<data key="application.allowurlrequesttimeout">Request timeout in URL</data>
 	<data key="mail.passwordmissing">Please enter a value for the corresponding password (row </data>
@@ -414,7 +419,7 @@
 	<data key="mail.porterrorlast">) of type number</data>
 	<data key="mail.spoolenabled">Spool enable</data>
 	<data key="mail.settings">Mail settings</data>
-	<data key="mail.mailserversdescription">You can define more than one mail server. When sending an email, lucee tries to send the mail with the first defined mail server. If the send operation fails, lucee will continue using the next mail server in the list.</data>
+	<data key="mail.mailserversdescription">You can define more than one mail server. When sending an email, Railo tries to send the mail with the first defined mail server. If the send operation fails, Railo will continue using the next mail server in the list.</data>
 	<data key="mail.usernamemissing">Please enter a value for the username (row </data>
 	<data key="general.yes">Yes</data>
 	<data key="general.second">Second</data>
@@ -452,7 +457,7 @@
 	<data key="search.searchterm">Enter the searchterm</data>
 	<data key="search.language">Language</data>
 	<data key="search.createcol">Create collection</data>
-	<data key="search.description">Here you can manage, create, populate and delete search collections. By default, lucee uses Apache Lucene as the search engine.&lt;br/&gt;&lt;br/&gt;</data>
+	<data key="search.description">Here you can manage, create, populate and delete search collections. By default, railo uses Apache Lucene as the search engine.&lt;br/&gt;&lt;br/&gt;</data>
 	<data key="search.noresult">No Result for your criteria</data>
 	<data key="search.missing_name">Please enter a name for the collection</data>
 	<data key="search.indexsubdirs">Index subdirectories</data>
@@ -467,7 +472,7 @@
 	<data key="components.basecomponent">Base/Root Component</data>
 	<data key="components.componentdumptemplatemissing">Please enter a value for the &quot;dump&quot; template</data>
 	<data key="components.componentpathcachedesc">component path is cached and not resolved again</data>
-	<data key="components.web">Defines how components will be handled by lucee.</data>
+	<data key="components.web">Defines how components will be handled by Railo.</data>
 	<data key="components.datamemberaccesstype">Data member access type</data>
 	<data key="components.componentpathcache">Cache</data>
 	<data key="components.dmatremote">remote</data>
@@ -480,13 +485,13 @@
 	<data key="components.archivemissing">Please enter a value for the archive name (row </data>
 	<data key="components.datamemberaccesstypedescription">Define the accessor for the data-members of a component. This defines how variables of the &quot;this&quot; scope of a component can be accessed from outside of the component.</data>
 	<data key="components.autoimportdescription">the following package defintion is imported into every template.</data>
-	<data key="components.componentmappingsdesc">Additional Resources that lucee checks for Components.</data>
+	<data key="components.componentmappingsdesc">Additional Resources that Railo checks for Components.</data>
 	<data key="components.componentmappingsearch">Search mappings</data>
 	<data key="components.useshadowdescription">Defines whether a component has an independent variables scope parallel to the &amp;quot;this&amp;quot; scope (CFML standard) or not.</data>
 	<data key="components.server">Define the component settings that will be used as a default for all web contexts. </data>
 	<data key="components.useshadow">Variables scope</data>
 	<data key="components.autoimportmissing">Please enter a value for the auto import field</data>
-	<data key="components.triggerdatamemberdescription">If there is no accessible data member (property, element of the this scope) inside a component, lucee searches for available matching &amp;quot;getters&amp;quot; or &amp;quot;setters&amp;quot; for the requested property. The following example should clarify this behaviour. &amp;quot;somevar = myComponent.properyName&amp;quot;. If &amp;quot;myComponent&amp;quot; has no accessible data member named &amp;quot;propertyName&amp;quot;, lucee searches for a function member (method) named &amp;quot;getPropertyName&amp;quot;.</data>
+	<data key="components.triggerdatamemberdescription">If there is no accessible data member (property, element of the this scope) inside a component, Railo searches for available matching &amp;quot;getters&amp;quot; or &amp;quot;setters&amp;quot; for the requested property. The following example should clarify this behaviour. &amp;quot;somevar = myComponent.properyName&amp;quot;. If &amp;quot;myComponent&amp;quot; has no accessible data member named &amp;quot;propertyName&amp;quot;, Railo searches for a function member (method) named &amp;quot;getPropertyName&amp;quot;.</data>
 	<data key="components.physical">Resource</data>
 	<data key="components.trusted">Trusted</data>
 	<data key="components.componentDeepSearch">Search subdirectories</data>
@@ -501,7 +506,7 @@
 	<data key="components.createnewcompmapping">Create new Additional Resource</data>
 	<data key="customtags.createnewcustomtagmapping">Create new Additional Resource</data>
 	<data key="components.dmatpackage">package</data>
-	<data key="components.basecomponentdescription">Every component that does not explicitly extend another component (attribute &quot;extends&quot;) will by default extend this component. This means that every component extends this base component in some way. Every change on this Component needs a restart from lucee.</data>
+	<data key="components.basecomponentdescription">Every component that does not explicitly extend another component (attribute &quot;extends&quot;) will by default extend this component. This means that every component extends this base component in some way. Every change on this Component needs a restart from Railo.</data>
 	<data key="login.passwordmissing">Please enter a value for the field password</data>
 	<data key="login.retypenewpasswordmissing">Please reenter the new password</data>
 	<data key="login.password">Password</data>
@@ -572,7 +577,7 @@
 	<data key="searchlng.turkish">Turkish</data>
 	<data key="debug.logmemoryusage">Log memory usage</data>
 	<data key="debug.memoryloggerdescripiton">File the memory usage will be stored to</data>
-	<data key="debug.enabledescription">If set to "yes" lucee logs the debug information you have selected below. 
+	<data key="debug.enabledescription">If set to "yes" Railo logs the debug information you have selected below. 
 you can see the log result at the end of every request, if a debug template is defined or under Debug/Logs in this administrator.</data>
 	<data key="debug.debugtemplatemissing">Please enter a value for the debug template</data>
 	<data key="debug.debugtemplatedescription">This template is used for formatting the debugging output</data>
@@ -598,18 +603,18 @@ you can see the log result at the end of every request, if a debug template is d
 	<data key="debug.settings.implicitAccess">Implicit variable Access</data>
 	<data key="debug.settings.implicitAccessDesc">Select this option to log all accesses to scopes, queries and threads that happens implicit (cascaded).</data>
 	<data key="general.enabled">Enabled</data>
-	<data key="scopes.sessiontimeoutdescription">Sets the amount of time lucee will keep the session scope alive. This behaviour can be overridden by the tag cfapplication.</data>
+	<data key="scopes.sessiontimeoutdescription">Sets the amount of time Railo will keep the session scope alive. This behaviour can be overridden by the tag cfapplication.</data>
 	<data key="scopes.sessiontype_cfml">CFML</data>
 	<data key="scopes.clientcookies">Client cookies</data>
 	<data key="scopes.timeoutendvalue">timeout must have a Integer Value</data>
 	<data key="scopes.mergeurlformdescription">This setting defines if the scopes URL and Form will be merged together (CFML Default is false). If a key already exists in Form and URL Scopes, the value from the Form Scope is used.</data>
 	<data key="scopes.timeoutminutesvalue">Value minutes for </data>
-	<data key="scopes.applicationtimeoutdescription">Sets the amount of time lucee will keep the application scope alive. This behaviour can be overridden by the tag cfapplication.</data>
+	<data key="scopes.applicationtimeoutdescription">Sets the amount of time Railo will keep the application scope alive. This behaviour can be overridden by the tag cfapplication.</data>
 	<data key="scopes.clienttimeout">Client timeout</data>
-	<data key="scopes.cascadetoresultsetdescription">When a variable has no scope defined (Example: #myVar# instead of #variables.myVar#), lucee will also search available resultsets (CFML&amp;nbsp;Standard) or not</data>
-	<data key="scopes.cascadingdescription">Depending on this setting lucee scans certain scopes to find a variable called from the CFML source. This will only happen, when the variable is called without a scope. (Example: #myVar# instead of #variables.myVar#)&lt;br/&gt;- strict: scans only the variables scope&lt;br/&gt;- small: scans the scopes variables,url,form&lt;br/&gt;- standard (CFML Standard): scans the scopes variables,cgi,url,form,cookie</data>
+	<data key="scopes.cascadetoresultsetdescription">When a variable has no scope defined (Example: #myVar# instead of #variables.myVar#), Railo will also search available resultsets (CFML&amp;nbsp;Standard) or not</data>
+	<data key="scopes.cascadingdescription">Depending on this setting Railo scans certain scopes to find a variable called from the CFML source. This will only happen, when the variable is called without a scope. (Example: #myVar# instead of #variables.myVar#)&lt;br/&gt;- strict: scans only the variables scope&lt;br/&gt;- small: scans the scopes variables,url,form&lt;br/&gt;- standard (CFML Standard): scans the scopes variables,cgi,url,form,cookie</data>
 	<data key="scopes.sessiontypedescription">J2EE Sessions allow to make sessions over a cluster. when you change this setting you will lose your current session and you must make a new login</data>
-	<data key="scopes.web">Here you can define the settings for how lucee handles scopes.</data>
+	<data key="scopes.web">Here you can define the settings for how Railo handles scopes.</data>
 	<data key="scopes.localmodeClassic">Classic</data>
 	<data key="scopes.timeoutsecondsvalue">Value seconds for </data>
 	<data key="scopes.sessionmanagementdescription">By default session management can be enabled. This behaviour can be overridden by the tag cfapplication.</data>
@@ -633,7 +638,7 @@ you can see the log result at the end of every request, if a debug template is d
 	<data key="scopes.sessionmanagement">Session management</data>
 	<data key="scopes.timeouthoursvalue">Value hours for </data>
 	<data key="scopes.localmode">Local scope mode</data>
-	<data key="scopes.clienttimeoutdescription">Sets the amount of time lucee will keep the client scope alive. </data>
+	<data key="scopes.clienttimeoutdescription">Sets the amount of time Railo will keep the client scope alive. </data>
 	<data key="scopes.small">small</data>
 	<data key="scopes.sessiontype_j2ee">J2EE</data>
 	<data key="scopes.server">You can define the scope settings that will be used as default for all web contexts here.</data>
@@ -646,14 +651,14 @@ you can see the log result at the end of every request, if a debug template is d
 	<data key="scopes.applicationtimeout">Application timeout</data>
 
 	<data key="compiler.nullSupport">Null Support</data>
-	<data key="compiler.nullSupportOnlyServer">This setting is only possible in the lucee Server Administrator.</data>
-	<data key="compiler.nullSupportDesc">Definiert wie lucee null unterstuetzt.</data>
+	<data key="compiler.nullSupportOnlyServer">This setting is only possible in the Railo Server Administrator.</data>
+	<data key="compiler.nullSupportDesc">Definiert wie Railo null unterstützt.</data>
 	<data key="compiler.nullSupportFull">Complete Support</data>
-	<data key="compiler.nullSupportFullDesc">lucee has a complete support for null, including "null" literal. Find more details in the lucee Wiki.</data>
+	<data key="compiler.nullSupportFullDesc">Railo has a complete support for null, including "null" literal. Find more details in the Railo Wiki.</data>
 	<data key="compiler.nullSupportPartial">Partial Support (CFML Default)</data>
-	<data key="compiler.nullSupportPartialDesc">lucee has only a partial null support.</data>
+	<data key="compiler.nullSupportPartialDesc">Railo has only a partial null support.</data>
 
-	<data key="setting.compiler">lucee compiler settings, this affects how the lucee Compiler parses the source code. Changing this settings flushes all existing class files and triggers a recompilation.</data>
+	<data key="setting.compiler">Railo compiler settings, this affects how the Railo Compiler parses the source code. Changing this settings flushes all existing class files and triggers a recompilation.</data>
 	<data key="setting.dotNotation">Dot notation</data>
 
 
@@ -672,12 +677,12 @@ sct[""bracketNotation""] --> keyname: "bracketNotation"</data>
 	
 	<data key="setting.suppressWSBeforeArg">Suppress whitespace before cfargument</data>
 
-	<data key="setting.suppressWSBeforeArgDesc">if set, lucee suppress whitespace defined between the "cffunction" starting tag  and the last "cfargument" tag.
+	<data key="setting.suppressWSBeforeArgDesc">if set, Railo suppress whitespace defined between the "cffunction" starting tag  and the last "cfargument" tag.
 	This setting is ignored when there is a different output between this tags as white space.</data>
 	<data key="setting.templatecache">Page Pool Cache</data>
 	<data key="setting.querycache">Query Cache</data>
 	<data key="setting.objectcache">Object Cache</data>
-	<data key="setting.web">lucee output control</data>
+	<data key="setting.web">Railo output control</data>
 	<data key="setting.templatecacheclear">Clear Page Pool Cache</data>
 	<data key="setting.templatecachecleardesc">Press the button above to clear the Page Pool cache. This cache is used to cache the template object classes (loaded source code).</data>
 	<data key="setting.inspecttemplate">Inspect Templates (CFM/CFC)</data>
@@ -694,15 +699,15 @@ sct[""bracketNotation""] --> keyname: "bracketNotation"</data>
 	
 	<data key="setting.inspecttemplateneverShort">Never</data>
 	<data key="setting.inspecttemplatenever">Never ( Best Performance )</data>
-	<data key="setting.showversion">Output lucee version</data>
-	<data key="setting.showversiondescription">Return the lucee version in the response header</data>
+	<data key="setting.showversion">Output Railo version</data>
+	<data key="setting.showversiondescription">Return the Railo version in the response header</data>
 	<data key="setting.allowCompression">Compression</data>
-	<data key="setting.allowCompressionDescription">Enable compression (GZip) for the lucee Response stream for text-based responses when supported by the client (Web Browser)</data>
+	<data key="setting.allowCompressionDescription">Enable compression (GZip) for the Railo Response stream for text-based responses when supported by the client (Web Browser)</data>
 	
 	<data key="setting.cfmlWriterReg">No whitespace management</data>
 	<data key="setting.cfmlWriterWS">Simple whitespace management - every whitespace character that follows whitespace is removed</data>
 	<data key="setting.cfmlWriterWSPref">Smart whitespace management - every whitespace character that follows a whitespace is removed, but whitespace inside the tags: &amp;lt;code&amp;gt;, &amp;lt;pre&amp;gt; and &amp;lt;textarea&amp;gt; is kept</data>
-	<data key="setting.server">lucee output control</data>
+	<data key="setting.server">Railo output control</data>
 
 	<data key="setting.suppressContent">Suppress Content for CFC Remoting</data>
 	<data key="setting.suppressContentDescription">Suppress content written to response stream when a Component is invoked remotely. Only works if the content was not flushed before.</data>
@@ -775,7 +780,7 @@ sct[""bracketNotation""] --> keyname: "bracketNotation"</data>
 	<data key="buttons.repair">repair</data>
 	<data key="buttons.export">export</data>
 	<data key="video.web.installed">The video components are installed on your system.</data>
-	<data key="video.web.installedbut">The video components are installed but they can not be executed properly.Just switch to the lucee Server Administrator, in order to repair it:</data>
+	<data key="video.web.installedbut">The video components are installed but they can not be executed properly.Just switch to the Railo Server Administrator, in order to repair it:</data>
 	<data key="video.upload">Upload</data>
 	<data key="video.uploadmissing">Missing upload definition</data>
 	<data key="video.server.installednoturltitle">Download video components by an URL</data>
@@ -783,10 +788,10 @@ sct[""bracketNotation""] --> keyname: "bracketNotation"</data>
 	<data key="video.server.installedbut2">A manual installation is recommended.</data>
 	<data key="video.server.installedbut1">The video components are installed but they can not be executed properly:</data>
 	<data key="video.server.mantitle">Manual installation</data>
-	<data key="video.server.installednotdesc">For the tag cfvideo/cfvideoplayer OS specific video components are required. They are not bundled with lucee because the size of the software would increase a lot and because some codecs may not be redistributed, although their use is not prohibited. Therefore you can download these components directly from a provider and upload them with the form below.</data>
-	<data key="video.server.installednotuploaddesc">The video components (ffmpeg.zip) are uploaded directly over the form and copied into lucee (no installation). As a source you can use e.g. {provider}</data>
+	<data key="video.server.installednotdesc">For the tag cfvideo/cfvideoplayer OS specific video components are required. They are not bundled with Railo because the size of the software would increase a lot and because some codecs may not be redistributed, although their use is not prohibited. Therefore you can download these components directly from a provider and upload them with the form below.</data>
+	<data key="video.server.installednotuploaddesc">The video components (ffmpeg.zip) are uploaded directly over the form and copied into Railo (no installation). As a source you can use e.g. {provider}</data>
 	<data key="video.server.mandesc">A manual installation can be made like follows: Open the url {provider} and download the corresponding file ffmpeg.zip for your operating system ({OS-Name}). Then copy this file (do not unzip it) into the directory {directory}. If you can not find a file for your operating system, just contact us.</data>
-	<data key="video.server.installednoturldesc">The video componenten are downloaded automatically from the remote server and copied into lucee (no installation).</data>
+	<data key="video.server.installednoturldesc">The video componenten are downloaded automatically from the remote server and copied into Railo (no installation).</data>
 	<data key="video.server.installednotuploadtitle">Video components by upload</data>
 	<data key="video.provider">Provider</data>
 	<data key="video.providermissing">Missing provider definition</data>
@@ -801,7 +806,7 @@ sct[""bracketNotation""] --> keyname: "bracketNotation"</data>
 	<data key="schedule.description">Here you can add, modify, run and delete scheduled tasks&lt;br/&gt;&lt;br/&gt;</data>
 	<data key="schedule.storeresponse">Sets, whether the response of server will be stored in a file or not</data>
 	<data key="schedule.resolvedescription">Translate relative URLs into absolute</data>
-	<data key="schedule.proxydesc">When there is a Proxy Server between the lucee Server and the called URL, you can define the Proxy Servers Setting here to access the URL</data>
+	<data key="schedule.proxydesc">When there is a Proxy Server between the Railo Server and the called URL, you can define the Proxy Servers Setting here to access the URL</data>
 	<data key="schedule.starttime">Start time</data>
 	<data key="schedule.endsatdescweekly">Defines a date within the task should be executed the last time.</data>
 	<data key="schedule.startsatdesc">Defines the date when the task should be executed the first time.</data>
@@ -820,7 +825,7 @@ sct[""bracketNotation""] --> keyname: "bracketNotation"</data>
 	<data key="schedule.urlmissing">Please enter a value for the URL of the task</data>
 	<data key="schedule.file">File</data>
 	<data key="schedule.timeoutdescription">Timeout in seconds. Defines how long a task will wait for the response of the server called by the URL</data>
-	<data key="schedule.outputdesc">With the following settings you can define, if lucee should store the result of the url invocation and where lucee should store this result</data>
+	<data key="schedule.outputdesc">With the following settings you can define, if railo should store the result of the url invocation and where railo should store this result</data>
 	<data key="schedule.port">Port</data>
 	<data key="schedule.urldescription">URL of the new task</data>
 	<data key="schedule.namedescription">Name of the new task (this name must be unique)</data>
@@ -834,7 +839,7 @@ sct[""bracketNotation""] --> keyname: "bracketNotation"</data>
 	<data key="schedule.enddate">End date</data>
 	<data key="schedule.portdescription">Port of the URL to call (HTTP Default: 80)</data>
 	<data key="schedule.executiondescweekly">This task is executed once a week.</data>
-	<data key="schedule.endtimedesc">Define the time when lucee stop to executed the task within every day.</data>
+	<data key="schedule.endtimedesc">Define the time when railo stop to executed the task within every day.</data>
 	<data key="schedule.executiondescevery">This task is executed in a certain intervall.</data>
 	<data key="schedule.enddatedesc">Define a date when the task should be executed the last time.</data>
 	<data key="schedule.namemissing">Please enter a value for the name of the task</data>
@@ -842,7 +847,7 @@ sct[""bracketNotation""] --> keyname: "bracketNotation"</data>
 	<data key="schedule.proxyusername">Username to access a proxy if it is  protected by authentication</data>
 	<data key="schedule.name">Name</data>
 	<data key="schedule.intervaltype">Interval type</data>
-	<data key="schedule.currentdatetime">The current date/time of this lucee context is:</data>
+	<data key="schedule.currentdatetime">The current date/time of this Railo context is:</data>
 	<data key="schedule.weekly">weekly</data>
 	<data key="schedule.endsat">End date</data>
 	<data key="schedule.executiontimedescdaily">Defines the time when the Task is executed daily</data>
@@ -856,7 +861,7 @@ sct[""bracketNotation""] --> keyname: "bracketNotation"</data>
 	<data key="schedule.endtime">End time</data>
 	<data key="schedule.startdate">Start date</data>
 	<data key="schedule.password">Password</data>
-	<data key="schedule.starttimedesc">Defines the time of day task is executed.</data>
+	<data key="schedule.starttimedesc">Defines the time when railo starts to executed the task within every day.</data>
 	<data key="schedule.once">once</data>
 	<data key="schedule.resume">resume</data>
 	<data key="schedule.intervaltypedesc">Execution interval of the new task</data>
@@ -941,8 +946,8 @@ sct[""bracketNotation""] --> keyname: "bracketNotation"</data>
 	
 	<data key="settings.dbtimezoneDesc">
 When you define a date as a string (not with cfqueryparam) inside cfquery, there is normally no timezone information with it and the date string is based on the locale timezone. Therefore the database will interpret this date string based on it's own timezone.
-If the timezone of your lucee instance and your database is different, this can lead to problems. Because of that lucee now allows you to define a timezone for a specific datasource defintion. Be aware that you should only define a specific timezone, if you are a 100% sure that this timezone is used on the database server and it is different from the timezone of the lucee instance. This setting can be overwritten by the cfquery attribute "timezone".</data>
-	<data key="settings.dbtimezoneSame">Same as lucee Instance</data>
+If the timezone of your Railo instance and your database is different, this can lead to problems. Because of that Railo now allows you to define a timezone for a specific datasource defintion. Be aware that you should only define a specific timezone, if you are a 100% sure that this timezone is used on the database server and it is different from the timezone of the Railo instance. This setting can be overwritten by the cfquery attribute "timezone".</data>
+	<data key="settings.dbtimezoneSame">Same as Railo Instance</data>
 	
 	<data key="settings.dbblobdesc">Enable binary large object retrieval (&lt;abbr title=&quot;binary large object&quot;&gt;BLOB&lt;/abbr&gt;)</data>
 	<data key="settings.dbclobdesc">Enable long text retrieval (&lt;abbr title=&quot;character large object&quot;&gt;CLOB&lt;/abbr&gt;)</data>
@@ -955,21 +960,21 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="settings.dbhost">Host/Server</data>
 	<data key="settings.dbconnlimitinf">- inf -</data>
 	<data key="settings.type">Type</data>
-	<data key="regional.timeserverdescription">Time server that returns the current time. If set, this time will be used within lucee instead of the local server time. (Example: swisstime.ethz.ch, time.nist.gov)&lt;br/&gt;</data>
-	<data key="regional.server">You can define regional settings that will be used as a default for all web contexts here. These settings have no direct effect on the current instance. lucee lets you set your own individual locale, timezone and timeserver.</data>
+	<data key="regional.timeserverdescription">Time server that returns the current time. If set, this time will be used within Railo instead of the local server time. (Example: swisstime.ethz.ch, time.nist.gov)&lt;br/&gt;</data>
+	<data key="regional.server">You can define regional settings that will be used as a default for all web contexts here. These settings have no direct effect on the current instance. Railo lets you set your own individual locale, timezone and timeserver.</data>
 	<data key="regional.defaultencodingdescription"></data>
-	<data key="regional.web">lucee lets you set your own individual locale, timezone and timeserver.</data>
+	<data key="regional.web">Railo lets you set your own individual locale, timezone and timeserver.</data>
 	<data key="regional.timezone">Time zone</data>
 	<data key="regional.timeserver">Time server (NTP)</data>
 	<data key="regional.usetimeserver">use time server</data>
 	<data key="regional.other"> --- other --- </data>
-	<data key="regional.timezonedescription">Define the desired time zone for lucee, this will also change the time for the context of the web.&lt;br/&gt;</data>
+	<data key="regional.timezonedescription">Define the desired time zone for Railo, this will also change the time for the context of the web.&lt;br/&gt;</data>
 	<data key="regional.timeservermissing">Please define a value for the field timezone</data>
 	<data key="regional.defaultencoding">Default encoding</data>
 	<data key="regional.serverprop.web">Server Administrator Value</data>
 	<data key="regional.serverprop.server">Server Value</data>
 	<data key="regional.locale">Locale</data>
-	<data key="regional.localedescription">Define the desired time locale for lucee, this will change the default locale for the context of the web.</data>
+	<data key="regional.localedescription">Define the desired time locale for Railo, this will change the default locale for the context of the web.</data>
 	<data key="regional.missingencoding">Please enter a value for the default encoding</data>
 	<data key="cfx.missingclassvalue">Please enter a value for the class (row </data>
 	<data key="cfx.cfxtags">Java CFX tags</data>
@@ -987,14 +992,14 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="overview.bugreport">Bug report</data>
 	<data key="overview.issuetracker">Issue Tracker</data>
 	<data key="overview.issuetrackerDesc">If you think you've found a bug, please take the time to report it via our bug tracking system (JIRA on the JBoss community site).</data>
-	<data key="overview.book">Book (lucee 3 Beginner's Guide)</data>
-	<data key="overview.bookDesc">A complete guide to developing an application with lucee from start to finish.</data>
-	<data key="overview.datetime">lucee date/time</data>
+	<data key="overview.book">Book (Railo 3 Beginner's Guide)</data>
+	<data key="overview.bookDesc">A complete guide to developing an application with Railo from start to finish.</data>
+	<data key="overview.datetime">Railo date/time</data>
 	<data key="overview.forum">Forum</data>
-	<data key="overview.featurerequestmail">features@lucee.ch</data>
+	<data key="overview.featurerequestmail">features@railo.ch</data>
 	<data key="overview.licenceprofessional">Professional</data>
-	<data key="overview.licencecommunitydesc">lucee Community is intended to be used by low budget business applicants. Except for some few limitations the Community Version offers the entire language range of lucee.</data>
-	<data key="overview.licenceenterprisedesc">The Enterprise Version of lucee is the biggest and most comprehensive version intended to be used in a larger context.</data>
+	<data key="overview.licencecommunitydesc">Railo Community is intended to be used by low budget business applicants. Except for some few limitations the Community Version offers the entire language range of Railo.</data>
+	<data key="overview.licenceenterprisedesc">The Enterprise Version of Railo is the biggest and most comprehensive version intended to be used in a larger context.</data>
 	<data key="overview.licenceenterprise">Enterprise</data>
 	<data key="overview.contact">Contact</data>
 	<data key="overview.serialnumber">Serial number</data>
@@ -1004,7 +1009,7 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="overview.twitter">Twitter</data>
 	<data key="overview.twitterDesc">Follow us on Twitter.</data>
 	<data key="overview.blog">Blog</data>
-	<data key="overview.blogDesc"> The latest news from lucee is always posted on our blog.</data>
+	<data key="overview.blogDesc"> The latest news from Railo is always posted on our blog.</data>
 	<data key="overview.mailinglist">Mailing list</data>
 	<data key="overview.mailinglistDesc">The mailing list is the focus of our community support program - help for users by users. </data>
 	
@@ -1023,16 +1028,16 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="overview.contexts.url">URL</data>
 	<data key="overview.contexts.title">Web contexts</data>
 	<data key="overview.contexts.config_file">Configuration File</data>
-	<data key="overview.licencedesc">lucee is available in four different editions, adapted to the different areas of application and budgets.</data>
-	<data key="overview.serialnumberdescription">Serial number for lucee</data>
+	<data key="overview.licencedesc">Railo is available in four different editions, adapted to the different areas of application and budgets.</data>
+	<data key="overview.serialnumberdescription">Serial number for Railo</data>
 	<data key="overview.cfcompatibility">ColdFusion&amp;reg; compatibilty version</data>
 	<data key="overview.os">OS</data>
-	<data key="overview.salesmail">sales@lucee.ch</data>
+	<data key="overview.salesmail">sales@railo.ch</data>
 	<data key="overview.installedfls">Installed function&lt;br/&gt; libraries</data>
-	<data key="overview.bugreportmail">bugs@lucee.ch</data>
-	<data key="overview.purchase">Purchase your lucee license</data>
+	<data key="overview.bugreportmail">bugs@railo.ch</data>
+	<data key="overview.purchase">Purchase your Railo license</data>
 	<data key="overview.sales">Sales</data>
-	<data key="overview.licenceprofessionaldesc">The Professional Version offers the full language range of lucee, no restriction to the use of any feature has to be expected. With the Professional Version several web contextes can be used on one server, the number of web contextes however is limited by the licence price.</data>
+	<data key="overview.licenceprofessionaldesc">The Professional Version offers the full language range of Railo, no restriction to the use of any feature has to be expected. With the Professional Version several web contextes can be used on one server, the number of web contextes however is limited by the licence price.</data>
 	<data key="overview.used">currently in use</data>
 	<data key="overview.licencecommunity">Community</data>
 	<data key="overview.remote_addr">Remote IP</data>
@@ -1041,9 +1046,9 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="overview.contactinfo">Info</data>
 	<data key="overview.versionname">Version Name</data>
 	<data key="overview.mailinglist_de">Mailinglist (german)</data>
-	<data key="overview.introdesc.web">lucee, the CFML engine - free, open source and easy to use. This Web Administrator is provided in order to customize your web context.</data>
-	<data key="overview.introdesc.server">The Server Administrator allows you to install updates and patches for your lucee installation and to restart the engine with a mouse click. You can preconfigure new web contexts and define restrictions and configurations per web context individually.</data>
-	<data key="overview.infomail">info@lucee.ch</data>
+	<data key="overview.introdesc.web">Railo, the CFML engine - free, open source and easy to use. This Web Administrator is provided in order to customize your web context.</data>
+	<data key="overview.introdesc.server">The Server Administrator allows you to install updates and patches for your Railo installation and to restart the engine with a mouse click. You can preconfigure new web contexts and define restrictions and configurations per web context individually.</data>
+	<data key="overview.infomail">info@railo.ch</data>
 	<data key="overview.servertime">Server date/time: </data>
 	<data key="overview.version">Version</data>
 	<data key="overview.Label">Label</data>
@@ -1090,14 +1095,14 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="doc.example">Example</data>
 	<data key="doc.chooseTag">Choose a tag</data>
 	<data key="doc.chooseFunction">Choose a function</data>
-	<data key="help.logotitle">lucee help</data>
+	<data key="help.logotitle">Railo help</data>
 	<data key="help.closewindow">Close window</data>
-	<data key="help.videohelp">lucee - online video help</data>
+	<data key="help.videohelp">Railo - online video help</data>
 	<data key="help.videohelpnotavailable">Online video help not available for this page</data>
-	<data key="help.globalhelp">lucee - global online help</data>
+	<data key="help.globalhelp">Railo - global online help</data>
 	<data key="help.globalhelpnotavailable">Global online help not available for this page</data>
 	<data key="help.globalhelpnotconnected">Global help not available - Connection problems</data>
-	<data key="help.localhelp">lucee - local help</data>
+	<data key="help.localhelp">Railo - local help</data>
 	<data key="help.addlocalhelp">Click here to add a local help for this page</data>
 	<data key="help.addhelpnote">Add help note</data>
 	<data key="help.addnote">Add note</data>
@@ -1159,7 +1164,13 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="settings.cache.defaulttypeResource">Resource</data>
 	<data key="settings.cache.defaulttypeResourceDesc">This cache connection is used for the Ram Resource (ram://...)</data>
 	<data key="settings.cache.defaulttypeInclude">Include</data>
-	<data key="settings.cache.defaulttypeIncludeDesc">This cache connection is used for caching the results of the tag cfinclude</data>
+	<data key="settings.cache.defaulttypeIncludeDesc">This cache connection is used for caching the results of the tag include</data>
+	<data key="settings.cache.defaulttypeHTTP">HTTP</data>
+	<data key="settings.cache.defaulttypeHTTPDesc">This cache connection is used for caching the results of the tag http</data>
+	<data key="settings.cache.defaulttypeFile">File</data>
+	<data key="settings.cache.defaulttypeFileDesc">This cache connection is used for caching the results of the tag file</data>
+	<data key="settings.cache.defaulttypeWebservice">Webservice (SOAP,REST,HTTP)</data>
+	<data key="settings.cache.defaulttypeWebserviceDesc">This cache connection is used for caching the results of webservice calls (SOAP, REST ot HTTP).</data>
 	
 	<data key="settings.cache.defaultDesc">Define the default cache connection for tempates (cfcache) and object (cacheGet, cachePut ...), this connection is used when no cache name is explicit defined</data>
 	<data key="settings.cache.Default">Default</data>
@@ -1187,13 +1198,13 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="settings.orm.title">Settings</data>
 	<data key="settings.orm.desc">Here you can define the default settings for the ORM Configuration, this settings can be overwritten in the Application.cfc with the struct "ormsettings".</data>
 	<data key="settings.orm.autogenmap">Automatically generate mapping</data>
-	<data key="settings.orm.autogenmapDesc">Specifies whether lucee should automatically generate mapping for the persistent CFCs. If disabled, mapping should be provided in the form of .HBMXML files. This setting can be overwritten in Application.cfc as follows [this.ormsettings.autogenmap=true]</data>
+	<data key="settings.orm.autogenmapDesc">Specifies whether Railo should automatically generate mapping for the persistent CFCs. If disabled, mapping should be provided in the form of .HBMXML files. This setting can be overwritten in Application.cfc as follows [this.ormsettings.autogenmap=true]</data>
 	<data key="settings.orm.catalog">Catalog</data>
 	<data key="settings.orm.catalogDesc">Specifies the default Catalog that should be used by ORM. This setting can be overwritten in Application.cfc as follows [this.ormsettings.catalog='db']</data>
 	<data key="settings.orm.cfclocation">Persistent Component Location</data>
-	<data key="settings.orm.cfclocationDesc">Specifies the directory that should be used to search for persistent CFCs to generate the mapping. If cfclocation is set, lucee looks at only the paths specified in it. If it is not set, lucee looks at the application directory, its sub-directories, and its mapped directories to search for persistent Comonents. This setting can be overwritten in Application.cfc as follows [this.ormsettings.cfclocation='...']</data>
+	<data key="settings.orm.cfclocationDesc">Specifies the directory that should be used to search for persistent CFCs to generate the mapping. If cfclocation is set, Railo looks at only the paths specified in it. If it is not set, Railo looks at the application directory, its sub-directories, and its mapped directories to search for persistent Comonents. This setting can be overwritten in Application.cfc as follows [this.ormsettings.cfclocation='...']</data>
 	<data key="settings.orm.dbcreate">Creating Tables behavior</data>
-	<data key="settings.orm.dbcreateDesc">lucee ORM can automatically create the tables for your application in the database when ORM is initialized for the application. This setting can be overwritten in Application.cfc as follows [this.ormsettings.dbcreate='none']</data>
+	<data key="settings.orm.dbcreateDesc">Railo ORM can automatically create the tables for your application in the database when ORM is initialized for the application. This setting can be overwritten in Application.cfc as follows [this.ormsettings.dbcreate='none']</data>
 	<data key="settings.orm.dbcreateNone">Setting this value does not change anything in the database schema.</data>
 	<data key="settings.orm.dbcreateUpdate">Setting this value creates the table if it does not exist or update the table if it exists.</data>
 	<data key="settings.orm.dbcreateDropcreate"> Setting this value drops the table if it exists and then creates it.</data>
@@ -1213,20 +1224,20 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="settings.orm.sqlscriptDesc">Path to the SQL script file that gets executed after ORM is initialized. This applies if dbcreate is set to dropcreate. This must be the absolute file path or the path relative to the application.The SQL script file lets you populate the tables before the application is accessed. This setting can be overwritten in Application.cfc as follows [this.ormsettings.sqlscript='...']</data>
 	<data key="services.update.provider">Update Provider</data>
 	<data key="services.update.location_www">Stable releases</data>
-	<data key="services.update.location_wwwDesc">Dieser Update Provider (www.lucee.org) gibt nur stabile Versionen zurueck, welche ausfuehrlich getestet wurden, diese Quelle sollte fuer produktive Systeme verwendet werden.</data>
+	<data key="services.update.location_wwwDesc">Dieser Update Provider (www.getrailo.org) gibt nur stabile Versionen zurück, welche ausführlich getestet wurden, diese Quelle sollte für produktive Systeme verwendet werden.</data>
 	<data key="services.update.location_preview">Preview releases</data>
-	<data key="services.update.location_previewDesc">Dieser Update Provider (preview.lucee.org) gibt vorab Versionen zurueck, dabei handelt es sich um Versionen die zwar getestet wurden aber noch nicht die Reife einer stable release besitzen, diese Quelle sollte nur bedingt fuer produktive Systeme verwendet werden.</data>
+	<data key="services.update.location_previewDesc">Dieser Update Provider (preview.getrailo.org) gibt vorab Versionen zurück, dabei handelt es sich um Versionen die zwar getestet wurden aber noch nicht die Reife einer stable release besitzen, diese Quelle sollte nur bedingt für produktive Systeme verwendet werden.</data>
 	<data key="services.update.location_dev">Develop releases (Bleeding Edge)</data>
-	<data key="services.update.location_devDesc">Dieser Update Provider (dev.lucee.org) gibt ""Bleeding Edge"" Versionen zurueck, dabei handelt es sich um Versionen die wenig bis gar nicht getestet wurden, diese Quelle sollte nicht fuer produktive Systeme verwendet werden.</data>
+	<data key="services.update.location_devDesc">Dieser Update Provider (dev.getrailo.org) gibt ""Bleeding Edge"" Versionen zurück, dabei handelt es sich um Versionen die wenig bis gar nicht getestet wurden, diese Quelle sollte nicht für produktive Systeme verwendet werden.</data>
 	<data key="services.update.location_custom">Custom</data>
-	<data key="services.update.location_customDesc">Hier koennen Sie ihren eigenen Update Provider definieren, dies ist eine URL in der Form ""http://my.domainname.org""</data>
+	<data key="services.update.location_customDesc">Hier können Sie ihren eigenen Update Provider definieren, dies ist eine URL in der Form ""http://my.domainname.org""</data>
 	<data key="services.update.provider">Update Provider</data>
 	<data key="services.update.location_www">Stable releases</data>
-	<data key="services.update.location_wwwDesc">This Update Provider (www.lucee.org ) returns only stable versions. The versions found here are deeply tested. This source is recommended for production environments.</data>
+	<data key="services.update.location_wwwDesc">This Update Provider (www.getrailo.org ) returns only stable versions. The versions found here are deeply tested. This source is recommended for production environments.</data>
 	<data key="services.update.location_preview">Preview releases</data>
-	<data key="services.update.location_previewDesc">This Update Provider (preview.lucee.org) returns public preview versions. Versions are tested, but not as deeply as stable releases. This source could be used for production environments. Please use caution.</data>
+	<data key="services.update.location_previewDesc">This Update Provider (preview.getrailo.org) returns public preview versions. Versions are tested, but not as deeply as stable releases. This source could be used for production environments. Please use caution.</data>
 	<data key="services.update.location_dev">Development releases (Bleeding Edge)</data>
-	<data key="services.update.location_devDesc">This Update Provider (dev.lucee.org) returns ""Bleeding Edge"" versions. Usually only a small amount of testing has been performed on these versions. This source should NOT be used for production environments.</data>
+	<data key="services.update.location_devDesc">This Update Provider (dev.getrailo.org) returns ""Bleeding Edge"" versions. Usually only a small amount of testing has been performed on these versions. This source should NOT be used for production environments.</data>
 	<data key="services.update.location_custom">Custom</data>
 	<data key="services.update.location_customDesc">Here you can define your own Update Provider. This is a URL of the form ""http://my.domainname.org""</data>
 		<data key="services.update.lib">Update JAR's</data>
@@ -1238,13 +1249,13 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="settings.gateway.startupModeManual">Manual</data>
 	<data key="settings.gateway.startupModeDisabled">Disabled</data>
 	
-	<data key="setting.general.web">Hier sehen Sie eine uebersicht alle Settings welche Einfluss auf das Verhalten von lucee haben, sie koennen diese nach vordefinierten kriterien anpassen</data>
+	<data key="setting.general.web">Hier sehen Sie eine Übersicht alle Settings welche Einfluss auf das Verhalten von Railo haben, sie können diese nach vordefinierten kriterien anpassen</data>
 	<data key="setting.general.compatibility">Compatibility</data>
-	<data key="setting.general.compatibilityDesc">Mit diesem Wert werden alle Settings so gesetzt, dass sie moeglichst dem CFML2009 Standard entsprechen und mit Implementationen anderer Hersteller kombatibel sind.</data>
+	<data key="setting.general.compatibilityDesc">Mit diesem Wert werden alle Settings so gesetzt, dass sie möglichst dem CFML2009 Standard entsprechen und mit Implementationen anderer Hersteller kombatibel sind.</data>
 	<data key="setting.general.strict">Strict</data>
-	<data key="setting.general.strictDesc">Mit diesem Wert werden alle Settings so gesetzt, dass lucee so streng wie moeglich mit der Umsetzung des Code ist.</data>
+	<data key="setting.general.strictDesc">Mit diesem Wert werden alle Settings so gesetzt, dass Railo so streng wie möglich mit der Umsetzung des Code ist.</data>
 	<data key="setting.general.speed">Speed</data>
-	<data key="setting.general.speedDesc">Mit diesem Wert werden alle Settings so gesetzt, dass sie eine moeglichst schnelle Ausfuehrung des Code erlauben.</data>
+	<data key="setting.general.speedDesc">Mit diesem Wert werden alle Settings so gesetzt, dass sie eine möglichst schnelle Ausführung des Code erlauben.</data>
 	<data key="setting.general.component">Component</data>
 	<data key="setting.general.charset">Charset</data>
 	<data key="setting.general.scope">Scope</data>
@@ -1255,5 +1266,5 @@ If the timezone of your lucee instance and your database is different, this can 
 	<data key="mail.tls">TLS</data>
 	<data key="mail.ssl">SSL</data>
 	<data key="overview.servletContainer">Servlet Container</data>
-	<data key="overview.luceeID">lucee Server ID</data>
+	<data key="overview.railoID">Railo Server ID</data>
 </language>

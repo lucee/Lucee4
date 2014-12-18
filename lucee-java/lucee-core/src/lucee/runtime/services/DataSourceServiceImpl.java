@@ -135,7 +135,7 @@ public class DataSourceServiceImpl extends ServiceSupport implements DataSourceS
 		Struct driver;
 		
 		try {
-			Resource luceeContext = ResourceUtil.toResourceExisting(pc() ,"/lucee-context/admin/dbdriver/");
+			Resource luceeContext = ResourceUtil.toResourceExisting(pc() ,"/lucee/admin/dbdriver/");
 			Resource[] children = luceeContext.listResources(new ExtensionResourceFilter("cfc"));
 	    	 
 	    	String name;

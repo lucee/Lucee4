@@ -28,4 +28,4 @@
    		<cfdump var="#(this)#" label="this">		
    		<cfreturn structkeyList(variables)>
    </cffunction>
-</cfcomponent> 
+</cfcomponent>

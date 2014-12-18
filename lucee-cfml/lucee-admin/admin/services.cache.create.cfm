@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cffunction name="addZero">
+<cffunction name="addZero">
 	<cfargument name="str">
  <!---   <while len(str) LT 2>
     	<cfset str="0"&str>
@@ -253,7 +236,7 @@ Redirtect to entry --->
 					<td>
 						<select name="default">
 							<option value="">------</option>
-							<cfloop index="type" list="function,object,template,query,resource,include">
+							<cfloop index="type" list="function,object,template,query,resource,include,http,file,webservice">
 								<option <cfif connection.default EQ type>selected="selected"</cfif> value="#type#">#stText.Settings.cache['defaultType'& type]#</option>
 							</cfloop>
 						</select>
@@ -264,7 +247,7 @@ Redirtect to entry --->
 			<tfoot>
 				<tr>
 					<td colspan="2">
-						<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.submit#">
+						<input type="submit" class="bs button submit" name="mainAction" value="#stText.Buttons.submit#">
 					</td>
 				</tr>
 			</tfoot>

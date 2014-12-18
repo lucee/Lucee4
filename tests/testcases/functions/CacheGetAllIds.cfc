@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<cfset variables.cacheName="Test"&ListFirst(ListLast(getCurrentTemplatePath(),"\/"),".")>
 	
 	<cffunction name="testCacheGetAllIdsEHCache" localMode="modern">
@@ -47,7 +47,7 @@
 	<cfset cachePut('def','123')>
     <cfset valueEquals(left="#ListSort(arrayToList(cacheGetAllIds()),'textnocase')#", right="ABC,DEF")>
     
-<cfif server.ColdFusion.ProductName EQ "railo"> 
+<cfif server.ColdFusion.ProductName EQ "lucee"> 
 	<cfset cacheClear()>   
 	<cfset cachePut('abc','123')>
 	<cfset cachePut('abd','123')>
@@ -77,7 +77,7 @@
 				
 				
 				name="#cacheName#" 
-				class="railo.runtime.cache.ram.RamCache" 
+				class="lucee.runtime.cache.ram.RamCache" 
 				storage="false"
 				default="object" 
 				custom="#{timeToLiveSeconds:86400
@@ -92,7 +92,7 @@
 				
 				
 				name="#cacheName#" 
-				class="railo.runtime.cache.eh.EHCache" 
+				class="lucee.runtime.cache.eh.EHCache" 
 				storage="false"
 				default="object" 
 				custom="#{timeToLiveSeconds:86400
@@ -115,7 +115,7 @@
 				
 				default="object"
 				name="#cacheName#" 
-				class="railo.extension.cache.jboss.JBossCache" 
+				class="lucee.extension.cache.jboss.JBossCache" 
 				storage="false"
 				custom="#{timeToLiveSeconds:86400.0
 					,minTimeToLiveSeconds:0

@@ -18,10 +18,10 @@
  **/
 
 
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public function setUp(){
-		variables.admin=new org.railo.cfml.Administrator("web","server");
+		variables.admin=new org.lucee.cfml.Administrator("web","server");
 	}
 	
 	public void function testGetRegional(){
@@ -131,4 +131,4 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 		//admin.updateJar();
 	}
 	
-} 
+}

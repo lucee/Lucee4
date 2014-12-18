@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<cffunction name="beforeTests">
 		<cfset variables.resultDir=getDirectoryFromPath(getCurrentTemplatePath())&"FileTest/test/res/">
 		<cfset variables.resDir=getDirectoryFromPath(getCurrentTemplatePath())&"FileTest/resources/">

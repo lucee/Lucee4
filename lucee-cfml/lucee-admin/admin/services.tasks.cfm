@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfset stText.remote.settings.title="Task Settings">
+<cfset stText.remote.settings.title="Task Settings">
 <cfset stText.remote.title="Tasks">
 <cfset stText.remote.settings.maxThreads="Maximum concurrent threads">
 <cfset stText.remote.settings.maxThreadsDesc="Maximum number of parallel threads used to execute tasks at the same time, fewer threads will take longer to execute all open threads, more threads will add more load to the system.">
@@ -286,9 +269,9 @@
 								<td colspan="2">
 									<input type="hidden" class="checkbox" name="row_#tasks.currentrow#" value="#tasks.currentrow#">
 									<input type="hidden" name="id_#tasks.currentrow#" value="#tasks.id#">
-									<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="button cancel" name="cancel" value="#stText.Buttons.Cancel#">
-									<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Execute#">
-									<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Delete#">
+									<input onclick="window.location='#request.self#?action=#url.action#';" type="button" class="bl button cancel" name="cancel" value="#stText.Buttons.Cancel#">
+									<input type="submit" class="bm button submit" name="mainAction" value="#stText.Buttons.Execute#">
+									<input type="submit" class="br button submit" name="mainAction" value="#stText.Buttons.Delete#">
 								</td>
 							</tr>
 						</tfoot>
@@ -369,9 +352,9 @@
 				<tfoot>
 					<tr>
 						<td colspan="2"><cfoutput>
-							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Update#">
-							<input type="reset" class="reset" name="canel" value="#stText.Buttons.Cancel#">
-							<cfif request.adminType EQ "web"><input class="button submit" type="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
+							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Update#">
+							<input type="reset" class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> button reset" name="canel" value="#stText.Buttons.Cancel#">
+							<cfif request.adminType EQ "web"><input class="br button submit" type="submit" name="mainAction" value="#stText.Buttons.resetServerAdmin#"></cfif>
 						</cfoutput></td>
 					</tr>
 				</tfoot>
@@ -516,7 +499,8 @@
 									#tasks.tries#
 								</td>
 								<td>
-									<a href="#request.self#?action=#url.action#&action2=edit&id=#tasks.id#" class="btn-mini edit"><span>edit</span></a>
+									#renderEditButton("#request.self#?action=#url.action#&action2=edit&id=#tasks.id#")#
+									
 								</td>
 							</tr>
 						</cfif>
@@ -526,10 +510,10 @@
 					<tfoot>
 						 <tr>
 							<td colspan="6">
-								<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
-								<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Execute#">
-								<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Delete#">
-								<input type="submit" class="button" name="mainAction" value="#stText.Buttons.DeleteAll#">
+								<input type="reset" class="bl button reset" name="cancel" value="#stText.Buttons.Cancel#">
+								<input type="submit" class="bm button submit" name="mainAction" value="#stText.Buttons.Execute#">
+								<input type="submit" class="bm button submit" name="mainAction" value="#stText.Buttons.Delete#">
+								<input type="submit" class="br button" name="mainAction" value="#stText.Buttons.DeleteAll#">
 							</td>	
 						</tr>
 					</tfoot>

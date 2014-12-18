@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **/
-component extends="org.railo.cfml.test.RailoTestCase" {
+component extends="org.lucee.cfml.test.LuceeTestCase" {
 
 	function giveIntegerPropertyAsIntegerTest () {
 		local.thingWithDate = CreateObject( 'webservice', createURL("Jira3044/service.cfc?wsdl")).returnThingWithDate();

@@ -17,7 +17,7 @@
  * 
  --->﻿<!--- !!!!!!!!!!!!!! make sure not changing the encoding of this template --->
 <cfscript>
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	processingdirective pageEncoding="UTF-8";
 	//public function beforeTests(){}
 	

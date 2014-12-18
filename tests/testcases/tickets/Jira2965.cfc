@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **/
-component extends="org.railo.cfml.test.RailoTestCase" {
+component extends="org.lucee.cfml.test.LuceeTestCase" {
 	
 	function setup() {
 		variables.ws = CreateObject( 'webservice', createURL("Jira2965/service.cfc?wsdl"));

@@ -341,7 +341,7 @@ public final class SecurityManagerImpl implements Cloneable, SecurityManager {
     private boolean isAdminContext() {
     	PageContext pc = ThreadLocalPageContext.get();
         try {
-			if(pc!=null && "/lucee-context".equals(pc.getBasePageSource().getMapping().getVirtualLowerCase())){
+			if(pc!=null && "/lucee".equals(pc.getBasePageSource().getMapping().getVirtualLowerCase())){
 				return true;
 			}
 		} 

@@ -27,7 +27,7 @@ component {
 	}
 	catch(e){
 		// only add mapping when necessary
-		this.componentpaths = [{archive:getDirectoryFromPath(getCurrentTemplatePath())&"testbox.ra"}]; // "{railo-server}/context/testbox.ra"
+		this.componentpaths = [{archive:getDirectoryFromPath(getCurrentTemplatePath())&"testbox.ra"}]; // "{lucee-server}/context/testbox.ra"
 	}
 	
 

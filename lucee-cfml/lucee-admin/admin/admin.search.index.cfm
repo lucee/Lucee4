@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfsilent>
+<cfsilent>
 	<cfif not directoryExists(dataDir)>
 		<cfdirectory action="create" directory="#dataDir#" mode="777" recurse="true" />
 	</cfif>
@@ -102,7 +85,7 @@
 
 	</cfloop>
 
-	<!--- remember the lucee version which is now in use --->
+	<!--- remember the Lucee version which is now in use --->
 	<cffile action="write" file="#datadir#indexed-lucee-version.cfm" output="#server.lucee.version##server.lucee['release-date']#" mode="644" addnewline="no" />
 
 	<!--- store the searchresults --->

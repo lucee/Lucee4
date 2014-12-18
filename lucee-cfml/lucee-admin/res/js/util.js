@@ -1,9 +1,9 @@
-/*! LUCEE.util version 1.0 */
+/*! RAILO.util version 1.0 */
 
-var __LUCEE = __LUCEE || {};
+var __RAILO = __RAILO || {};
 
 
-__LUCEE.util = 	{
+__RAILO.util = 	{
 
 	getCookie: 			function( name, def ) {
 
@@ -45,7 +45,7 @@ __LUCEE.util = 	{
 
 	, removeCookie: 	function( name ) {
 
-		__LUCEE.util.setCookie( name, "", new Date( 0 ) );
+		__RAILO.util.setCookie( name, "", new Date( 0 ) );
 	}
 
 	, getDomObject: 	function( obj ) {			// returns the element if it is an object, or finds the object by id */
@@ -58,35 +58,35 @@ __LUCEE.util = 	{
 
 	, hasClass: 		function( obj, cls ) {
 
-		obj = __LUCEE.util.getDomObject( obj );
+		obj = __RAILO.util.getDomObject( obj );
 		return ( obj.className.indexOf( cls ) > -1 );
 	}
 
 	, addClass: 		function( obj, cls ) {
 
-		if ( __LUCEE.util.hasClass( obj, cls ) )
+		if ( __RAILO.util.hasClass( obj, cls ) )
 			return;
 
-		obj = __LUCEE.util.getDomObject( obj );
+		obj = __RAILO.util.getDomObject( obj );
 		obj.className += " " + cls;
 	}
 
 	, removeClass: 		function( obj, cls ) {
 
-		obj = __LUCEE.util.getDomObject( obj );
+		obj = __RAILO.util.getDomObject( obj );
 		obj.className = obj.className.replace( cls, "" );
 	}
 
 	, toggleClass: 		function( obj, cls ) {
 
-		obj = __LUCEE.util.getDomObject( obj );
+		obj = __RAILO.util.getDomObject( obj );
 
-		if ( __LUCEE.util.hasClass( obj, cls ) )
-			__LUCEE.util.removeClass( obj, cls );
+		if ( __RAILO.util.hasClass( obj, cls ) )
+			__RAILO.util.removeClass( obj, cls );
 		else
-			__LUCEE.util.addClass( obj, cls );
+			__RAILO.util.addClass( obj, cls );
 
-		return ( __LUCEE.util.hasClass( obj, cls ) );
+		return ( __RAILO.util.hasClass( obj, cls ) );
 	}
 
 	, selectText: 	function( id ) {

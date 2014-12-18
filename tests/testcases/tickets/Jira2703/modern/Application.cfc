@@ -23,4 +23,4 @@ component {
 	request.currentPath=GetDirectoryFromPath(getCurrentTemplatePath());
 	this.locale="de_de";
 	this.scopecascading=url.scopecascading;
-} 
+}

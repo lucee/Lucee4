@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<!---
 	<cffunction name="beforeTests"></cffunction>
 	<cffunction name="afterTests"></cffunction>
 	<cffunction name="setUp"></cffunction>
 	--->
 	<cffunction name="testArrayIndexExists">
-		<cfif server.ColdFusion.ProductName EQ "railo">
+		<cfif server.ColdFusion.ProductName EQ "lucee">
 			<cfset var a=array(1)>
 			<cfset var a[3]=1>
 			<cfset valueEquals(left="#ArrayIndexExists(array("a","b","c","d"),2)#", right="#true#")>

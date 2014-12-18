@@ -24,4 +24,4 @@ component {
 	
 	this.componentpaths = request.currentPath&"cfcs/";
 
-} 
+}

@@ -1,21 +1,4 @@
 <!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><!--- 
 Defaults --->
 <cfset error.message="">
 <cfset error.detail="">
@@ -24,8 +7,7 @@ Defaults --->
 <!--- load asynchron all extension providers  --->
 <cfparam name="application[request.admintype].preloadedExtensionProviders" default="false" type="boolean">
 <cfif !application[request.admintype].preloadedExtensionProviders>
-	<cfinclude template="extension.functions.cfm">
-	<cfset loadAllProvidersData(0,false)>
+	<cfinclude template="ext.functions.cfm">
 	<cfset application[request.admintype].preloadedExtensionProviders=true>
 </cfif>
 
@@ -191,32 +173,12 @@ Error Output --->
 		<cfif !ArrayContainsNoCase(names,"Rest")>
 			<div class="warning nofocus">
 				The REST Servlet is not configured in your enviroment.
-				<!--- Follow these <a href="https://github.com/getlucee/lucee/wiki/Configuration:web.xml##wiki-REST" target="_blank">instructions</a> to enable REST.
-			--->
+				Follow these <a href="https://github.com/getlucee/lucee/wiki/Configuration:web.xml##wiki-REST" target="_blank">instructions</a> to enable REST.
 			</div>
 		</cfif>	
 	</cfif>
 
 
-	<cfif !info.javaAgentSupported>
-		<div class="warning nofocus">
-			There is no Java Agent defined in this enviroment. 
-			The Java Agent is needed to improve memory (PermGen Space) consumption for templates.
-			To enable the Java Agent follow this instructions:
-			<ul>
-				<li>Add the "-javaagent" JVM argument and set it to point to the lucee-inst.jar in your lib directory
-				<br>
-				<cfif !isNull(info.javaAgentPath) && len( info.javaAgentPath )>
-					in this environment that would be: <em>-javaagent:#replace( info.javaAgentPath, server.java.executionPath, "" )#</em>
-				<cfelse>
-
-					if the lucee-inst.jar is not present in your lib folder you can download it from <a href="http://www.lucee.org/download" target="new">here</a>.					
-				</cfif>
-                </li>
-			</ul>			
-		</div>
-	</cfif>
-	
 	<table>
 		<tr>
 			<td valign="top" width="65%">
@@ -266,13 +228,13 @@ Error Output --->
 							
 					</tbody>
 				</table>
-				<cfset stText.io.title="lucee IO">
-				<cfset stText.io.desc="lucee.io is your one stop shop to all that is lucee. From managing your Extension Store licenses, to monitoring your servers and keeping all your settings in sync and everything in between.">
-				<cfset stText.io.id="lucee.ID">
-				<cfset stText.io.idDesc="To interact with luceeIO, you need a lucee.ID, you can get this ID from <a target=""top"" href=""http://beta.lucee.io/index.cfm/account"">here</a>">
-				<h2>#stText.io.title#</h2>
+				<cfset stText.io.title="Lucee IO">
+				<cfset stText.io.desc="Lucee.io is your one stop shop to all that is Lucee. From managing your Extension Store licenses, to monitoring your servers and keeping all your settings in sync and everything in between.">
+				<cfset stText.io.id="Lucee.ID">
+				<cfset stText.io.idDesc="To interact with LuceeIO, you need a Lucee.ID, you can get this ID from <a target=""top"" href=""http://beta.lucee.io/index.cfm/account"">here</a>">
+				<!---<h2>#stText.io.title#</h2>
 				#stText.io.desc#
-				
+				 
 				<table class="maintbl">
 					<tbody>
 						<!--- has api key --->
@@ -287,7 +249,7 @@ Error Output --->
 						</cfif>
 						
 					</tbody>
-				</table>
+				</table>--->
 				
 				<h2>#stText.Overview.Info#</h2>
 				<table class="maintbl">
@@ -304,7 +266,7 @@ Error Output --->
 						</cfif>
 						<tr>
 							<th scope="row">#stText.Overview.Version#</th>
-							<td>lucee #server.lucee.version# #server.lucee.state#</td>
+							<td>Lucee #server.lucee.version# #server.lucee.state#</td>
 						</tr>
 						<cfif StructKeyExists(server.lucee,'versionName')>
 							<tr>
@@ -370,14 +332,14 @@ Error Output --->
 							<th scope="row">#stText.overview.servletContainer#</th>
 							<td>#server.servlet.name#</td>
 						</tr>
-						<tr>
+						<!---<tr>
 							<th scope="row">#stText.overview.luceeID#</th>
 							<td>#getId().server.id#</td>
 						</tr>
-						<!---
+						
 						<tr>
 							<th scope="row">#stText.overview.luceeID#</th>
-							<td>#getId().server.ioid#</td>
+							<td>#getLuceeId().server.ioid#</td>
 						</tr>
 						--->
 						<cfif request.adminType EQ "web">
@@ -429,17 +391,6 @@ Error Output --->
 								</td> 
 							</tr>
 						</cfif>
-						<tr>
-							<th scope="row">Classpath</th>
-							<td>
-								<div class="classpaths longwords">
-									<cfset arr=getClasspath()>
-									<cfloop from="1" to="#arrayLen(arr)#" index="line">
-										<div<cfif line mod 2> class="odd"</cfif>>#arr[line]#</div>
-									</cfloop>
-								</div>
-							</td> 
-						</tr>
 					</tbody>
 				</table>
 			</td>
@@ -471,7 +422,7 @@ Error Output --->
 	
 					<!--- Professional --->
 					<h3>
-						<a href="http://www.lucee.org/index.cfm/services/support/" target="_blank">#stText.Overview.Professional#</a>
+						<a href="http://www.getlucee.com/index.cfm/services/support/" target="_blank">#stText.Overview.Professional#</a>
 					</h3>
 					<div class="comment">#stText.Overview.ProfessionalDesc#</div>
 					
@@ -481,24 +432,24 @@ Error Output --->
 					</h3>
 					<div class="comment">#stText.Overview.MailinglistDesc#</div>
 					
-					<!--- Book
+					<!--- Book --->
 					<h3>
 						<a href="http://www.packtpub.com/lucee-3-beginners-guide-to-develop-deploy-complex-applications-online/book" target="_blank">#stText.Overview.book#</a>
 					</h3>
 					<div class="comment">#stText.Overview.bookDesc#</div>
-					 --->
+					
 					
 					<!--- <a href="http://www.linkedin.com/e/gis/71368/0CF7D323BBC1" target="_blank">Linked in</a>--->
 					
 					<!--- Jira --->
 					<h3>
-						<a href="https://jira.jboss.org/jira/browse/LUCEE" target="_blank">#stText.Overview.issueTracker#</a>
+						<a href="https://jira.jboss.org/jira/browse/RAILO" target="_blank">#stText.Overview.issueTracker#</a>
 					</h3>
-					<div class="comment">#stText.Overview.issuetrackerDesc#</div>
+					<div class="comment">#stText.Overview.issueTrackerDesc#</div>
 					
 					<!--- Blog --->
 					<h3>
-						<a href="http://blog.lucee.org/" target="_blank">#stText.Overview.blog#</a>
+						<a href="http://blog.getlucee.com/" target="_blank">#stText.Overview.blog#</a>
 					</h3>
 					<div class="comment">#stText.Overview.blogDesc#</div>
 					
@@ -538,7 +489,7 @@ Error Output --->
 								<input type="hidden" name="hash_#rst.currentrow#" value="#rst.hash#"/>
 								<input type="text" style="width:99%" name="label_#rst.currentrow#" value="#rst.label#"/>
 							</td>
-							<td><cfif len(rst.url)><a target="_blank" href="#rst.url#/lucee-context/admin/web.cfm">#rst.url#</a></cfif></td>
+							<td><cfif len(rst.url)><a target="_blank" href="#rst.url#/lucee/admin/web.cfm">#rst.url#</a></cfif></td>
 							<td><input type="text" class="xlarge" name="path_#rst.currentrow#" value="#rst.path#" readonly="readonly"/></td>
 							<td><input type="text" class="xlarge" style="width:99%" name="cf_#rst.currentrow#" value="#rst.config_file#" readonly="readonly"/></td>
 						</tr>

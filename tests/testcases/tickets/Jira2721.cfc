@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **/
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 
 	addrValid = [
@@ -62,11 +62,11 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 		  'user'
 		, 'user@'
 		, 'user@.'
-		, '.michael@getrailo.org'
-		, 'michael.@getrailo.org'
-		, 'michael@getrailo.org.'
-		, 'michael@.getrailo.org'
-		, 'michael@getrailo..org'
+		, '.michael@getlucee.org'
+		, 'michael.@getlucee.org'
+		, 'michael@getlucee.org.'
+		, 'michael@.getlucee.org'
+		, 'michael@getlucee..org'
 		, 'Abc.example.com'
 		, 'A@b@c@example.com'
 		, 'a"b(c)d,e:f;g<h>i[j\k]l@example.com'
@@ -86,7 +86,7 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 
 		var addr = '"Some One" <someone@domain.com>';
 
-		addr = 'user@getrailo.or';
+		addr = 'user@getlucee.or';
 
 		assert( isValid("email", addr), "validation for [#addr#] failed" );
 	}

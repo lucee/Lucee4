@@ -15,7 +15,7 @@
  * 
  **/
 <cfscript>
-component extends="org.railo.cfml.test.RailoTestCase"	{
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	
 	//public function beforeTests(){}
 	
@@ -63,7 +63,7 @@ component extends="org.railo.cfml.test.RailoTestCase"	{
 
 	
 	private boolean function hasFullNullSupport(){
-		return server.ColdFusion.ProductName EQ "Railo" && getPageContext().getConfig().getFullNullSupport();
+		return server.ColdFusion.ProductName EQ "Lucee" && getPageContext().getConfig().getFullNullSupport();
 	}
 } 
 </cfscript>

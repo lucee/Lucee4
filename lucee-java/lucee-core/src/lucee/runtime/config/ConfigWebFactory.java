@@ -1055,11 +1055,11 @@ public final class ConfigWebFactory extends ConfigFactory {
 				secDir.delete();
 		}
 
-		f = contextDir.getRealResource("lucee-context.ra");
+		f = contextDir.getRealResource("lucee-context.lar");
 		if (!f.exists() || doNew)
-			createFileFromResourceEL("/resource/context/lucee-context.ra", f);
+			createFileFromResourceEL("/resource/context/lucee-context.lar", f);
 		else
-			createFileFromResourceCheckSizeDiffEL("/resource/context/lucee-context.ra", f);
+			createFileFromResourceCheckSizeDiffEL("/resource/context/lucee-context.lar", f);
 
 		f = contextDir.getRealResource("component-dump.cfm");
 		if (!f.exists())
@@ -1102,9 +1102,6 @@ public final class ConfigWebFactory extends ConfigFactory {
 		f = contextDir.getRealResource("lucee-applet.jar");
 		if (!f.exists() || doNew)
 			createFileFromResourceEL("/resource/context/lucee-applet.jar", f);
-
-		// f=new BinaryFile(contextDir,"lucee_context.ra");
-		// if(!f.exists())createFileFromResource("/resource/context/lucee_context.ra",f);
 
 		f = contextDir.getRealResource("admin.cfm");
 		if (!f.exists())
@@ -1478,12 +1475,12 @@ public final class ConfigWebFactory extends ConfigFactory {
 				boolean toplevel = toBoolean(el.getAttribute("toplevel"), true);
 				int clMaxEl = toInt(el.getAttribute("classloader-max-elements"), 100);
 
-				if(config instanceof ConfigServer && virtual.equalsIgnoreCase("/lucee-server-context/")) {
+				if(config instanceof ConfigServer && virtual.equalsIgnoreCase("/lucee-server/")) {
 					hasLuceeServerContext=true;
 				}
 				
-				// lucee-context
-				if (virtual.equalsIgnoreCase("/lucee-context/")) {
+				// lucee context
+				if (virtual.equalsIgnoreCase("/lucee/")) {
 					if (StringUtil.isEmpty(listType, true))
 						listType = "modern";
 					if (StringUtil.isEmpty(listMode, true))
@@ -1514,8 +1511,8 @@ public final class ConfigWebFactory extends ConfigFactory {
 				if ((physical != null || archive != null)) {
 					
 					short insTemp=inspectTemplate(el);
-					if("/lucee-context/".equalsIgnoreCase(virtual) || "/lucee-context".equalsIgnoreCase(virtual) ||
-						"/lucee-server-context/".equalsIgnoreCase(virtual) || "/lucee-server-context".equalsIgnoreCase(virtual))
+					if("/lucee/".equalsIgnoreCase(virtual) || "/lucee".equalsIgnoreCase(virtual) ||
+						"/lucee-server/".equalsIgnoreCase(virtual) || "/lucee-server".equalsIgnoreCase(virtual))
 						insTemp=ConfigImpl.INSPECT_ONCE;
 					//boolean trusted = toBoolean(el.getAttribute("trusted"), false);
 					
@@ -1532,12 +1529,12 @@ public final class ConfigWebFactory extends ConfigFactory {
 				}
 			}
 			
-			// set default lucee-server-context
+			// set default lucee-server
 			if(config instanceof ConfigServer && !hasLuceeServerContext) {
 				ApplicationListener listener = ConfigWebUtil.loadListener("modern", null);
 				listener.setMode(ApplicationListener.MODE_CURRENT2ROOT);
 				
-				tmp = new MappingImpl(config, "/lucee-server-context", "{lucee-server}/context/", null, ConfigImpl.INSPECT_ONCE, true, false, true, true, false, false, listener, 100);
+				tmp = new MappingImpl(config, "/lucee-server", "{lucee-server}/context/", null, ConfigImpl.INSPECT_ONCE, true, false, true, true, false, false, listener, 100);
 				mappings.put(tmp.getVirtualLowerCase(), tmp);
 			}
 		}
@@ -4333,7 +4330,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		else if (hasCS)
 			config.setErrorTemplate(500, configServer.getErrorTemplate(500));
 		else
-			config.setErrorTemplate(500, "/lucee-context/templates/error/error.cfm");
+			config.setErrorTemplate(500, "/lucee/templates/error/error.cfm");
 
 		// 404
 		String template404 = error.getAttribute("template-404");
@@ -4349,7 +4346,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		else if (hasCS)
 			config.setErrorTemplate(404, configServer.getErrorTemplate(404));
 		else
-			config.setErrorTemplate(404, "/lucee-context/templates/error/error.cfm");
+			config.setErrorTemplate(404, "/lucee/templates/error/error.cfm");
 
 		// status code
 		String strStausCode = error.getAttribute("status-code");

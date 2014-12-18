@@ -415,7 +415,7 @@ public final class Image extends TagImpl {
 			// create path
 			String cp = pageContext.getHttpServletRequest().getContextPath();
 			if(StringUtil.isEmpty(cp)) cp="";
-			return cp+"/lucee-context/graph.cfm?img="+name+"&type="+(ListUtil.last(ImageUtil.getMimeTypeFromFormat(format),'/').trim());
+			return cp+"/lucee/graph.cfm?img="+name+"&type="+(ListUtil.last(ImageUtil.getMimeTypeFromFormat(format),'/').trim());
 		}
 		return ContractPath.call(pageContext, destination.getAbsolutePath());
 	}

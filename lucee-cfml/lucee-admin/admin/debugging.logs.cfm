@@ -1,21 +1,4 @@
-<!--- 
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfparam name="session.debugFilter.path" default="">
+<cfparam name="session.debugFilter.path" default="">
 <cfparam name="session.debugFilter.starttime" default="">
 <cfparam name="session.debugFilter.query" default="">
 <cfparam name="session.debugFilter.app" default="">
@@ -32,15 +15,15 @@
 <cfset stText.debug.exeTimeApp="App">
 <cfset stText.debug.maxLogs="Maximum Logged Requests">
 <cfset stText.debug.minExeTime="Minimal Execution Time (ms)">
-<cfset stText.debug.minExeTimeDesc="Minimal Execution Time that lucee outputs the debugger information of a request.">
+<cfset stText.debug.minExeTimeDesc="Minimal Execution Time that Lucee outputs the debugger information of a request.">
 <cfset stText.debug.pathRestriction="Path Restriction">
 <cfset stText.debug.pathRestrictionDesc="Path that should not be outputted, sperated path by line break.">
 
 <cfset stText.debug.settingTitle="Settings">
-<cfset stText.debug.settingDesc="Define how lucee Log the debugging information.">
+<cfset stText.debug.settingDesc="Define how Lucee Log the debugging information.">
 
 <cfset stText.debug.outputTitle="Output">
-<cfset stText.debug.outputDesc="Debugging information logged by lucee.">
+<cfset stText.debug.outputDesc="Debugging information logged by Lucee.">
 
 
 

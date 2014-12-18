@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<cfscript>
 	private function removeSpace(str){
 		return replace(replace(replace(replace(str,'	','','all'),' ','','all'),chr(10),'','all'),chr(13),'','all');
