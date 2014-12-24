@@ -1,4 +1,4 @@
-![Lucee CFML Server](https://bytebucket.org/lucee-foundation/lucee4/raw/c16535635b7be12bae85f2f6c4aebc1b1539e862/misc/lucee.png?token=e6d732606efd7d1ff969aa12639e0f93a7d27573)
+![Lucee CFML Server](https://bbuseruploads.s3.amazonaws.com/lucee/lucee/downloads/logo.png?Signature=K%2FkCHeGZYHMjuGImBeCn5qW20cs%3D&Expires=1419432627&AWSAccessKeyId=0EMWEFSGA12Z1HF1TZ82)
 
 Welcome to the Lucee CFML Server source code repository.
 
