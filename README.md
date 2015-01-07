@@ -67,6 +67,7 @@ The content of this file will look similar to this:
 Simply edit the value of the number property so that it is higher than the version on the server that you plan to patch.
 the "release-date" is set by the build script automaticly, so you dont have to set that.
 
+It is not necessary to set the release date, this is made by the build process. 
 
 ### 6. Run ANT
 
