@@ -22,7 +22,7 @@ The Lucee team is always open to feedback and active at CFML community events, a
 
 Download
 --------
-You can download binary builds including the necessary environment to run [here](http://www.lucee.org/download)
+You can download binary builds including the necessary environment to run [here](https://bitbucket.org/lucee/lucee/downloads)
 
 
 
