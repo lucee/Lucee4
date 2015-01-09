@@ -3,6 +3,8 @@
 	wikiURL="https://bitbucket.org/lucee/lucee/wiki/Home";
 	bbURL="https://bitbucket.org/lucee/lucee";
 	adminURL="#CGI.CONTEXT_PATH#/lucee/admin.cfm";
+	webAdminURL="#CGI.CONTEXT_PATH#/lucee/admin/web.cfm";
+	serverAdminURL="#CGI.CONTEXT_PATH#/lucee/admin/server.cfm";
 	mailinglistURL="https://groups.google.com/forum/##!forum/lucee";
 	profURL="https://www.lucee.org/services.html";
 
@@ -98,7 +100,11 @@
 										<a href="#adminURL#	">Secure Administrators</a>
 									</h2>
 
-									<p>If you have installed Lucee on a public server, please be sure to secure the <a href="#CGI.CONTEXT_PATH#/lucee/admin/server.cfm">Server</a> and <a href="#CGI.CONTEXT_PATH#/lucee/admin/web.cfm">Web</a> Administrators OF EVERY CONTEXT with strong passwords and whatever means you deem necessary. Best also set in the Server Administartor a default password for all web Administartors to be sure every Web Adminiistrator is protected by default!</p>
+									<p>Warning! If you have installed Lucee on a public server you need to secure the <a href="#serverAdminURL#	">Server</a> and <a href="#serverAdminURL#	">Web</a> admins OF EVERY CONTEXT with appropriate passwords or other access restrictions. 
+
+In addition you should set a default password in the Server admin for all web admins to be sure they are protected by default</p>
+
+
 								</div>
 								
 								<div class="clearfix"></div>
@@ -118,8 +124,7 @@
 										<a href="#wikiURL#">First steps</a>
 									</h2>
 
-									<p>If you are new to Lucee, please check our <a href="#wikiURL#" target="_blank">Wiki</a>. In our <a href="#wikiURL#" target="_blank">Wiki</a> you will find a lot of useful informations to start with Lucee and a Cookbook with a lot of usefull Examples.</p>
-
+									<p>If you are new to Lucee, please check our <a href="#wikiURL#" target="_blank">Wiki</a> where you will find useful resources to get you started with Lucee including a Cookbook with a growing list of examples.</p>
 							
 
 								</div>
@@ -142,8 +147,7 @@
 
 
 									<p>
-
-										See the complete Lucee language reference <a href="#refURL#">here</a>, detailed description and defintion of every single Build in Tag,Function and Object.
+										Detailed Lucee language reference incorporating builtin functions,objects and tags.
 									</p>
 
 								</div>
