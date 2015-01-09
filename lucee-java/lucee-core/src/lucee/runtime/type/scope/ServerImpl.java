@@ -32,6 +32,7 @@ import lucee.runtime.i18n.LocaleFactory;
 import lucee.runtime.instrumentation.InstrumentationUtil;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.Collection;
+import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.ReadOnlyStruct;
 import lucee.runtime.type.dt.DateTimeImpl;
@@ -105,6 +106,43 @@ public final class ServerImpl extends ScopeSupport implements Server,SharedScope
 
 	}
 	
+	@Override
+	public Object get(Key key, Object defaultValue) {
+		if(key.equalsIgnoreCase(KeyConstants._railo))
+			return super.get(KeyConstants._lucee, defaultValue);
+		return super.get(key, defaultValue);
+	}
+
+	@Override
+	public Object g(Key key, Object defaultValue) {
+		if(key.equalsIgnoreCase(KeyConstants._railo))
+			return super.g(KeyConstants._lucee, defaultValue);
+		return super.g(key, defaultValue);
+	}
+
+	@Override
+	public Object g(Key key) throws PageException {
+		if(key.equalsIgnoreCase(KeyConstants._railo))
+			return super.g(KeyConstants._lucee);
+		return super.g(key);
+	}
+
+	@Override
+	public Object get(Key key) throws PageException {
+		if(key.equalsIgnoreCase(KeyConstants._railo))
+			return super.get(KeyConstants._lucee);
+		return super.get(key);
+	}
+	
+	
+
+	@Override
+	public boolean containsKey(Key key) {
+		if(key.equalsIgnoreCase(KeyConstants._railo))
+			return super.containsKey(KeyConstants._lucee);
+		return super.containsKey(key);
+	}
+
 	@Override
 	public void reload() {	
 		reload(ThreadLocalPageContext.get());

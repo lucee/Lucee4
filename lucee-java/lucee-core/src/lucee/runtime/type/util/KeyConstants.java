@@ -534,6 +534,7 @@ public class KeyConstants {
 	public static final Key _queryError=KeyImpl._const("queryError");
 	public static final Key _r99f=KeyImpl._const("r99f");
 	public static final Key _lucee=KeyImpl._const("lucee");
+	public static final Key _railo=KeyImpl._const("railo");
 	public static final Key _luceeweb=KeyImpl._const("luceeweb");
 	public static final Key _rank=KeyImpl._const("rank");
 	public static final Key _rel=KeyImpl._const("rel");
