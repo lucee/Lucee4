@@ -7,7 +7,7 @@ Defaults --->
 <!--- load asynchron all extension providers  --->
 <cfparam name="application[request.admintype].preloadedExtensionProviders" default="false" type="boolean">
 <cfif !application[request.admintype].preloadedExtensionProviders>
-	<cfinclude template="ext.functions.cfm">
+	<cfinclude template="extension.functions.cfm">
 	<cfset application[request.admintype].preloadedExtensionProviders=true>
 </cfif>
 
@@ -420,11 +420,11 @@ Error Output --->
 						<cfcatch></cfcatch>
 					</cftry>
 	
-					<!--- Professional --->
+					<!--- Professional
 					<h3>
-						<a href="http://www.getlucee.com/index.cfm/services/support/" target="_blank">#stText.Overview.Professional#</a>
+						<a href="http://www.lucee.org/services/" target="_blank">#stText.Overview.Professional#</a>
 					</h3>
-					<div class="comment">#stText.Overview.ProfessionalDesc#</div>
+					<div class="comment">#stText.Overview.ProfessionalDesc#</div> --->
 					
 					<!--- Mailing list --->
 					<h3>
@@ -432,14 +432,6 @@ Error Output --->
 					</h3>
 					<div class="comment">#stText.Overview.MailinglistDesc#</div>
 					
-					<!--- Book --->
-					<h3>
-						<a href="http://www.packtpub.com/lucee-3-beginners-guide-to-develop-deploy-complex-applications-online/book" target="_blank">#stText.Overview.book#</a>
-					</h3>
-					<div class="comment">#stText.Overview.bookDesc#</div>
-					
-					
-					<!--- <a href="http://www.linkedin.com/e/gis/71368/0CF7D323BBC1" target="_blank">Linked in</a>--->
 					
 					<!--- Jira --->
 					<h3>
@@ -449,7 +441,7 @@ Error Output --->
 					
 					<!--- Blog --->
 					<h3>
-						<a href="http://blog.getlucee.com/" target="_blank">#stText.Overview.blog#</a>
+						<a href="http://blog.lucee.org/" target="_blank">#stText.Overview.blog#</a>
 					</h3>
 					<div class="comment">#stText.Overview.blogDesc#</div>
 					
@@ -457,7 +449,7 @@ Error Output --->
 					
 					<!--- Twitter --->
 					<h3>
-						<a href="https://twitter.com/##!/lucee" target="_blank">#stText.Overview.twitter#</a>
+						<a href="https://twitter.com/##!/lucee_server" target="_blank">#stText.Overview.twitter#</a>
 					</h3>
 					<div class="comment">#stText.Overview.twitterDesc#</div>
 				

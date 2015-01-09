@@ -1,4 +1,5 @@
 <cfinclude template="/lucee/admin/resources/text.cfm">
+<cfset stText.doc.attr.default="Default Value">
 
 
 <cfset arrAllItems = Application.objects.utils.getAllFunctions()>
@@ -97,13 +98,18 @@
 			</div>
 		</cfif>
 		<cfif data.argumentType EQ "fixed" and arraylen(data.arguments)>
+			<cfset hasdefaults=false>
+			<cfloop array="#data.arguments#" index="key" item="val">
+				<cfif !isNull(val.defaultValue)><cfset hasdefaults=true></cfif>
+			</cfloop>
 			<table class="maintbl">
 				<thead>
 					<tr>
 						<th width="21%">#stText.doc.arg.name#</th>
 						<th width="7%">#stText.doc.arg._type#</th>
 						<th width="7%">#stText.doc.arg.required#</th>
-						<th width="65%">#stText.doc.arg.description#</th>
+						<cfif hasdefaults><th width="7%">#stText.doc.attr.default#</th></cfif>
+ 						<th width="65%">#stText.doc.arg.description#</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -113,7 +119,8 @@
 							<td>#attr.name	#</td>
 							<td>#attr.type#&nbsp;</td>
 							<td>#YesNoFormat(attr.required)#</td>
-							<td><cfif attr.status == "deprecated">
+							<cfif hasdefaults><td><cfif isNull(attr.defaultValue)>&nbsp;<cfelse>#attr.defaultValue#</cfif></td></cfif>
+ 							<td><cfif attr.status == "deprecated">
 									<b class="error">#stText.doc.depArg#</b>
 								<cfelse>
 									#Application.objects.utils.formatAttrDesc( attr.description )#

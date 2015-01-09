@@ -1,4 +1,19 @@
-<cfinclude template="ext.functions.cfm">
+<!--- 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either 
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ ---><cfinclude template="extension.functions.cfm">
 
 <cfset stText.ext.free="Free">
 <cfset stText.ext.price="Price">
@@ -26,25 +41,25 @@
 </cfif>
 
 <cfadmin 
-	action="getRHExtensionProviders"
+	action="getExtensionProviders"
 	type="#request.adminType#"
 	password="#session["password"&request.adminType]#"
 	returnVariable="providers">
-<cfset providerURLs=queryColumnData(providers,"url")>
 <cfset request.providers=providers>
     
 
 <cfadmin 
-    action="getRHExtensions"
+    action="getExtensions"
     type="#request.adminType#"
     password="#session["password"&request.adminType]#"
     returnVariable="extensions">
-
-
-<cfparam name="error" default="#struct(message:"",detail:"")#">
+ 
+<cfparam name="err" default="#struct(message:"",detail:"")#">
+<!--- <cfset data=getData(providers,err)>--->
 
 
 <!--- Action --->
+<cfparam name="error" default="#struct(message:"",detail:"")#">
 <cftry>
 
 	<cfswitch expression="#form.mainAction#">
@@ -65,39 +80,19 @@
             </cfif>
 		</cfcase>
         <cfcase value="#stText.Buttons.install#,#stText.Buttons.installFull#">
-        	<cfadmin 
-			    action="updateRHExtension"
-			    type="#request.adminType#"
-			    password="#session["password"&request.adminType]#"
-			    source="#downloadFull(form.provider,form.id)#">
+        	<cflocation url="#request.self#?action=#url.action#&action2=install1&uid=#form.uid#" addtoken="no">
 		</cfcase>
         <cfcase value="#stText.Buttons.update#,#stText.Buttons.updateFull#">
-			<cfadmin 
-			    action="updateRHExtension"
-			    type="#request.adminType#"
-			    password="#session["password"&request.adminType]#"
-			    source="#downloadFull(form.provider,form.id)#">
+			<cflocation url="#request.self#?action=#url.action#&action2=install1&uid=#form.uid#" addtoken="no">
 		</cfcase>
         <cfcase value="#stText.Buttons.installTrial#">
-        	<cfadmin 
-			    action="updateRHExtension"
-			    type="#request.adminType#"
-			    password="#session["password"&request.adminType]#"
-			    source="#downloadTrial(form.provider,form.id)#">
+        	<cflocation url="#request.self#?action=#url.action#&action2=install1&uid=#form.uid#&trial=true" addtoken="no">
 		</cfcase>
         <cfcase value="#stText.Buttons.updateTrial#">
-        	<cfadmin 
-			    action="updateRHExtension"
-			    type="#request.adminType#"
-			    password="#session["password"&request.adminType]#"
-			    source="#downloadTrial(form.provider,form.id)#">
+        	<cflocation url="#request.self#?action=#url.action#&action2=install1&uid=#form.uid#&trial=true" addtoken="no">
 		</cfcase>
         <cfcase value="#stText.Buttons.uninstall#">
-        	<cfadmin 
-			    action="removeRHExtension"
-			    type="#request.adminType#"
-			    password="#session["password"&request.adminType]#"
-			    id="#form.id#">
+        	<cflocation url="#request.self#?action=#url.action#&action2=uninstall&uid=#form.uid#" addtoken="no">
 		</cfcase>
 	</cfswitch>
 <cfsavecontent variable="inc"><cfinclude template="#url.action#.#url.action2#.cfm"/></cfsavecontent>
@@ -107,14 +102,15 @@
 	</cfcatch>
 </cftry>
 
-<!--- 
-Error Output --->
-<cfset printError(error)>
+
+
 
 <!--- 
-Redirtect to entry --->
-<cfif cgi.request_method EQ "POST" and error.message EQ "">
-	<cflocation url="#request.self#?action=#url.action#" addtoken="no">
+Error Output --->
+<cfif len(err.message)>
+<cfset err.message&="<br><br>(Lucee still tries to load the failing Extension Providers in a background process)">
 </cfif>
+<cfset printError(err)>
+<cfset printError(error)>
 
 <cfoutput>#inc#</cfoutput>
