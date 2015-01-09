@@ -624,6 +624,7 @@ public class CFMLEngineFactory {
 						str=str.replace("<cfRailoConfiguration", "<!-- copy from Railo context --><cfLuceeConfiguration");
 						str=str.replace("</cfRailoConfiguration", "</cfLuceeConfiguration");
 						str=str.replace("<railo-configuration", "<lucee-configuration");
+						str=str.replace("<railo-configuration", "<lucee-configuration");
 						str=str.replace("</railo-configuration", "</lucee-configuration");
 						str=str.replace("{railo-config}", "{lucee-config}");
 						str=str.replace("{railo-server}", "{lucee-server}");
@@ -631,6 +632,7 @@ public class CFMLEngineFactory {
 						str=str.replace("\"railo.commons.", "\"lucee.commons.");
 						str=str.replace("\"railo.runtime.", "\"lucee.runtime.");
 						str=str.replace("\"railo.cfx.", "\"lucee.cfx.");
+						str=str.replace("/railo-context.ra", "/lucee-context.lar");
 						str=str.replace("/railo-context", "/lucee");
 						str=str.replace("/railo-server-context", "/lucee-server");
 						str=str.replace("http://www.getrailo.org", "http://www.lucee.org");
