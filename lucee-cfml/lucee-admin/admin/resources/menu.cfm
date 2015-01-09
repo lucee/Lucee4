@@ -37,7 +37,7 @@
 			)
 		),
 		struct(
-			action:"ext",label:stMenu.extension.label,
+			action:"extension",label:stMenu.extension.label,
 			children:array(
 				struct(action:"applications",label:stMenu.extension.applications),
 				struct(action:"providers",label:stMenu.extension.providers)
@@ -74,14 +74,14 @@
 				struct(action:"password",label:stMenu.security.password,display:true)
 				,struct(action:"serial",label:stMenu.security.serial,hidden:adminType NEQ "server" or server.ColdFusion.ProductLevel NEQ "enterprise",display:true)
 			)
-		),
+		)/*,
 		struct(action:"documentation",label:stMenu.documentation.label,
 			children:array(
 				struct(action:"tagRef",label:stMenu.documentation.tagRef),
 				struct(action:"funcRef",label:stMenu.documentation.funcRef),
 				struct(action:"objRef",label:stMenu.documentation.objRef)
 			)
-		)
+		)*/
 	)>
     <cfreturn MenuStruct>
 </cffunction>

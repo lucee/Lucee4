@@ -1,42 +1,48 @@
-<!--- Action --->
-<cfinclude template="ext.functions.cfm">
+<!--- 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either 
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ ---><!--- Action --->
+<cfinclude template="extension.functions.cfm">
 
 <cfset stVeritfyMessages=struct()>
 <cfparam name="error" default="#struct(message:"",detail:"")#">
 <cfparam name="form.mainAction" default="none">
 <cfset error.message="">
-
-
-
 <cftry>
 	<cfswitch expression="#form.mainAction#">
 		<cfcase value="#stText.Buttons.verify#">
 			<cfset data.urls=toArrayFromForm("url")>
 			<cfset data.rows=toArrayFromForm("row")>
-			<cfset data.validUrls=[]>
+			
 			<cfloop from="1" to="#arrayLen(data.urls)#" index="idx">
-				<cfif !isNull(data.rows[idx])>
-					<cfset arrayAppend(data.validUrls,data.urls[idx])>
+				<cfif arrayIndexExists(data.rows,idx)>
+					<cfset data.validUrls[idx]=data.urls[idx]>
 				</cfif>
 			</cfloop>
 			
 			<cfif arrayLen(data.validUrls)>
-				<cfset datas=getProvidersInfo(data.validUrls,false)>
+				<cfset datas=loadProvidersData(data.validUrls,20000,true)>
 			<cfelse>
 				<cfset datas={}>
 			</cfif>
 			
 			<cfloop collection="#datas#" index="provider" item="data">
-				<!--- fails --->
-				<cfif structKeyExists(data,"error")>
+				<cfif isSimpleValue(data)>
 					<cfset stVeritfyMessages[provider].Label = "Error">
-					<cfif data.status_code == 404>
-						<cfset stVeritfyMessages[provider].message = "Was not able to retrieve data from ["&provider&"].">
-						<cfset stVeritfyMessages[provider].detail ="">
-					<cfelse>
-						<cfset stVeritfyMessages[provider].message = "Failed to retrieve data from ["&provider&"].">
-						<cfset stVeritfyMessages[provider].detail = "Message from server: "&data.error>
-					</cfif>
+					<cfset stVeritfyMessages[provider].message = "was not able to retrieve data from ["&provider&"] within 10 seconds.">
+					<cfset stVeritfyMessages[provider].detail = "">
 				<cfelse>
 					<cfset stVeritfyMessages[provider].Label = "OK">
 				</cfif>
@@ -46,9 +52,9 @@
 			<cfset data.urls=toArrayFromForm("url")>
 			<cfset data.rows=toArrayFromForm("row")>
 			<cfloop from="1" to="#arrayLen(data.urls)#" index="idx">
-				<cfif !isNull(data.rows[idx])>
+				<cfif arrayIndexExists(data.rows,idx)>
 					<cfadmin 
-						action="updateRHExtensionProvider"
+						action="updateExtensionProvider"
 						type="#request.adminType#"
 						password="#session["password"&request.adminType]#"
 						
@@ -61,9 +67,9 @@
 			<cfset data.rows=toArrayFromForm("row")>
 			
 			<cfloop from="1" to="#arrayLen(data.urls)#" index="idx">
-				<cfif  !isNull(data.rows[idx])>
+				<cfif arrayIndexExists(data.rows,idx)>
 					<cfadmin 
-						action="removeRHExtensionProvider"
+						action="removeExtensionProvider"
 						type="#request.adminType#"
 						password="#session["password"&request.adminType]#"
 						
@@ -77,7 +83,7 @@
 			</cfif>
 		</cfcase>
 	</cfswitch>
-	<cfcatch><cfrethrow>
+	<cfcatch>
 		<cfset error.message=cfcatch.message>
 		<cfset error.detail=cfcatch.Detail>
 	</cfcatch>
@@ -96,23 +102,16 @@
 	action="getExtensionProviders"
 	type="#request.adminType#"
 	password="#session["password"&request.adminType]#"
-	returnVariable="classicProviders">
-	
-
-
-<cfadmin 
-	action="getRHExtensionProviders"
-	type="#request.adminType#"
-	password="#session["password"&request.adminType]#"
 	returnVariable="providers">
+	
+	
 
 
 
 <cfset hasAccess=true>
 
+<cfset datas=loadProvidersData(queryColumnData(providers,'url'),100)>
 
-
-<cfset datas=getProvidersInfo(queryColumnData(providers,'url'))>
 
 
 <!--- 
@@ -127,9 +126,9 @@ list all mappings and display necessary edit fields --->
 		<cfif 
 			StructKeyExists(datas,providers.url) and 
 			!isSimpleValue(datas[providers.url]) and
-			StructKeyExists(datas[providers.url],"meta") and 
-			StructKeyExists(datas[providers.url].meta,"mode") and 
-			trim(datas[providers.url].meta.mode) EQ "develop">
+			StructKeyExists(datas[providers.url],"getInfo") and 
+			StructKeyExists(datas[providers.url].getInfo,"mode") and 
+			trim(datas[providers.url].getInfo.mode) EQ "develop">
 			<cfset doMode=true>
 		</cfif>
 	</cfloop>
@@ -138,7 +137,6 @@ list all mappings and display necessary edit fields --->
 
 	<div class="itemintro">#stText.ext.prov.IntroText#</div>
 	<cfform onerror="customError" action="#request.self#?action=#url.action#" method="post">
-		
 		<table class="maintbl checkboxtbl">
 			<thead>
 				<tr>
@@ -156,7 +154,7 @@ list all mappings and display necessary edit fields --->
 					<tr>
 						<!--- checkbox ---->
 						<td>
-							<cfif not providers.readOnly>
+							<cfif not providers.isReadOnly>
 								<input type="checkbox" class="checkbox" name="row_#providers.currentrow#" value="#providers.currentrow#">
 							</cfif>
 						</td>
@@ -168,9 +166,9 @@ list all mappings and display necessary edit fields --->
 						<cfset hasData = 
 								StructKeyExists(datas,providers.url) and 
 								!isSimpleValue(datas[providers.url]) and
-								StructKeyExists(datas[providers.url],"meta")/>
+								StructKeyExists(datas[providers.url],"getInfo")/>
 						<cfif hasData>
-							<cfset info=datas[providers.url].meta>
+							<cfset info=datas[providers.url].getInfo>
 						</cfif>
 						 
 						<!--- title --->
@@ -200,15 +198,9 @@ list all mappings and display necessary edit fields --->
 						<!--- check --->
 						<cfif StructKeyExists(stVeritfyMessages, providers.url)>
 							<cfset msg=stVeritfyMessages[providers.url]>
-							<cfset title="">
-							<cfif (structKeyExists(msg,"message") && len(trim(msg.message))) || 
-								  (structKeyExists(msg,"detail")  && len(trim(msg.detail)))>
-								<cfset m=structKeyExists(msg,"message")?trim(msg.message):"">
-								<cfset d=structKeyExists(msg,"detail")?trim(msg.detail):"">
-								<cfset title=' title="#m# #d#"'>
-							</cfif>
-
-							<td class="tooltipMe favorite_inactive"#title#>#msg.label#</td>
+							<td
+								class="tooltipMe favorite_inactive" 
+								title="#isNull(msg.message)?"":msg.message#">#msg.label#</td>
 						<cfelse>
 							<td>&nbsp;</td>
 						</cfif>
@@ -230,19 +222,19 @@ list all mappings and display necessary edit fields --->
 	</cfform>
 	
 	<cfif hasAccess>
-		<h2>#stText.ext.prov.new#</h2>
+		<h2>New Extension Provider</h2>
 		<cfform onerror="customError" action="#request.self#?action=#url.action#" method="post">
 			<input type="hidden" name="row_1" value="1">
 			<table class="maintbl" style="width:75%">
 				<tbody>
 					<tr>
 						<th scope="row">
-							#stText.ext.prov.host#
+							Provider URL
 						</th>
 						<td>
 							<cfinput onKeyDown="checkTheBox(this)" type="text" 
 							name="url_1" value="" required="no" class="xlarge">
-							<div class="comment">#stText.ext.prov.hostDesc#</div>
+							<div class="comment">#stText.ext.prov.urlDesc#</div>
 						</td>
 					</tr>
 				</tbody>
@@ -256,6 +248,4 @@ list all mappings and display necessary edit fields --->
 			</table>
 		</cfform>
 	</cfif>
-
-
 </cfoutput>

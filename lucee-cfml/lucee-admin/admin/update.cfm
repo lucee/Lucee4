@@ -1,4 +1,19 @@
-<cfsetting showdebugoutput="false">
+<!--- 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either 
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ ---><cfsetting showdebugoutput="false">
 
 <cfparam name="session.alwaysNew" default="true" type="boolean">
 
@@ -7,9 +22,8 @@
 	<cfargument name="update">
 	<cfset var http="">
 	<cftry>
-		<cfset systemOutput("HEREEE",true,true)>
 		<cfhttp 
-			url="#update.location#/lucee/remote/version/Info.cfc?method=getpatchversionfor&level=#server.ColdFusion.ProductLevel#&version=#server.lucee.version#" 
+			url="#update.location#/railo/remote/version/Info.cfc?method=getpatchversionfor&level=#server.ColdFusion.ProductLevel#&version=#server.railo.version#" 
 			method="get" resolveurl="no" result="http">
 		<cfwddx action="wddx2cfml" input="#http.fileContent#" output="local.wddx">
 		<cfset session.availableVersion=wddx>
@@ -47,14 +61,14 @@
 				type="#adminType#"
 				password="#password#"
 				returnvariable="update">
-			<cfset curr=server.lucee.version>
+			<cfset curr=server.railo.version>
 			<cfset avi=getAvailableVersion(update)>
 			<cfset hasUpdate=curr LT avi>
 		</cfif>
 
 	<!--- Extensions --->
 		<cfparam name="err" default="#struct(message:"",detail:"")#">
-		<cfinclude template="ext.functions.cfm">
+		<cfinclude template="extension.functions.cfm">
 		<cfadmin 
 			action="getExtensions"
 			type="#adminType#"
@@ -67,16 +81,11 @@
 				type="#adminType#"
 				password="#password#"
 				returnVariable="providers">
-			<cfset request.adminType=url.adminType>
-			<cfset data=getAllExternalData()>
+			<cfset data=getData(providers,err)>
+
 			<cfsavecontent variable="ext" trim="true">
 				<cfloop query="extensions">
-					<cfset sct={}>
-					<cfloop list="#extensions.columnlist()#" item="key">
-						<cfset sct[key]=extensions[key]>
-					</cfloop>
-
-					<cfif !updateAvailable(sct,extensions)>
+					<cfif !updateAvailable(extensions)>
 						<cfcontinue>
 					</cfif>
 					<cfset uid=createId(extensions.provider,extensions.id)>
@@ -102,7 +111,7 @@
 		<cfset data=loadAllProvidersData(50000,false)>
 						
 		<cfloop collection="#data#" item="provider" index="providerURL">
-			<cfif not isSimpleValue(provider)>
+			<cfif not isSimpleValue(provider) && !isNull(provider.listApplications)>
 				<cfset qry=provider.listApplications>
 				<cfloop query="#provider.listApplications#">
 					<cfset uid=createId(providerURL,qry.id)>
@@ -170,7 +179,8 @@
 
 	<cfoutput>#content#</cfoutput>
 	
-	<cfcatch><cfrethrow>
+	<cfcatch>
+	
 		<cfoutput>
 			<div class="error">
 				Failed to retrieve update information:

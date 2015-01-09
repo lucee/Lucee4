@@ -1,5 +1,20 @@
-<cfset hasAccess=true />
-<cfset external=getExternalData(providerURLs,true)>
+<!--- 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either 
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ ---><cfset hasAccess=true />
+<cfset data=getData(providers,err)>
 <cfset existing=struct() />
 <!--- if user declined the agreement, show a msg --->
 <cfif structKeyExists(session, "extremoved")>
@@ -10,6 +25,7 @@
 	</cfoutput>
 	<cfset structDelete(session, "extremoved", false) />
 </cfif>
+
 
 <cfif extensions.recordcount>
 	<cfoutput>
@@ -30,10 +46,12 @@
 				</ul>
 				<div class="clear"></div>
 			</cfform>
-		</div>		
+		</div>
+		
 		<div class="extensionlist">
 			<cfloop query="extensions">
-				<cfset existing[extensions.id]=true>
+				<cfset uid=createId(extensions.provider,extensions.id)>
+				<cfset existing[uid]=true>
 				<cfif session.extFilter.filter neq "">
 					<cftry>
 						<cfset prov=getProviderData(extensions.provider)>
@@ -44,45 +62,27 @@
 					</cftry>
 				</cfif>
 				
-				<cfset cat=extensions.categories>
 				<cfif 
 				session.extFilter.filter eq ""
-				or doFilter(session.extFilter.filter,extensions.name,false)
-				or doFilter(session.extFilter.filter,arrayToList(cat),false)
+				or doFilter(session.extFilter.filter,extensions.label,false)
+				or doFilter(session.extFilter.filter,extensions.category,false)
 				or doFilter(session.extFilter.filter,provTitle,false)
-				><cfscript>
-	
-					link="#request.self#?action=#url.action#&action2=detail&id=#extensions.id#";
-					img=extensions.image;
-					if(len(img)==0) {
-						loop query="#external#"{
-							if(external.id==extensions.id) {
-								img=external.image;
-								break;
-							}
-						}
-					}
-					dn=getDumpNail(img,130,50);
-					hasUpdate=updateAvailable(queryRowData(extensions,extensions.currentrow),external);
-					</cfscript><div class="extensionthumb">
-
-					
-
-						<a href="#link#" title="#extensions.name#
-Categories: #arrayToList(cat)#"><cfif hasUpdate>
-       <div class="ribbon-wrapper"><div class="ribbon">UPDATE ME!</div></div>
-</cfif>
-<cfif extensions.trial>
-       <div class="ribbon-left-wrapper"><div class="ribbon-left">TRIAL</div></div>
-</cfif>
+				>
+					<cfset link="#request.self#?action=#url.action#&action2=detail&uid=#uid#">
+					<cfset dn=getDumpNail(extensions.image,90,50)>
+					<cfset hasUpdate=updateAvailable(extensions)>
+					<div class="extensionthumb">
+						<a href="#link#" title="#stText.ext.viewdetails#">
 							<div class="extimg">
 								<cfif len(dn)>
 									<img src="#dn#" alt="#stText.ext.extThumbnail#" />
 								</cfif>
 							</div>
-							#cut(extensions.name,40)#<br />
-							<span class="comment">#cut(arrayToList(cat),30)#</span>
-							
+							<b title="#extensions.label#">#cut(extensions.label,30)#</b><br />
+							<!---#cut(data.category,30)#<br />--->
+							<cfif hasUpdate>
+								<br /><span class="CheckError">#stText.ext.updateavailable#</span>
+							</cfif>
 						</a>
 					</div>
 				</cfif>
@@ -91,6 +91,8 @@ Categories: #arrayToList(cat)#"><cfif hasUpdate>
 		</div>
 	</cfoutput>
 </cfif>
+
+
 
 
 
@@ -119,33 +121,31 @@ Categories: #arrayToList(cat)#"><cfif hasUpdate>
 		</cfform>
 	</div>
 </cfoutput>
-
-<cfif isQuery(external)>
+<cfif isQuery(data)>
 	<div class="extensionlist">
-		<cfoutput query="#external#" group="id">
-			<cfif !StructKeyExists(existing,external.id)
-			and (isnull(data.type) or data.type EQ "all" or data.type EQ request.adminType or (data.type EQ "" and "web" EQ request.adminType)) 
+		<cfoutput query="data" group="uid">
+			<cfset info=data.info>
+			<cfif !StructKeyExists(existing,data.uid)
+			and (data.type EQ "all" or data.type EQ request.adminType or (data.type EQ "" and "web" EQ request.adminType)) 
 			and (
 				session.extFilter.filter2 eq ""
-				or doFilter(session.extFilter.filter2,external.name,false)
+				or doFilter(session.extFilter.filter2,data.label,false)
 				or doFilter(session.extFilter.filter2,data.category,false)
 				or doFilter(session.extFilter.filter2,info.title,false)
 			)
 			>
-			
-				<cfset link="#request.self#?action=#url.action#&action2=detail&id=#external.id#">
-				<cfset dn=getDumpNail(external.image,130,50)>
+				<cfset link="#request.self#?action=#url.action#&action2=detail&uid=#data.uid#">
+				<cfset dn=getDumpNail(data.image,90,50)>
 				<div class="extensionthumb">
 					<a href="#link#" title="#stText.ext.viewdetails#">
 						<div class="extimg">
 							<cfif len(dn)>
-
 								<img src="#dn#" alt="#stText.ext.extThumbnail#" />
 							</cfif>
 						</div>
-						<b title="#external.name#">#cut(external.name,30)#</b><br />
+						<b title="#data.label#">#cut(data.label,30)#</b><br />
 						<!------>
-						<cfif isDefined("external.price") and external.price GT 0>#external.price# <cfif structKeyExists(external,"currency")>#external.currency#<cfelse>USD</cfif><cfelse>#stText.ext.free#</cfif>
+						<cfif isDefined("data.price") and data.price GT 0>#data.price# <cfif structKeyExists(data,"currency")>#data.currency#<cfelse>USD</cfif><cfelse>#stText.ext.free#</cfif>
 					</a>
 				</div>
 			</cfif>

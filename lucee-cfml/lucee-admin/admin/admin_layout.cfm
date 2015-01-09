@@ -108,7 +108,7 @@
 					<td class="lotd" id="copyrighttd" colspan="#hasNavigation?2:1#">
 						<div id="copyright" class="copy">
 							&copy; #year(Now())#
-							<a href="http://www.getlucee.com" target="_blank">Lucee Technologies GmbH Switzerland</a>.
+							<a href="http://www.lucee.org" target="_blank">Lucee Association Switzerland</a>.
 							All Rights Reserved
 						</div>
 					</td>
