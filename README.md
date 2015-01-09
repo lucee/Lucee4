@@ -1,4 +1,4 @@
-![Lucee CFML Server](https://bitbucket.org/lucee/lucee/downloads/logo.png)
+![Lucee CFML Server](https://bitbucket.org/lucee/lucee/downloads/logo-for-bitbucket.png)
 
 Welcome to the Lucee Server source code repository.
 
@@ -19,4 +19,4 @@ Philosophy
 A primary aim of Lucee is to provide the functionality of ColdFusion(c) using less resources and giving better performance, and the Lucee team continue to "treat slowness as a bug" as a core development philosophy. Many performance tests have shown Lucee to perform faster than other CFML engines. In addition to this, Lucee attempts to resolve many inconsistencies found in traditional CFML. These are either forced changes in behavior, or configurable options in the Lucee Administrator.
 The Lucee team is always open to feedback and active at CFML community events, and are keen to remind people that Lucee is a community project.
 
-**Please consult our [Wiki](https://bitbucket.org/lucee/lucee/wiki) for any question you may have.** 
+**Please consult our [Wiki](https://bitbucket.org/lucee/lucee/wiki) for any question you may have.**
