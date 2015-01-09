@@ -23,6 +23,7 @@ lucee-java/lucee-core/bin/.DS_Store
 lucee-cfml/lucee-admin/admin2/
 /*.project
 /dist
+/templucee
 /build.xml
 va specific
 *.class
