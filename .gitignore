@@ -24,7 +24,6 @@ lucee-cfml/lucee-admin/admin2/
 /*.project
 /dist
 /templucee
-/build.xml
 va specific
 *.class
 *.rc
