@@ -40,12 +40,19 @@ public class InstrumentationFactory {
 	private static boolean doInit=true;
 	
 	public static synchronized Instrumentation getInstance() {
+		getInstance("lucee","lucee.runtime.instrumentation.Agent");
+		if(inst==null)getInstance("railo","railo.runtime.instrumentation.Agent");
+		
+		return inst;
+	}
+	
+	private static synchronized Instrumentation getInstance(String name,String className) {
 		if(doInit) {
 			doInit=false;
 			
-			Class agent = ClassUtil.loadClass("lucee.runtime.instrumentation.Agent",null);
+			Class agent = ClassUtil.loadClass(className,null);
 			if(agent==null) {
-				SystemOut.printDate("missing class lucee.runtime.instrumentation.Agent");
+				SystemOut.printDate("missing class "+className);
 				return null;
 			}
 			
@@ -54,10 +61,10 @@ public class InstrumentationFactory {
 			
 			// try to load Agent
 			if(inst==null) {
-				SystemOut.printDate("class lucee.runtime.instrumentation.Agent.getInstrumentation() is not returning a Instrumentation");
+				SystemOut.printDate("class "+className+".getInstrumentation() is not returning a Instrumentation");
 				try {
 					String id=getPid();
-					String path=getResourcFromLib().getAbsolutePath();
+					String path=getResourcFromLib(name,className).getAbsolutePath();
 					
 					Class vmClass = ClassUtil.loadClass("com.sun.tools.attach.VirtualMachine");
 					Object vmObj=attach(vmClass,id);
@@ -103,20 +110,20 @@ public class InstrumentationFactory {
 		detach.invoke(vmObj, new Object[]{});
 	}
 	
-	private static Resource getResourcFromLib() {
+	private static Resource getResourcFromLib(String name,String className) {
 		Resource[] pathes = SystemUtil.getClassPathes();
 		Resource res = null;
-		String name=null;
+		String fileName=null;
 		if(pathes!=null)for(int i=0;i<pathes.length;i++){
-			name=pathes[i].getName();
-			if(name.equalsIgnoreCase("lucee-instrumentation.jar") || name.equalsIgnoreCase("lucee-inst.jar")) {
+			fileName=pathes[i].getName();
+			if(fileName.equalsIgnoreCase(name+"-instrumentation.jar") || fileName.equalsIgnoreCase(name+"-inst.jar")) {
 				res=pathes[i];
 				break;
 			}
 		}
 		
 		if(res==null) {
-			Class agent = ClassUtil.loadClass("lucee.runtime.instrumentation.Agent",null);
+			Class agent = ClassUtil.loadClass(className,null);
 			if(agent!=null)res=getResourcFromLib(agent);
 			else res=getResourcFromLib(ClassReader.class);
 			
