@@ -40,7 +40,7 @@ import javax.smartcardio.ATR;
  */
 public class RunAsJavaApplication {
 
-    private static final int DEFAULT_PORT = 8888;
+    private static final int DEFAULT_PORT = 8080;
 
     public static void addContext(HttpServer server, String strContext, String host, String path, String strWebContext, String strServerContext) {
 
