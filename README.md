@@ -1,4 +1,4 @@
-![Lucee CFML Server](https://bitbucket.org/lucee/lucee/downloads/logo.png)
+![Lucee](https://bitbucket.org/repo/rX87Rq/images/3392835614-logo-1-color-black-small.png)
 
 Welcome to the Lucee Server source code repository.
 
