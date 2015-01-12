@@ -7,7 +7,7 @@
 	serverAdminURL="#CGI.CONTEXT_PATH#/lucee/admin/server.cfm";
 	mailinglistURL="https://groups.google.com/forum/##!forum/lucee";
 	profURL="https://www.lucee.org/services.html";
-
+	issueURL="https://bitbucket.org/lucee/lucee/issues";
 
 </cfscript><!DOCTYPE html>
 <html>
@@ -172,19 +172,34 @@ In addition you should set a default password in the Server admin for all web ad
 
 							<!--- lucee.org --->
 							<p class="file-link"><a href="http://www.lucee.org">Lucee Association Switzerland</a></p>
-							<p>The Website from the Lucee Association Switzerland that is in charge to maintain the Lucee Project.</p>
+							<p>Non-profit custodians and maintainers of the Lucee Project</p>
 							
-							<!--- Bitbucket --->
-							<p class="file-link"><a href="#bbURL#">Lucee Bitbucket Account</a></p>
-							<p>The Location where he source code and builds for Lucee are hold.</p>
+							<!--- Bitbucket 
+							<p class="file-link">Lucee Bitbucket</a></p>
+							<p>Access the source code and builds</p> --->
 							
 							<!--- Mailinglist --->
-							<p class="file-link"><a href="#mailinglistURL#">Lucee Mailinglist</a></p>
-							<p>Join the Lucee mailing list and get part of the community.</p>
+							<p class="file-link"><a href="##">Get Involved</a></p>
+							<p>
+								Get involved in the Lucee Project!
+							<ul>
+								<li>Engage with other Lucee community members via our <a href="#mailinglistURL#">mailing list</a></li>
+								<li><a href="#issueURL#">Submitting</a> bugs and feature requests</li>
+								<li><a href="#bbURL#">Contribute</a> to the code</li>
+								<li>Make a <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LKLC7KH4JRQ8J&">donation</a></li>	
+							</ul>
+							</p>
+							
+
+	
 
 							<!--- Prof Services --->
 							<p class="file-link"><a href="#profURL#">Professional Services</a></p>
-							<p>You need professinal support with your project? No problem, get in touch with our professional service providers.</p>
+							<p>Whether you need installation support or are looking for other professional services. Access our directory of providers</p>
+
+
+
+
 
 						</div>
 						</cfoutput>
