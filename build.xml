@@ -203,124 +203,43 @@
 
     <!-- temporary unzip the jetty server -->
     <unzip src="${build}/servers/jetty.zip" dest="${temp}/jetty"></unzip>
-    <!-- temporary unzip the jre -->
-    <unzip src="${build}/jre/linux-32.zip" dest="${temp}/linux32"></unzip>
-    <unzip src="${build}/jre/linux-64.zip" dest="${temp}/linux64"></unzip>
-    <unzip src="${build}/jre/windows-32.zip" dest="${temp}/windows32"></unzip>
-    <unzip src="${build}/jre/windows-64.zip" dest="${temp}/windows64"></unzip>
 
-
-<!-- start Unix with JRE -->
-<echo file="${temp}/unixjre/start">#!/bin/bash
-
-cd $(dirname $0)
-jre/bin/java -Djetty.port=8888 -DSTOP.PORT=8887 -DSTOP.KEY=lucee -Xms256M -Xmx1024M -javaagent:lib/ext/lucee-inst.jar -jar start.jar
-</echo>
-<chmod file="${temp}/unixjre/start" perm="+x"/>
 
 <!-- start Unix without JRE -->
-<echo file="${temp}/unixnojre/start">#!/bin/bash
+<echo file="${temp}/unixnojre/lucee-start.sh">#!/bin/bash
 
 cd $(dirname $0)
 java -Djetty.port=8888 -DSTOP.PORT=8887 -DSTOP.KEY=lucee -Xms256M -Xmx1024M -javaagent:lib/ext/lucee-inst.jar -jar start.jar
 </echo>
-<chmod file="${temp}/unixnojre/start" perm="+x"/>
+<chmod file="${temp}/unixnojre/lucee-start.sh" perm="+x"/>
 
-<!-- stop Unix with JRE -->
-<echo file="${temp}/unixjre/stop">#!/bin/bash
-
-cd $(dirname $0)
-jre/bin/java -DSTOP.PORT=8887 -DSTOP.KEY=lucee -jar start.jar --stop
-</echo>
-<chmod file="${temp}/unixjre/stop" perm="+x"/>
-
-<!-- stop UNix with JRE -->
-<echo file="${temp}/unixnojre/stop">#!/bin/bash
+<!-- stop UNix without JRE -->
+<echo file="${temp}/unixnojre/lucee-stop.sh">#!/bin/bash
 
 cd $(dirname $0)
 java -DSTOP.PORT=8887 -DSTOP.KEY=lucee -jar start.jar --stop
 </echo>
-<chmod file="${temp}/unixnojre/stop" perm="+x"/>
-
-
-<!-- start Windows with JRE -->
-<echo file="${temp}/winjre/start">
-
-
-"jre/bin/java" -Djetty.port=8888 -DSTOP.PORT=8887 -DSTOP.KEY=lucee -Xms256M -Xmx1024M -javaagent:lib/ext/lucee-inst.jar -jar start.jar
-</echo>
-<chmod file="${temp}/winjre/start" perm="+x"/>
-
-<!-- stop Windows with JRE -->
-<echo file="${temp}/winjre/stop">
-
-"jre/bin/java" -DSTOP.PORT=8887 -DSTOP.KEY=railo -jar start.jar --stop
-</echo>
-<chmod file="${temp}/winjre/stop" perm="+x"/>
+<chmod file="${temp}/unixnojre/lucee-stop.sh" perm="+x"/>
 
 
 <!-- start Windows without JRE -->
-<echo file="${temp}/winnojre/start">
+<echo file="${temp}/winnojre/lucee-start.bat">
 
 
 java -Djetty.port=8888 -DSTOP.PORT=8887 -DSTOP.KEY=lucee -Xms256M -Xmx1024M -javaagent:lib/ext/lucee-inst.jar -jar start.jar
 </echo>
-<chmod file="${temp}/winnojre/start" perm="+x"/>
+<chmod file="${temp}/winnojre/lucee-start.bat" perm="+x"/>
 
 <!-- stop Windows without JRE -->
-<echo file="${temp}/winnojre/stop">
+<echo file="${temp}/winnojre/lucee-stop.bat">
 
 java -DSTOP.PORT=8887 -DSTOP.KEY=railo -jar start.jar --stop
 </echo>
-<chmod file="${temp}/winnojre/stop" perm="+x"/>
+<chmod file="${temp}/winnojre/lucee-stop.bat" perm="+x"/>
 
 
-    <!-- Linux 32 -->
-    <zip destfile="${dist}/bundles/lucee-${number}-express-linux-jre32.zip">
-        <!-- jetty server -->
-        <zipfileset dir="${temp}/jetty"/>
-
-        <!-- jre -->
-        <zipfileset dir="${temp}/linux32" prefix="jre"/>
-        
-        <!-- jars -->
-        <zipfileset dir="${dist}" includes="lucee.jar" prefix="lib/ext"/>
-        <zipfileset dir="${lib}" excludes="javax.servlet.jar" prefix="lib/ext"/>
-
-        <!-- common files -->
-        <zipfileset dir="${build}/common"/>
-
-        <!-- website files -->
-        <zipfileset dir="${build}/website" prefix="webapps/www"/>
-
-        <!-- start/stop -->
-        <zipfileset dir="${temp}/unixjre" filemode="755"/>
-    </zip>
-
-    <!-- Linux 64 -->
-    <zip destfile="${dist}/bundles/lucee-${number}-express-linux-jre64.zip">
-        <!-- jetty server -->
-        <zipfileset dir="${temp}/jetty"/>
-
-        <!-- jre -->
-        <zipfileset dir="${temp}/linux64" prefix="jre"/>
-        
-        <!-- jars -->
-        <zipfileset dir="${dist}" includes="lucee.jar" prefix="lib/ext"/>
-        <zipfileset dir="${lib}" excludes="javax.servlet.jar" prefix="lib/ext"/>
-
-        <!-- common files -->
-        <zipfileset dir="${build}/common"/>
-
-        <!-- website files -->
-        <zipfileset dir="${build}/website" prefix="webapps/www"/>
-
-        <!-- start/stop -->
-        <zipfileset dir="${temp}/unixjre" filemode="755"/>
-    </zip>
-
-    <!-- Unix (Linux/MacOSX) -->
-    <zip destfile="${dist}/bundles/lucee-${number}-express-unix.zip">
+    <!-- Windows/Unix (Linux/MacOSX) -->
+    <zip destfile="${dist}/bundles/lucee-${number}-express.zip">
         <!-- jetty server -->
         <zipfileset dir="${temp}/jetty"/>
 
@@ -334,74 +253,13 @@ java -DSTOP.PORT=8887 -DSTOP.KEY=railo -jar start.jar --stop
         <!-- website files -->
         <zipfileset dir="${build}/website" prefix="webapps/www"/>
 
-        <!-- start/stop -->
+        <!-- start/stop Unix -->
         <zipfileset dir="${temp}/unixnojre" filemode="755"/>
-    </zip>
 
-
-    <!-- Windows 32 -->
-    <zip destfile="${dist}/bundles/lucee-${number}-express-windows-jre32.zip">
-        <!-- jetty server -->
-        <zipfileset dir="${temp}/jetty"/>
-
-        <!-- jre -->
-        <zipfileset dir="${temp}/windows32" prefix="jre"/>
-        
-        <!-- jars -->
-        <zipfileset dir="${dist}" includes="lucee.jar" prefix="lib/ext"/>
-        <zipfileset dir="${lib}" excludes="javax.servlet.jar" prefix="lib/ext"/>
-
-        <!-- common files -->
-        <zipfileset dir="${build}/common"/>
-
-        <!-- website files -->
-        <zipfileset dir="${build}/website" prefix="webapps/www"/>
-
-        <!-- start/stop -->
-        <zipfileset dir="${temp}/winjre" filemode="755"/>
-    </zip>
-
-    <!-- Windows 64 -->
-    <zip destfile="${dist}/bundles/lucee-${number}-express-windows-jre64.zip">
-        <!-- jetty server -->
-        <zipfileset dir="${temp}/jetty"/>
-
-        <!-- jre -->
-        <zipfileset dir="${temp}/windows64" prefix="jre"/>
-        
-        <!-- jars -->
-        <zipfileset dir="${dist}" includes="lucee.jar" prefix="lib/ext"/>
-        <zipfileset dir="${lib}" excludes="javax.servlet.jar" prefix="lib/ext"/>
-
-        <!-- common files -->
-        <zipfileset dir="${build}/common"/>
-
-        <!-- website files -->
-        <zipfileset dir="${build}/website" prefix="webapps/www"/>
-
-        <!-- start/stop -->
-        <zipfileset dir="${temp}/winjre" filemode="755"/>
-    </zip>
-
-
-    <!-- Windows no jre -->
-    <zip destfile="${dist}/bundles/lucee-${number}-express-windows.zip">
-        <!-- jetty server -->
-        <zipfileset dir="${temp}/jetty"/>
-
-        <!-- jars -->
-        <zipfileset dir="${dist}" includes="lucee.jar" prefix="lib/ext"/>
-        <zipfileset dir="${lib}" excludes="javax.servlet.jar" prefix="lib/ext"/>
-
-        <!-- common files -->
-        <zipfileset dir="${build}/common"/>
-
-        <!-- website files -->
-        <zipfileset dir="${build}/website" prefix="webapps/www"/>
-
-        <!-- start/stop -->
+        <!-- start/stop Windows -->
         <zipfileset dir="${temp}/winnojre" filemode="755"/>
     </zip>
+
     <delete dir="${temp}"/>
 
   </target>
