@@ -3,7 +3,7 @@
 	<language key="de">
 		<title>Dynamic DNS</title>
 		<description>
-			Verbinden Sie Railo mit dem Dynamic DNS Service DNSExchanges.
+			Verbinden Sie Lucee mit dem Dynamic DNS Service DNSExchanges.
 			Registrieren Sie sich dazu unter {link} und tragen Sie die ID, welche Sie erhalten in das Feld unterhalb ein.
 		</description>
 		<custom key="id">ID</custom>
@@ -23,7 +23,7 @@
 	<language key="en">
 		<title>Dynamic DNS</title>
 		<description>
-			Connect with Railo to the Dynamic DNS DNSExchange.
+			Connect with Lucee to the Dynamic DNS DNSExchange.
 			For that register at {link} and ad the ID to the Filed Below.
 		</description>
 		<custom key="id">ID</custom>
