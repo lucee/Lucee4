@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="basic" basedir="." name="LuceeCore">
+	<description>
+        Build Lucee itself
+    </description>
+    <!-- set global properties for this build -->
+
+
+  <property name="srcLoader" location="lucee-java/lucee-loader/src/"/>
+  <property name="srcCore" location="lucee-java/lucee-core/src/"/>
+  <property name="srcInst" location="lucee-java/lucee-instrumentation/src/"/>
+  <property name="lib" location="lucee-java/libs/"/>
+  <property name="infoIni" location="${srcCore}/lucee/runtime/Info.ini"/>
+  <property name="build" location="build"/>
+
+  <property name="temp" location="temp"/>
+  <property name="dist" location="dist"/>
+
+  <property file="${infoIni}"/>
+
+  <scriptdef name="updatedate" language="javascript">
+     <attribute name="text" />
+     <attribute name="date" />
+     <attribute name="property" />
+     <![CDATA[
+      var text = attributes.get("text");
+      var date = attributes.get("date");
+      
+      var index=text.indexOf("release-date");
+      if(index!=-1) {
+        var start=text.indexOf('=',index);
+        var end=text.indexOf('\n',start+1);
+        if(start!=-1 && end!=-1) {
+          text=text.substring(0,start+1)+date+text.substring(end);
+        }
+      }
+
+      project.setProperty(attributes.get("property"), text);
+     ]]>
+  </scriptdef>
+    
+
+  <path id="classpath">
+    <!-- <pathelement location="${railoLoader}" /> -->
+    <fileset dir="${lib}">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    
+    <delete dir="${dist}"/>
+    <delete dir="${temp}"/>
+    
+    <!-- Create the  directory structure needed -->
+    <mkdir dir="${temp}/loader"/>
+    <mkdir dir="${temp}/core"/>
+    <mkdir dir="${temp}/inst"/>
+
+    <tstamp>
+      <format property="NOW" pattern="yyyy/MM/dd HH:mm:ss z" locale="en,GB"/>
+    </tstamp>
+  </target>
+
+  <target name="loader" depends="init" description="copy none java files" >
+    <javac srcdir="${srcLoader}" target="1.6" destdir="${temp}/loader">
+      <classpath refid="classpath" />
+    </javac>
+
+    <copy todir="${temp}/loader">
+      <fileset dir="${srcLoader}">
+        <exclude name="**/*.java"/>
+        <exclude name=".*"/>
+      </fileset>
+    </copy>
+  </target>
+
+
+<!-- Compile Core source -->
+  <target name="_core" depends="loader" description="compile the source" >
+    
+    <path id="classpath">
+      <pathelement location="${temp}/loader" />
+      <fileset dir="${lib}">
+        <include name="**/*.jar" />
+      </fileset>
+    </path>
+
+    <!-- compile core source to temp directory -->
+    <javac srcdir="${srcCore}" target="1.6" destdir="${temp}/core">
+      <classpath refid="classpath" />
+    </javac>
+  
+    <!-- copy all none java files to temp/core-->
+    <copy todir="${temp}/core">
+      <fileset dir="${srcCore}">
+        <exclude name="**/*.java"/>
+        <exclude name=".*"/>
+      </fileset>
+    </copy>
+
+    
+    <!-- set current date in Info.ini -->
+    <loadfile property="defprop" srcFile="${srcCore}/lucee/runtime/Info.ini"/>
+    <updatedate text="${defprop}" date="${NOW}" property="moddefprop" />
+    <echo message="${moddefprop}"/>
+    <echo file="${temp}/core/lucee/runtime/Info.ini" message="${moddefprop}"/>
+
+
+  </target>
+
+
+
+  <target name="inst" depends="_core" description="copy none java files" >
+    <!-- set class path for the compiler -->
+    <path id="classpath">
+      <pathelement location="${temp}/loader" />
+      <fileset dir="${lib}">
+        <include name="**/*.jar" />
+      </fileset>
+    </path>
+
+    <!-- compile inst source to temp directory -->
+    <javac srcdir="${srcInst}" target="1.6" destdir="${temp}/inst">
+      <classpath refid="classpath" />
+    </javac>
+
+    <!-- copy all none java files to temp/inst; this is not really necessary because there are no files, but it does not hurt-->
+    <copy todir="${temp}/inst">
+      <fileset dir="${srcInst}">
+        <exclude name="**/*.java"/>
+        <exclude name=".*"/>
+      </fileset>
+    </copy>
+
+    <!-- build the inst jar -->
+    <jar 
+      jarfile="${dist}/lucee-inst.jar" basedir="${temp}/inst"  manifest="${srcInst}/META-INF/MANIFEST.MF">
+      <manifest>
+        <attribute name="Built-Date" value="${NOW}"/>
+      </manifest>
+    </jar>
+  </target>
+
+
+
+
+  <target name="zipCore" depends="inst" description="generate the core jar and copies to loader" >
+    <!-- copy core to the loader -->
+    <jar basedir="${temp}/core" jarfile="${temp}/loader/core/core.lco"/> 
+    <!-- copy core AS WELL to the dist directory  -->
+    <copy file="${temp}/loader/core/core.lco" tofile="${dist}/${number}.lco"/> 
+  </target>
+
+  <target name="zipLoader" depends="zipCore" description="generate the loader jar" >
+    <!-- create loader jar -->
+    <jar basedir="${temp}/loader" jarfile="${dist}/lucee.jar"/>    
+    <delete dir="${temp}"/>
+  </target>
+
+
+  <target name="basic" depends="zipLoader" description="builds the core and the loader" >
+  </target>
+
+
+
+
+
+</project>
