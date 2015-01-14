@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="buildCustom" basedir="." name="LuceeCustom">
+	<description>Build Lucee Custom Bundles</description>
+
+  <import file="build-core.xml"/>
+    
+
+  <target name="buildCustom" depends="basic" description="builds the custom packages">
+    
+    <!-- jars zip  -->
+    <zip destfile="${dist}/bundles/lucee-${number}-jars.zip">
+        <zipfileset dir="${dist}" includes="lucee.jar"/>
+        <zipfileset dir="${lib}" excludes="license/**,javax.servlet.jar"/>    
+    </zip>
+
+    <!-- jars tar.gz
+    <tar destfile="${dist}/bundles/custom/all/lucee-${number}-jars.tar.gz" compression="gzip">
+      <zipfileset dir="${dist}" includes="lucee.jar"/>
+      <zipfileset dir="${lib}" excludes="license/**,javax.servlet.jar"/>  
+    </tar>  -->
+    
+    <!-- war file  -->
+    <zip destfile="${dist}/bundles/lucee-${number}.war">
+        <!-- jars -->
+        <zipfileset dir="${dist}" includes="lucee.jar" prefix="WEB-INF/lib"/>
+        <zipfileset dir="${lib}" excludes="javax.servlet.jar" prefix="WEB-INF/lib"/>
+        <!-- common files -->
+        <zipfileset dir="${build}/common"/>
+        <!-- war specific files -->
+        <zipfileset dir="${build}/war"/>
+        <!-- website files -->
+        <zipfileset dir="${build}/website"/>
+    </zip>
+
+  </target>
+
+
+
+
+</project>
