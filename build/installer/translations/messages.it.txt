@@ -1,0 +1,89 @@
+Installer.Welcome.Title=Setup - %1$s
+Installer.Welcome.Text=Benvenuto nel programma di installazione di %1$s.\n\n
+Installer.Ready.Title=Pronto per l'installazione.
+Installer.Ready.Text1=Il programma è ora pronto per installare %1$s su questo computer.
+Installer.Installation.Finished.Title=Fine installazione di %1$s.
+Installer.Installation.Finished.Text=Il programma di setup ha terminato di installare %1$s su questo computer.
+postInstall.CreateTomcatUserFile=Creazione user file di Tomcat.
+postInstall.CreateControlScript=Creazione dello script di controllo.
+postInstall.modifyingTomcatPort=Modifica dei numeri delle porte di Tomcat.
+postInstall.installingJRE=Installazione JRE
+postInstall.configuringLuceeTomcat=Configurazio0ne del servizio Lucee-Tomcat.
+postInstall.updatingTomcatUser=Aggiornamento utente di sistema Tomcat.
+postInstall.startingLucee=Avvio del servizio Lucee
+postInstall.configuringApache=Configurazione di Apache
+postInstall.installingBonCodeConnector=Installazione del connector per IIS.
+warnings.setLuceeServerPass=Impossibile settare la password di amministrazione del server Lucee.
+warnings.setLuceeWebPass=Impossibile settare la password dell'amministratore web di Lucee.
+warnings.tomcatStartTimeout=Timeout in attesa dell'avvio di Lucee.
+warnings.passwordLengthSix=La password deve contenere almeno 6 caratteri.
+warnings.tomcatWebPort=La porta selezionata per il web server Tomcat è già in uso.
+warnings.tomcatShutdownPort=La porta selezionata per lo shutdown di Tomcat è già in uso.
+warnings.tomcatAJPPort=La porta selezionata per il Tomcat AJP è già in uso.
+shortCuts.LuceeComment=Controllo del servizio Lucee.
+shortCuts.LuceeName=Controllo del servizio Lucee-Tomcat.
+shortCuts.RemoveLuceeComment=Disinstallazione di Lucee da questo computer.
+shortCuts.RemoveLuceeName=Disinstallazione di Lucee.
+shortCuts.LaunchLuceeAdminComment=Avvio dell'amministrazione del server Lucee.
+shortCuts.LaunchLuceeAdminName=Amministrazione del server Lucee.
+shortCuts.TomcatMonitorComment=Avvio del monitor del servizio Lucee-Tomcat.
+shortCuts.TomcatMonitorName=Monitor del servizio Lucee-Tomcat.
+shortCuts.TomcatHostEntryComment=Aggiunta di un host entry alla configurazione di Tomcat.
+shortCuts.TomcatHostEntryName=Configurazione dell' host IN Tomcat.
+shortCuts.OpenLuceeURL=Aprire ora la schermata di benvenuto di Lucee?
+uninstall.stopLuceeService=Spegnimento del servizio Lucee.
+uninstall.removeLuceeService=Rimozione del servizio Lucee.
+tomcat.SystemUserTitle=Utente di sistema Tomcat
+tomcat.SystemUserExplanation=Digita il tipo di utente per Tomcat. In modalità "root" o "Amministratore" sotto Windows non si avranno problemi di accesso alle risorse, mentre in modalità non-root il sistema aggiungerà un ulteriore livello di sicurezza. Se si sceglie di lanciare il servizio come utente non-root, si raccomanda di usare un nome utente semplice da identificare e ricordare, es. "lucee" oppure "cfml.
+tomcatPorts.title=Porte Tomcat
+tomcatPorts.explanation=Tomcat ha bisogno di porte dedicate sul computer per poter servire vari tipi di richieste.E' possibile variare tali porte utilizzando in campi in basso. Se non si è sicuri lasciare i valori di default dei campi.
+tomcatPorts.webServerPort=Porta del web server Tomcat
+tomcatPorts.shutdownPort=Porta PER lo shutdown di Tomcat
+tomcatPorts.AJPPort=Porta per l'AJP di Tomcat
+params.StartAtBootTitle=Lanciare Tomcat all'avvio del computer?
+params.StartAtBootDesc=Si, Avvia Tomcat all'avvio del computer.
+params.StartAtBootExplanation=Vuoi che Lucee si avvii automaticamente ad ogni accensione del sistema?
+params.installApacheTitle=Installa Apache Connector?
+params.installApacheDesc=Installa Apache Connector?
+params.installApacheExplanation=Il connector Per Apache è necessario per la maggior parte delle installazioni. Non è necessario nel caso in cui non si utilizzi Apache come web server. Se non sei sicuro della scelta, conferma l'installazione del Connector.
+params.ApacheControlFileTitle=Posizione dello script di controllo di Apache
+params.ApacheControlFileDesc=Posizione dello script di controllo di Apache
+params.ApacheControlFileExplanation=Indica la cartella dello script di controllo di Apache.Il valore di default è "/usr/sbin/apachectl".
+params.ApacheModulesTitle=Cartella dei moduli di Apache.
+params.ApacheModulesDesc=Cartella dei moduli di Apache.
+params.ApacheModulesExplanation=Indica la cartella in cui Apache memorizza i moduli. I valori di default sono "/usr/lib/httpd/modules/" per il S.O. RHEL/CentOS, e "/usr/lib/apache2/modules/" per il S.O. Ubuntu. Per sistemi a 64 bit può essere necessario modificare il percorso cambiando la cartella "lib" a "lib 64".
+params.ApacheConfigFileTitle=File di Configurazione di Apache.
+params.ApacheConfigFileDesc=File di Configurazione di Apache.
+params.ApacheConfigFileExplanation=Il file di configurazione di Apache controlla il modo in cui le richieste al web server vengono processate. La cartella di default del file di configurazione è "/etc/httpd/conf/httpd.conf" su S.O. RHEL/CentOS e "/etc/apache2/apache2.conf" su S.O. Ubuntu.
+params.ApacheLogDirTitle=Cartella del file di log di Apache
+params.ApacheLogDirDesc=Cartella del file di log di Apache
+params.ApacheLogDirExplanation=Indica la cartella in cui Apache registra i files di log. Le cartelle di default sono "/var/log/httpd/" per S.O. RHEL/CentOS, e "/var/log/apache2/" per S.O. Ubuntu.
+params.installIISConnectorTitle=Installare il Connector per IIS?
+params.installIISConnectorDesc=Installare il Connector per IIS?
+params.installIISConnectorExplanation=Vuoi installare  il Connector petr IIS? Se non si è sicuri lasciare la check box selezionata.
+luceepass.title=Lucee Password
+luceepass.explain=Please enter in the default passwords for the Lucee Server Administrator and the Lucee Web Administrators.
+luceepass.desc=Lucee Password
+luceepass.desc.confirm=Lucee Password (confirm)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

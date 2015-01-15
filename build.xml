@@ -3,7 +3,7 @@
   <import file="build-core.xml"/>
   <import file="build-express.xml"/>
   <import file="build-custom.xml"/>
-  <!-- <import file="build-installer.xml"/> -->
+  <import file="build-installer.xml"/>
 
   <target name="info" description="outputs information about all posible building options">
     <echo>You have the following building options, call:</echo>
@@ -18,7 +18,7 @@
   <target name="core" depends="basic" description="build only Lucee itself"></target>
   <target name="custom" depends="buildCustom" description="build custom bundles"></target>
   <target name="express" depends="buildExpress" description="builds express bundles"></target>
-  <!-- <target name="installer" depends="buildInstaller" description="builds express bundles"></target> -->
+  <target name="installer" depends="buildInstaller" description="builds express bundles"></target>
   <target name="all" depends="buildCustom,buildExpress" description="builds ALL bundles"></target>
 
 

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="prepare" basedir="." name="Lucee Installer">
+  
+
+  <loadproperties srcfile="build-installer.properties"/>
+
+
+  <property name="installer.version" value="${number}"/>
+  <property name="outputdir" location="${dist}/bundles"/>
+  	
+
+ 
+
+   <!-- <target name="buildInstaller">
+   <zip destfile="${build}/java/linux-32/jdk-1.7.0_72.zip">
+      <zipfileset dir="${build}/java/linux-32/jdk1.7.0_72" excludes="__MACOSX/**"/>
+    </zip> 
+    <zip destfile="${build}/java/linux-32/jre-1.7.0_72.zip">
+      <zipfileset dir="${build}/java/linux-32/jre1.7.0_72" excludes="__MACOSX/**"/>
+    </zip>
+    <zip destfile="${build}/java/osx-64/jdk-1.7.0_72.zip">
+      <zipfileset dir="${build}/java/osx-64/jdk1.7.0_72" excludes="__MACOSX/**"/>
+    </zip> 
+    <zip destfile="${build}/java/osx-64/jre-1.7.0_72.zip">
+      <zipfileset dir="${build}/java/osx-64/jre1.7.0_72" excludes="__MACOSX/**"/>
+    </zip> 
+
+  </target> -->
+
+  <target name="extractJava">
+
+    <property name="java.dir" location="${temp}/java"/>
+    
+      <!-- linux JRE 32 -->
+      <path id="linuxJRE32"><fileset dir="${build}/java/linux-32"><include name="jre-*.zip" /></fileset></path>
+      <property name="temp.linuxJRE32" refid="linuxJRE32"/>
+      <unzip src="${temp.linuxJRE32}" dest="${java.dir}/linux-32"/>
+      
+      <!-- linux JRE 64 -->
+      <path id="linuxJRE64"><fileset dir="${build}/java/linux-64"><include name="jre-*.zip" /></fileset></path>
+      <property name="temp.linuxJRE64" refid="linuxJRE64"/>
+      <unzip src="${temp.linuxJRE64}" dest="${java.dir}/linux-64"/>
+    
+      <!-- windows JRE 32 -->
+      <path id="windowsJRE32"><fileset dir="${build}/java/windows-32"><include name="jre-*.zip" /></fileset></path>
+      <property name="temp.windowsJRE32" refid="windowsJRE32"/>
+      <unzip src="${temp.windowsJRE32}" dest="${java.dir}/windows-32"/>
+      
+      <!-- windows JRE 64 -->
+      <path id="windowsJRE64"><fileset dir="${build}/java/windows-64"><include name="jre-*.zip" /></fileset></path>
+      <property name="temp.windowsJRE64" refid="windowsJRE64"/>
+      <unzip src="${temp.windowsJRE64}" dest="${java.dir}/windows-64"/>
+    
+      <!-- OSX JRE 64 -->
+      <path id="osxJRE64"><fileset dir="${build}/java/osx-64"><include name="jre-*.zip" /></fileset></path>
+      <property name="temp.osxJRE64" refid="osxJRE64"/>
+      <unzip src="${temp.osxJRE64}" dest="${java.dir}/osx-64"/>
+      
+
+      <!-- OSX JDK 64
+      <path id="osxJDK64"><fileset dir="${build}/java/osx-64"><include name="jdk-*.zip" /></fileset></path>
+      <property name="temp.osxJDK64" refid="osxJDK64"/>
+      <unzip src="${temp.osxJDK64}" dest="${java.dir}/osxjdk64"/>
+      -->
+
+      <!-- windows JDK 32
+      <path id="windowsJDK32"><fileset dir="${build}/java/windows-32"><include name="jdk-*.zip" /></fileset></path>
+      <property name="temp.windowsJDK32" refid="windowsJDK32"/>
+      <unzip src="${temp.windowsJDK32}" dest="${java.dir}/windowsjdk32"/>
+       -->
+      <!-- windows JDK 64
+      <path id="windowsJDK64"><fileset dir="${build}/java/windows-64"><include name="jdk-*.zip" /></fileset></path>
+      <property name="temp.windowsJDK64" refid="windowsJDK64"/>
+      <unzip src="${temp.windowsJDK64}" dest="${java.dir}/windowsjdk64"/>
+     -->
+
+
+  </target>
+
+	<target name="buildInstaller" depends="basic,extractJava">
+      
+
+    <property name="bitrock.cmdAbs" location="${bitrock.installDir}/${bitrock.cmd}"/>
+    <property name="license.file" location="${bitrock.installDir}/${bitrock.license}"/>
+
+    <property name="xml" location="${build}/installer/lucee.xml"/>
+
+    <!-- copy the jars -->
+    <copy todir="${temp}/jar">
+      <fileset dir="${dist}" includes="lucee.jar"/>
+      <fileset dir="${lib}" excludes="javax.servlet.jar"/>
+    </copy>
+
+
+
+	  <!-- 
+
+     Supported platforms: linux linux-x64 linux-ia64 windows osx solaris-sparc solaris-intel linux-ppc
+     [exec]           linux-s390 linux-s390x freebsd freebsd4 freebsd6 freebsd6-x64 freebsd7 freebsd7-x64 openbsd3 hpux aix irix-n32 cdrom
+    
+    <move todir="new/dir/to/move/to">
+      <fileset dir="src/dir"/>
+    </move>-->
+
+    <property name="installer.os" value="osx"/>
+    <property name="installer.bittype" value="64"/>
+
+      <exec executable="${bitrock.cmdAbs}">
+          <arg line="build ${xml} ${installer.os}"></arg>
+          <arg line="--setvars project.outputDirectory='${outputdir}' installer.version='${installer.version}' "/>
+          <arg line="--setvars jar.dir='${temp}/jar' jre.dir='${java.dir}/${installer.os}-${installer.bittype}' "/>
+          <arg line="--setvars java.dir='${java.dir}' "/>
+          
+          <arg line="--setvars image.dir='${build}/installer/images' common.dir='${build}/common' "/>
+          <arg line="--setvars tomcat.dir='${build}/installer/tomcat7' translation.dir='${build}/installer/translations' "/>
+          <arg line="--setvars os.dir='${build}/installer/os' website.dir='${build}/website' "/>
+          <arg line="--setvars withJRE='${installer.withJRE}' "/> 
+          <arg line="--setvars bittype=${installer.bittype} "/>
+          <arg line="--setvars license.file='${license.file}' "/>
+      </exec>
+
+
+
+    <!-- <delete dir="${temp}"/> -->
+
+	</target>
+</project>

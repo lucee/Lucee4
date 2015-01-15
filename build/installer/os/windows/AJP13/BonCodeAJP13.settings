@@ -1,0 +1,9 @@
+<Settings>
+  <Port>8009</Port>
+  <Server>localhost</Server>   
+  <MaxConnections>200</MaxConnections>
+  <LogLevel>0</LogLevel>
+  <LogDir>c:\temp</LogDir>
+  <FlushThreshold>0</FlushThreshold>
+  <EnableRemoteAdmin>False</EnableRemoteAdmin>
+</Settings>
