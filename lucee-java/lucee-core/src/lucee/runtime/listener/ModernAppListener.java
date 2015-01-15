@@ -97,7 +97,7 @@ public class ModernAppListener extends AppListenerSupport {
 	public void onRequest(PageContext pc, PageSource requestedPage, RequestListener rl) throws PageException {
 		// on requestStart
 		PageSource appPS=//pc.isCFCRequest()?null:
-			AppListenerUtil.getApplicationPageSource(pc,requestedPage,Constants.APP_CFC,mode);
+			AppListenerUtil.getApplicationPageSource(pc,requestedPage,mode,AppListenerUtil.TYPE_NEW,null);
 		
 		_onRequest(pc, requestedPage, appPS,rl);
 	}

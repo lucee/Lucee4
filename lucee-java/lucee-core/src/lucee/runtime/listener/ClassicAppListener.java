@@ -37,7 +37,7 @@ public final class ClassicAppListener extends AppListenerSupport {
 	public void onRequest(PageContext pc,PageSource requestedPage, RequestListener rl) throws PageException {
 		
 		PageSource application=//pc.isCFCRequest()?null:
-			AppListenerUtil.getApplicationPageSource(pc,requestedPage,Constants.APP_CFM,mode);
+			AppListenerUtil.getApplicationPageSource(pc,requestedPage,mode,AppListenerUtil.TYPE_CLASSIC,null);
 		
 		_onRequest(pc, requestedPage, application,rl);
 	}
