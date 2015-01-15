@@ -353,7 +353,7 @@ public final class ConfigWebUtil {
 		else if("currenttoroot".equalsIgnoreCase(strListenerMode) || "current2root".equalsIgnoreCase(strListenerMode) || "curr2root".equalsIgnoreCase(strListenerMode))		
         	return ApplicationListener.MODE_CURRENT2ROOT;
 		else if("currentorroot".equalsIgnoreCase(strListenerMode) || "currorroot".equalsIgnoreCase(strListenerMode))		
-        	return AppListenerUtil.MODE_CURRENT_OR_ROOT;
+        	return ApplicationListener.MODE_CURRENT_OR_ROOT;
         else if("root".equalsIgnoreCase(strListenerMode))		
         	return ApplicationListener.MODE_ROOT;
 		

@@ -18,6 +18,7 @@
  **/
 package lucee.runtime.listener;
 
+import lucee.print;
 import lucee.commons.lang.types.RefBoolean;
 import lucee.commons.lang.types.RefBooleanImpl;
 import lucee.runtime.PageContext;
@@ -29,9 +30,8 @@ public final class MixedAppListener extends ModernAppListener {
 	@Override
 	public void onRequest(PageContext pc, PageSource requestedPage, RequestListener rl) throws PageException {
 		RefBoolean isCFC=new RefBooleanImpl(false);
-		
 		PageSource appPS=//pc.isCFCRequest()?null:
-			AppListenerUtil.getApplicationPageSource(pc, requestedPage, mode, isCFC);
+			AppListenerUtil.getApplicationPageSource(pc, requestedPage, mode,AppListenerUtil.TYPE_ALL, isCFC);
 		
 		if(isCFC.toBooleanValue())_onRequest(pc, requestedPage,appPS,rl);
 		else ClassicAppListener._onRequest(pc, requestedPage,appPS,rl);

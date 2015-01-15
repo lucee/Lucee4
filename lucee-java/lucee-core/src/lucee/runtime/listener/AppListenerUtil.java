@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import lucee.print;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.StringUtil;
@@ -64,7 +65,9 @@ import lucee.runtime.net.s3.Properties;
 
 public final class AppListenerUtil {
 
-	public static final int MODE_CURRENT_OR_ROOT=4;// FUTURE add to ApplicationListener interface
+	public static final int TYPE_ALL = 0;
+	public static final int TYPE_NEW = 1;
+	public static final int TYPE_CLASSIC = 2;
 	
 	public static final Collection.Key ACCESS_KEY_ID = KeyImpl.intern("accessKeyId");
 	public static final Collection.Key AWS_SECRET_KEY = KeyImpl.intern("awsSecretKey");
@@ -82,90 +85,48 @@ public final class AppListenerUtil {
 	public static final Collection.Key READ_ONLY = KeyImpl.intern("readOnly");
 	public static final Collection.Key DATABASE = KeyConstants._database;
 	
-	public static PageSource getApplicationPageSource(PageContext pc,PageSource requestedPage, String filename, int mode) {
-		if(mode==ApplicationListener.MODE_CURRENT)return getApplicationPageSourceCurrent(requestedPage, filename);
-		if(mode==ApplicationListener.MODE_ROOT)return getApplicationPageSourceRoot(pc, filename);
-		return getApplicationPageSourceCurr2Root(pc, requestedPage, filename);
-	}
-	
-	public static PageSource getApplicationPageSourceCurrent(PageSource requestedPage, String filename) {
-		PageSource res=requestedPage.getRealPage(filename);
-	    if(res.exists()) return res;
-		return null;
-	}
-	
-	public static PageSource getApplicationPageSourceRoot(PageContext pc, String filename) {
-		PageSource ps = ((PageContextImpl)pc).getPageSourceExisting("/".concat(filename));
-		if(ps!=null) return ps;
-		return null;
-	}
-	
-	public static PageSource getApplicationPageSourceCurr2Root(PageContext pc,PageSource requestedPage, String filename) {
-		PageSource ps=requestedPage.getRealPage(filename);
-	    if(ps.exists()) { 
-			return ps;
-		}
-	    Array arr=lucee.runtime.type.util.ListUtil.listToArrayRemoveEmpty(requestedPage.getFullRealpath(),"/");
-	    //Config config = pc.getConfig();
-		for(int i=arr.size()-1;i>0;i--) {
-			StringBuilder sb=new StringBuilder("/");
-			for(int y=1;y<i;y++) {
-			    sb.append((String)arr.get(y,""));
-			    sb.append('/');
-			}
-			sb.append(filename);
-			ps = ((PageContextImpl)pc).getPageSourceExisting(sb.toString());
-			if(ps!=null) {
-				return ps;
-			}
-		}
-		return null;
-	}
-	
-	
-
-	public static PageSource getApplicationPageSource(PageContext pc,PageSource requestedPage, int mode, RefBoolean isCFC) {
+	public static PageSource getApplicationPageSource(PageContext pc,PageSource requestedPage, int mode,int type, RefBoolean isCFC) {
 		if(mode==ApplicationListener.MODE_CURRENT2ROOT)
-			return getApplicationPageSourceCurrToRoot(pc, requestedPage, isCFC);
-		if(mode==MODE_CURRENT_OR_ROOT)
-			return getApplicationPageSourceCurrOrRoot(pc, requestedPage, isCFC);
+			return getApplicationPageSourceCurrToRoot(pc, requestedPage,type, isCFC);
+		if(mode==ApplicationListener.MODE_CURRENT_OR_ROOT)
+			return getApplicationPageSourceCurrOrRoot(pc, requestedPage,type, isCFC);
 		if(mode==ApplicationListener.MODE_CURRENT)
-			return getApplicationPageSourceCurrent(requestedPage, isCFC);
-		return getApplicationPageSourceRoot(pc, isCFC);
+			return getApplicationPageSourceCurrent(requestedPage,type, isCFC);
+		return getApplicationPageSourceRoot(pc,type, isCFC);
 	}
-	
-	public static PageSource getApplicationPageSourceCurrent(PageSource requestedPage, RefBoolean isCFC) {
-		PageSource res=requestedPage.getRealPage(Constants.APP_CFC);
-	    if(res.exists()) {
-	    	isCFC.setValue(true);
-	    	return res;
-	    }
-	    res=requestedPage.getRealPage(Constants.APP_CFM);
+
+	public static PageSource getApplicationPageSourceCurrent(PageSource requestedPage, int type, RefBoolean isCFC) {
+		if(type!=TYPE_CLASSIC) {
+			PageSource res=requestedPage.getRealPage(Constants.APP_CFC);
+		    if(res.exists()) {
+		    	if(isCFC!=null)isCFC.setValue(true);
+		    	return res;
+		    }
+		}
+		PageSource res=requestedPage.getRealPage(Constants.APP_CFM);
 	    if(res.exists()) return res;
 		return null;
 	}
 	
-	public static PageSource getApplicationPageSourceRoot(PageContext pc, RefBoolean isCFC) {
-		PageSource ps = ((PageContextImpl)pc).getPageSourceExisting("/"+Constants.APP_CFC);
-		if(ps!=null) {
-			isCFC.setValue(true);
-	    	return ps;
+	public static PageSource getApplicationPageSourceRoot(PageContext pc, int type, RefBoolean isCFC) {
+		if(type!=TYPE_CLASSIC) {
+			PageSource ps = ((PageContextImpl)pc).getPageSourceExisting("/"+Constants.APP_CFC);
+			if(ps!=null) {
+				if(isCFC!=null)isCFC.setValue(true);
+		    	return ps;
+			}
 		}
-		ps = ((PageContextImpl)pc).getPageSourceExisting("/"+Constants.APP_CFM);
+		PageSource ps = ((PageContextImpl)pc).getPageSourceExisting("/"+Constants.APP_CFM);
 		if(ps!=null) return ps;
 		return null;
 	}
 	
 
-	public static PageSource getApplicationPageSourceCurrToRoot(PageContext pc,PageSource requestedPage, RefBoolean isCFC) {
-	    PageSource res=requestedPage.getRealPage(Constants.APP_CFC);
-	    if(res.exists()) {
-	    	isCFC.setValue(true);
-	    	return res;
-	    }
-	    //res=requestedPage.getRealPage(Constants.APP_CFM);
-	    //if(res.exists()) return res;
+	public static PageSource getApplicationPageSourceCurrToRoot(PageContext pc,PageSource requestedPage, int type, RefBoolean isCFC) {
 	    
+		PageSource res = getApplicationPageSourceCurrent(requestedPage, type, isCFC);
+		if(res!=null) return res;
+		
 	    Array arr=lucee.runtime.type.util.ListUtil.listToArrayRemoveEmpty(requestedPage.getFullRealpath(),"/");
 		//Config config = pc.getConfig();
 		String path;
@@ -176,34 +137,34 @@ public final class AppListenerUtil {
 			    sb.append('/');
 			}
 			path=sb.toString();
-			res = ((PageContextImpl)pc).getPageSourceExisting(path.concat(Constants.APP_CFC));
-			if(res!=null) {
-				isCFC.setValue(true);
-				return res;
+			if(type!=TYPE_CLASSIC) {
+				res = ((PageContextImpl)pc).getPageSourceExisting(path.concat(Constants.APP_CFC));
+				if(res!=null) {
+					if(isCFC!=null)isCFC.setValue(true);
+					return res;
+				}
 			}
+			
 			res = ((PageContextImpl)pc).getPageSourceExisting(path.concat(Constants.APP_CFM));
 			if(res!=null) return res;
 		}
 		return null;
 	}
 	
-	public static PageSource getApplicationPageSourceCurrOrRoot(PageContext pc,PageSource requestedPage, RefBoolean isCFC) {
+	public static PageSource getApplicationPageSourceCurrOrRoot(PageContext pc,PageSource requestedPage, int type,RefBoolean isCFC) {
 	    // current 
-		PageSource res=requestedPage.getRealPage(Constants.APP_CFC);
-	    if(res.exists()) {
-	    	isCFC.setValue(true);
-	    	return res;
-	    }
-	    
+		PageSource res = getApplicationPageSourceCurrent(requestedPage, type, isCFC);
+		if(res!=null) return res;
+		
 	    // root
-	    return getApplicationPageSourceRoot(pc, isCFC);
+	    return getApplicationPageSourceRoot(pc,type, isCFC);
 	}
 	
 	public static String toStringMode(int mode) {
 		if(mode==ApplicationListener.MODE_CURRENT)	return "curr";
 		if(mode==ApplicationListener.MODE_ROOT)		return "root";
 		if(mode==ApplicationListener.MODE_CURRENT2ROOT)		return "curr2root";
-		if(mode==AppListenerUtil.MODE_CURRENT_OR_ROOT)		return "currorroot";
+		if(mode==ApplicationListener.MODE_CURRENT_OR_ROOT)		return "currorroot";
 		return "curr2root";
 	}
 
