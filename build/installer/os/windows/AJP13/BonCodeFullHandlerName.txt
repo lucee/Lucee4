@@ -1,0 +1,1 @@
+BonCodeIIS.BonCodeCallHandler, BonCodeIIS, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ad590a40d40745cf
