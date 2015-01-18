@@ -17,7 +17,6 @@
  * 
  **/
 
-
 component extends="mxunit.framework.TestCase"	{
 
 	public function setUp(){
