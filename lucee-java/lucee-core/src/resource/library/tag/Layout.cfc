@@ -1,5 +1,4 @@
-/**
- *
+<!--- 
  * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -15,7 +14,23 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- **/
+ ---><cfcomponent extends="lucee.core.ajax.AjaxBase">
+	
+	<cfset variables._SUPPORTED_JSLIB = 'jquery' />
+	<cfset variables.supported_types = 'tab' />	
+	<cfset variables.children = [] />
+	<cfset variables.instance.ajaxBinder = createObject('component','railo.core.ajax.AjaxBinder').init() />
+	
+	<!--- Meta data --->
+	<cfset this.metadata.attributetype="fixed">
+	<cfset this.metadata.hint="">
+    <cfset this.metadata.attributes={
+		type:			{required:true,type:"string",hint=""},
+		name:			{required:false,type:"string",default:"_cf_layout_#randRange(1,999999999)#",hint=""},
+		style:      	{required:false,type:"string",default:"",hint=""},
+		jsLib:  		{required:false,type:"string",default:"jquery",hint=""},	
+		
+		/* tab only */
 		tabHeight : 	{required:false,type:"numeric",default:50,hint=""},
 		tabsselect :	{required:false,type:"string",default:"",hint=""},
 		tabsadd : 		{required:false,type:"string",default:"",hint=""},
