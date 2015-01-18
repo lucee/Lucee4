@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2015, Lucee Assocication Switzerland. All rights reserved.
+<!--- 
+ * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,7 +13,5 @@
  * 
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- */
-component  displayname="Component" hint="This is the root component extended by all components" {
-
-}
+ * 
+ ---><cfcomponent displayname="Component" hint="This is the Base Component"></cfcomponent>
