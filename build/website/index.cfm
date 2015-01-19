@@ -87,29 +87,7 @@
 
 
 							<cfoutput>
-							<li class="listing-item thumb-large">
-								<div class="listing-thumb">
-									<a href="#adminURL#">
-										<img src="/assets/img/img-exclamation-mark.png" alt="">
-									</a>
-								</div>
-								
-
-								<div class="listing-content">
-									<h2 class="title">
-										<a href="#adminURL#	">Secure Administrators</a>
-									</h2>
-
-									<p>Warning! If you have installed Lucee on a public server you need to secure the <a href="#serverAdminURL#	">Server</a> and <a href="#serverAdminURL#	">Web</a> admins OF EVERY CONTEXT with appropriate passwords or other access restrictions. 
-
-In addition you should set a default password in the Server admin for all web admins to be sure they are protected by default</p>
-
-
-								</div>
-								
-								<div class="clearfix"></div>
-
-							</li>
+							
 
 							<li class="listing-item thumb-large">
 								<div class="listing-thumb">
@@ -154,6 +132,30 @@ In addition you should set a default password in the Server admin for all web ad
 								
 								<div class="clearfix"></div>
 							</li>
+
+							<li class="listing-item thumb-large">
+								<div class="listing-thumb">
+									<a href="#adminURL#">
+										<img src="/assets/img/img-exclamation-mark.png" alt="">
+									</a>
+								</div>
+								
+
+								<div class="listing-content">
+									<h2 class="title">
+										<a href="#adminURL#	">Secure Administrators</a>
+									</h2>
+
+									<p>Warning! If you have installed Lucee on a public server you need to secure the <a href="#serverAdminURL#	">Server</a> and <a href="#serverAdminURL#	">Web</a> admins OF EVERY CONTEXT with appropriate passwords or other access restrictions. 
+
+In addition you should set a default password in the Server admin for all web admins to be sure they are protected by default</p>
+
+
+								</div>
+								
+								<div class="clearfix"></div>
+
+							</li>
 						</cfoutput>
 						</ul>
 					</div>
@@ -181,13 +183,11 @@ In addition you should set a default password in the Server admin for all web ad
 							<!--- Mailinglist --->
 							<p class="file-link"><a href="##">Get Involved</a></p>
 							<p>
-								Get involved in the Lucee Project!
-							<ul>
-								<li>Engage with other Lucee community members via our <a href="#mailinglistURL#">mailing list</a></li>
-								<li><a href="#issueURL#">Submitting</a> bugs and feature requests</li>
-								<li><a href="#bbURL#">Contribute</a> to the code</li>
-								<li>Make a <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LKLC7KH4JRQ8J&">donation</a></li>	
-							</ul>
+								Get involved in the Lucee Project!<br />
+							- Engage with other Lucee community members via our <a href="#mailinglistURL#">mailing list</a><br />
+							- <a href="#issueURL#">Submitting</a> bugs and feature requests<br />
+							- <a href="#bbURL#">Contribute</a> to the code<br />
+							- <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LKLC7KH4JRQ8J&">Support</a> the project<br />
 							</p>
 							
 
