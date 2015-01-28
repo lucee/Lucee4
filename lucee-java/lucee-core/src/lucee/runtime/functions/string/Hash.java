@@ -62,7 +62,9 @@ public final class Hash implements Function {
 	}
     
     public static String call(PageContext pc , Object input, String algorithm, String encoding, double numIterations) throws PageException {
-		return invoke( pc.getConfig(), input, algorithm, encoding, (int)numIterations );
+		int ni=(int)numIterations;
+		if(ni<1)ni=1;
+    	return invoke( pc.getConfig(), input, algorithm, encoding, ni);
 	}
 
     /*/	this method signature was called from ConfigWebAdmin.createUUID(), comment this comment to enable
@@ -90,7 +92,6 @@ public final class Hash implements Function {
 		try {			
 			if(input instanceof byte[]) data = (byte[])input;
 			else data = Caster.toString(input).getBytes( encoding );
-			
 			MessageDigest md=MessageDigest.getInstance(algorithm);
 		    md.reset();
 		    for(int i=0; i<numIterations; i++) {
