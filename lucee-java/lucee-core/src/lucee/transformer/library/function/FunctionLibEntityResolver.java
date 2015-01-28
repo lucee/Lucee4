@@ -40,7 +40,7 @@ public final class FunctionLibEntityResolver implements EntityResolver {
 	 * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
 	 */
 	public InputSource resolveEntity(String publicId, String systemId) {
-		if ( publicId.equals( "-//Lucee//DTD CFML Function Library 1.0//EN" ) ) {
+		if ( publicId.equals( "-//Lucee//DTD CFML Function Library 1.0//EN" ) || publicId.equals( "-//Railo//DTD CFML Function Library 1.0//EN" ) ) {
 			return new InputSource( getClass().getResourceAsStream(DTD_1_0) );
 		}
 		return null;
