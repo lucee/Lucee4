@@ -61,7 +61,9 @@ public final class Hash40 implements Function {
 	}
     
     public static String call(PageContext pc , Object input, String algorithm, String encoding, double numIterations) throws PageException {
-		return invoke( pc.getConfig(), input, algorithm, encoding, (int)numIterations );
+    	int ni=(int)numIterations;
+		if(ni<1)ni=1;
+    	return invoke( pc.getConfig(), input, algorithm, encoding, ni);
 	}
 
     /*/	this method signature was called from ConfigWebAdmin.createUUID(), comment this comment to enable
@@ -71,14 +73,13 @@ public final class Hash40 implements Function {
     }	//*/
     
     public static String invoke(Config config, Object input, String algorithm, String encoding, int numIterations) throws PageException {
-		
+
     	if(StringUtil.isEmpty(algorithm))algorithm="md5";
 		else algorithm=algorithm.trim().toLowerCase();
 		if(StringUtil.isEmpty(encoding))encoding=config.getWebCharset();
 		
 		boolean isDefaultAlgo = numIterations == 1 && ("md5".equals(algorithm) || "cfmx_compat".equals(algorithm));
 		byte[] arrBytes = null;
-		
 		try {			
 			if(input instanceof byte[]) {
 				arrBytes = (byte[])input;

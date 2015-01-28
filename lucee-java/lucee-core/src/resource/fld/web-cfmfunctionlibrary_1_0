@@ -6960,6 +6960,7 @@ Default list delimiter: comma character.</description>
 			<name>numIterations</name>
 			<type>number</type>
 			<required>No</required>
+			<default>1</default>
 			<description>number of iterations; default is 1.</description>
 		</argument>
 		<return>
@@ -7006,6 +7007,7 @@ Default list delimiter: comma character.</description>
 			<name>numIterations</name>
 			<type>number</type>
 			<required>No</required>
+			<default>1</default>
 			<description>number of iterations; default is 1.</description>
 		</argument>
 		<return>
