@@ -165,9 +165,9 @@
 			
 		<cfloop array="#arguments.providers#" item="local.cfcName">
 			<cfif 
-				StructKeyExists(request,"cfcs") and 
-				StructKeyExists(request.cfcs,cfcName) and 
-				StructKeyExists(request.cfcs[cfcName],'getInfo') and
+				StructKeyExists(request,"cfcs") and isStruct(request.cfcs) and 
+				StructKeyExists(request.cfcs,cfcName) and isStruct(request.cfcs[cfcName]) and 
+				StructKeyExists(request.cfcs[cfcName],'getInfo') and isStruct(request.cfcs[cfcName].getInfo) and
 				StructKeyExists(request.cfcs[cfcName].getInfo,'lastModified')>
 				<cfset datas[cfcName]=request.cfcs[cfcName]>
 			</cfif>
