@@ -4730,12 +4730,14 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         Struct sct=new StructImpl();
         pageContext.setVariable(getString("admin",action,"returnVariable"),sct);
         URL location = config.getUpdateLocation();
-        if(location==null) {
+        if(location==null || location.toExternalForm().equals("http://www.lucee.org")) {
             try {
-                location=new URL("http://www.lucee.org");
+                location=new URL("http://stable.lucee.org");
             } 
             catch (MalformedURLException e) {}
         }
+        
+        
         String type=config.getUpdateType();
         if(StringUtil.isEmpty(type))type="manual";
         
