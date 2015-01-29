@@ -22,8 +22,8 @@
 		<cfargument name="callerId" required="no" type="string" default="undefined">
 		
 		<cfset var result="">
-		<cfset var id=getId()[arguments.type].id>
-		<cfset var sec=getId()[arguments.type].securityKey>
+		<cfset var id=getLuceeId()[arguments.type].id>
+		<cfset var sec=getLuceeId()[arguments.type].securityKey>
 		<cfif not listFind(arguments.callerId,id)>
 			<cfadmin 
 				type="#arguments.type#"
@@ -42,7 +42,7 @@
 		<cfargument name="action" required="yes" type="string">
 		<cfargument name="urlCollection" required="no" type="struct" default="#{}#">
 	
-		<cfset var sec=getId()[arguments.type].securityKey>
+		<cfset var sec=getLuceeId()[arguments.type].securityKey>
 		<cfset pw=Decrypt(arguments.password,sec,'cfmx_compat','hex')>
 		
         <cfadmin 
