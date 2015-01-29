@@ -229,7 +229,7 @@ hasUpdate=structKeyExists(updateData,"available");
 		<cfscript>
 			// Jira
 			jira=stText.services.update.jira;
-			jira=replace(jira,'{a}','<a href="http://jira.jboss.org/jira/browse/RAILO" target="_blank">');
+			jira=replace(jira,'{a}','<a href="hhttps://bitbucket.org/lucee/lucee/issues" target="_blank">');
 			jira=replace(jira,'{/a}','</a>');
 		</cfscript>
 		<h2>#stText.services.update.infoTitle#</h2>
@@ -238,7 +238,7 @@ hasUpdate=structKeyExists(updateData,"available");
 		</div>
 		<div style="overflow:auto;height:200px;border-style:solid;border-width:1px;padding:10px">
 <pre><cfloop list="#listSort(structKeyList(updateData.changelog),'textnocase')#" item="key"><!--- 
-			---><a target="_blank" href="http://jira.jboss.org/jira/browse/RAILO-#key#">#key#</a> - #updateData.changelog[key]#
+			---><a target="_blank" href="https://bitbucket.org/lucee/lucee/issue/#key#">#key#</a> - #updateData.changelog[key]#
 </cfloop></pre></div>
 		#jira#
 	<cfelse>
