@@ -399,7 +399,7 @@ public class CFMLEngineFactory {
 	 private boolean update() throws IOException, ServletException {
 	 	
 		URL hostUrl=getEngine().getUpdateLocation();
-		if(hostUrl==null)hostUrl=new URL("http://www.lucee.org");
+		if(hostUrl==null)hostUrl=new URL("http://stable.lucee.org");
 		URL infoUrl=new URL(hostUrl,"/lucee/remote/version/info.cfm?ext="+getCoreExtension()+"&version="+version);// FUTURE replace with Info.cfc or better move the functionality to core if possible. something like engine.getUpdater a class provided by the core and defined (interface) by the loader.
 		
 		tlog("Check for update at "+hostUrl);
@@ -635,8 +635,8 @@ public class CFMLEngineFactory {
 						str=str.replace("/railo-context.ra", "/lucee-context.lar");
 						str=str.replace("/railo-context", "/lucee");
 						str=str.replace("/railo-server-context", "/lucee-server");
-						str=str.replace("http://www.getrailo.org", "http://www.lucee.org");
-						str=str.replace("http://www.lucee.org", "http://www.lucee.com");
+						str=str.replace("http://www.getrailo.org", "http://stable.lucee.org");
+						str=str.replace("http://www.getrailo.com", "http://stable.lucee.org");
 						
 						
 						ByteArrayInputStream bais = new ByteArrayInputStream(str.getBytes());

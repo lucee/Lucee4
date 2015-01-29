@@ -121,7 +121,7 @@ public class JarLoader {
 
 	private static URL toURL(Config config, String jarName) throws MalformedURLException {
 		URL hostUrl=config.getUpdateLocation();
-        if(hostUrl==null)hostUrl=new URL("http://www.lucee.org");
+        if(hostUrl==null)hostUrl=new URL("http://stable.lucee.org");
         return new URL(hostUrl,"/lucee/remote/jars/"+(Info.getMajorVersion()+"."+Info.getMinorVersion())+"/"+jarName);
 	}
 

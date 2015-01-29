@@ -174,7 +174,7 @@ public abstract class ConfigImpl implements Config {
 	
 	
 	public static final ExtensionProvider[] LUCEE_EXTENSION_PROVIDERS = new ExtensionProviderImpl[]{
-		new ExtensionProviderImpl("http://www.lucee.org/ExtensionProvider.cfc",true)
+		new ExtensionProviderImpl("http://extension.lucee.org/ExtensionProvider.cfc",true)
 	};
 	private static final Extension[] EXTENSIONS_EMPTY = new Extension[0];
 	

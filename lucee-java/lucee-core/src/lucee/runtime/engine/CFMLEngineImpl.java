@@ -368,8 +368,8 @@ public final class CFMLEngineImpl implements CFMLEngine {
 						str=str.replace("/railo-context.ra", "/lucee-context.lar");
 						str=str.replace("/railo-context", "/lucee");
 						str=str.replace("/railo-server-context", "/lucee-server");
-						str=str.replace("http://www.getrailo.org", "http://www.lucee.org");
-						str=str.replace("http://www.getrailo.com", "http://www.lucee.org");
+						str=str.replace("http://www.getrailo.org", "http://stable.lucee.org");
+						str=str.replace("http://www.getrailo.com", "http://stable.lucee.org");
 						
 						
 						ByteArrayInputStream bais = new ByteArrayInputStream(str.getBytes());
