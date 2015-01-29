@@ -6228,7 +6228,7 @@ The returned number of unallocated bytes is a hint, but not a guarantee, that it
 	</function>
 	<!-- getId -->
 	<function>
-		<name>GetId</name>
+		<name>GetLuceeId</name>
 		<class>lucee.runtime.functions.other.GetId</class>
 		<description>return ids of the current context</description>
 		<return>
