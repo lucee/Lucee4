@@ -6,7 +6,7 @@
 	webAdminURL="#CGI.CONTEXT_PATH#/lucee/admin/web.cfm";
 	serverAdminURL="#CGI.CONTEXT_PATH#/lucee/admin/server.cfm";
 	mailinglistURL="https://groups.google.com/forum/##!forum/lucee";
-	profURL="https://www.lucee.org/services.html";
+	profURL="https://www.lucee.org/support.html";
 	issueURL="https://bitbucket.org/lucee/lucee/issues";
 
 </cfscript><!DOCTYPE html>
