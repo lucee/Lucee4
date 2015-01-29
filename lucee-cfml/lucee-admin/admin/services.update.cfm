@@ -144,21 +144,21 @@ hasUpdate=structKeyExists(updateData,"available");
 							<ul class="radiolist" id="updatelocations">
 								<li>
 									<label>
-										<input type="radio" class="radio" name="location" value="http://www.getlucee.org"<cfif update.location EQ 'http://www.getlucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
+										<input type="radio" class="radio" name="location" value="http://stable.lucee.org"<cfif update.location EQ 'http://stable.lucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
 										<b>#stText.services.update.location_www#</b>
 									</label>
 									<div class="comment">#stText.services.update.location_wwwdesc#</div>
 								</li>
 								<li>
 									<label>
-										<input type="radio" class="radio" name="location" value="http://preview.getlucee.org"<cfif update.location EQ 'http://preview.getlucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
+										<input type="radio" class="radio" name="location" value="http://preview.lucee.org"<cfif update.location EQ 'http://preview.lucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
 										<b>#stText.services.update.location_preview#</b>
 									</label>
 									<div class="comment">#stText.services.update.location_previewdesc#</div>
 								</li>
 								<li>
 									<label>
-										<input type="radio" class="radio" name="location" value="http://dev.getlucee.org"<cfif update.location EQ 'http://dev.getlucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
+										<input type="radio" class="radio" name="location" value="http://dev.lucee.org"<cfif update.location EQ 'http://dev.lucee.org'> <cfset isCustom=false>checked="checked"</cfif> />
 										<b>#stText.services.update.location_dev#</b>
 									</label>
 									<div class="comment">#stText.services.update.location_devdesc#</div>

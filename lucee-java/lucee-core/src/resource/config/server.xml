@@ -346,7 +346,7 @@ Path placeholders:
 		listener-mode="curr2root"/>
 	
 	<update 
-		location="http://www.lucee.org" 
+		location="http://stable.lucee.org" 
 		type="manual"/>
 	<!--
 	flex:
