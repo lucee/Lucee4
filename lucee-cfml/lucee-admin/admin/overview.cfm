@@ -334,7 +334,7 @@ Error Output --->
 						</tr>
 						<!---<tr>
 							<th scope="row">#stText.overview.luceeID#</th>
-							<td>#getId().server.id#</td>
+							<td>#getLuceeId().server.id#</td>
 						</tr>
 						
 						<tr>
