@@ -5,7 +5,7 @@
 	adminURL="#CGI.CONTEXT_PATH#/lucee/admin.cfm";
 	webAdminURL="#CGI.CONTEXT_PATH#/lucee/admin/web.cfm";
 	serverAdminURL="#CGI.CONTEXT_PATH#/lucee/admin/server.cfm";
-	mailinglistURL="https://groups.google.com/forum/##!forum/lucee";
+	mailinglistURL="http://discourse.lucee.org";
 	profURL="https://www.lucee.org/support.html";
 	issueURL="https://bitbucket.org/lucee/lucee/issues";
 
@@ -146,7 +146,7 @@
 										<a href="#adminURL#	">Secure Administrators</a>
 									</h2>
 
-									<p>Warning! If you have installed Lucee on a public server you need to secure the <a href="#serverAdminURL#	">Server</a> and <a href="#serverAdminURL#	">Web</a> admins OF EVERY CONTEXT with appropriate passwords or other access restrictions. 
+									<p>Warning! If you have installed Lucee on a public server you need to secure the <a href="#serverAdminURL#	">Server</a> and <a href="#webAdminURL#	">Web</a> admins OF EVERY CONTEXT with appropriate passwords or other access restrictions. 
 
 In addition you should set a default password in the Server admin for all web admins to be sure they are protected by default</p>
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
+ * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,7 @@
 component {
 
 
-	this.name = "__RAILO_STATIC_RESOURCE" & ( left( CGI.CF_TEMPLATE_PATH, 6 ) == "zip://" ? "_ARC" : "" );
+	this.name = "__LUCEE_STATIC_RESOURCE" & ( left( CGI.CF_TEMPLATE_PATH, 6 ) == "zip://" ? "_ARC" : "" );
 
 
 	variables.isDebug = true;		// ATTN: set to false for production!
