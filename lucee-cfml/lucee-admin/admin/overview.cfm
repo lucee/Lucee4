@@ -435,7 +435,7 @@ Error Output --->
 					
 					<!--- Jira --->
 					<h3>
-						<a href="https://jira.jboss.org/jira/browse/RAILO" target="_blank">#stText.Overview.issueTracker#</a>
+						<a href="https://bitbucket.org/lucee/lucee/issues" target="_blank">#stText.Overview.issueTracker#</a>
 					</h3>
 					<div class="comment">#stText.Overview.issueTrackerDesc#</div>
 					
