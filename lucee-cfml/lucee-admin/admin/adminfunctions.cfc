@@ -85,7 +85,7 @@
 	</cffunction>
 
 	<cffunction name="getDataStoreName" access="private" output="no" returntype="string">
-		<cfreturn "#request.admintype#-#getId()[request.admintype].id#" />
+		<cfreturn "#request.admintype#-#getLuceeId()[request.admintype].id#" />
 	</cffunction>
 
 	<cffunction name="getDataFilePath" access="private" output="no" returntype="string">
