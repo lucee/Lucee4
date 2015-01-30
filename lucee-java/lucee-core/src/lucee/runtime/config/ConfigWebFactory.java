@@ -477,6 +477,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 			Element defaultProvider = defaultProviders[defaultProviders.length - 1];
 			String strDefaultProviderClass = deRailo(defaultProvider.getAttribute("class"));
 			String strDefaultProviderComponent = defaultProvider.getAttribute("component");
+			strDefaultProviderComponent=ConfigWebUtil.fixComponentPath(strDefaultProviderComponent);
 
 			// class
 			if (!StringUtil.isEmpty(strDefaultProviderClass)) {
@@ -508,6 +509,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 			for (int i = 0; i < providers.length; i++) {
 				strProviderClass = deRailo(providers[i].getAttribute("class"));
 				strProviderCFC = providers[i].getAttribute("component");
+				strProviderCFC=ConfigWebUtil.fixComponentPath(strProviderCFC);
 
 				// ignore S3 extension
 				if ("lucee.extension.io.resource.type.s3.S3ResourceProvider".equals(strProviderClass))
@@ -2184,7 +2186,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 				Element eConnection = gateways[i];
 				id = eConnection.getAttribute("id").trim().toLowerCase();
 
-				ge = new GatewayEntryImpl(engine, id, deRailo(eConnection.getAttribute("class")), eConnection.getAttribute("cfc-path"), eConnection.getAttribute("listener-cfc-path"),
+				ge = new GatewayEntryImpl(engine, id, deRailo(eConnection.getAttribute("class")), ConfigWebUtil.fixComponentPath(eConnection.getAttribute("cfc-path")), eConnection.getAttribute("listener-cfc-path"),
 						eConnection.getAttribute("startup-mode"), toStruct(eConnection.getAttribute("custom")), Caster.toBooleanValue(eConnection.getAttribute("read-only"), false));
 
 				if (!StringUtil.isEmpty(id)) {
@@ -3852,7 +3854,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 			e = entries[i];
 			id = e.getAttribute("id");
 			try {
-				list.put(id, new DebugEntry(id, e.getAttribute("type"), e.getAttribute("iprange"), e.getAttribute("label"), e.getAttribute("path"), e.getAttribute("fullname"),
+				list.put(id, new DebugEntry(id, e.getAttribute("type"), e.getAttribute("iprange"), e.getAttribute("label"), e.getAttribute("path"), ConfigWebUtil.fixComponentPath(e.getAttribute("fullname")),
 						toStruct(e.getAttribute("custom"))));
 			}
 			catch (IOException ioe) {

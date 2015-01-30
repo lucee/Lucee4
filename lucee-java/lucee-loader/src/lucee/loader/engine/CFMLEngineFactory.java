@@ -634,7 +634,7 @@ public class CFMLEngineFactory {
 						str=str.replace("\"railo.cfx.", "\"lucee.cfx.");
 						str=str.replace("/railo-context.ra", "/lucee-context.lar");
 						str=str.replace("/railo-context", "/lucee");
-						str=str.replace("/railo-server-context", "/lucee-server");
+						str=str.replace("railo-server-context", "lucee-server");
 						str=str.replace("http://www.getrailo.org", "http://stable.lucee.org");
 						str=str.replace("http://www.getrailo.com", "http://stable.lucee.org");
 						
