@@ -12,7 +12,7 @@ The "Railo Company LCC" (TRC) is copyright owner of the initial code in this pro
 
 Plattform
 ---------
-Lucee is a JVM language and runs on the JVM as a servlet and will work with any servlet container (e.g. Apache Tomcat, Eclipse Jetty) or application server (e.g. JBoss AS, GlassFish). 
+Lucee is a JVM language and runs on the JVM as a servlet and will work with any servlet container (e.g. [Apache Tomcat](http://tomcat.apache.org/), [Eclipse Jetty](http://eclipse.org/jetty/)) or application server (e.g. [JBoss AS](http://jbossas.jboss.org/), [GlassFish](https://glassfish.java.net/)). 
 
 Philosophy
 ----------
