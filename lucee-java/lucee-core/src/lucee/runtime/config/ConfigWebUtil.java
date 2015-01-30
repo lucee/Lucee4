@@ -445,4 +445,15 @@ public final class ConfigWebUtil {
 	public static CacheHandlerFactoryCollection getCacheHandlerFactories(ConfigWeb config) { 
 		return ((ConfigWebImpl)config).getCacheHandlerFactories();
 	}
+
+	public static String fixComponentPath(String path) {
+		if(path==null) return path;
+		
+		if(path.startsWith("railo-server-context."))
+			return "lucee-server"+path.substring(20);
+		if(path.startsWith("railo-context."))
+			return "lucee-server"+path.substring(13);
+		
+		return path;
+	}
 }
