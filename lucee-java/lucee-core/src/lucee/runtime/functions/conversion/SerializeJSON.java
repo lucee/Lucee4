@@ -26,14 +26,16 @@ import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.converter.ConverterException;
 import lucee.runtime.converter.JSONConverter;
+import lucee.runtime.exp.FunctionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
+import lucee.runtime.functions.BIF;
 import lucee.runtime.op.Caster;
 
 /**
  * Decodes Binary Data that are encoded as String
  */
-public final class SerializeJSON implements Function {
+public final class SerializeJSON extends BIF implements Function {
 
 	private static final long serialVersionUID = -4632952919389635891L;
 
@@ -54,4 +56,16 @@ public final class SerializeJSON implements Function {
             throw Caster.toPageException(e);
         }
 	}
+
+    @Override
+    public Object invoke(PageContext pc, Object[] args) throws PageException {
+        if (args.length == 1) {
+            return call(pc, args[0]);
+        } else if (args.length == 2) {
+            return call(pc, args[0], Caster.toBoolean(args[1]));
+        } else if (args.length == 3) {
+            return call(pc, args[0], Caster.toBoolean(args[1]), Caster.toString(args[2]));
+        }
+        throw new FunctionException(pc, "serializeJSON", 0, 2, args.length - 1);
+    }
 }

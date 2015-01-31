@@ -15206,8 +15206,103 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 			<type>string</type>
 		</return>
 	</function>
-	
-	
+
+	<!-- _serializeJSONArray (only for member functions -->
+	<function>
+		<name>_serializeJSONArray</name>
+		<member-name>serializeJSON</member-name>
+		<class>lucee.runtime.functions.conversion.SerializeJSON</class>
+		<keywords>string,formatting,json,javascript</keywords>
+		<description>Converts CFML data into a JSON (JavaScript Object Notation) representation of the data.</description>
+		<argument>
+			<name>var</name>
+			<type>array</type>
+			<required>Yes</required>
+			<description>A CFML data value or variable that represents one.</description>
+		</argument>
+		<argument>
+			<name>serializeQueryByColumns</name>
+			<type>boolean</type>
+			<required>No</required>
+			<description>A Boolean value that specifies how to serialize CFML queries.</description>
+		</argument>
+		<argument>
+			<name>charset</name>
+			<alias>charsetName</alias>
+			<type>string</type>
+			<required>No</required>
+			<description>string characters that cannot be encoded by this charset get escaped,
+			if not set the web charset is used.</description>
+		</argument>
+		<return>
+			<type>string</type>
+		</return>
+	</function>
+
+	<!-- _serializeJSONQuery (only for member functions -->
+	<function>
+		<name>_serializeJSONQuery</name>
+		<member-name>serializeJSON</member-name>
+		<class>lucee.runtime.functions.conversion.SerializeJSON</class>
+		<keywords>string,formatting,json,javascript</keywords>
+		<description>Converts CFML data into a JSON (JavaScript Object Notation) representation of the data.</description>
+		<argument>
+			<name>var</name>
+			<type>query</type>
+			<required>Yes</required>
+			<description>A CFML data value or variable that represents one.</description>
+		</argument>
+		<argument>
+			<name>serializeQueryByColumns</name>
+			<type>boolean</type>
+			<required>No</required>
+			<description>A Boolean value that specifies how to serialize CFML queries.</description>
+		</argument>
+		<argument>
+			<name>charset</name>
+			<alias>charsetName</alias>
+			<type>string</type>
+			<required>No</required>
+			<description>string characters that cannot be encoded by this charset get escaped,
+			if not set the web charset is used.</description>
+		</argument>
+		<return>
+			<type>string</type>
+		</return>
+	</function>
+
+	<!-- _serializeJSONStruct (only for member functions -->
+	<function>
+		<name>_serializeJSONStruct</name>
+		<member-name>serializeJSON</member-name>
+		<class>lucee.runtime.functions.conversion.SerializeJSON</class>
+		<keywords>string,formatting,json,javascript</keywords>
+		<description>Converts CFML data into a JSON (JavaScript Object Notation) representation of the data.</description>
+		<argument>
+			<name>var</name>
+			<type>struct</type>
+			<required>Yes</required>
+			<description>A CFML data value or variable that represents one.</description>
+		</argument>
+		<argument>
+			<name>serializeQueryByColumns</name>
+			<type>boolean</type>
+			<required>No</required>
+			<description>A Boolean value that specifies how to serialize CFML queries.</description>
+		</argument>
+		<argument>
+			<name>charset</name>
+			<alias>charsetName</alias>
+			<type>string</type>
+			<required>No</required>
+			<description>string characters that cannot be encoded by this charset get escaped,
+			if not set the web charset is used.</description>
+		</argument>
+		<return>
+			<type>string</type>
+		</return>
+	</function>
+
 	<!-- SessionStartTime -->
 	<function>
 		<name>SessionStartTime</name>
@@ -17369,6 +17464,7 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 			<type>string</type>
 		</return>
 	</function>
+
 	<!-- uCase -->
 	<function>
 		<name>uCase</name>
