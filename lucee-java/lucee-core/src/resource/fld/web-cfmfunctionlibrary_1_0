@@ -3975,6 +3975,7 @@ dec: descending (z to a) sort order.
 	<!-- DeserializeJSON -->
 	<function>
 		<name>DeserializeJSON</name>
+		<member-name>deserializeJSON</member-name>
 		<class>lucee.runtime.functions.conversion.DeserializeJSON</class>
 		<keywords>string,parsing,json,javascript</keywords>
 		<description>Converts a JSON (JavaScript Object Notation) string data representation into CFML data, such as a struct or array.</description>
