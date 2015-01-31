@@ -3057,7 +3057,61 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 			<type>string</type>
 		</return>
 	</function>
-	
+
+	<!-- _dateFormat (only for member types) -->
+    <function>
+        <name>_dateFormat</name>
+        <member-name>dateFormat</member-name>
+        <class>lucee.runtime.functions.displayFormatting.DateFormat</class>
+        <keywords>date,string,formatting</keywords>
+        <description>Formats a date string to a given output</description>
+        <argument>
+            <name>date</name>
+            <type>date</type>
+            <required>Yes</required>
+        <description>Date object</description>
+    </argument>
+        <argument>
+            <name>mask</name>
+            <type>string</type>
+            <required>No</required>
+            <default>dd-mmm-yy</default>
+        <description>
+Characters that show how Lucee displays a date:
+- d: Day of the month as digits; no leading zero for single-digit days.
+- dd: Day of the month as digits; leading zero for single-digit days.
+- ddd: Day of the week as a three-letter abbreviation.
+- dddd: Day of the week as its full name.
+- m: Month as digits; no leading zero for single-digit months.
+- mm: Month as digits; leading zero for single-digit months.
+- mmm: Month as a three-letter abbreviation.
+- mmmm: Month as its full name.
+- yy: Year as last two digits; leading zero for years less than 10.
+- yyyy: Year represented by four digits.
+- gg: Period/era string. Ignored. Reserved. The following masks tell how to format the full date and cannot be combined with other masks:
+- short: equivalent to m/d/y
+- medium: equivalent to mmm d, yyyy
+- long: equivalent to mmmm d, yyyy
+- full: equivalent to dddd, mmmm d, yyyy</description>
+    </argument>
+        <argument>
+            <name>timezone</name>
+            <type>string</type>
+            <required>No</required>
+        <description>
+A datetime object is independent of a specific timezone, it is only a offset in milliseconds from 1970-1-1 00.00:00 UTC (Coordinated Universal Time).
+This means that the timezone only comes into play when you need specific information like hours in a day, minutes in a hour or which day it is since those calculations depend on the timezone.
+For these calculations, a timezone must be specified in order to translate the date object to something else. If you do not provide the timezone in the function call, it will default to the timezone specified in the Lucee Administrator (Settings/Regional), or the timezone specified for the current request using the function setTimezone.
+You can find a list of all available timezones in the Lucee administrator (Settings/Regional). Some examples of valid timezones:
+       - AGT (for time in Argentina)
+       - Europe/Zurich (for time in Zurich/Switzerland)
+       - HST (Hawaiian Standard Time in the USA)
+        </description>
+    </argument>
+        <return>
+            <type>string</type>
+        </return>
+    </function>
 	
 	<!-- dateTimeFormat -->
 	<function>
