@@ -1208,7 +1208,7 @@ body.full #logo { display: block; position: absolute; top: 0px; left: 0; width: 
 
 #resizewin 		{ display:block; width:19px; height:19px; text-indent: -9999px; }
 
-body.full #resizewin { background-position: -184px 0; }
+/* body.full #resizewin { background-position: -184px 0; } */
 
 /** server-specific values */
 .-admin-server #header				{ background-color: #F33; }
