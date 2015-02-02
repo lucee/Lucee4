@@ -36,6 +36,7 @@ import lucee.runtime.dump.DumpUtil;
 import lucee.runtime.dump.SimpleDumpData;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.text.xml.struct.XMLObject;
 import lucee.runtime.text.xml.struct.XMLStruct;
@@ -381,9 +382,8 @@ public final class XMLNodeList extends ArraySupport implements NodeList, XMLObje
 	}
 	
 	@Override
-	public void sort(Comparator comp)
-			throws ExpressionException {
-		throw new ExpressionException("can't sort a XML Node List Array");
+	public void sort(Comparator comp) {
+		throw new PageRuntimeException("can't sort a XML Node List Array");
 	}
 
 	@Override

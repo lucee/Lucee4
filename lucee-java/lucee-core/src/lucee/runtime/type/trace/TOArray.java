@@ -118,7 +118,7 @@ public class TOArray extends TOCollection implements Array {
 	}
 
 	@Override
-	public void sort(Comparator comp) throws PageException {
+	public void sort(Comparator comp) {
 		log();
 		arr.sort(comp);
 	}
