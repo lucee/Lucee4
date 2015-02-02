@@ -34,6 +34,7 @@ import lucee.runtime.dump.DumpProperties;
 import lucee.runtime.dump.DumpUtil;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Duplicator;
 import lucee.runtime.type.Array;
@@ -204,9 +205,9 @@ public class ListAsArray implements Array,List,Sizeable {
 	}
 
 	@Override
-	public synchronized void sort(Comparator comp) throws PageException {
+	public synchronized void sort(Comparator comp) {
 		if(getDimension()>1)
-			throw new ExpressionException("only 1 dimensional arrays can be sorted");
+			throw new PageRuntimeException("only 1 dimensional arrays can be sorted");
 		Collections.sort(list,comp);
 	}
 

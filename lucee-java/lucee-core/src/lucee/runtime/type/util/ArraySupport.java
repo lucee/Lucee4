@@ -351,9 +351,4 @@ public abstract class ArraySupport extends AbstractList implements Array,List,Si
 		if(!(obj instanceof Collection)) return false;
 		return CollectionUtil.equals(this,(Collection)obj);
 	}
-	
-	/*@Override
-	public int hashCode() {
-		return CollectionUtil.hashCode(this);
-	}*/
 }

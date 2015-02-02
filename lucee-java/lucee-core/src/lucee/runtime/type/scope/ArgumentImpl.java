@@ -36,6 +36,7 @@ import lucee.runtime.dump.DumpUtil;
 import lucee.runtime.dump.SimpleDumpData;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.type.Array;
@@ -344,9 +345,9 @@ public final class ArgumentImpl extends ScopeSupport implements Argument {
 		throw new ExpressionException("can't sort ["+sortType+"-"+sortOrder+"] Argument Scope","not Implemnted Yet");
 	}
 
-	public void sort(Comparator com) throws ExpressionException {
+	public void sort(Comparator com) {
 		// TODO Impl.
-		throw new ExpressionException("can't sort Argument Scope","not Implemnted Yet");
+		throw new PageRuntimeException("can't sort Argument Scope","not Implemnted Yet");
 	}
 
 	@Override

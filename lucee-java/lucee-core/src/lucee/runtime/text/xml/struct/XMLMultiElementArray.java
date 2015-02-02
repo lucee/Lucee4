@@ -161,7 +161,7 @@ public class XMLMultiElementArray extends ArraySupport {
 		}// MUST testen
 	}
 
-	public void sort(Comparator comp) throws PageException {
+	public void sort(Comparator comp) {
 		if(size()<=1) return;
 		
 		struct.getInnerArray().sort(comp);

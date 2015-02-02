@@ -34,6 +34,7 @@ import lucee.runtime.dump.DumpUtil;
 import lucee.runtime.dump.SimpleDumpData;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Duplicator;
 import lucee.runtime.op.ThreadLocalDuplication;
@@ -476,9 +477,9 @@ public final class ArrayImplNS extends ArraySupport implements Array,Sizeable {
 	}
 
 	@Override
-	public synchronized void sort(Comparator comp) throws PageException {
+	public synchronized void sort(Comparator comp) {
 		if(getDimension()>1)
-			throw new ExpressionException("only 1 dimensional arrays can be sorted");
+			throw new PageRuntimeException("only 1 dimensional arrays can be sorted");
 		Arrays.sort(arr,offset,offset+size,comp);	
 	}
 	

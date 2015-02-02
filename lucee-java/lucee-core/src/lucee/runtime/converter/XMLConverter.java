@@ -74,7 +74,7 @@ public final class XMLConverter extends ConverterSupport {
 	private static final Collection.Key REMOTING_FETCH = KeyImpl.intern("remotingFetch");
 	
 	private int deep=1;
-	private char _='"';
+	private char del='"';
 	private TimeZone timeZone;
 	private boolean ignoreRemotingFetch=true;
     //private PageContext pcx;
@@ -145,7 +145,7 @@ public final class XMLConverter extends ConverterSupport {
 	 */
 	private String _serializeList(List list, Map<Object,String> done, String id) throws ConverterException {
 		// <ARRAY ID="1" SIZE="1"><ITEM INDEX="1" TYPE="STRING">hello world</ITEM></ARRAY>
-		StringBuilder sb=new StringBuilder(goIn()+"<ARRAY ID=\""+id+"\" SIZE="+_+list.size()+_+">");
+		StringBuilder sb=new StringBuilder(goIn()+"<ARRAY ID=\""+id+"\" SIZE="+del+list.size()+del+">");
 		int index;
 		ListIterator it=list.listIterator();
 		while(it.hasNext()) {
@@ -183,7 +183,7 @@ public final class XMLConverter extends ConverterSupport {
         	key=it.next();
         	member = component.get(key,null);
         	if(member instanceof UDF) continue;
-        	sb.append(goIn()+"<var scope=\"this\" name="+_+key.toString()+_+">");
+        	sb.append(goIn()+"<var scope=\"this\" name="+del+key.toString()+del+">");
             sb.append(_serialize(member,done));
             sb.append(goIn()+"</var>");
         }
@@ -208,7 +208,7 @@ public final class XMLConverter extends ConverterSupport {
         	
         	member = scope.get(key,null);
         	if(member instanceof UDF || key.equals(KeyConstants._this)) continue;
-            sb.append(goIn()+"<var scope=\"variables\" name="+_+key.toString()+_+">");
+            sb.append(goIn()+"<var scope=\"variables\" name="+del+key.toString()+del+">");
             sb.append(_serialize(member,done));
             sb.append(goIn()+"</var>");
         }
@@ -267,7 +267,7 @@ public final class XMLConverter extends ConverterSupport {
 		deep++;
 		while(it.hasNext()) {
 			Object key=it.next();
-			sb.append(goIn()+"<var name="+_+key.toString()+_+">");
+			sb.append(goIn()+"<var name="+del+key.toString()+del+">");
 			sb.append(_serialize(map.get(key),done));
 			sb.append(goIn()+"</var>");
 		}
