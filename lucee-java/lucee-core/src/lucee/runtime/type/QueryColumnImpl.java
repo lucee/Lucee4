@@ -834,7 +834,7 @@ public class QueryColumnImpl implements QueryColumnPro,Sizeable,Objects {
 	}
 
 	@Override
-	public void sort(Comparator comp) throws PageException {
+	public void sort(Comparator comp) {
 		throwNotAllowedToAlter();
 	}
 

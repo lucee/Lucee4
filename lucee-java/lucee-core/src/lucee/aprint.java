@@ -70,7 +70,7 @@ public class aprint {
 	}
 	
 	public static void ds(Object label,boolean useOutStream) {
-		_(useOutStream?System.out:System.err, label);
+		_oe(useOutStream?System.out:System.err, label);
 		ds(useOutStream);
 	}
 	
@@ -180,10 +180,10 @@ public class aprint {
 	
 
 	public static void out(Object o) {
-		_(System.out, o);
+		_oe(System.out, o);
 	}
 	public static void err(Object o) {
-		_(System.err, o);
+		_oe(System.err, o);
 	}
 
 	public static void writeTemp(String name,Object o, boolean addStackTrace) {
@@ -204,7 +204,7 @@ public class aprint {
 			ResourceUtil.touch(res);
 			os = res.getOutputStream(true);
 			ps = new PrintStream(os);
-			_(ps, o);
+			_oe(ps, o);
 			if(addStackTrace) new Exception("Stack trace").printStackTrace(ps);
 		}
 		catch(IOException ioe){
@@ -215,17 +215,17 @@ public class aprint {
 			IOUtil.closeEL(os);
 		}
 	}
-	public static void _(Object o, boolean d) {
-		_(System.out, o);
+	public static void _oe(Object o, boolean d) {
+		_oe(System.out, o);
 	}
 	public static void o(Object o) {
-		_(System.out, o);
+		_oe(System.out, o);
 	}
 	public static void e(Object o) {
-		_(System.err, o);
+		_oe(System.err, o);
 	}
 	public static void oe(Object o, boolean valid) {
-		_(valid?System.out:System.err, o);
+		_oe(valid?System.out:System.err, o);
 	}
 	
 	public static void dateO(String value) {
@@ -238,7 +238,7 @@ public class aprint {
 
 	private static void _date(PrintStream ps,String value) {
 		long millis = System.currentTimeMillis();
-		_(ps,
+		_oe(ps,
 		new Date(millis)
 		+"-"
 		+(millis-(millis/1000*1000))
@@ -247,26 +247,26 @@ public class aprint {
 	
 	
 	
-	private static void _(PrintStream ps,Object o) {
-		if(o instanceof Enumeration) _(ps,(Enumeration)o);
-    	else if(o instanceof Object[]) _(ps,(Object[])o);
-    	else if(o instanceof boolean[]) _(ps,(boolean[])o);
-    	else if(o instanceof byte[]) _(ps,(byte[])o);
-    	else if(o instanceof int[]) _(ps,(int[])o);
-    	else if(o instanceof float[]) _(ps,(float[])o);
-    	else if(o instanceof long[]) _(ps,(long[])o);
-    	else if(o instanceof double[]) _(ps,(double[])o);
-    	else if(o instanceof char[]) _(ps,(char[])o);
-    	else if(o instanceof short[]) _(ps,(short[])o);
-    	else if(o instanceof Set) _(ps,(Set)o);
-    	else if(o instanceof List) _(ps,(List)o);
-    	else if(o instanceof Map) _(ps,(Map)o);
-    	else if(o instanceof Collection) _(ps,(Collection)o);
-    	else if(o instanceof Iterator) _(ps,(Iterator)o);
-    	else if(o instanceof NamedNodeMap) _(ps,(NamedNodeMap)o);
-    	else if(o instanceof ResultSet) _(ps,(ResultSet)o);
-    	else if(o instanceof Node) _(ps,(Node)o);
-    	else if(o instanceof Throwable) _(ps,(Throwable)o);
+	private static void _oe(PrintStream ps,Object o) {
+		if(o instanceof Enumeration) _oe(ps,(Enumeration)o);
+    	else if(o instanceof Object[]) _oe(ps,(Object[])o);
+    	else if(o instanceof boolean[]) _oe(ps,(boolean[])o);
+    	else if(o instanceof byte[]) _oe(ps,(byte[])o);
+    	else if(o instanceof int[]) _oe(ps,(int[])o);
+    	else if(o instanceof float[]) _oe(ps,(float[])o);
+    	else if(o instanceof long[]) _oe(ps,(long[])o);
+    	else if(o instanceof double[]) _oe(ps,(double[])o);
+    	else if(o instanceof char[]) _oe(ps,(char[])o);
+    	else if(o instanceof short[]) _oe(ps,(short[])o);
+    	else if(o instanceof Set) _oe(ps,(Set)o);
+    	else if(o instanceof List) _oe(ps,(List)o);
+    	else if(o instanceof Map) _oe(ps,(Map)o);
+    	else if(o instanceof Collection) _oe(ps,(Collection)o);
+    	else if(o instanceof Iterator) _oe(ps,(Iterator)o);
+    	else if(o instanceof NamedNodeMap) _oe(ps,(NamedNodeMap)o);
+    	else if(o instanceof ResultSet) _oe(ps,(ResultSet)o);
+    	else if(o instanceof Node) _oe(ps,(Node)o);
+    	else if(o instanceof Throwable) _oe(ps,(Throwable)o);
     	else if(o instanceof Cookie) {
     		Cookie c=(Cookie) o;
     		ps.println("Cookie(name:"+c.getName()+";domain:"+c.getDomain()+";maxage:"+c.getMaxAge()+";path:"+c.getPath()+";value:"+c.getValue()+";version:"+c.getVersion()+";secure:"+c.getSecure()+")");
@@ -288,7 +288,7 @@ public class aprint {
 	
 	
 	
-	private static void _(PrintStream ps,Object[] arr) {
+	private static void _oe(PrintStream ps,Object[] arr) {
     	if(arr==null){
     		ps.println("null");
     		return;
@@ -298,12 +298,12 @@ public class aprint {
             if(i>0) {
                 ps.print("\t,");
             }
-            _(ps,arr[i]);
+            _oe(ps,arr[i]);
         }
         ps.println("}");
     }
     
-    private static void _(PrintStream ps,int[] arr) {
+    private static void _oe(PrintStream ps,int[] arr) {
         ps.print("int[]{");
         for(int i=0;i<arr.length;i++) {
             if(i>0)ps.print(',');
@@ -312,7 +312,7 @@ public class aprint {
         ps.println("}");
     }
     
-    private static void _(PrintStream ps,byte[] arr) {
+    private static void _oe(PrintStream ps,byte[] arr) {
         ps.print("byte[]{");
         for(int i=0;i<arr.length;i++) {
             if(i>0)ps.print(',');
@@ -321,7 +321,7 @@ public class aprint {
         ps.println("}");
     }
     
-    private static void _(PrintStream ps,boolean[] arr) {
+    private static void _oe(PrintStream ps,boolean[] arr) {
         ps.print("boolean[]{");
         for(int i=0;i<arr.length;i++) {
             if(i>0)ps.print(',');
@@ -330,7 +330,7 @@ public class aprint {
         ps.println("}");
     }
     
-    private static void _(PrintStream ps,char[] arr) {
+    private static void _oe(PrintStream ps,char[] arr) {
         ps.print("char[]{");
         for(int i=0;i<arr.length;i++) {
             if(i>0)ps.print(',');
@@ -339,7 +339,7 @@ public class aprint {
         ps.println("}");
     }
     
-    private static void _(PrintStream ps,short[] arr) {
+    private static void _oe(PrintStream ps,short[] arr) {
         ps.print("short[]{");
         for(int i=0;i<arr.length;i++) {
             if(i>0)ps.print(',');
@@ -348,7 +348,7 @@ public class aprint {
         ps.println("}");
     }
     
-    private static void _(PrintStream ps,float[] arr) {
+    private static void _oe(PrintStream ps,float[] arr) {
         ps.print("float[]{");
         for(int i=0;i<arr.length;i++) {
             if(i>0)ps.print(',');
@@ -357,7 +357,7 @@ public class aprint {
         ps.println("}");
     }
     
-    private static void _(PrintStream ps,long[] arr) {
+    private static void _oe(PrintStream ps,long[] arr) {
         ps.print("long[]{");
         for(int i=0;i<arr.length;i++) {
             if(i>0)ps.print(',');
@@ -366,7 +366,7 @@ public class aprint {
         ps.println("}");
     }
     
-    private static void _(PrintStream ps,double[] arr) {
+    private static void _oe(PrintStream ps,double[] arr) {
         ps.print("double[]{");
         for(int i=0;i<arr.length;i++) {
             if(i>0)ps.print(',');
@@ -376,29 +376,29 @@ public class aprint {
     }
     
 
-	private static void _(PrintStream ps,Node n) {
+	private static void _oe(PrintStream ps,Node n) {
 		ps.print(Caster.toString(n,null));
 	}
 	
 	
-	private static void _(PrintStream ps,Throwable t) {
+	private static void _oe(PrintStream ps,Throwable t) {
     	t.printStackTrace(ps);
     }
     
 
-    private static void _(PrintStream ps,Enumeration en) {
+    private static void _oe(PrintStream ps,Enumeration en) {
         
-    	_(ps,en.getClass().getName()+" [");
+    	_oe(ps,en.getClass().getName()+" [");
         while(en.hasMoreElements()) {
         	ps.print(en.nextElement());
             ps.println(",");
         }
-        _(ps,"]");
+        _oe(ps,"]");
     }
     
-    private static void _(PrintStream ps,List list) {
+    private static void _oe(PrintStream ps,List list) {
         ListIterator it = list.listIterator();
-        _(ps,list.getClass().getName()+" {");
+        _oe(ps,list.getClass().getName()+" {");
         while(it.hasNext()) {
             int index = it.nextIndex();
             it.next();
@@ -407,30 +407,30 @@ public class aprint {
             ps.print(list.get(index));
             ps.println(";");
         }
-        _(ps,"}");
+        _oe(ps,"}");
     }
     
-    private static void _(PrintStream ps,Collection coll) {
+    private static void _oe(PrintStream ps,Collection coll) {
     	Iterator it = coll.iterator();
-        _(ps,coll.getClass().getName()+" {");
+        _oe(ps,coll.getClass().getName()+" {");
         while(it.hasNext()) {
-        	_(ps, it.next());
+        	_oe(ps, it.next());
         }
-        _(ps,"}");
+        _oe(ps,"}");
     }
     
-    private static void _(PrintStream ps,Iterator it) {
+    private static void _oe(PrintStream ps,Iterator it) {
         
-        _(ps,it.getClass().getName()+" {");
+        _oe(ps,it.getClass().getName()+" {");
         while(it.hasNext()) {
             ps.print(it.next());
             ps.println(";");
         }
-        _(ps,"}");
+        _oe(ps,"}");
     }
     
     
-    private static void _(PrintStream ps,Set set) {
+    private static void _oe(PrintStream ps,Set set) {
     	Iterator it = set.iterator();
     	ps.println(set.getClass().getName()+" {");
     	boolean first=true;
@@ -439,21 +439,21 @@ public class aprint {
         		ps.println();
         		ps.print(",");
         	}
-            _(ps,it.next());
+            _oe(ps,it.next());
             first=false;
         }
-        _(ps,"}");
+        _oe(ps,"}");
     }
     
-    private static void _(PrintStream ps,ResultSet res) {
+    private static void _oe(PrintStream ps,ResultSet res) {
     	try {
-			_(ps, new QueryImpl(res,"query",null).toString());
+			_oe(ps, new QueryImpl(res,"query",null).toString());
 		} catch (PageException e) {
-			_(ps, res.toString());
+			_oe(ps, res.toString());
 		}
     }
 
-    private static void _(PrintStream ps,Map map) {
+    private static void _oe(PrintStream ps,Map map) {
     	if(map==null) {
     		ps.println("null");
     		return;
@@ -465,9 +465,9 @@ public class aprint {
             while(it.hasNext()) {
                 Object key = it.next();
 
-                _(ps,key);
+                _oe(ps,key);
                 ps.print(":");
-                _(ps,map.get(key));
+                _oe(ps,map.get(key));
             }
             ps.println("}");
         } 
@@ -476,16 +476,16 @@ public class aprint {
 	        while(it.hasNext()) {
 	            Object key = it.next();
 	            ps.print("	");
-	            _(ps,key);
+	            _oe(ps,key);
 	            ps.print(":");
-	            _(ps,map.get(key));
+	            _oe(ps,map.get(key));
 	            ps.println(";");
 	        }
 	        ps.println("}");
         }
     }
 
-    private static void _(PrintStream ps,NamedNodeMap map) {
+    private static void _oe(PrintStream ps,NamedNodeMap map) {
     	if(map==null) {
     		ps.println("null");
     		return;

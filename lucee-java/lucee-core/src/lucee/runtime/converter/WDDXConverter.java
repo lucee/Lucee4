@@ -82,7 +82,7 @@ public final class WDDXConverter extends ConverterSupport {
 	
 	private int deep=1;
 	private boolean xmlConform;
-	private char _;
+	private char del;
 	private TimeZone timeZone;
 	private boolean ignoreRemotingFetch=true;
     //private PageContext pcx;
@@ -94,7 +94,7 @@ public final class WDDXConverter extends ConverterSupport {
 	 */
 	public WDDXConverter(TimeZone timeZone, boolean xmlConform,boolean ignoreRemotingFetch) {
 		this.xmlConform=xmlConform;
-		_=(xmlConform)?'"':'\'';
+		del=(xmlConform)?'"':'\'';
 		this.timeZone=timeZone;
 		this.ignoreRemotingFetch=ignoreRemotingFetch;
 	}
@@ -187,7 +187,7 @@ public final class WDDXConverter extends ConverterSupport {
 	 * @throws ConverterException
 	 */
 	private String _serializeList(List list, Set<Object> done) throws ConverterException {
-		StringBuilder sb=new StringBuilder(goIn()+"<array length="+_+list.size()+_+">");
+		StringBuilder sb=new StringBuilder(goIn()+"<array length="+del+list.size()+del+">");
 				
 		ListIterator it=list.listIterator();
 		while(it.hasNext()) {
@@ -219,7 +219,7 @@ public final class WDDXConverter extends ConverterSupport {
         	key=Caster.toKey(it.next(),null);
         	member = component.get(key,null);
         	if(member instanceof UDF) continue;
-        	sb.append(goIn()+"<var scope=\"this\" name="+_+XMLUtil.escapeXMLString(key.toString())+_+">");
+        	sb.append(goIn()+"<var scope=\"this\" name="+del+XMLUtil.escapeXMLString(key.toString())+del+">");
             sb.append(_serialize(member,done));
             sb.append(goIn()+"</var>");
         }
@@ -244,7 +244,7 @@ public final class WDDXConverter extends ConverterSupport {
         	
         	member = scope.get(key,null);
         	if(member instanceof UDF || key.equals(KeyConstants._this)) continue;
-            sb.append(goIn()+"<var scope=\"variables\" name="+_+XMLUtil.escapeXMLString(key.toString())+_+">");
+            sb.append(goIn()+"<var scope=\"variables\" name="+del+XMLUtil.escapeXMLString(key.toString())+del+">");
             sb.append(_serialize(member,done));
             sb.append(goIn()+"</var>");
         }
@@ -275,7 +275,7 @@ public final class WDDXConverter extends ConverterSupport {
         deep++;
         while(it.hasNext()) {
             Key key = it.next();
-            sb.append(goIn()+"<var name="+_+XMLUtil.escapeXMLString(key.toString())+_+">");
+            sb.append(goIn()+"<var name="+del+XMLUtil.escapeXMLString(key.toString())+del+">");
             sb.append(_serialize(struct.get(key,null),done));
             sb.append(goIn()+"</var>");
         }
@@ -300,7 +300,7 @@ public final class WDDXConverter extends ConverterSupport {
 		deep++;
 		while(it.hasNext()) {
 			Object key=it.next();
-			sb.append(goIn()+"<var name="+_+XMLUtil.escapeXMLString(key.toString())+_+">");
+			sb.append(goIn()+"<var name="+del+XMLUtil.escapeXMLString(key.toString())+del+">");
 			sb.append(_serialize(map.get(key),done));
 			sb.append(goIn()+"</var>");
 		}
@@ -328,13 +328,13 @@ public final class WDDXConverter extends ConverterSupport {
 		}
 		
 		
-		StringBuilder sb=new StringBuilder(goIn()+"<recordset rowCount="+_+query.getRecordcount()+_+" fieldNames="+_+fn+_+" type="+_+"coldfusion.sql.QueryTable"+_+">");
+		StringBuilder sb=new StringBuilder(goIn()+"<recordset rowCount="+del+query.getRecordcount()+del+" fieldNames="+del+fn+del+" type="+del+"coldfusion.sql.QueryTable"+del+">");
 		
 	
 		deep++;
 		int len=query.getRecordcount();
 		for(int i=0;i<keys.length;i++) {
-			sb.append(goIn()+"<field name="+_+XMLUtil.escapeXMLString(keys[i].getString())+_+">");
+			sb.append(goIn()+"<field name="+del+XMLUtil.escapeXMLString(keys[i].getString())+del+">");
 				for(int y=1;y<=len;y++) {
 					try {
 						sb.append(_serialize(query.getAt(keys[i],y),done));
@@ -381,7 +381,7 @@ public final class WDDXConverter extends ConverterSupport {
 		}
 		// Boolean
 		if(object instanceof Boolean) {
-			rtn= goIn()+"<boolean value="+_+((Boolean)object).booleanValue()+_+"/>";
+			rtn= goIn()+"<boolean value="+del+((Boolean)object).booleanValue()+del+"/>";
 			deep--;
 			return rtn;
 		}
@@ -454,7 +454,7 @@ public final class WDDXConverter extends ConverterSupport {
 			done.remove(raw);
 		}
 		// Others
-		rtn="<struct type="+_+"L"+object.getClass().getName()+";"+_+"></struct>";
+		rtn="<struct type="+del+"L"+object.getClass().getName()+";"+del+"></struct>";
 		deep--;
 		return rtn;
 	}
@@ -476,7 +476,7 @@ public final class WDDXConverter extends ConverterSupport {
 		
 		StringBuilder sb=new StringBuilder();	
 		if(xmlConform)sb.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>");	
-		sb.append("<wddxPacket version="+_+"1.0"+_+">");	
+		sb.append("<wddxPacket version="+del+"1.0"+del+">");	
 		deep++;
 		sb.append(goIn()+"<header/>");
 		sb.append(goIn()+"<data>");

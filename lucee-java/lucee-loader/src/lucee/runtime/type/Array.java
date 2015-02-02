@@ -114,7 +114,7 @@ public interface Array extends Collection,Cloneable,Objects {
 	public void sort(String sortType, String sortOrder) throws PageException;
 	
 	
-	public void sort(Comparator comp) throws PageException;
+	public void sort(Comparator comp);
 	
 	/**
 	 * @return return arra as native (Java) Object Array
