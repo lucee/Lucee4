@@ -286,10 +286,8 @@ public final class CFMLEngineImpl implements CFMLEngine {
             configDir=ResourceUtil.createResource(frp.getResource(strConfig), FileUtil.LEVEL_GRAND_PARENT_FILE,FileUtil.TYPE_DIR);
         }
         if(configDir==null) throw new PageServletException(new ApplicationException("path ["+strConfig+"] is invalid"));
-        print.e(configDir+":"+configDir.exists());
         	
         if(!configDir.exists() || ResourceUtil.isEmptyDirectory(configDir, null)){
-        	print.e( (configDir.getParentResource().getRealResource("railo"))+":"+ (configDir.getParentResource().getRealResource("railo")).isDirectory());
         	Resource railoRoot;
         	// there is a railo directory
         	if(configDir.getName().equals("lucee") && (railoRoot=configDir.getParentResource().getRealResource("railo")).isDirectory()) {
