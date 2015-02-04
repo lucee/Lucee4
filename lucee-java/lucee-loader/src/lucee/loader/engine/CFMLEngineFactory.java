@@ -502,7 +502,7 @@ public class CFMLEngineFactory {
 	*/
 	 private boolean removeUpdate() throws IOException, ServletException {
 		File patchDir=getPatchDirectory();
-		File[] patches=patchDir.listFiles(new ExtensionFilter(new String[]{"lucee","rc","rcs"}));
+		File[] patches=patchDir.listFiles(new ExtensionFilter(new String[]{getCoreExtension()}));
 		
 		for(int i=0;i<patches.length;i++) {
 			if(!patches[i].delete())patches[i].deleteOnExit();
@@ -623,9 +623,11 @@ public class CFMLEngineFactory {
 						String str=Util.toString(is);
 						str=str.replace("<cfRailoConfiguration", "<!-- copy from Railo context --><cfLuceeConfiguration");
 						str=str.replace("</cfRailoConfiguration", "</cfLuceeConfiguration");
-						str=str.replace("<railo-configuration", "<lucee-configuration");
-						str=str.replace("<railo-configuration", "<lucee-configuration");
-						str=str.replace("</railo-configuration", "</lucee-configuration");
+						
+						str=str.replace("<railo-configuration", "<!-- copy from Railo context --><cfLuceeConfiguration");
+						str=str.replace("</railo-configuration", "</cfLuceeConfiguration");
+						
+						
 						str=str.replace("{railo-config}", "{lucee-config}");
 						str=str.replace("{railo-server}", "{lucee-server}");
 						str=str.replace("{railo-web}", "{lucee-web}");
