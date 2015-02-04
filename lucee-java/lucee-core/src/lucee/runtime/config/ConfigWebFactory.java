@@ -2035,8 +2035,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 					Struct custom = toStruct(eConnection.getAttribute("custom"));
 					
 					// Workaround for old EHCache class defintions
-					if ("lucee.extension.io.cache.eh.EHCacheLite".equals(clazzName)
-							|| "lucee.runtime.cache.eh.EHCacheLite".equals(clazzName)) {
+					if (clazzName!=null && clazzName.endsWith(".EHCacheLite")) {
 						cacheClazz = EHCache.class;
 						if(!custom.containsKey("distributed")) 
 							custom.setEL("distributed", "off");
@@ -2047,7 +2046,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 						
 						
 					}
-					else if ("lucee.extension.io.cache.eh.EHCache".equals(clazzName))
+					else if (clazzName!=null && clazzName.endsWith(".extension.io.cache.eh.EHCache"))
 						cacheClazz = EHCache.class;
 					else
 						cacheClazz = ClassUtil.loadClass(config.getClassLoader(), clazzName);

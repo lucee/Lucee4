@@ -1592,8 +1592,7 @@ public final class ConfigWebAdmin {
         
         try {
         	Class clazz;
-        	if("lucee.extension.io.cache.eh.EHCacheLite".equals(classname)) clazz=EHCache.class;
-        	else if("lucee.runtime.cache.eh.EHCacheLite".equals(classname)) clazz=EHCache.class;
+        	if(classname!=null && classname.endsWith(".EHCacheLite")) clazz=EHCache.class;
         	else clazz = ClassUtil.loadClass(config.getClassLoader(),classname);
 			if(!Reflector.isInstaneOf(clazz, Cache.class))
 				throw new ExpressionException("class ["+clazz.getName()+"] is not of type ["+Cache.class.getName()+"]");
