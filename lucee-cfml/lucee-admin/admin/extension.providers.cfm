@@ -32,7 +32,7 @@
 				</cfif>
 			</cfloop>
 			
-			<cfif arrayLen(data.validUrls)>
+			<cfif !isnull(data.validUrls) && arrayLen(data.validUrls)>
 				<cfset datas=loadProvidersData(data.validUrls,20000,true)>
 			<cfelse>
 				<cfset datas={}>
