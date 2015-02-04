@@ -3061,6 +3061,9 @@ public abstract class ConfigImpl implements Config {
 	}
 
 	protected void setComponentDefaultImport(String str) {
+		if(StringUtil.isEmpty(str)) return;
+		if("org.railo.cfml.*".equalsIgnoreCase(str)) str="org.lucee.cfml.*";
+		
 		ImportDefintion cdi = ImportDefintionImpl.getInstance(str, null);
 		if(cdi!=null)this.componentDefaultImport= cdi;
 	}
