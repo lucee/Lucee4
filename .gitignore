@@ -24,6 +24,7 @@ lucee-cfml/lucee-admin/admin2/
 /*.project
 /dist
 /legacy
+/temp
 /templucee
 va specific
 *.class
