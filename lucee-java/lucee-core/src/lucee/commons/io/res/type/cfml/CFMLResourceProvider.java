@@ -30,6 +30,7 @@ import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
+import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
@@ -65,6 +66,7 @@ public class CFMLResourceProvider implements ResourceProviderPro {
 		cfcPath=Caster.toString(args.get("cfc"),null);
 		if(StringUtil.isEmpty(cfcPath,true))
 			cfcPath=Caster.toString(args.get("component"),null);
+		cfcPath=ConfigWebUtil.fixComponentPath(cfcPath);
 		
 		// use Streams for data
 		Boolean _useStreams = Caster.toBoolean(args.get("use-streams"),null);
