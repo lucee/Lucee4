@@ -377,7 +377,7 @@ public final class FunctionLibFunction {
 		if(memberNames!=null && memberType==CFTypes.TYPE_UNKNOW){
 			ArrayList<FunctionLibFunctionArg> args = getArg();
 			if(args.size()>=1){
-				memberType=CFTypes.toShortStrict(args.get(0).getTypeAsString(),CFTypes.TYPE_UNKNOW);
+				memberType=CFTypes.toShortStrict(args.get(getMemberPosition()-1).getTypeAsString(),CFTypes.TYPE_UNKNOW);
 			}
 		}
 		return memberType;
