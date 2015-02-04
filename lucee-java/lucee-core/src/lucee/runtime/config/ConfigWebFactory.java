@@ -2878,16 +2878,21 @@ public final class ConfigWebFactory extends ConfigFactory {
 				str = deRailo(video.getAttribute("video-executer"));
 		}
 		if (!StringUtil.isEmpty(str)) {
+			Class clazz=null;
 			try {
-				Class clazz = ClassUtil.loadClass(config.getClassLoader(), str);
-				if (!Reflector.isInstaneOf(clazz, VideoExecuter.class))
-					throw new ApplicationException("class [" + clazz.getName() + "] does not implement interface [" + VideoExecuter.class.getName() + "]");
-				config.setVideoExecuterClass(clazz);
+				clazz = ClassUtil.loadClass(config.getClassLoader(), str);
+			}
+			catch (Throwable t) {
+				t.printStackTrace();
+			}
+			if (clazz==null)
+				throw new ApplicationException("Lucee was not able to load the class ["+str+"]");
+			
+			if (!Reflector.isInstaneOf(clazz, VideoExecuter.class))
+				throw new ApplicationException("class [" + clazz.getName() + "] does not implement interface [" + VideoExecuter.class.getName() + "]");
+			
+			config.setVideoExecuterClass(clazz);
 
-			}
-			catch (ClassException e) {
-				e.printStackTrace();
-			}
 		}
 		else if (hasCS)
 			config.setVideoExecuterClass(configServer.getVideoExecuterClass());
