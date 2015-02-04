@@ -2927,6 +2927,8 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 	<function>
 		<name>dateDiff</name>
 		<class>lucee.runtime.functions.dateTime.DateDiff</class>
+		<member-name>diff</member-name>
+		<member-position>2</member-position>
 		<description>Determines the number of given date parts between two different dates</description>
 		<argument>
 			<name>datepart</name>
@@ -2957,47 +2959,6 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 			<required>Yes</required>
 		<description>date time object to compare</description>
     </argument>
-		<return>
-			<type>number</type>
-		</return>
-	</function>
-	
-	<!-- _dateDiff (only for member types) -->
-	<function>
-		<name>_dateDiff</name>
-		<class>lucee.runtime.functions.dateTime.DateDiffMember</class>
-		<member-name>diff</member-name>
-		<description>Determines the number of given date parts between two different dates</description>
-		<argument>
-			<name>date1</name>
-			<type>datetime</type>
-			<required>Yes</required>
-			<description>date time object to compare</description>
-	    </argument>
-		<argument>
-			<name>date2</name>
-			<type>datetime</type>
-			<required>Yes</required>
-			<description>date time object to compare</description>
-	    </argument>
-		<argument>
-			<name>datepart</name>
-			<type>string</type>
-			<required>no</required>
-			<default>s</default>
-		<description>String that specifies the units in which to count:
-- yyyy: Years
-- q: Quarters
-- m: Months
-- y: Days of year (same as d)
-- d: Days
-- w: Weekdays (same as ww)
-- ww: Weeks
-- h: Hours
-- n: Minutes
-- s (Default): Seconds
-			</description>
-   	 	</argument>
 		<return>
 			<type>number</type>
 		</return>
