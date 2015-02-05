@@ -260,6 +260,8 @@ public class CFMLEngineFactory {
 					 }
 				}
 		}
+		
+		
 		if(lucee!=null && isNewerThan(coreVersion,Util.toInVersion(lucee.getName())))lucee=null;
 		
 		// Load Lucee
@@ -314,7 +316,7 @@ public class CFMLEngineFactory {
 	 }
 	 
 
-	 private String getCoreExtension() throws ServletException {
+	 private String getCoreExtension()  {
 	 	return "lco";
 	}
 
