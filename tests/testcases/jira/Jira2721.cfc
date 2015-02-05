@@ -62,11 +62,11 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		  'user'
 		, 'user@'
 		, 'user@.'
-		, '.michael@getlucee.org'
-		, 'michael.@getlucee.org'
-		, 'michael@getlucee.org.'
-		, 'michael@.getlucee.org'
-		, 'michael@getlucee..org'
+		, '.michael@lucee.org'
+		, 'michael.@lucee.org'
+		, 'michael@lucee.org.'
+		, 'michael@.lucee.org'
+		, 'michael@lucee..org'
 		, 'Abc.example.com'
 		, 'A@b@c@example.com'
 		, 'a"b(c)d,e:f;g<h>i[j\k]l@example.com'
@@ -86,7 +86,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 		var addr = '"Some One" <someone@domain.com>';
 
-		addr = 'user@getlucee.or';
+		addr = 'user@lucee.or';
 
 		assert( isValid("email", addr), "validation for [#addr#] failed" );
 	}
