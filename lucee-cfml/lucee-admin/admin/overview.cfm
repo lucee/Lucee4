@@ -172,8 +172,7 @@ Error Output --->
 		<cfset names=StructKeyArray(info.servlets)>
 		<cfif !ArrayContainsNoCase(names,"Rest")>
 			<div class="warning nofocus">
-				The REST Servlet is not configured in your enviroment.
-				Follow these <a href="https://github.com/getlucee/lucee/wiki/Configuration:web.xml##wiki-REST" target="_blank">instructions</a> to enable REST.
+				The REST Servlet is not configured in your enviroment!
 			</div>
 		</cfif>	
 	</cfif>
