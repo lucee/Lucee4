@@ -63,7 +63,7 @@ public class Version {
         catch (IOException e) {} 
         
         int index=content.indexOf(':');
-        version=Integer.parseInt(content.substring(0,index));
+        version=Util.toInVersion((content.substring(0,index)));
         created=Long.parseLong(content.substring(index+1));
         
     }
