@@ -343,8 +343,6 @@ public final class CFMLEngineImpl implements CFMLEngine {
 			if(trg.getName().endsWith(".rc") || trg.getName().startsWith(".")) {
 				return;
 			}
-			print.e("src:"+src);
-			print.e("trg:"+trg);
 					
 			if(trg.getName().equals("railo-web.xml.cfm")) {
 				trg=trg.getParentResource().getRealResource("lucee-web.xml.cfm");
