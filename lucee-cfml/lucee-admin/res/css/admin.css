@@ -1194,10 +1194,10 @@ body 	{ margin: 0; padding: 0; }
 body.full #tr-header	{ height: 63px; }
 
 #header			{ position: relative; height: 100px; -padding: 0 22px; -margin: 0 22px 0 22px; }
-body.full #header { height: 50px; }
+body.full #header { height: 68px; }
 
 #logo			{ display: block; position: absolute; top: -16px; left: 0; width: 166px; height: 68px; padding: 0;background-position: 0px -136px; }
-body.full #logo { width: 48px; height:28px;  background-position: -145px -53px; }
+body.full #logo { display: block; position: absolute; top: 0px; left: 0; width: 166px; height: 68px; padding: 0;background-position: 0px -136px; }
 
 #admin-tabs		{ width: 126px; position: absolute; bottom: -16px; right: 20px; } /*114 33*/
 
@@ -1208,7 +1208,7 @@ body.full #logo { width: 48px; height:28px;  background-position: -145px -53px; 
 
 #resizewin 		{ display:block; width:19px; height:19px; text-indent: -9999px; }
 
-body.full #resizewin { background-position: -184px 0; }
+/* body.full #resizewin { background-position: -184px 0; } */
 
 /** server-specific values */
 .-admin-server #header				{ background-color: #F33; }
