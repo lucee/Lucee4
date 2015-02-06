@@ -28,13 +28,15 @@ import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.CasterException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
+import lucee.runtime.functions.BIF;
+import lucee.runtime.op.Caster;
 import lucee.runtime.op.date.DateCaster;
 import lucee.runtime.type.dt.DateTime;
 
 /**
  * Implements the CFML Function dateformat
  */
-public final class DateFormat implements Function {
+public final class DateFormat extends BIF implements Function {
 	
 	public static String call(PageContext pc , Object object) throws PageException {
 		return _call(pc,object,"dd-mmm-yy",ThreadLocalPageContext.getTimeZone(pc));
@@ -45,6 +47,18 @@ public final class DateFormat implements Function {
 	public static String call(PageContext pc , Object object, String mask,String strTimezone) throws PageException {
 		return _call(pc, object, mask, strTimezone==null?ThreadLocalPageContext.getTimeZone(pc):TimeZoneUtil.toTimeZone(strTimezone));
 	}
+
+    @Override
+    public String invoke(PageContext pc, Object[] args) throws PageException {
+        if (args.length == 1) {
+            return call(pc, args[0]);
+        } else if (args.length == 2) {
+            return call(pc, args[0], Caster.toString(args[1]));
+        } else {
+            return call(pc, args[0], Caster.toString(args[1]), Caster.toString(args[2]));
+        }
+    }
+
 	private static String _call(PageContext pc , Object object, String mask,TimeZone tz) throws PageException {
 	    Locale locale=Locale.US;
 	    
