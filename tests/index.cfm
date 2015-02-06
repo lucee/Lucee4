@@ -15,7 +15,16 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- --->function toPackage(string path) {
+ ---><cfscript>
+// SETUP THE ROOTS OF THE BROWSER RIGHT HERE
+reporter="org.lucee.cfml.test.reporter.HTMLReporter";
+currentDirectory= getDirectoryFromPath(getCurrentTemplatePath());
+rootPath= currentDirectory&"testcases/";
+rootMapping 	= contractPath(rootPath);
+/**
+* converts a path to a package name
+*/
+function toPackage(string path) {
 	return ListCompact(replace(replace(mid(path,1,len(path)-4),'/','.','all'),'\','.','all'),'.');
 }
 

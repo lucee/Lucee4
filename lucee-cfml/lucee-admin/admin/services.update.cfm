@@ -1,9 +1,23 @@
-<cfif request.admintype EQ "web"><cflocation url="#request.self#" addtoken="no"></cfif>
+<!--- 
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either 
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ ---><cfif request.admintype EQ "web"><cflocation url="#request.self#" addtoken="no"></cfif>
 
 <cfparam name="url.action2" default="none">
 <cfset error.message="">
 <cfset error.detail="">
-<cfset restBasePath="/rest/update/provider/">
 
 <cftry>
 <cfswitch expression="#url.action2#">
@@ -29,7 +43,14 @@
 			password="#session["password"&request.adminType]#"
 			remoteClients="#request.getRemoteClients()#">
 	</cfcase>
-	
+	<cfcase value="updateJars">
+		<cfsetting requesttimeout="10000">
+		<cfadmin 
+			action="updateJars"
+			type="#request.adminType#"
+			password="#session["password"&request.adminType]#"
+			remoteClients="#request.getRemoteClients()#">
+	</cfcase>
 	<cfcase value="remove">
 		<cfadmin 
 			action="removeUpdate"
@@ -72,60 +93,48 @@ because this is only about optional updates, we do this only in background from 
 ---->
 <cfset needNewJars=false>
 
-<cfscript>
-stText.services.update.serverNotReachable="Could not reach server {url}.";
-stText.services.update.serverFailed="server {url} failed to return a valid response.";
 
-	struct function getAvailableVersion() localmode="true"{
-		try{
-			
-			admin 
-				action="getAPIKey"
-				type="#request.adminType#"
-				password="#session["password"&request.adminType]#"
-				returnVariable="apiKey";
+<cffunction name="getAvailableVersion" output="false">
+	
+	<cftry>
+	<cfhttp 
+			url="#update.location#/lucee/remote/version/Info.cfc?method=getpatchversionfor&version=#server.lucee.version#" 
+		method="get" resolveurl="no" result="local.http">
 
-			http 
-			url="#update.location##restBasePath#info/#server.lucee.version#" 
-			method="get" resolveurl="no" result="local.http" {
-				httpparam type="header" name="ioid" value="#apikey#";
+	<cfwddx action="wddx2cfml" input="#http.fileContent#" output="local.wddx">
+	<cfset session.availableVersion=wddx>
+	<cfreturn session.availableVersion>
+		<cfcatch>
+			<cfreturn "">
+		</cfcatch>
+	</cftry>
+</cffunction>
 
-			}
-			// i have a response
-			if(isJson(http.filecontent)) {
-				rsp=deserializeJson(http.filecontent);
-			}
-			// service not available
-			else if(http.status_code==404) {
-				rsp={"type":"warning","message":replace(stText.services.update.serverNotReachable,'{url}',update.location)};
-			}
-			// server failed
-			else {
-				rsp={"type":"warning","message":replace(stText.services.update.serverFailed,'{url}',update.location)&" "&http.filecontent};
-			}
-		}
-		catch(e){
-			rsp={"type":"warning","message":replace(stText.services.update.serverFailed,'{url}',update.location)&" "&e.message};
-		}
-		return rsp;
-	}
+<cffunction name="getAvailableVersionDoc" output="true">
+	
+	<cftry>
+	<cfhttp 
+		url="#update.location#/lucee/remote/version/Info.cfc?method=getPatchVersionDocFor&level=#server.ColdFusion.ProductLevel#&version=#server.lucee.version#" 
+		method="get" resolveurl="no" result="local.http"><!--- #server.lucee.version# --->
+	<cfwddx action="wddx2cfml" input="#http.fileContent#" output="wddx">
+		
+	<cfreturn wddx>
+		<cfcatch>
+			<cfreturn "-">
+		</cfcatch>
+	</cftry>
+</cffunction>
 
-// get info for the update location
-admin 
+<cfadmin 
 	action="getUpdate"
 	type="#request.adminType#"
 	password="#session["password"&request.adminType]#"
-	returnvariable="update";
+	returnvariable="update">
 
-
-curr=server.lucee.version;
-updateData=getAvailableVersion();
-hasAccess=1;
-hasUpdate=structKeyExists(updateData,"available");
-
-</cfscript>
-
-
+<cfset curr=server.lucee.version>
+<cfset avi=getAvailableVersion()>
+<cfset hasAccess=1>
+<cfset hasUpdate=curr LT avi>
 
 <cfoutput>
 	<div class="pageintro">#stText.services.update.desc#</div>
@@ -214,8 +223,8 @@ hasUpdate=structKeyExists(updateData,"available");
 				<tfoot>
 					<tr>
 						<td colspan="2">
-							<input type="submit" class="bl button submit" name="mainAction" value="#stText.Buttons.Update#">
-							<input type="reset" class="br button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<input type="submit" class="button submit" name="mainAction" value="#stText.Buttons.Update#">
+							<input type="reset" class="reset" name="cancel" value="#stText.Buttons.Cancel#">
 						</td>
 					</tr>
 				</tfoot>
@@ -229,21 +238,35 @@ hasUpdate=structKeyExists(updateData,"available");
 		<cfscript>
 			// Jira
 			jira=stText.services.update.jira;
-			jira=replace(jira,'{a}','<a href="hhttps://bitbucket.org/lucee/lucee/issues" target="_blank">');
+			jira=replace(jira,'{a}','<a href="https://bitbucket.org/lucee/lucee/issues" target="_blank">');
 			jira=replace(jira,'{/a}','</a>');
+			try	{
+				// Changelog
+				content=getAvailableVersionDoc();
+				start=1;
+				arr=array();
+				matches=REMatchNoCase("\[\ *(##([0-9]*)) *\]",content);
+				for(i=arrayLen(matches);i>=1;i--){
+					match=trim(matches[i]);
+					nbr=trim(mid(match,4,len(match)-4));
+					content=replace(content,match,'<a target="_blank" href="https://bitbucket.org/lucee/lucee/issue/'&nbr&'">##'& nbr & '</a>',"all");
+				}
+					content=replace(content,"
+Version ","
+
+Version ","all");
+			}
+			catch(e){}
 		</cfscript>
 		<h2>#stText.services.update.infoTitle#</h2>
 		<div class="text">
-			#updatedata.message#
+			#replace(replace(replace(stText.services.update.update,'{available}','<b>(#avi#)</b>'),'{current}','<b>(#curr#)</b>'),'{available}','<b>(#avi#)</b>')#
 		</div>
-		<div style="overflow:auto;height:200px;border-style:solid;border-width:1px;padding:10px">
-<pre><cfloop list="#listSort(structKeyList(updateData.changelog),'textnocase')#" item="key"><!--- 
-			---><a target="_blank" href="https://bitbucket.org/lucee/lucee/issue/#key#">#key#</a> - #updateData.changelog[key]#
-</cfloop></pre></div>
+		<div style="overflow:auto;height:200px;border-style:solid;border-width:1px;padding:10px"><pre>#trim(content)#</pre></div>
 		#jira#
-	<cfelse>
+	<cfelseif not needNewJars>
 		<h2>#stText.services.update.infoTitle#</h2>
-		<div class="text">#updateData.message#</div>
+		<div class="text">#replace(stText.services.update.noUpdate,'{current}',curr)#</div>
 	</cfif>
 	
 	
@@ -259,7 +282,7 @@ hasUpdate=structKeyExists(updateData,"available");
 				<tfoot>
 					<tr>
 						<td>
-							<input type="submit" class="bs button submit" name="mainAction" value="#stText.services.update.exeRun#">
+							<input type="submit" class="button submit" name="mainAction" value="#stText.services.update.exeRun#">
 						</td>
 					</tr>
 				</tfoot>
