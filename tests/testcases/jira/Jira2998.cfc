@@ -151,12 +151,12 @@ c","abc".wrap(2));
 
 
 	public void function testREMatch(){
-		var string="Hallo https://www.getlucee.org Susi";
+		var string="Hallo https://www.lucee.org Susi";
 		var regex="https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?";
 		assertEquals(REMatch(regex, string),string.REMatch(regex));
 	}
 	public void function testREMatchNoCase(){
-		var string="Hallo https://www.getlucee.org Susi";
+		var string="Hallo https://www.lucee.org Susi";
 		var regex="https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?";
 		assertEquals(REMatchNoCase(regex, string),string.REMatchNoCase(regex));
 	}

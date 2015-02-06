@@ -2035,8 +2035,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 					Struct custom = toStruct(eConnection.getAttribute("custom"));
 					
 					// Workaround for old EHCache class defintions
-					if ("lucee.extension.io.cache.eh.EHCacheLite".equals(clazzName)
-							|| "lucee.runtime.cache.eh.EHCacheLite".equals(clazzName)) {
+					if (clazzName!=null && clazzName.endsWith(".EHCacheLite")) {
 						cacheClazz = EHCache.class;
 						if(!custom.containsKey("distributed")) 
 							custom.setEL("distributed", "off");
@@ -2047,7 +2046,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 						
 						
 					}
-					else if ("lucee.extension.io.cache.eh.EHCache".equals(clazzName))
+					else if (clazzName!=null && clazzName.endsWith(".extension.io.cache.eh.EHCache"))
 						cacheClazz = EHCache.class;
 					else
 						cacheClazz = ClassUtil.loadClass(config.getClassLoader(), clazzName);
@@ -2878,16 +2877,21 @@ public final class ConfigWebFactory extends ConfigFactory {
 				str = deRailo(video.getAttribute("video-executer"));
 		}
 		if (!StringUtil.isEmpty(str)) {
+			Class clazz=null;
 			try {
-				Class clazz = ClassUtil.loadClass(config.getClassLoader(), str);
-				if (!Reflector.isInstaneOf(clazz, VideoExecuter.class))
-					throw new ApplicationException("class [" + clazz.getName() + "] does not implement interface [" + VideoExecuter.class.getName() + "]");
-				config.setVideoExecuterClass(clazz);
+				clazz = ClassUtil.loadClass(config.getClassLoader(), str);
+			}
+			catch (Throwable t) {
+				t.printStackTrace();
+			}
+			if (clazz==null)
+				throw new ApplicationException("Lucee was not able to load the class ["+str+"]");
+			
+			if (!Reflector.isInstaneOf(clazz, VideoExecuter.class))
+				throw new ApplicationException("class [" + clazz.getName() + "] does not implement interface [" + VideoExecuter.class.getName() + "]");
+			
+			config.setVideoExecuterClass(clazz);
 
-			}
-			catch (ClassException e) {
-				e.printStackTrace();
-			}
 		}
 		else if (hasCS)
 			config.setVideoExecuterClass(configServer.getVideoExecuterClass());
