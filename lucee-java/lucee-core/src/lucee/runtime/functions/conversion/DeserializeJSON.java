@@ -22,8 +22,10 @@ import java.util.Iterator;
 
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
+import lucee.runtime.exp.FunctionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
+import lucee.runtime.functions.BIF;
 import lucee.runtime.interpreter.JSONExpressionInterpreter;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.Array;
@@ -40,7 +42,7 @@ import lucee.runtime.type.util.ListUtil;
 /**
  * Decodes Binary Data that are encoded as String
  */
-public final class DeserializeJSON implements Function {
+public final class DeserializeJSON extends BIF implements Function {
 
 	private static final Key ROWCOUNT = KeyImpl.intern("ROWCOUNT");
 
@@ -53,7 +55,17 @@ public final class DeserializeJSON implements Function {
 		return result;
 	}
 
-	//{"COLUMNS":["AAA","BBB"],"DATA":[["a","b"],["c","d"]]}
+    @Override
+    public Object invoke(PageContext pc, Object[] args) throws PageException {
+        if (args.length == 1) {
+            return call(pc, Caster.toString(args[0]));
+        } else if (args.length == 2) {
+            return call(pc, Caster.toString(args[0]), Caster.toBoolean(args[1]));
+        }
+        throw new FunctionException(pc, "deserializeJSON", 0, 1, args.length - 1);
+    }
+
+    //{"COLUMNS":["AAA","BBB"],"DATA":[["a","b"],["c","d"]]}
 	//{"ROWCOUNT":2,"COLUMNS":["AAA","BBB"],"DATA":{"aaa":["a","c"],"bbb":["b","d"]}}
 	private static Object toQuery(Object obj) throws PageException {
 		if(obj instanceof Struct) {
