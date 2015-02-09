@@ -3,7 +3,7 @@
 	<data key="admin.search.label">Durchsuche den Lucee Administrator</data>
 	<data key="admin.search.desc">Suche nach Keywords im Lucee Administrator</data>
 	
-	<data key="services.update.locdesc">Definieren Sie die URL von der ein Lucee Update bezogen werden kann, typischerweise &apos;http://www.lucee.ch&apos;</data>
+	<data key="services.update.locdesc">Definieren Sie die URL von der ein Lucee Update bezogen werden kann, typischerweise &apos;http://stable.lucee.org&apos;</data>
 	<data key="services.update.type_manually">Manuell</data>
 	<data key="services.update.location">URL</data>
 	<data key="services.update.settitle">Einstellungen</data>
@@ -193,7 +193,7 @@ und Optimierungen innerhalb ihrer Version einspielen.</data>
 	<data key="security.maildescription">Die Maileinstellungen  können im &apos;Web Administrator&apos; geändert werden.</data>
 	<data key="security.tagobjectdescription">Mit dem Tag CFObject und der Funktion createObject können Java Objekte geladen werden. Wenn Sie diese Option ausschalten, können Sie nur noch Objekte des Typs &apos;component&apos; erstellen.</data>
 	<data key="security.mapping">Mappings</data>
-	<data key="security.remotedescription">Es wird erlaubt das der User seine Einstellungen mit einem anderen lucee synchronisiern kann</data>
+	<data key="security.remotedescription">Es wird erlaubt das der User seine Einstellungen mit einem anderen Lucee synchronisiern kann</data>
 	<data key="security.accessread">Lesezugriff</data>
 	<data key="security.tagregistry">Tag CFRegistry</data>
 	<data key="security.speclisttitle">Spzifische Web Kontexte</data>
@@ -300,7 +300,7 @@ und Optimierungen innerhalb ihrer Version einspielen.</data>
 	<data key="remote.adminpassworddesc.server">Passwort für den Zugriff auf den Remote Lucee Server Administrator</data>
 	<data key="remote.urlpath">Pfad</data>
 	<data key="remote.urlmissing">Die Remote Client URL fehlt</data>
-	<data key="remote.urlserverdesc">Remote Client Server (Beispiel: http://lucee.ch)</data>
+	<data key="remote.urlserverdesc">Remote Client Server (Beispiel: http://lucee.org)</data>
 	<data key="remote.proxyport">Port</data>
 	<data key="remote.labelmissing">Die Bezeichnung für den Remote Client fehlt</data>
 	<data key="remote.proxypassword">Passwort</data>
@@ -1060,9 +1060,10 @@ When checked, any requested files will be inspected only once for potential upda
 	<data key="overview.serialnumberdescription">Seriennummer für Lucee</data>
 	<data key="overview.cfcompatibility">Kompatibel zu ColdFusion&amp;reg; Version</data>
 	<data key="overview.os">Betriebssystem</data>
-	<data key="overview.salesmail">sales@lucee.ch</data>
+	<data key="overview.salesmail">sales@lucee.org</data>
 	<data key="overview.installedfls">Installierte Funktions Bibliotheken</data>
-	<data key="overview.bugreportmail">bugs@lucee.ch</data>
+	<data key="overview.bugreportmail">bugs@lucee.org
+</data>
 	<data key="overview.purchase">Hol Dir Deine Lucee Lizenz</data>
 	<data key="overview.sales">Verkauf</data>
 	<data key="overview.licenceprofessionaldesc">Die Professional Version bietet den vollen Sprachumfang von Lucee, es muss also auf keine Feature verzichtet werden. Mit der Professional Version können mehrere Webs auf einem Server betrieben werden, die Anzahl Webs wird jedoch durch den Lizenspreis eingeschränkt.</data>
