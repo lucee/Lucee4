@@ -199,8 +199,8 @@ public class DumpUtil {
 			}
 			sb.append("]");
 			table.appendRow(1,new SimpleDumpData("Raw"+(bytes.length<max?"":" (truncated)")),new SimpleDumpData(sb.toString()));
-			
-			
+
+
 			if(bytes.length<max) {
 				// base64
 				table.appendRow(1,new SimpleDumpData("Base64 Encoded"),new SimpleDumpData(Base64Coder.encode(bytes)));
@@ -210,8 +210,8 @@ public class DumpUtil {
 				}
 				catch (IOException e) {}*/
 			}
-			
-			
+
+
 			return table;	
 		}
 		// Collection.Key
@@ -221,7 +221,7 @@ public class DumpUtil {
 			table.appendRow(1,new SimpleDumpData("Collection.Key"),new SimpleDumpData(key.getString()));
 			return table;
 		}
-		
+
 		
 		String id=""+IDGenerator.intId();
 		String refid=ThreadLocalDump.get(o);
@@ -239,7 +239,8 @@ public class DumpUtil {
 
 			// Printable
 			if(o instanceof Dumpable) {
-				return setId(id,((Dumpable)o).toDumpData(pageContext,maxlevel,props));
+                DumpData dd = ((Dumpable)o).toDumpData(pageContext,maxlevel,props);
+				return setId(id, dd);
 			}
 			// Map
 			if(o instanceof Map) {
@@ -453,9 +454,9 @@ public class DumpUtil {
 				
 				
 				
-				
+
 			}
-		
+
 		// reflect
 		//else {
 			DumpTable table = new DumpTable(o.getClass().getName(),"#cc9999","#ffcccc","#000000");
