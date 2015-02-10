@@ -101,7 +101,7 @@ public abstract class HtmlHeadBodyBase extends BodyTagTryCatchFinallyImpl {
 	@Override
 	public int doEndTag() throws PageException {
 
-		if (!StringUtil.isEmpty(text))
+		if (!StringUtil.isEmpty(text) || action.equals("flush") || action.equals("read") || action.equals("reset"))
 			processTag();
 
 		return SKIP_BODY;
@@ -142,7 +142,7 @@ public abstract class HtmlHeadBodyBase extends BodyTagTryCatchFinallyImpl {
 			else if (action.equals("read")) actionRead();
 			else if (action.equals("flush")) actionFlush();
 			else
-				throw new ApplicationException("invalid value [" + action + "] for attribute action", "values for attribute action are:append,read,reset,write");
+				throw new ApplicationException("invalid value [" + action + "] for attribute action", "values for attribute action are: [append], flush, read, reset, write");
 		} catch (IOException e) {
 			throw Caster.toPageException(e);
 		}
