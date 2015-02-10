@@ -159,12 +159,15 @@ public abstract class HtmlHeadBodyBase extends BodyTagTryCatchFinallyImpl {
 
 		Map m = getIdMap();
 
-		boolean result = !m.containsKey(id);
+        if (m.containsKey(id)) {
 
-		if (!result)
-			m.put(id, Boolean.TRUE);
+            return false;
+        }
+        else {
 
-		return result;
+            m.put(id, Boolean.TRUE);
+            return true;
+        }
 	}
 
 	protected Map getIdMap() {
