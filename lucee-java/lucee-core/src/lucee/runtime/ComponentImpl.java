@@ -968,10 +968,12 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 			DumpTable box=accesses[a];
 			Object o=cw.get(key,null);
 			if(o==ci)o="[this]";
-			if(DumpUtil.keyValid(dp,maxlevel, key))
-				box.appendRow(1,new SimpleDumpData(key.getString()),DumpUtil.toDumpData(o,pc,maxlevel,dp));
+			if(DumpUtil.keyValid(dp,maxlevel, key)) {
+                DumpData name = new SimpleDumpData(key.getString());
+                DumpData child = DumpUtil.toDumpData(o, pc, maxlevel, dp);
+                box.appendRow(1, name, child);
+            }
 		}
-		
 		
 		DumpTable table=new DumpTable("#ffffff","#cccccc","#000000");
 		
