@@ -89,7 +89,7 @@ public final class DumpStruct implements Function {
 		
 		DumpProperties properties=new DumpProperties((int)maxLevel,setShow,setHide,(int)keys,metainfo,showUDFs);
 		DumpData dd = DumpUtil.toDumpData(object, pc,(int)maxLevel,properties);
-		
+
 		if(!StringUtil.isEmpty(label)) {
 			DumpTable table=new DumpTable("#ffffff","#cccccc","#000000");
 			table.appendRow(1,new SimpleDumpData(label));
@@ -119,14 +119,6 @@ public final class DumpStruct implements Function {
 				simpleType  = "struct";
 				simpleValue = "Scope (" + getSize(o) + ")";
 			}
-			else if (Decision.isStruct(o)) {
-				simpleType  = "struct";
-				simpleValue = "Struct (" + getSize(o) + ")";
-			}
-			else if (Decision.isArray(o)) {
-				simpleType  = "array";
-				simpleValue = "Array (" + getSize(o) + ")";
-			}
 			else if (Decision.isQuery(o)) {
 				simpleType  = "query";
 				simpleValue = "Query (" + getSize(o) + ")";
@@ -139,6 +131,14 @@ public final class DumpStruct implements Function {
 				simpleType  = "function";
 //				simpleValue = "Function: " + ((Function)o).();      // TODO: add signature
 			}
+            else if (Decision.isStruct(o)) {
+                simpleType  = "struct";
+                simpleValue = "Struct (" + getSize(o) + ")";
+            }
+            else if (Decision.isArray(o)) {
+                simpleType  = "array";
+                simpleValue = "Array (" + getSize(o) + ")";
+            }
 			else if (Decision.isDate(o, false)) {
 				simpleType  = "date";
 				simpleValue = o.toString();
