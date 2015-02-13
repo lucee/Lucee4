@@ -75,7 +75,7 @@
   </target>
 
   <target name="loader" depends="init" description="copy none java files" >
-    <javac srcdir="${srcLoader}" target="1.6" destdir="${temp}/loader">
+    <javac srcdir="${srcLoader}" target="1.6" destdir="${temp}/loader" debug="true" debuglevel="lines,vars,source">
       <classpath refid="classpath" />
     </javac>
 
@@ -140,7 +140,7 @@
     </path>
 
     <!-- compile inst source to temp directory -->
-    <javac srcdir="${srcInst}" target="1.6" destdir="${temp}/inst">
+    <javac srcdir="${srcInst}" target="1.6" destdir="${temp}/inst" debug="true" debuglevel="lines,vars,source">
       <classpath refid="classpath" />
     </javac>
 
