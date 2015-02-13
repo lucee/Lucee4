@@ -1224,7 +1224,7 @@ If the timezone of your Lucee instance and your database is different, this can 
 	<data key="settings.orm.sqlscriptDesc">Path to the SQL script file that gets executed after ORM is initialized. This applies if dbcreate is set to dropcreate. This must be the absolute file path or the path relative to the application.The SQL script file lets you populate the tables before the application is accessed. This setting can be overwritten in Application.cfc as follows [this.ormsettings.sqlscript='...']</data>
 	<data key="services.update.provider">Update Provider</data>
 	<data key="services.update.location_www">Stable releases</data>
-	<data key="services.update.location_wwwDesc">Dieser Update Provider (www.lucee.org) gibt nur stabile Versionen zurück, welche ausführlich getestet wurden, diese Quelle sollte für produktive Systeme verwendet werden.</data>
+	<data key="services.update.location_wwwDesc">Dieser Update Provider (stable.lucee.org) gibt nur stabile Versionen zurück, welche ausführlich getestet wurden, diese Quelle sollte für produktive Systeme verwendet werden.</data>
 	<data key="services.update.location_preview">Preview releases</data>
 	<data key="services.update.location_previewDesc">Dieser Update Provider (preview.lucee.org) gibt vorab Versionen zurück, dabei handelt es sich um Versionen die zwar getestet wurden aber noch nicht die Reife einer stable release besitzen, diese Quelle sollte nur bedingt für produktive Systeme verwendet werden.</data>
 	<data key="services.update.location_dev">Develop releases (Bleeding Edge)</data>
@@ -1233,7 +1233,7 @@ If the timezone of your Lucee instance and your database is different, this can 
 	<data key="services.update.location_customDesc">Hier können Sie ihren eigenen Update Provider definieren, dies ist eine URL in der Form ""http://my.domainname.org""</data>
 	<data key="services.update.provider">Update Provider</data>
 	<data key="services.update.location_www">Stable releases</data>
-	<data key="services.update.location_wwwDesc">This Update Provider (www.lucee.org ) returns only stable versions. The versions found here are deeply tested. This source is recommended for production environments.</data>
+	<data key="services.update.location_wwwDesc">This Update Provider (stable.lucee.org ) returns only stable versions. The versions found here are deeply tested. This source is recommended for production environments.</data>
 	<data key="services.update.location_preview">Preview releases</data>
 	<data key="services.update.location_previewDesc">This Update Provider (preview.lucee.org) returns public preview versions. Versions are tested, but not as deeply as stable releases. This source could be used for production environments. Please use caution.</data>
 	<data key="services.update.location_dev">Development releases (Bleeding Edge)</data>
