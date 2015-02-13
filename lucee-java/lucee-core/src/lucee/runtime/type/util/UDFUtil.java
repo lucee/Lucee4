@@ -281,13 +281,12 @@ public class UDFUtil {
 		// arguments
 		FunctionArgument[] args = udf.getFunctionArguments();
         
-        DumpTable atts;
-        if(TYPE_UDF==type) 			atts= new DumpTable("udf","#cc66ff","#ffccff","#000000");
-        else if(TYPE_CLOSURE==type) atts= new DumpTable("udf","#ff00ff","#ffccff","#000000");
-        else						atts= new DumpTable("udf","#ffff66","#ffffcc","#000000");
-        
-        
-		atts.appendRow(new DumpRow(63,new DumpData[]{new SimpleDumpData("label"),new SimpleDumpData("name"),new SimpleDumpData("required"),new SimpleDumpData("type"),new SimpleDumpData("default"),new SimpleDumpData("hint")}));
+        DumpTable dtArgs;
+        if(TYPE_UDF==type) 			dtArgs = new DumpTable("udf","#cc66ff","#ffccff","#000000");
+        else if(TYPE_CLOSURE==type) dtArgs = new DumpTable("udf","#ff00ff","#ffccff","#000000");
+        else						dtArgs = new DumpTable("udf","#ffff66","#ffffcc","#000000");
+
+		dtArgs.appendRow(new DumpRow(63, new DumpData[]{new SimpleDumpData("label"), new SimpleDumpData("name"), new SimpleDumpData("required"), new SimpleDumpData("type"), new SimpleDumpData("default"), new SimpleDumpData("hint")}));
 		for(int i=0;i<args.length;i++) {
 			FunctionArgument arg=args[i];
 			DumpData def;
@@ -302,23 +301,23 @@ public class UDFUtil {
 			} catch (PageException e) {
 				def=new SimpleDumpData("");
 			}
-			atts.appendRow(new DumpRow(0,new DumpData[]{
-					new SimpleDumpData(arg.getDisplayName()),
-					new SimpleDumpData(arg.getName().getString()),
-					new SimpleDumpData(arg.isRequired()),
-					new SimpleDumpData(arg.getTypeAsString()),
-					def,
-					new SimpleDumpData(arg.getHint())}));
-			//atts.setRow(0,arg.getHint());
+			dtArgs.appendRow(new DumpRow(0, new DumpData[]{
+                    new SimpleDumpData(arg.getDisplayName()),
+                    new SimpleDumpData(arg.getName().getString()),
+                    new SimpleDumpData(arg.isRequired()),
+                    new SimpleDumpData(arg.getTypeAsString()),
+                    def,
+                    new SimpleDumpData(arg.getHint())}));
+			//dtArgs.setRow(0,arg.getHint());
 			
 		}
 		DumpTable func;
 		if(TYPE_CLOSURE==type) {
-			func=new DumpTable("#ff00ff","#ffccff","#000000");
+			func=new DumpTable("function", "#ff00ff", "#ffccff", "#000000");
 			func.setTitle("Closure");
 		}
 		else if(TYPE_UDF==type) {
-			func=new DumpTable("#cc66ff","#ffccff","#000000");
+			func=new DumpTable("function", "#cc66ff", "#ffccff", "#000000");
 			String f="Function ";
 			try {
 				f=StringUtil.ucFirst(ComponentUtil.toStringAccess(udf.getAccess()).toLowerCase())+" "+f;
@@ -344,7 +343,7 @@ public class UDFUtil {
 
 		if(!StringUtil.isEmpty(udf.getDescription()))func.setComment(udf.getDescription());
 		
-		func.appendRow(1,new SimpleDumpData("arguments"),atts);
+		func.appendRow(1,new SimpleDumpData("arguments"),dtArgs);
 		func.appendRow(1,new SimpleDumpData("return type"),new SimpleDumpData(udf.getReturnTypeAsString()));
 		
 		boolean hasLabel=!StringUtil.isEmpty(udf.getDisplayName());//displayName!=null && !displayName.equals("");
