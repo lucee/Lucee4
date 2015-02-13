@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  ---><cfsetting showdebugoutput="no">
-<cfprocessingdirective fullNullSupport="true">
+<cfprocessingdirective>
 <cfscript>
 variables.test = nullValue();
 echo(structKeyExists(variables, "test")); 

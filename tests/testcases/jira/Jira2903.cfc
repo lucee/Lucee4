@@ -1,6 +1,4 @@
-/**
- *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
+<!--- 
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +13,31 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- **/
+ ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+	<!---
+	<cffunction name="beforeTests"></cffunction>
+	<cffunction name="afterTests"></cffunction>
+	<cffunction name="setUp"></cffunction>
+	--->
+	<cffunction name="test">
+		<cfquery datasource="postgre" name="qry">
+			CREATE OR REPLACE FUNCTION f_is_bigint(IN in_value bigint, OUT out_is_bigint boolean, OUT out_value bigint)
+			  RETURNS record AS
+			$BODY$
+			DECLARE
+			BEGIN
+			out_value = in_value;
+			IF in_value IS NULL THEN
+			out_is_bigint = false;
+			END IF;
+			perform in_value::bigint;
+			out_is_bigint = true;
+			EXCEPTION WHEN others THEN
+			out_is_bigint = false;
+			/*
+			SELECT * FROM f_is_bigint(9223372036854775807);
+			SELECT * FROM f_is_bigint(9223372036854775808);
+			*/
 			END;
 			$BODY$
 			  LANGUAGE plpgsql VOLATILE

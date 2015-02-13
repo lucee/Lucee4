@@ -35,7 +35,7 @@ function isTestCase(string cfc, boolean defaultValue) localmode="true" {
 	try{
 		meta=getComponentMetaData(cfc);
 		while(true) {
-			if(meta.fullname=='testbox.system.testing.compat.framework.TestCase') return true;
+			if(meta.fullname=='testbox.system.compat.framework.TestCase') return true;
 			if(!structKeyExists(meta,'extends')) return false;
 			meta=meta.extends;
 		}
@@ -54,7 +54,7 @@ url.path = urlDecode( url.path );
 if(!len( url.path )) url.path = "/";
 
 // Prepare TestBox 
-testbox = new testbox.system.testing.TestBox();
+testbox = new testbox.system.TestBox();
 
 
 </cfscript>
