@@ -23,11 +23,11 @@ component {
 	// make sure testbox exists 
 	// TODO cache this test for a minute
 	try{
-		getComponentMetaData("testbox.system.testing.TestBox");
+		getComponentMetaData("testbox.system.TestBox");
 	}
-	catch(e){
+	catch(e){ 
 		// only add mapping when necessary
-		this.componentpaths = [{archive:getDirectoryFromPath(getCurrentTemplatePath())&"testbox.ra"}]; // "{lucee-server}/context/testbox.ra"
+		this.componentpaths = [{archive:getDirectoryFromPath(getCurrentTemplatePath())&"testbox.lar"}]; // "{lucee-server}/context/testbox.ra"
 	}
 	
 

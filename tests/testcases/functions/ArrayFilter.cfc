@@ -15,7 +15,39 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---></cfscript>
+ ---><cfcomponent extends="org.railo.cfml.test.RailoTestCase">
+	<!---
+	<cffunction name="beforeTests"></cffunction>
+	<cffunction name="afterTests"></cffunction>
+	<cffunction name="setUp"></cffunction>
+	--->
+	<cffunction name="testArrayFilter">
+		<cfscript>
+// UDF
+
+var arr=["hello","world"];
+var arr2=ArrayFilter(arr,helloFilter);
+
+valueEquals(arrayToList(arr),'hello,world');
+valueEquals(arrayToList(arr2),'hello');
+
+
+// closure 
+var clo=function (arg1){
+	return FindNoCase("hello",arg1);
+};
+arr2=ArrayFilter(arr,clo);
+valueEquals(arrayToList(arr),'hello,world');
+valueEquals(arrayToList(arr2),'hello');
+
+
+// string filter (not supported by ACF)
+/*if(server.ColdFusion.ProductName EQ "Railo") {
+	arr2=ArrayFilter(arr,"he*");
+	valueEquals(arrayToList(arr),'hello,world');
+	valueEquals(arrayToList(arr2),'hello');
+}*/
+</cfscript>
 		
 		<!--- <cfset assertEquals("","")> --->
 	</cffunction>
