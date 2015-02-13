@@ -42,6 +42,7 @@ import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
 import lucee.runtime.PageSourceImpl;
 import lucee.runtime.config.Config;
+import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
@@ -303,7 +304,7 @@ public final class ResourceUtil {
     }
     
     public static Resource toResourceNotExisting(PageContext pc ,String destination,boolean allowRelpath, boolean checkComponentMappings) {
-    	Resource res;
+    	Resource res=null;
         destination=destination.replace('\\','/');  
     	
     	if(!allowRelpath){
@@ -329,8 +330,8 @@ public final class ResourceUtil {
         if(isUNC) {
         	res=pc.getConfig().getResource(destination.replace('/','\\'));
         }
-        else res=pc.getConfig().getResource(destination);
-        if(res.isAbsolute()) return res;
+        else if(!destination.startsWith("..")) res=pc.getConfig().getResource(destination);
+        if(res!=null && res.isAbsolute()) return res;
         
         return getRealResource(pc,destination,res);
     }
