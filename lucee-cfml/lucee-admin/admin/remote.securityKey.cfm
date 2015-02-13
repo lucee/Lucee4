@@ -31,7 +31,7 @@
 		#sttext.remote.securityKeyTitleDesc#
 	</div>
 	<div class="center">
-		<input type="text" id="remotekey" value="#getId()[request.adminType].securityKey#" size="50" readonly="readonly" />
+		<input type="text" id="remotekey" value="#getLuceeId()[request.adminType].securityKey#" size="50" readonly="readonly" />
 		<script type="text/javascript">
 			$(function(){
 				$('##remotekey').bind('focus keydown', function(){ $(this).select() });
