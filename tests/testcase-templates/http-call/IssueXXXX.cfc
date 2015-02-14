@@ -1,6 +1,6 @@
-/**
+<!--- 
  *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
+ * Copyright (c) 2015, Lucee Assosication Switzerland. All rights reserved.*
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,11 +15,27 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- **/
-component {
+ ---><cfscript>
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
-	this.name = hash( getCurrentTemplatePath() );
-    request.baseURL="http://#cgi.HTTP_HOST##GetDirectoryFromPath(cgi.SCRIPT_NAME)#";
-	request.currentPath=GetDirectoryFromPath(getCurrentTemplatePath());
+	//public function setUp(){}
 
-}
+	public void function test(){
+		http method="get" result="local.result" url="#createURL("IssueXXXX/index.cfm")#" addtoken="false";
+		/*
+		assertEquals("",result.filecontent);
+		
+		try{
+			// error
+			fail("");
+		}
+		catch(local.exp){}*/
+	}
+	
+	private string function createURL(string calledName){
+		var baseURL="http://#cgi.HTTP_HOST##getDirectoryFromPath(contractPath(getCurrenttemplatepath()))#";
+		return baseURL&""&calledName;
+	}
+	
+} 
+</cfscript>
