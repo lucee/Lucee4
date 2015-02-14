@@ -109,8 +109,9 @@ public class Base64Encoder {
 		int length = 0;
 		data=data.trim();
 		final int len=data.length();
+		if(len==0) return new byte[0];// we accept a empty string as a empty binary!
 		if(len % 4 != 0 || len < 4)
-    		throw new CoderException("can't ["+data.length()+"] decode the input string"+printString(data)+", because the input string has an invalid length");
+    		throw new CoderException("can't decode the base64 input string"+printString(data)+", because the input string has an invalid length");
 		
 		
 		for (int position=0; position < len; ) {
