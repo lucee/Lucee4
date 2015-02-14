@@ -60,6 +60,7 @@ import org.w3c.dom.NodeList;
 import lucee.commons.date.DateTimeUtil;
 import lucee.commons.date.JREDateTimeUtil;
 import lucee.commons.date.TimeZoneUtil;
+import lucee.commons.digest.Base64Encoder;
 import lucee.commons.io.FileUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
@@ -2554,7 +2555,7 @@ public final class Caster {
         	}
         }
         try {
-			return Coder.decode(Coder.ENCODING_BASE64,toString(o));
+			return Base64Encoder.decode(toString(o));
 		} 
         catch (CoderException e) {
 			throw new CasterException(e.getMessage(),"binary");
