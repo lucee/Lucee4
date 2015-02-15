@@ -1,4 +1,4 @@
-<!--- 
+/**
  *
  * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
  *
@@ -15,7 +15,18 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent>
-	<cfset this.name = hash( getCurrentTemplatePath() )& gettickcount()>
-    <cfsetting showdebugoutput="no">
-</cfcomponent>
+ **/
+component {
+	this.name = this.name = hash( getCurrentTemplatePath() )& gettickcount();
+	
+	// make sure testbox exists 
+	// TODO cache this test for a minute
+	try{
+		getComponentMetaData("testbox.system.TestBox");
+	}
+	catch(e){ 
+		// only add mapping when necessary
+		this.componentpaths = [ { archive:expandPath( "/lucee-tests/" ) & "testbox.lar" } ]; // "{lucee-server}/context/testbox.ra"
+	}
+	
+}
