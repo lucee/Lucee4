@@ -16,9 +16,6 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  --->
-
-
-
 <cfoutput>
 <table id="-lucee-err" cellpadding="4" cellspacing="2">
 	<tr>
