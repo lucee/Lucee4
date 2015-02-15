@@ -1,6 +1,6 @@
 <!--- 
  *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
+ * Copyright (c) 2015, Lucee Association Switzerland. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,20 +15,13 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- --->
-
-<cfif thistag.EXECUTIONMODE EQ "start">
-	<cfset caller.fromLevel2="caller.2">
-	
-	<cfset caller.from.Level2="caller_2">
-	
-	
-	
-	<cfset caller.caller.fromLevel2="caller.caller.2">
-	<cfset c="caller">
-	<cfset "#c#.#c#.fromLevel2Eval"="caller.caller.2.eval">
-	
-	<cfset caller.caller.from.Level2="caller_caller_2">
-	<cfset "#c#.#c#.fro.mLevel2.Eval"="caller-caller.2.eval">
-	
-</cfif>
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
+	<!---
+	<cffunction name="beforeTests"></cffunction>
+	<cffunction name="afterTests"></cffunction>
+	<cffunction name="setUp"></cffunction>
+	--->
+	<cffunction name="test">
+		<cfset assertEquals("","")>
+	</cffunction>
+</cfcomponent>

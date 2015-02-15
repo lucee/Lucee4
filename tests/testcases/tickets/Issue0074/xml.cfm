@@ -1,6 +1,6 @@
 <!--- 
  *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
+ * Copyright (c) 2015, Lucee Assosication Switzerland. All rights reserved.*
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,18 +15,18 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
-	<!---
-	<cffunction name="beforeTests"></cffunction>
-	<cffunction name="afterTests"></cffunction>
-	<cffunction name="setUp"></cffunction>
-	--->
-	<cffunction name="test">
-		<cfstoredproc procedure="spweb_ZipCodes_LookupLatLon3074" datasource="mySQL" cachedwithin="#CreateTimeSpan(0,0,10,0)#">
-		    <cfprocparam cfsqltype="cf_sql_varchar" value="57103">
-		    <cfprocresult name="rsLatLon" resultset="1">
-		</cfstoredproc>
+ ---><cfsetting showdebugoutput="no">
+ <cfscript>
+	id = randRange(1,1000);
+		dump("#createRestURL("issue0074/person/#id#")#");
+		http method="get" result="result" url="#createRestURL("issue0074/person/#id#")#" addtoken="false" charset="UTF-8" {
+			httpparam type="header" name="accept" value="text/xml";
+		}
+		dump(result);
 
-		<cfset assertEquals("","")>
-	</cffunction>
-</cfcomponent>
+
+	string function createRestURL(string path){
+		return "http://#cgi.HTTP_HOST#/rest/#path#";
+	}
+
+</cfscript>qq

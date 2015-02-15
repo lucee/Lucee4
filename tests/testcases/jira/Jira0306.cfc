@@ -17,7 +17,7 @@
  * 
  ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	
-	<cfset variables.ds="lucee_mirror">
+	<cfset variables.ds="#request.mysql#">
 	
 	<cffunction name="beforeTests">
 		<!--- create table User if necessary --->

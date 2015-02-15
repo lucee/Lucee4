@@ -1,6 +1,6 @@
 <!--- 
  *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
+ * Copyright (c) 2015, Lucee Associaction Switzerland. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,27 +17,30 @@
  * 
  ---><cfscript>
 component extends="org.lucee.cfml.test.LuceeTestCase"	{
-
+	wsUrl = "https://sb1.geolearning.com/geonext/testhudexchangelearn/webservices/geonext.asmx?wsdl";
+	argSct.username = "scrubbed";
+	argSct.password = "scrubbed";
+	//public function beforeTests(){}
+	
+	//public function afterTests(){}
+	
 	//public function setUp(){}
 
-	public void function testCFM(){
+	PRIVATE void function test(){
 
-		http method="get" result="local.result" url="#createURL("Jira3070/index.cfm")#" addtoken="false";
+		var ws = createObject("webservice", wsUrl, argSct);
 
-		//echo(result.filecontent);
-		assertEquals("",result.filecontent);
+		writeDump(var=ws, expand=false);
+
+		// this method does work
+		writeOutput("User Exists? #ws.userExists(argSct.username)#");
+		var user = ws.GenerateUserObject(); // ACF yields a com.geolearning.geonext.webservices.User object
+
+		// var today = now();
+		// var yesterday = today.add("d", -1);
+
+		// assertEquals(-1,dateDiff("d", today, yesterday));
+		// assertEquals(-1,today.diff("d", yesterday));
 	}
-
-	public void function testCFC(){
-		variables.test = nullValue();
-		assertEquals(false,structKeyExists(variables, "test")); 
-
-	}
-	
-	private string function createURL(string calledName){
-		var baseURL="http://#cgi.HTTP_HOST##getDirectoryFromPath(contractPath(getCurrenttemplatepath()))#";
-		return baseURL&""&calledName;
-	}
-	
 } 
 </cfscript>

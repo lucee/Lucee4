@@ -33,7 +33,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase" {
 
 	function testGiveIntegerPropertyAsInteger2 () {
 		var item=new Jira2965.MyItemWithString();
-		//dump(ws);abort;
 		item.name="Susi";
 		item.id=1;
 		local.accept = variables.ws.giveIntegerPropertyAsInteger(item);
