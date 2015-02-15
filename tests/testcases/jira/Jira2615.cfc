@@ -179,7 +179,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	}
 
 	public void function testMyItemEchoArray() localMode="modern" {
-		//dump(myiWS);abort;
 		data=myiWS.echoArray([new Jira2615.MyItem("Test")]);
 
 		assertEquals(true,isArray(data));

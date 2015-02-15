@@ -1,4 +1,4 @@
-<!--- 
+/**
  *
  * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
  *
@@ -15,40 +15,41 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfscript>
+ **/
+
+
 component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public function setUp(){
-		ws = CreateObject("webservice","http://fleurop-svc1.exigo.ch/WsSimple6.svc?singleWsdl&nc=#getTickCount()#");
 		
 	}
-
 	
-	public void function testServerDateTime(){
-		assertEquals(
-			dateTimeFormat(now(),'yyyy.MM.dd HH:nn'),
-			dateTimeFormat(ws.ServerDateTime(),'yyyy.MM.dd HH:nn'));
+	
+	public void function test(){
 	}
 
-	public void function testConcatWithMessage(){
-		assertEquals(
-			'{">ConcatWithMessage>returnMsg":"123 123",">ConcatWithMessageResponse>ConcatWithMessageResult":null}',
-			serializeJson(ws.ConcatWithMessage('123','123','a')));
+	public void function testThreads(){
+	
+		thread name="l1" {
+			thread name="l2" {
+				thread name="l3" {
+					thread name="l4" {
+						thread name="l5" {
+						
+						}
+						thread action="join" names="l5";
+					}
+					thread action="join" names="l4";
+				}
+				thread action="join" names="l3";
+			}
+			thread action="join" names="l2";
+		}
+		thread action="join" names="l1";
+		assertEquals("COMPLETED",l1.STATUS);
+		
+		
+		
 	}
-
-	public void function testConcat(){
-		assertEquals("123 123",ws.Concat('123','123'));
-	}
-
-	public void function testGetObject(){
-		obj=ws.getObject();
-		// TODO add assertEquals();
-	}
-
-	public void function testSetObject(){
-		obj=ws.getObject();
-		ws.setObject(obj);
-		// TODO add assertEquals();
-	}
-} 
-</cfscript>
+	
+}

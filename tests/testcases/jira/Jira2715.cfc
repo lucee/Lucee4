@@ -47,7 +47,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		}
 		
 		sct=evaluate(trim(result.filecontent));
-		//dump(createURL("Jira2715/reqhead.cfm")); abort;
 	}
 	
 	private string function createURL(string calledName){

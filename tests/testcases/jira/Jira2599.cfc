@@ -25,21 +25,21 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	//public function setUp(){}
 
 	public void function testIdConversion(){
-	
-		content = {'name':'Susi'};
-		mongo = MongoDBConnect("test");
-		mongo['test'].insert(content);
-		
-		
-		//db.test2.insert({susi:"Sorglos"});
+		if(!isNull(request.testMongoDBExtension) && request.testMongoDBExtension) {
+			content = {'name':'Susi'};
+			mongo = MongoDBConnect("test");
+			mongo['test'].insert(content);
+			
+			
+			//db.test2.insert({susi:"Sorglos"});
 
-		
-		//Get by Name
-		var id = mongo['test'].findOne({'name':'Susi'}, {'_id':1});
-		
-		//Get by Id : fails
-		var byid = mongo['test'].findOne({'_id':id});
-		
+			
+			//Get by Name
+			var id = mongo['test'].findOne({'name':'Susi'}, {'_id':1});
+			
+			//Get by Id : fails
+			var byid = mongo['test'].findOne({'_id':id});
+		}
 		
 	}
 } 

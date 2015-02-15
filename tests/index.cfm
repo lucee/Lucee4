@@ -17,7 +17,7 @@
  * 
  ---><cfscript>
 // SETUP THE ROOTS OF THE BROWSER RIGHT HERE
-reporter="org.lucee.cfml.test.reporter.HTMLReporter";
+//reporter="org.lucee.cfml.test.reporter.HTMLReporter";
 currentDirectory= getDirectoryFromPath(getCurrentTemplatePath());
 rootPath= currentDirectory&"testcases/";
 rootMapping 	= contractPath(rootPath);
@@ -69,7 +69,7 @@ testbox = new testbox.system.TestBox();
 		
 		<cfoutput>
 
-#testbox.init( directory=rootMapping & url.path ,reporter:reporter).run(
+#testbox.init( directory=rootMapping & url.path ).run(
 	directory:{mapping:rootMapping & url.path,recurse:false}
 	)#</cfoutput>
 	<cfelse>
@@ -225,7 +225,7 @@ testbox = new testbox.system.TestBox();
 			<!--- <cfelseif listLast( qresults.name, ".") eq "cfm">
 				<a href="#executePath & qResults.name#" target="_blank">#qResults.name#</a><br/> --->
 			<cfelseif listLast( qresults.name, ".") eq "cfc" && isTestcase(toPackage(executePath & qResults.name),false)>
-				<a class="test" href="#executePath & qResults.name#?method=runRemote&reporter=#URLEncodedFormat(reporter)#" target="_blank"><button type="button">#qResults.name#</button></a><br/>
+				<a class="test" href="#executePath & qResults.name#?method=runRemote" target="_blank"><button type="button">#qResults.name#</button></a><br/>
 			<!--- <cfelse>
 				#qResults.name#<br/> --->
 			</cfif>

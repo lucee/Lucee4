@@ -24,7 +24,7 @@
 	<cffunction name="testExpandPath" localMode="modern">
 
 <!--- begin old test code --->
-<cfset dir=getDirectoryFromPath(GetCurrentTemplatePath())>
+<cfset dir=getDirectoryFromPath(GetBaseTemplatePath())>
 <cfset dir=mid(dir,1,len(dir)-1)>
 
 <cfset parent=getDirectoryFromPath(dir)>
