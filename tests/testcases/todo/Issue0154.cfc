@@ -1,4 +1,4 @@
-/**
+<!--- 
  *
  * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
  *
@@ -15,44 +15,31 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- **/
-
-
+ ---><cfscript>
+	pageencoding "utf-8"; 
 component extends="org.lucee.cfml.test.LuceeTestCase"	{
+	// processingdirective pageencoding="utf-8";
+	
+	public function beforeTests(){
+		variables.str="LİELİELİELİE....";
+		variables.expectedResult="Lİa very long string to replace ELİa very long string to replace ELİa very long string to replace ELİa very long string to replace E....";
+		variables.repl="a very long string to replace E";
+	}
+	
+	//public function afterTests(){}
+	
+	//public function setUp(){}
 
-	public function setUp(){
-		
+	public void function testReplaceNoCase(){
+		var result=replaceNoCase(str,"E",repl,"all");
+		assertEquals(expectedResult,result);
 	}
-	
-	
-	public void function test(){
+
+	public void function testReplace(){
+		var result=replace(str,"E",repl,"all");
+		assertEquals(expectedResult,result);
 	}
 
 	
-	public void function testThreads(){
-	
-		thread name="l1" {
-			thread name="l2" {
-				thread name="l3" {
-					thread name="l4" {
-						thread name="l5" {
-						
-						}
-						thread action="join" names="l5";
-					}
-					thread action="join" names="l4";
-				}
-				thread action="join" names="l3";
-			}
-			thread action="join" names="l2";
-		}
-		thread action="join" names="l1";
-		//dump(cfthread)
-		//abort;
-		assertEquals("COMPLETED",l1.STATUS);
-		
-		
-		
-	}
-	
-}
+} 
+</cfscript>

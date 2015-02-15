@@ -17,6 +17,12 @@
  * 
  ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	
+<cfscript>
+  function replaceWS(string str,string replacement=''){
+    return rereplace(str,"[[:space:]]+",replacement,"all");
+  }
+</cfscript>
+
 	<cffunction name="setUp"></cffunction>
 	<cffunction name="test">
 	
@@ -34,8 +40,9 @@
 <cfsetting enablecfoutputonly="no">
 </cfsavecontent>
 <cfset assertEquals(
-		"{Start:lvl 1}{Start:lvl 2}{label:lvl 2;parent-label:lvl 1}{Start:lvl 3}{label:lvl 3;parent-label:lvl 2;parent-parent-label:lvl 1}{End:lvl 3}{End:lvl 2}{End:lvl 1}"
-		,trim(content))>
+		"{Start:lvl1}{Start:lvl2}{label:lvl2;parent-label:lvl1}{Start:lvl3}{label:lvl3;parent-label:lvl2;parent-parent-label:lvl1}{End:lvl3}{End:lvl2}{End:lvl1}"
+		,replaceWS(trim(content)))>
+
 
 <!--- the instance number on getBaseTagData correctly 
       works when the tags are not immediately nested --->
@@ -54,8 +61,8 @@
 </cfsavecontent>
 
 <cfset assertEquals(
-		"{Start:lvl 1}{Start:lvl 2}{label:lvl 2;parent-label:lvl 1}{Start:lvl 3}{label:lvl 3;parent-label:lvl 2;parent-parent-label:lvl 2}{End:lvl 3}{End:lvl 2}{End:lvl 1}"
-		,trim(content))>
+		"{Start:lvl1}{Start:lvl2}{label:lvl2;parent-label:lvl1}{Start:lvl3}{label:lvl3;parent-label:lvl2;parent-parent-label:lvl2}{End:lvl3}{End:lvl2}{End:lvl1}"
+		,replaceWS(trim(content)))>
 
 	
 	</cffunction>

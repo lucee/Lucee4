@@ -15,13 +15,27 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
-	<!---
-	<cffunction name="beforeTests"></cffunction>
-	<cffunction name="afterTests"></cffunction>
-	<cffunction name="setUp"></cffunction>
-	--->
-	<cffunction name="test">
-		<cfset assertEquals("","")>
-	</cffunction>
-</cfcomponent>
+ ---><cfscript>
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
+
+	public void function testCFM(){
+
+		http method="get" result="local.result" url="#createURL("Jira3070/index.cfm")#" addtoken="false";
+
+		//echo(result.filecontent);
+		assertEquals("",result.filecontent);
+	}
+
+	public void function testCFC(){
+		variables.test = nullValue();
+		assertEquals(false,structKeyExists(variables, "test")); 
+
+	}
+	
+	private string function createURL(string calledName){
+		var baseURL="http://#cgi.HTTP_HOST##getDirectoryFromPath(contractPath(getCurrenttemplatepath()))#";
+		return baseURL&""&calledName;
+	}
+	
+} 
+</cfscript>

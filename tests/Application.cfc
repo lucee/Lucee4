@@ -18,8 +18,18 @@
  **/
 component {
 	this.name = hash( getCurrentTemplatePath() );
-    request.webadminpassword="server";
+    
+	include "properties.cfm";
+
+
+	// check properties
+	if(isNull(request.webAdminPassword) || request.webAdminPassword.isEmpty())
+		throw '"request.webAdminPassword" is not set in template "properties.cfm"';
 	
+	if(isNull(request.mysql) || request.mysql.isEmpty())
+		throw '"request.mysql" is not set in template "properties.cfm"';
+	
+
 	// make sure testbox exists 
 	// TODO cache this test for a minute
 	try{

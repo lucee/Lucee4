@@ -1,6 +1,6 @@
-/**
+<!--- 
  *
- * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
+ * Copyright (c) 2015, Lucee Association Switzerland. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,15 +15,21 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- **/
-component {
-	remote function undefined(){
-		return [];
-	}
-	remote function returnformat() returnformat="json" {
-		return queryNew('a');
-	}
-	remote function returnformat2() returnformat="wddx" {
-		return queryNew('a');
-	}
-}
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
+	<!---
+	<cffunction name="beforeTests"></cffunction>
+	<cffunction name="afterTests"></cffunction>
+	<cffunction name="setUp"></cffunction>
+	--->
+	<cffunction access="private" name="test">
+		<cftry> 
+			<cfthrow type="TestException" message="test exception"> 
+			<cfcatch name="local.e">
+				<cfdump var="#cfcatch#">
+			</cfcatch> 
+		</cftry>
+
+
+		<cfset assertEquals("","")>
+	</cffunction>
+</cfcomponent>

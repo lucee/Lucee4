@@ -24,9 +24,11 @@
 		<cfset deleteCache()>
 	</cffunction>
 	<cffunction name="testCacheKeyExistsJBossCache" localMode="modern">
-		<cfset createJBossCache()>
-		<cfset testCacheKeyExists()>
-		<cfset deleteCache()>
+		<cfif !isNull(request.testJBossExtension) and request.testJBossExtension>
+			<cfset createJBossCache()>
+			<cfset testCacheKeyExists()>
+			<cfset deleteCache()>
+		</cfif>
 	</cffunction>
 	<cffunction name="testCacheKeyExistsRAMCache" localMode="modern">
 		<cfset createRAMCache()>
