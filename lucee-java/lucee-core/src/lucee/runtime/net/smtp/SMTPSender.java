@@ -34,8 +34,9 @@ public final class SMTPSender extends Thread {
 	private String user;
 	private String pass;
 	private MimeMessageAndSession mmas;
+	private final boolean recyleConnection;
 	
-	public SMTPSender(Object lock, MimeMessageAndSession mmas, String host, int port, String user, String pass) {
+	public SMTPSender(Object lock, MimeMessageAndSession mmas, String host, int port, String user, String pass, boolean reuseConnection) {
 		this.lock=lock;
 		this.mmas=mmas;
 
@@ -43,6 +44,7 @@ public final class SMTPSender extends Thread {
 		this.port=port;
 		this.user=user;
 		this.pass=pass;
+		this.recyleConnection=reuseConnection;
 	}
 	
 	@Override
@@ -63,7 +65,11 @@ public final class SMTPSender extends Thread {
 			this.throwable=t;
 		}
 		finally {
-			try {SMTPConnectionPool.releaseSessionAndTransport(mmas.session);}catch (Throwable t) {}
+			try {
+				if(recyleConnection)SMTPConnectionPool.releaseSessionAndTransport(mmas.session);
+				else SMTPConnectionPool.disconnect(mmas.session.transport);
+				
+			}catch (Throwable t) {}
 			SystemUtil.notify(lock);
 		}
 	}

@@ -3693,8 +3693,14 @@ public final class ConfigWebFactory extends ConfigFactory {
 			for (int i = 0; i < elServers.length; i++) {
 				Element el = elServers[i];
 				if (el.getNodeName().equals("server"))
-					servers[index++] = new ServerImpl(el.getAttribute("smtp"), toInt(el.getAttribute("port"), 25), el.getAttribute("username"),
-							decrypt(el.getAttribute("password")), toBoolean(el.getAttribute("tls"), false), toBoolean(el.getAttribute("ssl"), false));
+					servers[index++] = new ServerImpl(
+							el.getAttribute("smtp"), 
+							toInt(el.getAttribute("port"), 25), 
+							el.getAttribute("username"),
+							decrypt(el.getAttribute("password")), 
+							toBoolean(el.getAttribute("tls"), false), 
+							toBoolean(el.getAttribute("ssl"), false), 
+							toBoolean(el.getAttribute("reuse-connection"), true));
 
 			}
 		}

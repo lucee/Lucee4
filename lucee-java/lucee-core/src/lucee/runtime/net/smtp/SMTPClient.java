@@ -50,8 +50,6 @@ import javax.mail.internet.MimePart;
 import org.apache.commons.collections.ReferenceMap;
 
 import lucee.commons.activation.ResourceDataSource;
-import lucee.commons.date.DateTimeException;
-import lucee.commons.date.DateTimeUtil;
 import lucee.commons.digest.MD5;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.log.LogUtil;
@@ -364,7 +362,7 @@ public final class SMTPClient implements Serializable  {
 	
 	
 	private MimeMessageAndSession createMimeMessage(lucee.runtime.config.Config config,String hostName, int port, String username, String password,
-			boolean tls,boolean ssl) throws MessagingException {
+			boolean tls,boolean ssl, boolean newConnection) throws MessagingException {
 		
 	      Properties props = (Properties) System.getProperties().clone();
 	      String strTimeout = Caster.toString(getTimeout(config));
@@ -403,7 +401,8 @@ public final class SMTPClient implements Serializable  {
 	    	  props.remove("mail.smtp.password");
 	    	  props.remove("password");
 	      }
-	      SessionAndTransport sat = SMTPConnectionPool.getSessionAndTransport(props,hash(props),auth);
+	      SessionAndTransport sat = newConnection?new SessionAndTransport(hash(props), props, auth):
+    		SMTPConnectionPool.getSessionAndTransport(props,hash(props),auth);
 	      
 	// Contacts
 		SMTPMessage msg = new SMTPMessage(sat.session);
@@ -720,10 +719,10 @@ public final class SMTPClient implements Serializable  {
 			
 			
 			MimeMessageAndSession msgSess;
-			
+			boolean recyleConnection=((ServerImpl)server).reuseConnections();
 			synchronized(LOCK) {
 				try {
-					msgSess = createMimeMessage(config,server.getHostName(),server.getPort(),_username,_password,_tls,_ssl);
+					msgSess = createMimeMessage(config,server.getHostName(),server.getPort(),_username,_password,_tls,_ssl,!recyleConnection);
 				} catch (MessagingException e) {
 					// listener
 					listener(config,server,log,e,System.nanoTime()-start);
@@ -733,7 +732,7 @@ public final class SMTPClient implements Serializable  {
 				}
 				try {
 	            	SerializableObject lock = new SerializableObject();
-	            	SMTPSender sender=new SMTPSender(lock,msgSess,server.getHostName(),server.getPort(),_username,_password);
+	            	SMTPSender sender=new SMTPSender(lock,msgSess,server.getHostName(),server.getPort(),_username,_password,recyleConnection);
             		sender.start();
             		SystemUtil.wait(lock, _timeout);
             		
