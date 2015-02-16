@@ -208,7 +208,7 @@ public final class ConfigServerFactory extends ConfigFactory{
 		Resource cdDir = wcdDir.getRealResource("cdriver");
 		delete(cdDir,new String[]{"EHCache.cfc","EHCacheLite.cfc"});
 		try {
-			ResourceUtil.deleteEmptyFolders(wcdDir);
+			ResourceUtil.removeEmptyFolders(wcdDir,null);
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
