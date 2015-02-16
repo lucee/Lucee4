@@ -4718,8 +4718,8 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         pageContext.setVariable(getString("admin",action,"returnVariable"),sct);
         sct.set("resourceCharset",config.getResourceCharset());
         sct.set("templateCharset",config.getTemplateCharset());
-        sct.set("webCharset",((PageContextImpl)pageContext).getWebCharset());
-        sct.set("jreCharset",SystemUtil.getCharset());
+        sct.set("webCharset",((PageContextImpl)pageContext).getWebCharset().name());
+        sct.set("jreCharset",SystemUtil.getCharset().name());
 	}
 
     /**
