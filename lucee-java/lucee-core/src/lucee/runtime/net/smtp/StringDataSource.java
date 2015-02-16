@@ -22,17 +22,22 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 import javax.activation.DataSource;
 
-public final class StringDataSource implements DataSource {
+import lucee.print;
 
+import org.apache.commons.lang.WordUtils;
+
+public class StringDataSource implements DataSource {
+	
 	private String text;
 	private String ct;
 	private String charset;
 
-	public StringDataSource(String text, String ct, String charset) {
-		this.text=text;
+	public StringDataSource(String text, String ct, String charset, int maxLineLength) {
+		this.text=WordUtils.wrap(text, maxLineLength);
 		this.ct=ct;
 		this.charset=charset;
 	}

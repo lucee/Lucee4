@@ -845,8 +845,8 @@ public final class SMTPClient implements Serializable  {
 	}
 	
 	private void fillHTMLText(MimePart mp) throws MessagingException {
-		mp.setDataHandler(new DataHandler(new StringDataSource(htmlText,TEXT_HTML ,htmlTextCharset)));
-		mp.setHeader("Content-Transfer-Encoding", "7bit");
+		mp.setDataHandler(new DataHandler(new StringDataSource(htmlText,TEXT_HTML ,htmlTextCharset,76)));
+		//mp.setHeader("Content-Transfer-Encoding", "7bit");
 		mp.setHeader("Content-Type", TEXT_HTML+"; charset="+htmlTextCharset);
 	}
 
@@ -856,14 +856,13 @@ public final class SMTPClient implements Serializable  {
 		return plain;
 	}
 	private void fillPlainText(MimePart mp) throws MessagingException {
-		mp.setDataHandler(new DataHandler(new StringDataSource(plainText,TEXT_PLAIN ,plainTextCharset)));
-		mp.setHeader("Content-Transfer-Encoding", "7bit");
+		mp.setDataHandler(new DataHandler(new StringDataSource(plainText,TEXT_PLAIN ,plainTextCharset,980)));
+		//mp.setHeader("Content-Transfer-Encoding", "7bit");
 		mp.setHeader("Content-Type", TEXT_PLAIN+"; charset="+plainTextCharset);
 	}
-	
 	private BodyPart toMimeBodyPart(MailPart part) throws MessagingException {
 		MimeBodyPart mbp = new MimeBodyPart();
-		mbp.setDataHandler(new DataHandler(new StringDataSource(part.getBody(),part.getType() ,part.getCharset())));
+		mbp.setDataHandler(new DataHandler(new StringDataSource(part.getBody(),part.getType() ,part.getCharset(),980)));
 		//mbp.setHeader("Content-Transfer-Encoding", "7bit");
 		//mbp.setHeader("Content-Type", TEXT_PLAIN+"; charset="+plainTextCharset);
 		return mbp;
