@@ -57,7 +57,7 @@
 	<data key="mappings.archivetitle">create archive</data>
 	<data key="mappings.compilestoponerrordesc">Sets whether the compile process should be aborted on errors</data>
 	<data key="mappings.editdesc">Here you can edit a certain mapping or create a Lucee archive out of an existing one.</data>
-	<data key="mappings.archivedesc">Generate a Lucee archive (ra) from an existing mapping</data>
+	<data key="mappings.archivedesc">Generate a Lucee archive (.lar) from an existing mapping</data>
 	<data key="mappings.physicalhead">Resource</data>
 	<data key="mappings.archivesecure">Secured</data>
 	<data key="mappings.compiledesc">Compile all cfm and cfc files inside the mapping</data>
