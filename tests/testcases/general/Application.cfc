@@ -21,7 +21,7 @@ component {
     
 	include "../../properties.cfm";
 
-	
+
 	// check properties
 	if(isNull(request.webAdminPassword) || request.webAdminPassword.isEmpty())
 		throw '"request.webAdminPassword" is not set in template "properties.cfm"';
