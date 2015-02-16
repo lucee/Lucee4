@@ -35,6 +35,7 @@ public final class ServerImpl implements Server {
 	private boolean readOnly=false;
 	private boolean tls;
 	private boolean ssl;
+	private final boolean reuse;
 	//private static Pattern[] patterns=new Pattern[3];
     
 	//[user:password@]server[:port],[
@@ -82,7 +83,7 @@ public final class ServerImpl implements Server {
 		else host=host.trim();
 
 			
-		return new ServerImpl(host,port,user,pass,defaultTls,defaultSsl);
+		return new ServerImpl(host,port,user,pass,defaultTls,defaultSsl,true);
 	}
 	
 
@@ -91,13 +92,14 @@ public final class ServerImpl implements Server {
 		this.port=port;
 	}*/
 	
-	public ServerImpl(String hostName,int port,String username,String password, boolean tls, boolean ssl) {
+	public ServerImpl(String hostName,int port,String username,String password, boolean tls, boolean ssl, boolean reuseConnections) {
 		this.hostName=hostName;
 		this.username=username;
 		this.password=password;
 		this.port=port;
 		this.tls=tls;
 		this.ssl=ssl;
+		this.reuse=reuseConnections;
 	}
 	
 	/*public ServerImpl(String strServer) throws MailException {
@@ -177,7 +179,7 @@ public final class ServerImpl implements Server {
 
     @Override
     public Server cloneReadOnly() {
-        ServerImpl s = new ServerImpl(hostName, port,username, password,tls,ssl);
+        ServerImpl s = new ServerImpl(hostName, port,username, password,tls,ssl,reuse);
         s.readOnly=true;
         return s;
     }
@@ -206,5 +208,9 @@ public final class ServerImpl implements Server {
 
 	public void setTLS(boolean tls) {
 		this.tls=tls;
+	}
+	
+	public boolean reuseConnections() {
+		return reuse;
 	}
 }
