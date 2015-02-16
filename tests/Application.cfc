@@ -21,6 +21,7 @@ component {
     
 	include "properties.cfm";
 
+	dump(123);
 
 	// check properties
 	if(isNull(request.webAdminPassword) || request.webAdminPassword.isEmpty())
