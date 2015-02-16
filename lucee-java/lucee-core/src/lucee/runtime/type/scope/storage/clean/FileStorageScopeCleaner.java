@@ -91,7 +91,7 @@ public class FileStorageScopeCleaner extends StorageScopeCleanerSupport {
 				}
 			}
 			
-			ResourceUtil.deleteEmptyFolders(dir);
+			ResourceUtil.removeEmptyFolders(dir,null);
 		
 		} catch (Throwable t) {error(t);}
 

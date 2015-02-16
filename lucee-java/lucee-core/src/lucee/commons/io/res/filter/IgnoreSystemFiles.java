@@ -23,7 +23,7 @@ import lucee.commons.io.res.filter.ResourceNameFilter;
 
 public class IgnoreSystemFiles implements ResourceNameFilter {
 
-	public static final ResourceNameFilter INSTANCE=new IgnoreSystemFiles();
+	public static final IgnoreSystemFiles INSTANCE=new IgnoreSystemFiles();
 	
 	@Override
 	public boolean accept(Resource parent, String name) {
