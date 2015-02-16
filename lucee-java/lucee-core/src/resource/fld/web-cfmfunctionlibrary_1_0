@@ -7270,8 +7270,8 @@ Value must be greater than or equal to 3 and less than or equal to 10. The defau
 	<function>
 		<name>ImageClearRect</name>
 		<class>lucee.runtime.functions.image.ImageClearRect</class>
-		<member-name>blur</member-name>
-		<keywords>clearRect</keywords>
+		<member-name>clearRect</member-name>
+		<keywords>image</keywords>
 		<description>Clears the specified rectangle by filling it with the background color of the current drawing surface.</description>
 		<argument>
 			<name>image</name>
