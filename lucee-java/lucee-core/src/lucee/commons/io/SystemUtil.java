@@ -42,6 +42,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 
+import lucee.aprint;
 import lucee.commons.digest.MD5;
 import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
@@ -1050,14 +1051,19 @@ class StopThread extends Thread {
 		int count=0;
 		if(thread.isAlive()) {
 			do{
-				if(count>0 && log!=null) LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread on the first approach", thread.getStackTrace());
+				if(count>0 && log!=null) {
+					LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread on the first approach", thread.getStackTrace());
+				}
 				if(count++>10) break; // should never happen
 				thread.stop(t);
 				SystemUtil.sleep(1000);
 			}
 			while(thread.isAlive() && pci.isInitialized());
 		}
-		
-		if(count>10 && log!=null) LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread", thread.getStackTrace());
+
+		if(count>10 && log!=null) {
+			LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread", thread.getStackTrace());
+			aprint.e(thread.getStackTrace());
+		}
 	}
 }
