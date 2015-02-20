@@ -177,7 +177,8 @@ public final class CFMLFactoryImpl extends CFMLFactory {
         ThreadLocalPageContext.release();
         //if(!pc.hasFamily()){
 			    runningPcs.remove(Integer.valueOf(pc.getId()));
-	            if(pcs.size()<100)// not more than 100 PCs
+	            
+	            if(pcs.size()<100 && ((PageContextImpl)pc).getStopPosition()==null)// not more than 100 PCs
 	            	pcs.push(pc);
 	            //SystemOut.printDate(config.getOutWriter(),"Release: (id:"+pc.getId()+";running-requests:"+config.getThreadQueue().size()+";)");
 	        
@@ -192,7 +193,6 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 	 */
 	public void checkTimeout() {
 		if(!engine.allowRequestTimeout())return;
-		
 		//synchronized (runningPcs) {
             //int len=runningPcs.size();
 			Iterator<Entry<Integer, PageContextImpl>> it = runningPcs.entrySet().iterator();
@@ -221,7 +221,7 @@ public final class CFMLFactoryImpl extends CFMLFactory {
         //}
 	}
 	
-	public static void terminate(PageContext pc) {
+	public static void terminate(PageContextImpl pc) {
 		Log log = ((ConfigImpl)pc.getConfig()).getLog("requesttimeout");
         
 		String strLocks="";
@@ -235,7 +235,11 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 		catch(Throwable t){}
         if(log!=null)LogUtil.log(log,Log.LEVEL_ERROR,"controler",
         		"stop thread ("+pc.getId()+") because run into a timeout "+getPath(pc)+"."+strLocks,pc.getThread().getStackTrace());
-        SystemUtil.stop(pc.getThread(),new RequestTimeoutException(pc,"request ("+getPath(pc)+":"+pc.getId()+") has run into a timeout ("+(pc.getRequestTimeout()/1000)+" seconds) and has been stopped."+strLocks));
+        
+        // then we release the pagecontext
+        
+        SystemUtil.stop(pc,new RequestTimeoutException(pc.getThread(),"request ("+getPath(pc)+":"+pc.getId()+") has run into a timeout ("+(pc.getRequestTimeout()/1000)+" seconds) and has been stopped."+strLocks),log);
+        
         
 	}
 
@@ -247,7 +251,7 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 			return "path: "+base+" ("+current+")";
 		}
 		catch(Throwable t) {
-			return "";
+			return "(fail to retrieve path:"+t.getClass().getName()+":"+t.getMessage()+")";
 		}
 	}
 	
@@ -414,12 +418,13 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 
 	public void stopThread(String threadId, String stopType) {
 		//synchronized (runningPcs) {
-            Iterator<PageContextImpl> it = runningPcs.values().iterator();
+			Iterator<PageContextImpl> it = runningPcs.values().iterator();
             PageContext pc;
     		while(it.hasNext()) {
             	
             	pc=it.next();
-                try {
+            	Log log = ((ConfigImpl)pc.getConfig()).getLog("application");
+            	try {
 					String id = Hash.call(pc, pc.getId()+":"+pc.getStartTime());
 					if(id.equals(threadId)){
 						stopType=stopType.trim();
@@ -427,9 +432,9 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 						if("abort".equalsIgnoreCase(stopType) || "cfabort".equalsIgnoreCase(stopType))
 							t=new Abort(Abort.SCOPE_REQUEST);
 						else
-							t=new RequestTimeoutException(pc,"request has been forced to stop.");
+							t=new RequestTimeoutException(pc.getThread(),"request has been forced to stop.");
 						
-						SystemUtil.stop(pc.getThread(),t);
+						SystemUtil.stop(pc,t,log);
 		                SystemUtil.sleep(10);
 						break;
 					}

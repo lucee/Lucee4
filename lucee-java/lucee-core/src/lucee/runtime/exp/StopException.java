@@ -18,8 +18,18 @@
  **/
 package lucee.runtime.exp;
 
-public class StopException extends Exception implements Stop {
-	public StopException(){
-		super("Thread forced to stop!");
+import lucee.runtime.PageContext;
+
+public class StopException extends Abort implements Stop {
+	private StackTraceElement[] stacktrace;
+
+	public StopException(Thread t){
+		super(SCOPE_REQUEST,"Thread forced to stop!");
+		this.stacktrace=t!=null?t.getStackTrace():null;
+	}
+	
+	@Override
+	public StackTraceElement[] getStackTrace() {
+		return stacktrace;
 	}
 }

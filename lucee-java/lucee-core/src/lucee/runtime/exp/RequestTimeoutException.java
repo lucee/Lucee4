@@ -22,13 +22,11 @@ import lucee.runtime.PageContext;
 
 public class RequestTimeoutException extends Abort implements Stop {
 
-	private PageContext pc;
 	private StackTraceElement[] stacktrace;
 
-	public RequestTimeoutException(PageContext pc,String msg) {
+	public RequestTimeoutException(Thread t,String msg) {
 		super(SCOPE_REQUEST,msg);
-		this.pc=pc;
-		this.stacktrace=pc!=null?pc.getThread().getStackTrace():null;
+		this.stacktrace=t!=null?t.getStackTrace():null;
 	}
 	
 	@Override

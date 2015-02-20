@@ -22,12 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lucee.commons.io.SystemUtil;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.runtime.CFMLFactoryImpl;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
+import lucee.runtime.config.ConfigImpl;
 import lucee.transformer.bytecode.util.ASMUtil;
 
 import com.intergral.fusiondebug.server.IFDController;
@@ -66,7 +68,8 @@ public class FDThreadImpl implements IFDThread {
 
 	@Override
 	public void stop() {
-		SystemUtil.stop(pc.getThread());
+		Log log = ((ConfigImpl)pc.getConfig()).getLog("application");
+        SystemUtil.stop(pc,log);
 	}
 	
 	@Override
