@@ -24,9 +24,10 @@ import lucee.runtime.exp.FunctionException;
 
 public class Sleep {
 
-	public static String call(PageContext pc, double duration) throws FunctionException {
+	public static String call(PageContext pc, double duration) throws FunctionException, InterruptedException {
 		if(duration>=0) {
-			SystemUtil.sleep((long)duration);
+			Thread.sleep((long)duration);
+			//SystemUtil.sleep((long)duration);
 		}
 		else throw new FunctionException(pc,"sleep",1,"duration","attribute interval must be greater or equal to 0, now ["+(duration)+"]");
 		return null;

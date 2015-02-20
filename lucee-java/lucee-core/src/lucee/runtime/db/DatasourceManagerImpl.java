@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import lucee.commons.io.IOUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.config.ConfigImpl;
@@ -105,7 +106,6 @@ public final class DatasourceManagerImpl implements DataSourceManager {
 		//}
 		return newDC;
 	}
-	
 
 	public void add(PageContext pc,ORMSession session) throws PageException {
 		DataSource[] sources = session.getDataSources();
@@ -145,10 +145,15 @@ public final class DatasourceManagerImpl implements DataSourceManager {
 	
 	@Override
 	public void releaseConnection(PageContext pc,DatasourceConnection dc) {
-		if(autoCommit) config.getDatasourceConnectionPool().releaseDatasourceConnection(config,dc,false);
+		if(autoCommit ) {
+			if(((PageContextImpl)pc).getStopPosition()!=null) {
+				IOUtil.closeEL(dc.getConnection());
+			}
+			else
+				config.getDatasourceConnectionPool().releaseDatasourceConnection(config,dc,false);
+		}
 	}
-	
-	
+
 	@Override
 	public void begin() {
 		this.autoCommit=false;
