@@ -18,13 +18,13 @@
  ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 	<cffunction name="setUp">
 		<cftry>
-			<cfquery name="qInsert" datasource="mysql">
+			<cfquery name="qInsert" datasource="#request.mysql#">
 			drop TABLE T3097
 			</cfquery>
 			<cfcatch></cfcatch>
 		</cftry>
 
-		<cfquery name="qInsert" datasource="mysql">
+		<cfquery name="qInsert" datasource="#request.mysql#">
 			CREATE TABLE T3097 (
 		    blobi BLOB
 		    ,clobi TEXT
@@ -34,7 +34,7 @@
 	</cffunction>
 	
 	<cffunction name="testBlobClob">
-		<cfquery datasource="mysql">
+		<cfquery datasource="#request.mysql#">
 		INSERT INTO T3097(blobi,clobi)
 		VALUES(
 			<cfqueryparam cfsqltype="cf_sql_blob" value="#"abc".getBytes()#"> 
@@ -43,7 +43,7 @@
 		</cfquery>
 
 
-		<cfquery datasource="mySQL" name="local.qry">
+		<cfquery datasource="#request.mysql#" name="local.qry">
 			select * from T3097
 		</cfquery>
 

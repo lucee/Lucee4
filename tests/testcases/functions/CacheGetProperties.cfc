@@ -24,9 +24,11 @@
 		<cfset deleteCache()>
 	</cffunction>
 	<cffunction name="testCacheGetPropertiesJBossCache" localMode="modern">
-		<cfset createJBossCache()>
-		<cfset testCacheGetProperties()>
-		<cfset deleteCache()>
+		<cfif !isNull(request.testJBossExtension) and request.testJBossExtension>
+			<cfset createJBossCache()>
+			<cfset testCacheGetProperties()>
+			<cfset deleteCache()>
+		</cfif>
 	</cffunction>
 	<cffunction name="testCacheGetPropertiesRAMCache" localMode="modern">
 		<cfset createRAMCache()>
@@ -44,7 +46,6 @@
 	
 	<cfset cachePut('abc','123')>
 	<cfset cacheGetProperties()>
-	<cfset cacheGetProperties('template')>
 	<cfset cacheGetProperties('object')>
 	
 	<cfif server.ColdFusion.ProductName EQ "lucee"> 

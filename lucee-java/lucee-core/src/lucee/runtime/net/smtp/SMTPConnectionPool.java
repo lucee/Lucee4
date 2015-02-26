@@ -112,7 +112,7 @@ public class SMTPConnectionPool {
 		}	
 	}
 	
-	private static void disconnect(Transport transport) {
+	static void disconnect(Transport transport) {
 		if(transport!=null && transport.isConnected()) {
 			try {
 				transport.close();
@@ -162,7 +162,7 @@ public class SMTPConnectionPool {
 		public final String key;
 		private long lastAccess;
 		
-		private SessionAndTransport(String key, Properties props,Authenticator auth) throws NoSuchProviderException {
+		SessionAndTransport(String key, Properties props,Authenticator auth) throws NoSuchProviderException {
 			this.key=key;
 			this.session=createSession(key, props, auth);
 			this.transport=session.getTransport("smtp");

@@ -26,7 +26,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public void function test(){
 		
-		query name="qry" datasource="mysql" cachedwithin="#createTimespan(0,0,1,1)#" {
+		query name="qry" datasource="#request.mysql#" cachedwithin="#createTimespan(0,0,1,1)#" {
 			echo("select CURTIME() as a");
 		}
 		objectcache action="clear";

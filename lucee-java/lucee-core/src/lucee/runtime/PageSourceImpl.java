@@ -91,9 +91,13 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 	 */
 	PageSourceImpl(MappingImpl mapping,String relPath) {
 		this.mapping=mapping;
-        //recompileAlways=mapping.getConfig().getCompileType()==Config.RECOMPILE_ALWAYS;
-        //recompileAfterStartUp=mapping.getConfig().getCompileType()==Config.RECOMPILE_AFTER_STARTUP || recompileAlways;
         relPath=relPath.replace('\\','/');
+        if(relPath.indexOf("//")!=-1) {
+        	//print.ds(relPath);
+        	relPath=StringUtil.replace(relPath, "//", "/");
+        }
+        
+        
 		if(relPath.indexOf('/')!=0) {
 		    if(relPath.startsWith("../")) {
 				isOutSide=true;
@@ -122,6 +126,10 @@ public final class PageSourceImpl implements PageSource, Sizeable {
         //recompileAfterStartUp=mapping.getConfig().getCompileType()==Config.RECOMPILE_AFTER_STARTUP || recompileAlways;
         this.mapping=mapping;
 	    this.isOutSide=isOutSide;
+	    if(relPath.indexOf("//")!=-1) {
+        	//print.ds(relPath);
+        	relPath=StringUtil.replace(relPath, "//", "/");
+        }
 		this.relPath=relPath;
 		
 	}
@@ -186,7 +194,7 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 	        if(page!=null) return page;
 	    }
 	    else {
-	        page=loadArchive(page);
+	    	page=loadArchive(page);
 	        if(page==null)page=loadPhysical(pc,page);
 	        if(page!=null) return page;
 	    }
@@ -209,7 +217,7 @@ public final class PageSourceImpl implements PageSource, Sizeable {
             }
         } 
         catch (Exception e) {
-            return null;
+        	return null;
         }
     }
     
@@ -430,11 +438,26 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 	 * @return merged relpath
 	 */
 	private static String mergeRelPathes(Mapping mapping,String parentRelPath, String newRelPath, RefBoolean isOutSide) {
+		//print.e("---------- mergeRelPathes ------------");
+		
 		parentRelPath=pathRemoveLast(parentRelPath,isOutSide);
+		//print.e("->"+parentRelPath);
+		//print.e("->"+newRelPath);
+		
 		while(newRelPath.startsWith("../")) {
 			parentRelPath=pathRemoveLast(parentRelPath,isOutSide);
 			newRelPath=newRelPath.substring(3);
+			//print.e("->"+parentRelPath);
+			//print.e("->"+newRelPath);
 		}
+		
+		if(newRelPath.equals("..")) {
+			parentRelPath=pathRemoveLast(parentRelPath,isOutSide);
+			newRelPath="";
+			//print.e("->"+parentRelPath);
+			//print.e("->"+newRelPath);
+		}
+		
 		
 		// check if come back
 		String path=parentRelPath.concat("/").concat(newRelPath);
@@ -464,11 +487,13 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 							rtn.append("../");
 						}
 						isOutSide.setValue(rtn.length()!=0);
+						//print.e("2>"+(rtn.length()==0?"/":rtn.toString())+list(arr,i,arr.length));
 						return (rtn.length()==0?"/":rtn.toString())+list(arr,i,arr.length);
 					}
 				}
 			}
 		}
+		//print.e("3>"+(parentRelPath.concat("/").concat(newRelPath)));
 		return parentRelPath.concat("/").concat(newRelPath);
 	}
 
@@ -505,7 +530,10 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 		    isOutSide.setValue(true);
 			return path.concat("/..");//path+"/..";
 		}
-		return path.substring(0,path.lastIndexOf('/'));
+		path= path.substring(0,path.lastIndexOf('/'));
+		if(StringUtil.endsWith(path, '/'))
+			path=path.substring(0,path.length()-1);
+		return path;
 	}
 	
 	@Override
@@ -727,12 +755,11 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 
 	@Override
 	public PageSource getRealPage(String relPath) {
-	    if(relPath.equals(".") || relPath.equals(".."))relPath+='/';
+		if(relPath.equals(".") || relPath.equals(".."))relPath+='/';
 	    else relPath=relPath.replace('\\','/');
 	    RefBoolean _isOutSide=new RefBooleanImpl(isOutSide);
 	    
-	    
-		if(relPath.indexOf('/')==0) {
+	    if(relPath.indexOf('/')==0) {
 		    _isOutSide.setValue(false);
 		}
 		else if(relPath.startsWith("./")) {

@@ -239,8 +239,8 @@
 
 <cfsavecontent variable="content"><cfset evaluate('false and isCalled()')></cfsavecontent>
 
-<cf_valueEquals left="#evaluate('7.5^1.3')#" startWith="13.727126706">
-<cf_valueEquals left="#evaluate('27^1.3')#" startWith="72.5726352471">
+<cfset valueEquals(left="#left(evaluate('7.5^1.3'),12)#",right="13.727126706")>
+<cfset valueEquals(left="#left(evaluate('27^1.3'),12)#",right="72.572635247")>
 
 <cfset valueEquals(left="#evaluate('27^1/3')#", right="9")>
 <cfset valueEquals(left="#evaluate('27^(1/3)')#", right="3")>

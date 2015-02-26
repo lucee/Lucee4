@@ -59,7 +59,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	public void function testPlusAssignment(){
 		url._testPlusAssignment=1;
 		assertEquals(11,_testPlusAssignment+=10);
-		//dump(variables);abort;
 		assertEquals(11,url._testPlusAssignment);
 
 	} 

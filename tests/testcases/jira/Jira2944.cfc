@@ -57,11 +57,11 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		
 		wddx action="cfml2wddx" input="#tmp#" output="wddxInvoicedata" validate='yes';
 
-		dump(var="#wddxInvoicedata#");
-		dump("#tmp#");
-abort;
+		//dump(var="#wddxInvoicedata#");
+		//dump("#tmp#");
+
 		wddx action="wddx2cfml" input="#wddxInvoicedata#" output="sameInvoicedata";
-		dump("#sameInvoicedata#");
+		//dump("#sameInvoicedata#");
 		
 
 		assertEquals("","");

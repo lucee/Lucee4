@@ -23,7 +23,7 @@
 	<cfset var http="">
 	<cftry>
 		<cfhttp 
-			url="#update.location#/railo/remote/version/Info.cfc?method=getpatchversionfor&level=#server.ColdFusion.ProductLevel#&version=#server.railo.version#" 
+			url="#update.location#/lucee/remote/version/Info.cfc?method=getpatchversionfor&level=#server.ColdFusion.ProductLevel#&version=#server.lucee.version#" 
 			method="get" resolveurl="no" result="http">
 		<cfwddx action="wddx2cfml" input="#http.fileContent#" output="local.wddx">
 		<cfset session.availableVersion=wddx>
@@ -61,7 +61,7 @@
 				type="#adminType#"
 				password="#password#"
 				returnvariable="update">
-			<cfset curr=server.railo.version>
+			<cfset curr=server.lucee.version>
 			<cfset avi=getAvailableVersion(update)>
 			<cfset hasUpdate=curr LT avi>
 		</cfif>

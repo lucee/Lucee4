@@ -60,7 +60,7 @@ Defaults --->
 						<cfset data.addCFMLFiles[idx]=isDefined("data.addCFMLFiles[#idx#]") and data.addCFMLFiles[idx]>
 						<cfset data.addNonCFMLFiles[idx]=isDefined("data.addNonCFMLFiles[#idx#]") and data.addNonCFMLFiles[idx]>
 					
-					<cfset ext="ra">
+					<cfset ext="lar">
 					<cfset target=getTempDirectory() & Rand() & "."&ext>
 					<cfset filename=data.virtuals[idx]>
 					<cfset filename=mid(filename,2,len(filename))>

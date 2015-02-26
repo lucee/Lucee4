@@ -98,7 +98,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		assertEquals(mod.resourceCharset,resourceCharset);
 		assertEquals(mod.templateCharset,templateCharset);
 		assertEquals(mod.webCharset,webCharset);
-		
 		// without optional arguments
 		admin.updateCharset(resourceCharset,templateCharset);
 		admin.updateCharset(resourceCharset);

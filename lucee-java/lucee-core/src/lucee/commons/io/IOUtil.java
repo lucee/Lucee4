@@ -39,6 +39,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.zip.ZipFile;
@@ -448,13 +449,20 @@ public final class IOUtil {
          catch (Throwable e) {}
      }
      
-     
+
      public static void closeEL(Document doc) {
            try {
                if(doc!=null)doc.close();
          } 
          catch (Throwable e) {}
      }
+     
+     public static void closeEL(Connection conn) {
+         try {
+             if(conn!=null)conn.close();
+       } 
+       catch (Throwable e) {}
+   }
      
      
      

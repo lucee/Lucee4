@@ -26,7 +26,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	public void function test(){
 		try {
 			directoryCopy( variables.src, variables.trg, true, function( path ){
-					dump(arguments.path);
+					//dump(arguments.path);
 					return path.find("tmp1"); // only copy the "tmp1" path
 								
 				});
@@ -40,7 +40,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 		try {
 			directoryCopy( variables.src, variables.trg, false, function( path ){
-					dump(arguments.path);
 					return path.find("tmp1"); // only copy the "tmp1" path
 								
 				});

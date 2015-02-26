@@ -42,7 +42,10 @@ import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 
+import lucee.aprint;
 import lucee.commons.digest.MD5;
+import lucee.commons.io.log.Log;
+import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.ResourcesImpl;
@@ -52,6 +55,8 @@ import lucee.commons.lang.StringUtil;
 import lucee.loader.TP;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.runtime.Info;
+import lucee.runtime.PageContext;
+import lucee.runtime.PageContextImpl;
 import lucee.runtime.config.Config;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.DatabaseException;
@@ -1010,12 +1015,55 @@ public final class SystemUtil {
 		}
 		return macAddress;
 	}
-	
-	public static void stop(Thread t) {
-		stop(t,new StopException());
+
+	@Deprecated
+	public static void stop(Thread thread) {
+		if(thread.isAlive()){
+			thread.stop(new StopException(thread));
+		}
+	}
+
+	public static void stop(PageContext pc,Log log) {
+		stop(pc,new StopException(pc.getThread()),log);
 	}
 	
-	public static void stop(Thread thread, Throwable t) {
-		if(thread.isAlive())thread.stop(t);
+	public static void stop(PageContext pc, Throwable t,Log log) {
+		new StopThread(pc,t,log).start();
+	}
+}
+
+class StopThread extends Thread {
+	
+	private final PageContext pc;
+	private final Throwable t;
+	private final Log log; 
+
+	public StopThread(PageContext pc, Throwable t, Log log) {
+		this.pc=pc;
+		this.t=t;
+		this.log=log;
+	}
+
+	public void run(){
+		PageContextImpl pci=(PageContextImpl) pc;
+		Thread thread = pc.getThread();
+		pci.stop(t);
+		int count=0;
+		if(thread.isAlive()) {
+			do{
+				if(count>0 && log!=null) {
+					LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread on the first approach", thread.getStackTrace());
+				}
+				if(count++>10) break; // should never happen
+				thread.stop(t);
+				SystemUtil.sleep(1000);
+			}
+			while(thread.isAlive() && pci.isInitialized());
+		}
+
+		if(count>10 && log!=null) {
+			LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread", thread.getStackTrace());
+			aprint.e(thread.getStackTrace());
+		}
 	}
 }
