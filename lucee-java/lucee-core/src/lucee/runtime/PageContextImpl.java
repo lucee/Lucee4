@@ -26,7 +26,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +35,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -314,7 +314,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	private boolean hasFamily=false;
 	//private CFMLFactoryImpl factory;
 	private PageContextImpl parent;
-	private Map<String,DatasourceConnection> transConns=new HashMap<String,DatasourceConnection>();
+	private Map<String,DatasourceConnection> transConns=new ConcurrentHashMap<String,DatasourceConnection>();
 	private List<Statement> lazyStats;
 	private boolean fdEnabled;
 	private ExecutionLog execLog;
@@ -327,6 +327,9 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	private String serverPassword;
 
 	private PageException pe;
+
+	private Throwable requestTimeoutException;
+
 
 	public long sizeOf() {
 		
@@ -426,6 +429,24 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 			   bufferSize,
 			   autoFlush,false);
 	}
+	
+
+	public boolean isInitialized() {
+		return rsp!=null;
+	}
+	
+
+	/**
+	 * return if the PageContext is from a stopped thread, if so it should no longer be used!
+	 * @return
+	 */
+	public Throwable getStopPosition() {
+		return requestTimeoutException;
+	}
+	public void stop(Throwable requestTimeoutException) {
+		this.requestTimeoutException=requestTimeoutException;
+	}
+	
 	
 	/**
 	 * initialize a existing page context
@@ -705,7 +726,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 
 	}
 
-    @Override
+	@Override
     public void write(String str) throws IOException {
     	writer.write(str);
 	}
@@ -1806,6 +1827,9 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	@Override
 	public void handlePageException(PageException pe) {
 		if(!Abort.isSilentAbort(pe)) {
+			if(requestTimeoutException!=null)
+				pe=Caster.toPageException(requestTimeoutException);
+			
 			
 			Charset cs = ReqRspUtil.getCharacterEncoding(this,rsp);
 	        if(cs==null) {
@@ -3068,10 +3092,6 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 
 	private Stack<ActiveQuery> activeQueries=new Stack<ActiveQuery>();
 	private Stack<ActiveLock> activeLocks=new Stack<ActiveLock>();
-	
-	
-
-
 
 	public boolean isTrusted(Page page) {
 		if(page==null)return false;
@@ -3269,4 +3289,6 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 		if(lazyStats==null)lazyStats=new ArrayList<Statement>();
 		lazyStats.add(s);
 	}
+
+
 }

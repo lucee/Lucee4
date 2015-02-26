@@ -46,22 +46,14 @@ public class RunAsJavaApplication {
 
     	if (strWebContext == null) strWebContext = "./web";
     	if (strServerContext == null) strServerContext = "./server";
-        //String webContextDir = strWebContext + "/WEB-INF/lucee";
-        //String serverContextDir = strWebContext + "/WEB-INF/lucee";
-        //if (adminContextDir == null) adminContextDir = appDir + "/WEB-INF/lib/lucee-server";
-        //System.out.println("appdir:" + appDir);
-        //System.out.println("webcontext:" + webContextDir);
-        //System.out.println("servercontext:" + adminContextDir);
-
+        
         HttpContext context = new HttpContext();
-        //context.setClassLoader(new ContextClassloader());
         context.setContextPath(strContext);
         context.addWelcomeFile("index.cfm");
 
 	    if ( host != null && !host.isEmpty() )
 	        context.addVirtualHost(host);
 
-        //context.setClassPath(lib);
         server.addContext(context);
 
         // Create a servlet container
@@ -69,47 +61,19 @@ public class RunAsJavaApplication {
         context.addHandler(servlets);
 
         // Map a servlet onto the container
-        ServletHolder servlet = servlets.addServlet("CFMLServlet", "*.cfc/*,*.cfm/*,*.cfml/*,*.cfc,*.cfm,*.cfml", "lucee.debug.loader.servlet.CFMLServlet");
-        servlet.setInitOrder(0);
+        ServletHolder cfml = servlets.addServlet("CFMLServlet", "*.cfc/*,*.cfm/*,*.cfml/*,*.cfc,*.cfm,*.cfml", "lucee.debug.loader.servlet.CFMLServlet");
+        cfml.setInitOrder(0);
 
-        servlet.setInitParameter("lucee-server-directory", strServerContext);
-        //servlet.setInitParameter("lucee-web-directory", strWebContext);
-
-        // Uncomment line below to debug Lucee REST Servlet
-        //servlet = servlets.addServlet("RESTServlet", "/rest/*", "lucee.debug.loader.servlet.RESTServlet");
-
-        //servlet = servlets.addServlet("FileServlet","/","servlet.FileServlet");
-
-        /* Uncomment to add remote flash support; toggle block comment by adding/removing a '/' at the beginning of this line
-        servlet = servlets.addServlet("openamf","/flashservices/gateway/*,/openamf/gateway/*","servlet.AMFServlet");
-        servlet = servlets.addServlet("openamf","/openamf/gateway/*","lucee.loader.servlet.AMFServlet");
-        servlet = servlets.addServlet("MessageBrokerServlet","/flashservices/gateway/*,/messagebroker/*,/flex2gateway/*","flex.messaging.MessageBrokerServlet");
-        servlet.setInitParameter("services.configuration.file", "/WEB-INF/flex/services-config.xml");
-        //*/
+        cfml.setInitParameter("lucee-server-directory", strServerContext);
+        
+        // Lucee REST Servlet
+        ServletHolder rest = servlets.addServlet("RESTServlet", "/rest/*", "lucee.debug.loader.servlet.RESTServlet");
+        rest.setInitOrder(0);
 
         strWebContext += path;
         context.setResourceBase(strWebContext);
         context.addHandler(new ResourceHandler());
     }
-
-    /*public static void addWebXmlContext(HttpServer server, String strContext, String host, String path, String strWebContext, String strServerContext) {
-
-        if (appDir == null) appDir = "./web";
-        if (webContextDir == null) webContextDir = appDir + "/WEB-INF/lucee";
-        if (adminContextDir == null) adminContextDir = appDir + "/WEB-INF/lib/lucee-server";
-        System.out.println("appdir:" + appDir);
-        System.out.println("webcontext:" + webContextDir);
-        System.out.println("servercontext:" + adminContextDir);
-        WebApplicationContext context = new WebApplicationContext(appDir);
-        context.setContextPath(strContext);
-
-	    if ( host != null && !host.isEmpty() )
-	        context.addVirtualHost(host);
-
-        server.addContext(context);
-        appDir += path;
-        context.addHandler(new ResourceHandler());
-    }*/
 
     /**
      * @param args
@@ -161,21 +125,11 @@ public class RunAsJavaApplication {
         	System.err.println("not supported atm");
             //addWebXmlContext(server, "/", host, "/", strWebContext, strServerContext);
         } else {
-            addContext(server, "/", host, "/", strWebContext, strServerContext);
+        	addContext(server, "/", host, "/", strWebContext, strServerContext);
         }
 
         //addContext(server,"/susi/","localhost","/jm/",null,null);
-        //addContext(server,"/sub1/","localhost","/subweb1/",null,null);
-        //addContext(server,"/sub2/","localhost","/subweb2/",null,null);
-        //addContext(server,"/","192.168.2.104","/",null,null);
-
-        //addContext(server,"/","context.example.local","/",null);
-        //addContext(server,"/","7of9","/",null);
-
-        //for(int i=1;i<10;i++)
-        //    addContext(server,"/","context"+i+".example.local","/context"+i+"/",null,null);
-
-
+        
         server.start();
 
 	    if ( host != null && !host.isEmpty() )

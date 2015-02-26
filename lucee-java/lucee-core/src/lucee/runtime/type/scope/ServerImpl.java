@@ -48,7 +48,6 @@ public final class ServerImpl extends ScopeSupport implements Server,SharedScope
 
 	private static final Key PRODUCT_NAME = KeyImpl.intern("productname");
 	private static final Key PRODUCT_LEVEL = KeyImpl.intern("productlevel");
-    private static final Key PRODUCT_CONTEXT_COUNT = KeyImpl.intern("productcontextcount");
     private static final Key PRODUCT_VERSION = KeyImpl.intern("productversion");
     private static final Key SERIAL_NUMBER = KeyImpl.intern("serialnumber");
     private static final Key APP_SERVER =KeyConstants._appserver;
@@ -82,20 +81,8 @@ public final class ServerImpl extends ScopeSupport implements Server,SharedScope
     private static final Key JAVA = KeyConstants._java;
 	private static final Key VERSION_NAME = KeyImpl.intern("versionName");
 	private static final Key VERSION_NAME_EXPLANATION = KeyImpl.intern("versionNameExplanation");
-
-	private static String jap;
-
 	private static String jep;
-
-	/*
-    Supported CFML Application
     
-    Blog
-    - http://www.blogcfm.org
-    
-    
-    
-    */
 	/**
 	 * constructor of the server scope
 	 * @param pc
@@ -135,13 +122,6 @@ public final class ServerImpl extends ScopeSupport implements Server,SharedScope
 	}
 	
 	
-
-	@Override
-	public boolean containsKey(Key key) {
-		if(key.equalsIgnoreCase(KeyConstants._railo))
-			return super.containsKey(KeyConstants._lucee);
-		return super.containsKey(key);
-	}
 
 	@Override
 	public void reload() {	

@@ -42,6 +42,7 @@ import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
 import lucee.runtime.PageSourceImpl;
 import lucee.runtime.config.Config;
+import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
@@ -303,7 +304,7 @@ public final class ResourceUtil {
     }
     
     public static Resource toResourceNotExisting(PageContext pc ,String destination,boolean allowRelpath, boolean checkComponentMappings) {
-    	Resource res;
+    	Resource res=null;
         destination=destination.replace('\\','/');  
     	
     	if(!allowRelpath){
@@ -329,8 +330,8 @@ public final class ResourceUtil {
         if(isUNC) {
         	res=pc.getConfig().getResource(destination.replace('/','\\'));
         }
-        else res=pc.getConfig().getResource(destination);
-        if(res.isAbsolute()) return res;
+        else if(!destination.startsWith("..")) res=pc.getConfig().getResource(destination);
+        if(res!=null && res.isAbsolute()) return res;
         
         return getRealResource(pc,destination,res);
     }
@@ -1370,18 +1371,6 @@ public final class ResourceUtil {
 		
 	}
 	
-	public static void deleteEmptyFolders(Resource res) throws IOException {
-		if(res.isDirectory()){
-			Resource[] children = res.listResources();
-			for(int i=0;i<children.length;i++){
-				deleteEmptyFolders(children[i]);
-			}
-			if(res.listResources().length==0){
-				res.remove(false);
-			}
-		}
-	}
-	
 	/**
      * if the pageSource is based on a archive, translate the source to a zip:// Resource
      * @return return the Resource matching this PageSource
@@ -1436,15 +1425,23 @@ public final class ResourceUtil {
     	}
     	return list.toArray(new Resource[list.size()]);
 	}
-	public static void removeEmptyFolders(Resource dir) throws IOException {
+	
+	/**
+	 * remove empty folder in given directory
+	 * @param dir directory to delete 
+	 * @param filter if set (not null), only delete directories that match the given filter
+	 * @throws IOException
+	 */
+	public static void removeEmptyFolders(Resource dir,ResourceFilter filter) throws IOException {
 		if(!dir.isDirectory()) return;
+		
 		
 		Resource[] children = dir.listResources(IgnoreSystemFiles.INSTANCE);
 		
 		if(!ArrayUtil.isEmpty(children)) {
 			boolean hasFiles=false;
 			for(int i=0;i<children.length;i++){
-				if(children[i].isDirectory()) removeEmptyFolders(children[i]);
+				if(children[i].isDirectory()) removeEmptyFolders(children[i],filter);
 				else if(children[i].isFile()) {
 					hasFiles=true;
 				}
@@ -1452,10 +1449,10 @@ public final class ResourceUtil {
 			if(!hasFiles){
 				children = dir.listResources(IgnoreSystemFiles.INSTANCE);
 			}
-			
 		}
-		if(ArrayUtil.isEmpty(children)) dir.remove(true);
+		if(ArrayUtil.isEmpty(children) && (filter==null || filter.accept(dir))) dir.remove(true);
 	}
+	
 	
 	public static char getSeparator(ResourceProvider rp) {
 		if(rp instanceof ResourceProviderPro)

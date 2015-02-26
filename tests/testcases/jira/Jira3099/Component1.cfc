@@ -35,7 +35,6 @@ component {
 		local.com2 = new component2();
 		local.com2.override = susi;
 		local.com2.override();
-		//dump(local.com2);	
 	}
 
 	private function susi(){			

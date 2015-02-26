@@ -714,7 +714,7 @@ public final class Directory extends TagImpl  {
 	}
 	
 	
-	public static  void actionCopy(PageContext pc,Resource directory,String strDestination,String serverPassword,boolean createPath, Object acl,int storage, ResourceFilter filter, boolean recurse, int nameconflict) throws PageException {
+	public static  void actionCopy(PageContext pc,Resource directory,String strDestination,String serverPassword,boolean createPath, Object acl,int storage, final ResourceFilter filter, boolean recurse, int nameconflict) throws PageException {
 		// check directory
 		SecurityManager securityManager = pc.getConfig().getSecurityManager();
 	    securityManager.checkFileLocation(pc.getConfig(),directory,serverPassword);
@@ -739,21 +739,39 @@ public final class Directory extends TagImpl  {
 	    securityManager.checkFileLocation(pc.getConfig(),newdirectory,serverPassword);
 
 		try {
+			boolean clearEmpty=false;
 			// has already a filter
+			ResourceFilter f=null;
 			if(filter!=null) {
-				if(!recurse) filter=new AndResourceFilter(new ResourceFilter[]{
-						filter,new NotResourceFilter(DirectoryResourceFilter.FILTER)
-				});
+				if(!recurse) {
+					f=new AndResourceFilter(
+							new ResourceFilter[]{
+									filter,
+									new NotResourceFilter(DirectoryResourceFilter.FILTER)
+								}
+							);
+				}
+				else {
+					clearEmpty=true;
+					f=new OrResourceFilter(
+							new ResourceFilter[]{
+									filter,
+									DirectoryResourceFilter.FILTER
+								}
+							);
+				}
 			}
 			else {
-				if(!recurse)filter=new NotResourceFilter(DirectoryResourceFilter.FILTER);
+				if(!recurse)f=new NotResourceFilter(DirectoryResourceFilter.FILTER);
 			}
 			if(!createPath) {
 				Resource p = newdirectory.getParentResource();
 				if(p!=null && !p.exists())
 					throw new ApplicationException("parent directory for ["+newdirectory+"] doesn't exist");
 			}
-			ResourceUtil.copyRecursive(directory, newdirectory,filter);
+			ResourceUtil.copyRecursive(directory, newdirectory,f);
+			if(clearEmpty)ResourceUtil.removeEmptyFolders(newdirectory,f==null?null:new NotResourceFilter(filter));
+			
 		}
 		catch(Throwable t) {
 			throw new ApplicationException(t.getMessage());

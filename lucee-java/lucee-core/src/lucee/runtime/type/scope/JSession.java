@@ -60,7 +60,7 @@ public final class JSession extends ScopeSupport implements Session,HttpSessionB
      */
     public JSession() {
         super(true,"session",SCOPE_SESSION);
-        setDisplayName("Scope Session (Type J2ee)");
+        setDisplayName("Scope Session (Type JEE)");
         this.created=System.currentTimeMillis();
     }
 

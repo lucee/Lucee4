@@ -19,6 +19,7 @@
 component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public function setUp(){
+		setTimeZone("CET");
 		date=createDateTime(2009,6,9,14,30,3);
 	}
 	
@@ -221,6 +222,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	}
 	
 	public void function testZ(){
+		
 		// Second in minute
 		assertEquals("CEST",DateTimeFormat(date,"z"));
 		assertEquals("CEST",DateTimeFormat(date,"zz"));

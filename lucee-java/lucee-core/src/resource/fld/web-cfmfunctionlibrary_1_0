@@ -7270,8 +7270,8 @@ Value must be greater than or equal to 3 and less than or equal to 10. The defau
 	<function>
 		<name>ImageClearRect</name>
 		<class>lucee.runtime.functions.image.ImageClearRect</class>
-		<member-name>blur</member-name>
-		<keywords>clearRect</keywords>
+		<member-name>clearRect</member-name>
+		<keywords>image</keywords>
 		<description>Clears the specified rectangle by filling it with the background color of the current drawing surface.</description>
 		<argument>
 			<name>image</name>
@@ -14129,6 +14129,34 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 			<type>array</type>
 		</return>
 	</function>
+	
+	
+	<!-- QueryGetRow -->
+    	<function>
+    		<name>QueryGetRow</name>
+    		<class>lucee.runtime.functions.query.QueryRowData</class>
+    		<member-name>getRow</member-name>
+    		<keywords>query</keywords>
+			<status>deprecated</status>
+			<description>this function is deprecated, use function QueryRowData instead.</description>
+	
+    		<argument>
+    			<name>query</name>
+    			<type>query</type>
+    			<required>Yes</required>
+    			<description>query object do get data from</description>
+    	    </argument>
+    		<argument>
+    			<name>rowNumber</name>
+    			<type>number</type>
+    			<required>Yes</required>
+    			<description>position of the row to be returned</description>
+    	    </argument>
+    		<return>
+    			<type>struct</type>
+    		</return>
+    	</function>
+	
 	<!-- queryRowData -->
     	<function>
     		<name>queryRowData</name>

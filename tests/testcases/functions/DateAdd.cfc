@@ -180,8 +180,8 @@
 <cfset valueEquals(left="#DateDiff('m', date1, date2)#x", right="1x")>
 <cfset valueEquals(left="#DateDiff('d', date1, date2)#x", right="31x")>
 
-<cf_valueEquals label="1" left="#DateAdd("m", 1, 0)#x" right="{ts '1900-01-30 00:00:00'}x" >
-<cf_valueEquals label="1" left="#DateAdd("yyyy", 2, 0)&""#" right="{ts '1901-12-30 00:00:00'}" >
+<cfset valueEquals(left="#DateAdd("m", 1, 0)#x", right="{ts '1900-01-30 00:00:00'}x") >
+<cfset valueEquals(left="#DateAdd("yyyy", 2, 0)&""#", right="{ts '1901-12-30 00:00:00'}") >
 
 
 <cfset valueEquals(left="#DateAdd('m',0,"11/01/1975 00:00 AM")#x", right="{ts '1975-11-01 00:00:00'}x")>
