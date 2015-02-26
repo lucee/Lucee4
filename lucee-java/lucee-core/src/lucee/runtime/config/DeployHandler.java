@@ -76,12 +76,12 @@ public class DeployHandler {
 				try {
 				// Lucee archives
 				ext=ResourceUtil.getExtension(child, null);
-				if("ra".equalsIgnoreCase(ext) || "ras".equalsIgnoreCase(ext)) {
+				if("lar".equalsIgnoreCase(ext)) {
 					deployArchive(config,child);
 				}
 				
 				// Lucee Extensions
-				else if("re".equalsIgnoreCase(ext))
+				else if("lex".equalsIgnoreCase(ext))
 					deployExtension(config, child);
 				}
 				catch (ZipException e) {
