@@ -30,14 +30,12 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	public void function testPositionalArguments(){
 		if(hasFullNullSupport()) throw "test need full null support disabled";
 		var res=testArgs("test","test");
-		//dump(var:res,label:'p1');
 		assertTrue(structKeyexists(res,"arg1"));
 		assertTrue(structKeyexists(res,"arg2"));
 		assertTrue(structKeyexists(res,"arg3"));
 		assertFalse(structKeyexists(res,"arg4"));
 
 		var res=testArgs("test","test",nullValue(),nullValue());
-		//dump(var:res,label:'p2');
 		assertTrue(structKeyexists(res,"arg1"));
 		assertTrue(structKeyexists(res,"arg2"));
 		assertTrue(structKeyexists(res,"arg3"));
@@ -48,13 +46,12 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		if(hasFullNullSupport()) throw "test need full null support disabled";
 
 		var res=testArgs(arg1="test",arg2="test");
-		//dump(var:res,label:'n');
 		assertTrue(structKeyexists(res,"arg1"));
 		assertTrue(structKeyexists(res,"arg2"));
 		assertTrue(structKeyexists(res,"arg3"));
 		assertFalse(structKeyexists(res,"arg4"));
 		res=testArgs(arg1="test",arg2="test",arg3=nullValue(),arg4=nullValue());
-		//dump(var:res,label:'n');
+		
 		assertTrue(structKeyexists(res,"arg1"));
 		assertTrue(structKeyexists(res,"arg2"));
 		assertTrue(structKeyexists(res,"arg3"));

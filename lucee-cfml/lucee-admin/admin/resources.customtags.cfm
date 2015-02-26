@@ -1,8 +1,8 @@
 <cfset stText.CustomTags.name="Name">
-<cfset stText.CustomTags.nameMissing="Missing the name for the new Mapping, this name is used when you deploy a Lucee Archive (.ra,.ras) based on this Mapping.">
+<cfset stText.CustomTags.nameMissing="Missing the name for the new Mapping, this name is used when you deploy a Lucee Archive (.lar) based on this Mapping.">
 <cfset stText.CustomTags.nameDesc="The name is used as identifier when you automaticly import a Lucee Archive build based on this Mapping.">
 <cfset stText.CustomTags.PhysicalDesc="Directory path where the custom tags are located.">
-<cfset stText.CustomTags.archiveDesc="File path to a custom tag Lucee Archive (.ra or .ras).">
+<cfset stText.CustomTags.archiveDesc="File path to a custom tag Lucee Archive (.lar).">
 <cfset stText.CustomTags.PrimaryDesc="Defines where Lucee does looks first for a requested custom tags">
 <cfset stText.CustomTags.trustedDesc="When does Lucee checks for changes in the source file for a already loaded custom tags">
 
@@ -62,7 +62,7 @@
 						<cfset data.addNonCFMLFiles[idx]=isDefined("data.addNonCFMLFiles[#idx#]") and data.addNonCFMLFiles[idx]>
 						<cfset data.addCFMLFiles[idx]=isDefined("data.addCFMLFiles[#idx#]") and data.addCFMLFiles[idx]>
 					
-					<cfset ext='ra'>
+					<cfset ext='lar'>
 					<cfset target=getTempDirectory() & Rand() & "."&ext>
 					<cfset filename=data.virtuals[idx]>
 					<cfset filename=mid(filename,2,len(filename))>

@@ -1,7 +1,7 @@
 ﻿<cfsetting showdebugoutput="no">
 <cfsilent>
 	
-	<cfapplication name='__RAILO_STATIC_CONTENT' sessionmanagement='#false#' clientmanagement='#false#' applicationtimeout='#createtimespan( 1, 0, 0, 0 )#'>
+	<cfapplication name='__LUCEE_STATIC_CONTENT' sessionmanagement='#false#' clientmanagement='#false#' applicationtimeout='#createtimespan( 1, 0, 0, 0 )#'>
 	
 	<cfset mimetype = "text/javascript" />
 	<cfset etag = hash( getCurrentTemplatePath() & '-' & Server.Lucee.Version ) />

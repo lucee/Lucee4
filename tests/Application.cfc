@@ -18,16 +18,27 @@
  **/
 component {
 	this.name = hash( getCurrentTemplatePath() );
-    request.webadminpassword="server";
+    
+	include "properties.cfm";
+
+	dump(123);
+
+	// check properties
+	if(isNull(request.webAdminPassword) || request.webAdminPassword.isEmpty())
+		throw '"request.webAdminPassword" is not set in template "properties.cfm"';
 	
+	if(isNull(request.mysql) || request.mysql.isEmpty())
+		throw '"request.mysql" is not set in template "properties.cfm"';
+	
+
 	// make sure testbox exists 
 	// TODO cache this test for a minute
 	try{
-		getComponentMetaData("testbox.system.testing.TestBox");
+		getComponentMetaData("testbox.system.TestBox");
 	}
-	catch(e){
+	catch(e){ 
 		// only add mapping when necessary
-		this.componentpaths = [{archive:getDirectoryFromPath(getCurrentTemplatePath())&"testbox.ra"}]; // "{lucee-server}/context/testbox.ra"
+		this.componentpaths = [{archive:getDirectoryFromPath(getCurrentTemplatePath())&"testbox.lar"}]; // "{lucee-server}/context/testbox.ra"
 	}
 	
 
