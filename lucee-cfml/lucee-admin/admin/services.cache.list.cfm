@@ -253,7 +253,7 @@ function defaultValue(field) {
 			<table class="maintbl">
 				<tbody>
 	<cfset defaults={}>		
-    <cfloop index="type" list="object,template,query,resource,function,include,http,file,webservice">
+    <cfloop index="type" list="object,template,query,resource,function,include">
 						<tr>
 							<th scope="row">#stText.Settings.cache['defaulttype'& type]#</th>
 							<td>
@@ -274,7 +274,7 @@ hasObj=!isNull(defaults.object) && len(defaults.object);
 hasTem=!isNull(defaults.template) && len(defaults.template);
 hasQry=!isNull(defaults.query) && len(defaults.query);
 hasRes=!isNull(defaults.resource) && len(defaults.resource);
-hasFun=!isNull(defaults.function) && len(defaults.function);
+hasFun=!isNull(defaults['function']) && len(defaults['function']);
 hasInc=!isNull(defaults.include) && len(defaults.include);
 hasHTT=!isNull(defaults.http) && len(defaults.http);
 hasFil=!isNull(defaults.file) && len(defaults.file);
