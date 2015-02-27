@@ -58,7 +58,8 @@ public class CFMLEngineFactory {
 	
 	 // set to false to disable patch loading, for example in major alpha releases
 	 private static final boolean PATCH_ENABLED = true;
-	 
+	 private static boolean loadLuceeFromClassPath = false;
+	    
 	private static CFMLEngineFactory factory;
 	 private static CFMLEngineWrapper engineListener;
 	 private CFMLEngine engine;
@@ -203,6 +204,11 @@ public class CFMLEngineFactory {
 				}
 		}
 		catch(IOException ioe){}
+        // if this property is true, the lucee patch file should be renamed to a jar file and placed on the classpath in order for it to work.
+        String loadLuceeFromClasspathProperty = config.getInitParameter("load-from-classpath");
+        if ( !Util.isEmpty( loadLuceeFromClasspathProperty ) ) {
+        	loadLuceeFromClassPath = loadLuceeFromClasspathProperty.toLowerCase().equals("true");
+        }
 	 }
 	 
 
@@ -229,7 +235,20 @@ public class CFMLEngineFactory {
 		return engine;
 	 }
 
-	 private void initEngine() throws ServletException {
+	    private void initEngine() throws ServletException {
+	    	
+	        if ( loadLuceeFromClassPath ) {
+		        try {
+					engine = getEngine( mainClassLoader );
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+	        } else {
+	        	_initPatchEngine();
+	        }
+	    } 
+	    
+	    private void _initPatchEngine() throws ServletException {
 		
 		int coreVersion=Version.getIntVersion();
 		long coreCreated=Version.getCreateTime();
