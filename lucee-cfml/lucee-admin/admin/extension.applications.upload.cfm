@@ -119,6 +119,9 @@
 	, download: zipfile
 } />
 <cfloop collection="#configXml.config.info#" item="key">
+	<cfif not structKeyExists(qData, key)>
+		<cfcontinue />
+	</cfif>
 	<cfif isDefined("configXml.config.info[key].xmlText")>
 		<cfset qData[key] = configXml.config.info[key].xmlText />
 	<cfelse>
