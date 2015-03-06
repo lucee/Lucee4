@@ -46,7 +46,8 @@ public abstract class _Mail extends TagImpl {
     private int startrow=1;
     private int maxrows=-1;
     private boolean generateUniqueFilenames=false;
-    
+    private boolean secure=false;
+
     @Override
     public void release() {
         port=-1;
@@ -61,6 +62,7 @@ public abstract class _Mail extends TagImpl {
         startrow=1;
         maxrows=-1;
         generateUniqueFilenames=false;
+        secure=false;
         super.release();
         
     }
@@ -161,6 +163,13 @@ public abstract class _Mail extends TagImpl {
     }
 
     /**
+     * @param secure The secure to set.
+     */
+    public void setSecure(boolean secure) {
+        this.secure = secure;
+    }
+
+    /**
      * @param timeout The timeout to set.
      */
     public void setTimeout(double timeout) {
@@ -188,7 +197,7 @@ public abstract class _Mail extends TagImpl {
     	if(port==-1)port=getDefaultPort();
     	
     	//PopClient client = new PopClient(server,port,username,password);
-    	MailClient client = MailClient.getInstance(getType(),server,port,username,password);
+    	MailClient client = MailClient.getInstance(getType(),server,port,username,password,secure);
         client.setTimeout(timeout*1000);
         client.setMaxrows(maxrows);
         if(startrow>1)client.setStartrow(startrow-1);
