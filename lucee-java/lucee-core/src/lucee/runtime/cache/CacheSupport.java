@@ -48,18 +48,18 @@ public abstract class CacheSupport implements Cache {
 	}
 	
 	@Override
-	public List<CacheEntry> keys(CacheEntryFilter filter) throws IOException {
+	public List<String> keys(CacheEntryFilter filter) throws IOException {
 		boolean all=CacheUtil.allowAll(filter);
 		
 		List<String> keys = keys();
-		List<CacheEntry> list=new ArrayList<CacheEntry>();
+		List<String> list=new ArrayList<String>();
 		Iterator<String> it = keys.iterator();
 		String key;
 		CacheEntry entry;
 		while(it.hasNext()){
 			key=it.next();
 			entry=getQuiet(key,null);
-			if(all || filter.accept(entry))list.add(entry);
+			if(all || filter.accept(entry))list.add(key);
 		}
 		return list;
 	}
