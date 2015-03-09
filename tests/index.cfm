@@ -19,8 +19,18 @@
 // SETUP THE ROOTS OF THE BROWSER RIGHT HERE
 //reporter="org.lucee.cfml.test.reporter.HTMLReporter";
 currentDirectory= getDirectoryFromPath(getCurrentTemplatePath());
-rootPath= currentDirectory&"testcases/";
-rootMapping 	= contractPath(rootPath);
+
+if(isNull(url.rootPath)) {
+	rootPathes=request.pathes;
+	arrayAppend(rootPathes,currentDirectory&"testcases/");
+}
+else rootPathes=[rootPath];
+
+rootMappings=[];
+loop array="#rootPathes#" item="value"{
+	arrayAppend(rootMappings,contractPath(value));
+}
+
 /**
 * converts a path to a package name
 */
@@ -80,11 +90,22 @@ testbox = new testbox.system.TestBox();
 </cfif>
 
 <!--- Get list of files --->
-<cfdirectory action="list" directory="#rootPath & url.path#" name="qResults" sort="asc" >
-
-
-<!--- Get the execute path --->
-<cfset executePath = rootMapping & ( url.path eq "/" ? "/" : url.path & "/" )>
+<cfset qResults="">
+<cfloop array="#rootPathes#" item="rootPath">
+	<cfdirectory action="list" directory="#rootPath & url.path#" name="qry" sort="asc">
+	<cfif isSimpleValue(qResults)>
+		<cfset qResults=queryNew(qry.columnlist)>
+	</cfif>
+	<cfloop query="#qry#">
+		<cfset row=queryAddRow(qResults)>
+		<cfloop list="#qry.columnlist#" item="col">
+			<cfset qResults[col][row]=qry[col]>
+		</cfloop>
+	</cfloop>
+</cfloop>
+<cfdump var="#qResults#">
+<!--- Get the execute path 
+<cfset executePath = rootMapping & ( url.path eq "/" ? "/" : url.path & "/" )>--->
 <!--- Get the Back Path --->
 <cfif url.path neq "/">
 	<cfset backPath = replacenocase( url.path, listLast( url.path, "/" ), "" )>
@@ -208,7 +229,7 @@ testbox = new testbox.system.TestBox();
 			or click on the <strong>Run All</strong> button on your left and it will execute a directory runner from the visible folder.
 		</p>
 		
-		<fieldset><legend>Contents: #executePath#</legend>
+		<fieldset><legend>Contents: <!--- #executePath# ---></legend>
 		<cfif url.path neq "/">
 			<a href="index.cfm?path=#URLEncodedFormat( backPath )#"><button type="button" class="btn-red">&lt;&lt; Back</button></a><br><hr>
 		</cfif>
@@ -218,9 +239,11 @@ testbox = new testbox.system.TestBox();
 			</cfif>
 
 			<cfset dirPath = URLEncodedFormat( ( url.path neq '/' ? '#url.path#/' : '/' ) & qResults.name )>
+			<cfset executePath = contractPath(qresults.directory)&"/" >
+
 			<cfif qResults.type eq "Dir">
 				<cfif !fileExists(qResults.directory&"/"&qResults.name&".cfc")>
-					+<a href="index.cfm?path=#dirPath#">#qResults.name#</a><br/>
+					+<a href="index.cfm?rootPath=#URLEncodedFormat(qresults.directory)#&path=#dirPath#">#qResults.name#</a><br/>
 				</cfif>
 			<!--- <cfelseif listLast( qresults.name, ".") eq "cfm">
 				<a href="#executePath & qResults.name#" target="_blank">#qResults.name#</a><br/> --->
