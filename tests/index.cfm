@@ -103,7 +103,6 @@ testbox = new testbox.system.TestBox();
 		</cfloop>
 	</cfloop>
 </cfloop>
-<cfdump var="#qResults#">
 <!--- Get the execute path 
 <cfset executePath = rootMapping & ( url.path eq "/" ? "/" : url.path & "/" )>--->
 <!--- Get the Back Path --->
