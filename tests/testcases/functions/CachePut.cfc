@@ -23,6 +23,13 @@
 		<cfset testCachePut()>
 		<cfset deleteCache()>
 	</cffunction>
+
+	<cffunction name="testCachePutRAMCache" localMode="modern">
+		<cfset createRAMCache()>
+		<cfset testCachePut()>
+		<cfset deleteCache()>
+	</cffunction>
+
 	<cffunction name="testCachePutJBossCache" localMode="modern">
 		<cfif !isNull(request.testJBossExtension) and request.testJBossExtension>
 			<cfset createJBossCache()>
@@ -30,11 +37,15 @@
 			<cfset deleteCache()>
 		</cfif>
 	</cffunction>
-	<cffunction name="testCachePutRAMCache" localMode="modern">
-		<cfset createRAMCache()>
-		<cfset testCachePut()>
-		<cfset deleteCache()>
+
+	<cffunction name="testCachePutMemcachedCache" localMode="modern">
+		<cfif !isNull(request.testMemcachedExtension) and request.testMemcachedExtension>
+			<cfset createMemcachedCache()>
+			<cfset testCachePut()>
+			<cfset deleteCache()>
+		</cfif>
 	</cffunction>
+
 	
 	<cffunction access="private" name="testCachePut" localMode="modern">
 
@@ -42,30 +53,31 @@
 <cfset server.enableCache=true>
 
 <cflock scope="server" timeout="10">
-	<cfset cacheRemove(arrayToList(cacheGetAllIds()))>
-	
-	<cfset cachePut('abc','123',CreateTimeSpan(0,0,0,1))>
-	<cfset cachePut('def','123',CreateTimeSpan(0,0,0,2),CreateTimeSpan(0,0,0,1))>
-	<cfset cachePut('ghi','123',CreateTimeSpan(0,0,0,0),CreateTimeSpan(0,0,0,0))>
+	<!--- <cfset cacheRemove(arrayToList(cacheGetAllIds()))> --->
+	<cfset prefix=getTickCount()>
+
+	<cfset cachePut(prefix&'abc','123',CreateTimeSpan(0,0,0,1))>
+	<cfset cachePut(prefix&'def','123',CreateTimeSpan(0,0,0,2),CreateTimeSpan(0,0,0,1))>
+	<cfset cachePut(prefix&'ghi','123',CreateTimeSpan(0,0,0,0),CreateTimeSpan(0,0,0,0))>
     
 	<cfset sct={}>
-    <cfset sct.a=cacheGet('abc')>
-    <cfset sct.b=cacheGet('def')>
-    <cfset sct.c=cacheGet('ghi')>
+    <cfset sct.a=cacheGet(prefix&'abc')>
+    <cfset sct.b=cacheGet(prefix&'def')>
+    <cfset sct.c=cacheGet(prefix&'ghi')>
     
     <cfset valueEquals(left="#structKeyExists(sct,'a')#", right="true")>
     <cfset valueEquals(left="#structKeyExists(sct,'b')#", right="true")>
     <cfset valueEquals(left="#structKeyExists(sct,'c')#", right="true")>
     <cfset sleep(1200)>
-    <cfset sct.d=cacheGet('abc')>
-    <cfset sct.e=cacheGet('def')>
-    <cfset sct.f=cacheGet('ghi')>
+    <cfset sct.d=cacheGet(prefix&'abc')>
+    <cfset sct.e=cacheGet(prefix&'def')>
+    <cfset sct.f=cacheGet(prefix&'ghi')>
     <cfset valueEquals(left="#structKeyExists(sct,'d')#", right="false")>
     <cfset valueEquals(left="#structKeyExists(sct,'e')#", right="false")>
     <cfset valueEquals(left="#structKeyExists(sct,'f')#", right="true")>
     
 <cfif server.ColdFusion.ProductName EQ "lucee">    
-	<cfset cachePut('def','123',CreateTimeSpan(0,0,0,2),CreateTimeSpan(0,0,0,1),cacheName)>
+	<cfset cachePut(prefix&'def','123',CreateTimeSpan(0,0,0,2),CreateTimeSpan(0,0,0,1),cacheName)>
 </cfif>
 </cflock>
 
@@ -136,6 +148,35 @@
 					,memoryEvictionPolicy:"LRU"
 					,timeToIdleSeconds:86400
 					,maxElementsInMemory:10000}#";
+	}
+
+
+		
+	private function createMemcachedCache() {
+		admin 
+				action="updateCacheConnection"
+				type="web"
+				password="#request.webadminpassword#"
+				
+				default="object"
+				name="#cacheName#" 
+				class="org.lucee.extension.io.cache.memcache.MemCacheRaw" 
+				storage="false"
+				custom="#{
+				'initial_connections':'1',
+				'socket_timeout':30,
+				'alive_check':true,
+				'buffer_size':1,
+				'max_spare_connections':'32',
+				'socket_connect_to':3,
+				'min_spare_connections':1,
+				'failback':true,
+				'maint_thread_sleep':5,
+				'max_idle_time':600,
+				'nagle_alg':true,
+				'max_busy_time':30,
+				'failover':true,
+				'servers':'localhost:11211'}#";
 	}
 				
 	private function deleteCache(){
