@@ -134,7 +134,7 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 				ce.register(new SessionEndCacheEvent());
 			}*/
 			String key=getKey(cfid, appName, getTypeAsString());
-			cache.put(key, sct,new Long(getTimeSpan()), null);
+			cache.put(key, sct,null,new Long(getTimeSpan()));
 		} 
 		catch (Exception pe) {}
 	}
