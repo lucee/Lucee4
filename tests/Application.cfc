@@ -19,15 +19,46 @@
 component {
 	this.name = hash( getCurrentTemplatePath() );
     
+
+
 	include "properties.cfm";
 
 	// check properties
 	if(isNull(request.webAdminPassword) || request.webAdminPassword.isEmpty())
 		throw '"request.webAdminPassword" is not set in template "properties.cfm"';
-	
+
 	if(isNull(request.mysql) || request.mysql.isEmpty())
 		throw '"request.mysql" is not set in template "properties.cfm"';
 	
+
+	// addional path
+
+	if(!isNull(request.external)) {
+		mapp={};
+		loop struct="#request.external#" index="label" item="path" {
+			virtual="/"&label.replace(' ','_');
+			admin 
+				action="updateMapping"
+				type="web"
+				password="#request.webAdminPassword#"
+				archive=""
+				primary="physical"
+				trusted="false"
+				virtual="#virtual#"
+				physical="#path#";
+
+			if(fileExists(path&"/properties.cfm")) {
+				//mapp[virtual]=path;
+				//application action="update" mappings="#{''&virtual:path}#";
+				include virtual&"/properties.cfm";
+			}
+		}
+		this.mappings=mapp;
+	}
+
+
+
+
 
 	// make sure testbox exists 
 	// TODO cache this test for a minute
