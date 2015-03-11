@@ -25,12 +25,12 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public void function testCompositeId(){
 		// first call only initialize the data
-		http method="get" result="local.result" url="#variables.baseURL#one.cfm" addtoken="false";
+		http method="get" result="local.result" url="#variables.baseURL#one.cfm?datasource=#request.mysql#" addtoken="false";
 		assertEquals(200,result.status_code);
 		assertEquals('',trim(result.filecontent));
 		
 		// now get the result
-		http method="get" result="local.result" url="#variables.baseURL#two.cfm" addtoken="false";
+		http method="get" result="local.result" url="#variables.baseURL#two.cfm?datasource=#request.mysql#" addtoken="false";
 		local.res=evaluate(trim(result.filecontent));
 		setting showdebugoutput="false";
 		
@@ -41,7 +41,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	
 	public void function testCompositeId2(){
 		// first call only initialize the data
-		http method="get" result="local.result" url="#variables.baseURL#bestseller.cfm" addtoken="false";
+		http method="get" result="local.result" url="#variables.baseURL#bestseller.cfm?datasource=#request.mysql#" addtoken="false";
 		assertEquals(200,result.status_code);
 	}
 	
