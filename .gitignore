@@ -40,3 +40,7 @@ sample.mov
 /.idea/
 /*.iml
 *.hbm.xml
+**/db.lck
+**/db.properties
+**/db.log
+**/db.script
