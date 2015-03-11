@@ -21,7 +21,8 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	//public function setUp(){}
 
 	public void function test(){
-		http method="get" result="local.result" url="#createURL("Jira2275/index.cfm")#" addtoken="false";
+		http method="get" result="local.result" url="#createURL("Jira2275/index.cfm?datasource=#request.mysql#")#" addtoken="false";
+		echo(result.filecontent);
 		
 		assertEquals("DISPLAY,FIELD_ID,INFOCARD_ID,TYPE",trim(result.filecontent));
 		

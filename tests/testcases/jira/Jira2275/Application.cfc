@@ -22,7 +22,7 @@
 	<cfset THIS.SetClientCookies = true />
 	<!--- ORM Stuff --->
 	<cfset this.ormenabled = "true"> 
-	<cfset this.datasource = "#request.mysql#">
+	<cfset this.datasource = "#url.datasource#">
 	<cfset this.ormsettings = {} />
 	<cfset this.ormsettings.cfclocation = "orm" />
 	<cfset this.ormsettings.dbcreate = "update" />

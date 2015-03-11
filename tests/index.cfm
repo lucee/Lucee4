@@ -42,9 +42,12 @@ if(isNull(url.root)) {
 }
 else rootPathes=[{root:url.root,label:url.label}];
 
-loop array="#rootPathes#" item="value"{
-	virtual="/"&hash(value.root);
-	value.mapping=virtual;
+loop array="#rootPathes#" index="i" item="value"{
+	if(i==1) value.mapping=contractPath(value.root)// first is main
+	else {
+		virtual="/"&value.label.replace(' ','_');
+		value.mapping=virtual;
+	}
 }
 
 
@@ -97,7 +100,6 @@ testbox = new testbox.system.TestBox();
 	<cfif directoryExists( expandPath( el.root & url.path ) )>
 		
 		<cfoutput>
-		<cfdump var="#el.mapping & url.path#">
 #testbox.init( directory=el.mapping & url.path ).run(
 	directory:{mapping:el.mapping & url.path,recurse:false}
 	)#</cfoutput>
