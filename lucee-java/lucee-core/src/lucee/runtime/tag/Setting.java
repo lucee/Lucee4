@@ -30,11 +30,11 @@ public final class Setting extends BodyTagImpl {
 	* @param requesttimeout value to set
 	**/
 	public void setRequesttimeout(double requesttimeout)	{
-		long rt;
-		if(requesttimeout <= 0) rt=Long.MAX_VALUE;
-		else rt=(long)(requesttimeout*1000);
-		
-		pageContext.setRequestTimeout(rt);
+
+        if (requesttimeout <= 0)
+            pageContext.setRequestTimeout(Long.MAX_VALUE);
+        else
+            pageContext.setRequestTimeout((long)(requesttimeout*1000));
 	}
 
 	/** set the value showdebugoutput
