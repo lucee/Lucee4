@@ -8,12 +8,6 @@ request.external={
 	//"MongoDB":"/Users/mic/Projects/Extensions/MongoDB/tests/"
 };
 
-// Test Extensions (need to be installed)
-request.testJBossExtension=false;
-request.testMongoDBExtension=false;
-request.testMemcachedExtension=true;
-
-
 
 // Datasources
 request.mysql="mysql";
