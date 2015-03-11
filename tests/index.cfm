@@ -92,16 +92,19 @@ testbox = new testbox.system.TestBox();
 
 <!--- Run Tests Action?--->
 <cfif structKeyExists( url, "action")>
-	<cfif directoryExists( expandPath( rootMapping & url.path ) )>
+	<cfloop array="#rootPathes#" item="el">
+	
+	<cfif directoryExists( expandPath( el.root & url.path ) )>
 		
 		<cfoutput>
-
-#testbox.init( directory=rootMapping & url.path ).run(
-	directory:{mapping:rootMapping & url.path,recurse:false}
+		<cfdump var="#el.mapping & url.path#">
+#testbox.init( directory=el.mapping & url.path ).run(
+	directory:{mapping:el.mapping & url.path,recurse:false}
 	)#</cfoutput>
 	<cfelse>
 		<cfoutput><h1>Invalid incoming directory: #rootMapping & url.path#</h1></cfoutput>
 	</cfif>
+	</cfloop>
 	<cfabort>
 	
 </cfif>
@@ -239,7 +242,9 @@ testbox = new testbox.system.TestBox();
 	<div id="tb-left" class="centered">
 		<img src="data:image/png;base64,#logo#" alt="TestBox" id="tb-logo"/><br>v#testbox.getVersion()#<br>
 
-		<a href="index.cfm?action=runTestBox&path=#URLEncodedFormat( url.path )#" target="_blank"><button class="btn-red" type="button">Run All</button></a>
+		<a href="index.cfm?#(isNull(url.label)?"":"label=#url.label#&")
+		##(isNull(url.root)?"":"root=#url.root#&")
+		#action=runTestBox&path=#URLEncodedFormat( url.path )#" target="_blank"><button class="btn-red" type="button">Run All</button></a>
 	</div>
 
 	<div id="tb-right">
