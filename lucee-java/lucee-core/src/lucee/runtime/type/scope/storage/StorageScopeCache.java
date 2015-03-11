@@ -162,7 +162,7 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 	
 
 	public static String getKey(String cfid, String appName, String type) {
-		return new StringBuilder("lucee-storage:").append(type).append(":").append(cfid).append(":").append(appName).toString();
+		return new StringBuilder("lucee-storage:").append(type).append(":").append(cfid).append(":").append(appName).toString().toUpperCase();
 	}
 	
 	/*private void setTimeSpan(PageContext pc) {
