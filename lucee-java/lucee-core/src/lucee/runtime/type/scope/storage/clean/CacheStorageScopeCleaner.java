@@ -108,7 +108,7 @@ public class CacheStorageScopeCleaner extends StorageScopeCleanerSupport {
 		private String startsWith;
 
 		public Filter(String type){
-			startsWith="lucee-storage:"+type+":";
+			startsWith=new StringBuilder("lucee-storage:").append(type).append(":").toString().toUpperCase();
 		}
 		
 		public String toPattern() {
