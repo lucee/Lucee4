@@ -30,7 +30,7 @@ import com.sun.mail.imap.IMAPFolder;
 public final class ImapClient extends MailClient {
 
 	public ImapClient(String server, int port, String username, String password) {
-		super(server, port, username, password);
+		super(server, port, username, password, false);
 	}
 
 	protected String getId(Folder folder,Message message) throws MessagingException {
