@@ -46,7 +46,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		var end=find('</testReturn>',res);
 		var raw=mid(res,start+1,end-start-1)
 		
-		dump(raw);
 		//dump(StringEscapeUtils.unescapeHtml(raw));
 		//dump(StringEscapeUtils.unescapeHtml(StringEscapeUtils.unescapeHtml(raw)));
 		assertEquals(variables.expected,StringEscapeUtils.unescapeHtml(raw));
