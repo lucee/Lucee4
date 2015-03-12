@@ -30,10 +30,10 @@ public class StringSerializerFactory extends SimpleSerializerFactory {
 	}
 
 	public Serializer getSerializerAs(String mechanismType) throws JAXRPCException {
-        if (javaType == String.class) {
-            return new StringSerializer(javaType, xmlType);
-        }
+		if (javaType == String.class) {
+			return new StringSerializer(javaType, xmlType);
+		}
 
-        return super.getSerializerAs(mechanismType);
-    }
+		return super.getSerializerAs(mechanismType);
+	}
 }
