@@ -4,7 +4,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	variables.url=createURL("Issue0210/Test.cfc");
 	variables.expected='
 
-			hfd'&chr(132);
+			<br>hfd'&chr(132);
 
 
 	variables.body='<?xml version="1.0" encoding="UTF-8"?>
@@ -36,6 +36,8 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			
 			// body
 			httpparam type="body" value="#variables.body#";
+			// &amp;#x000a;&amp;#x000a;&amp;#x0009;&amp;#x0009;&amp;#x0009;hfd&#x84;
+			// &amp;#x000a;&amp;#x000a;&amp;#x0009;&amp;#x0009;&amp;#x0009;hfd&#x84;
 		}
 
 		var res=result.filecontent;
@@ -44,10 +46,9 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		var end=find('</testReturn>',res);
 		var raw=mid(res,start+1,end-start-1)
 		
-		//dump(raw);
+		dump(raw);
 		//dump(StringEscapeUtils.unescapeHtml(raw));
 		//dump(StringEscapeUtils.unescapeHtml(StringEscapeUtils.unescapeHtml(raw)));
-
 		assertEquals(variables.expected,StringEscapeUtils.unescapeHtml(raw));
 	}
 	

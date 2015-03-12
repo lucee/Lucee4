@@ -2,6 +2,6 @@ component {
 	remote string function test() {
 		return '
 
-			hfd'&chr(132);
+			<br>hfd'&chr(132);
 	}
 }
