@@ -4426,7 +4426,13 @@ public final class ConfigWebFactory extends ConfigFactory {
 			NullSupportHelper.fullNullSupport = fns;
 			((ConfigServerImpl) config).setFullNullSupport(fns);
 		}
-		
+		String output = compiler.getAttribute("default-function-output");
+		if (!StringUtil.isEmpty(output, true)) {
+			config.setDefaultFunctionOutput(Caster.toBooleanValue(output, true));
+		}
+		else if (hasCS) {
+			config.setDefaultFunctionOutput(configServer.getDefaultFunctionOutput());
+		}	
 		// suppress WS between cffunction and cfargument
 		
 		String str = compiler.getAttribute("externalize-string-gte");

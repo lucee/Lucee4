@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import lucee.commons.lang.StringUtil;
+import lucee.runtime.config.ConfigWebImpl;
+import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.type.util.ComponentUtil;
 import lucee.transformer.bytecode.Body;
 import lucee.transformer.bytecode.BodyBase;
@@ -211,7 +213,8 @@ public final class TagFunction extends TagBase implements IFunction {
 
 		// output
 		attr = removeAttribute("output");
-		Expression output = (attr == null) ? LitBoolean.TRUE : attr.getValue();
+		LitBoolean defaultOutput = ((ConfigWebImpl)ThreadLocalPageContext.get().getConfig()).getDefaultFunctionOutput() ? LitBoolean.TRUE : LitBoolean.FALSE;
+		Expression output = (attr == null) ? defaultOutput : attr.getValue();
 		
 		// bufferOutput
 		attr = removeAttribute("bufferoutput");
