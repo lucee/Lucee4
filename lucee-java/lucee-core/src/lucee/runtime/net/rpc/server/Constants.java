@@ -25,7 +25,4 @@ public final class Constants {
 
 	public static final String PAGE_CONTEXT = PageContext.class.getName();
 	public static final String COMPONENT = Component.class.getName();
- 
-	
-
 }

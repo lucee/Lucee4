@@ -23,7 +23,7 @@ component {
 	this.ormEnabled = true;
 	this.ormSettings.flushatrequestend = false;
 	this.ormSettings.autoManageSession = false;
-	this.ormSettings.datasource = "#request.mysql#";
+	this.ormSettings.datasource = "#url.datasource#";
 	this.ormSettings.dbcreate = "update";
 	this.ormSettings.savemapping = true;
 	this.ormSettings.eventHandling = true;

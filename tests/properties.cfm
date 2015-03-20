@@ -3,13 +3,10 @@
 request.webAdminPassword="server";
 
 // addional testcase directories
-request.pathes=[];
-
-// Test Extensions (need to be installed)
-request.testJBossExtension=false;
-request.testMongoDBExtension=false;
-request.testMemcachedExtension=true;
-
+request.external={
+	//"Memcached":"/Users/mic/Projects/Extensions/Memcached/tests/",
+	//"MongoDB":"/Users/mic/Projects/Extensions/MongoDB/tests/"
+};
 
 
 // Datasources

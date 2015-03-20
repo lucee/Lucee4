@@ -30,8 +30,6 @@ import lucee.commons.io.cache.CacheEntry;
 public class SessionEndCacheEvent implements CacheEventListener {
 
 	public void onExpires(CacheEntry entry) {
-		//return new StringBuilder(cache instanceof CacheEvent?"":"lucee-storage:").append(type).append(":").append(cfid).append(":").append(appName).toString();
-		
 		String key=entry.getKey();
 		
 		// type
