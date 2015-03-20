@@ -134,7 +134,7 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 				ce.register(new SessionEndCacheEvent());
 			}*/
 			String key=getKey(cfid, appName, getTypeAsString());
-			cache.put(key, sct,new Long(getTimeSpan()), null);
+			cache.put(key, sct,null,new Long(getTimeSpan()));
 		} 
 		catch (Exception pe) {}
 	}
@@ -162,7 +162,7 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 	
 
 	public static String getKey(String cfid, String appName, String type) {
-		return new StringBuilder("lucee-storage:").append(type).append(":").append(cfid).append(":").append(appName).toString();
+		return new StringBuilder("lucee-storage:").append(type).append(":").append(cfid).append(":").append(appName).toString().toUpperCase();
 	}
 	
 	/*private void setTimeSpan(PageContext pc) {

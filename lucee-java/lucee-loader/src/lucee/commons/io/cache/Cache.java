@@ -124,7 +124,7 @@ public interface Cache {
 	 * @param filter 
 	 * @return a set of the keys contained in this cache.
 	 */
-	public List<CacheEntry> keys(CacheEntryFilter filter) throws IOException;
+	public List<String> keys(CacheEntryFilter filter) throws IOException;
 	
 	/**
 	 * Returns a List of values containing in this cache. 

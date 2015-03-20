@@ -34,13 +34,12 @@ public final class ComponentProvider extends RPCProvider {
 
 	public static final String PAGE_CONTEXT = PageContext.class.getName();
 	public static final String COMPONENT = Component.class.getName();
- 
-	
+
 	@Override
 	protected Object invokeMethod(MessageContext mc, Method method, Object trg, Object[] args) throws Exception {
 		PageContext pc=(PageContext) mc.getProperty(Constants.PAGE_CONTEXT);
 		Component c= (Component) mc.getProperty(Constants.COMPONENT);
-        
+
 		RPCServer server = RPCServer.getInstance(pc.getId(),pc.getServletContext());
 		TypeMapping tm =mc.getTypeMapping();//TypeMappingUtil.getServerTypeMapping(server.getEngine().getTypeMappingRegistry());
 		
@@ -54,6 +53,4 @@ public final class ComponentProvider extends RPCProvider {
 		}
 		return trgs;
 	}
-	
-
 }

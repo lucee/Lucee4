@@ -60,7 +60,7 @@ public final class ComponentController {
 			throw AxisFault.makeFault((Caster.toPageException(t)));
 		}
 	}
-	public static Object _invoke(String name, Object[] args) throws PageException {
+	private static Object _invoke(String name, Object[] args) throws PageException {
 		Key key = Caster.toKey(name);
 		Component c=component.get();
 		PageContext p=pagecontext.get();

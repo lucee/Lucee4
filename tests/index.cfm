@@ -16,20 +16,40 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  ---><cfscript>
+
+if(!isNull(url.component)) {
+	cfc=createObject("component",url.component);
+	cfc.runRemote();
+	abort;
+}
+
+
 // SETUP THE ROOTS OF THE BROWSER RIGHT HERE
 //reporter="org.lucee.cfml.test.reporter.HTMLReporter";
 currentDirectory= getDirectoryFromPath(getCurrentTemplatePath());
 
-if(isNull(url.rootPath)) {
-	rootPathes=request.pathes;
-	arrayAppend(rootPathes,currentDirectory&"testcases/");
-}
-else rootPathes=[rootPath];
+if(isNull(url.root)) {
 
-rootMappings=[];
-loop array="#rootPathes#" item="value"{
-	arrayAppend(rootMappings,contractPath(value));
+	// main path
+	rootPathes=[{root:currentDirectory&"testcases/",label:"Main"}];
+
+	// addional path
+	if(!isNull(request.external)) {
+		loop struct="#request.external#" index="key" item="value" {
+			arrayAppend(rootPathes,{root:value,label:key});
+		}
+	}
 }
+else rootPathes=[{root:url.root,label:url.label}];
+
+loop array="#rootPathes#" index="i" item="value"{
+	if(i==1) value.mapping=contractPath(value.root)// first is main
+	else {
+		virtual="/"&value.label.replace(' ','_');
+		value.mapping=virtual;
+	}
+}
+
 
 /**
 * converts a path to a package name
@@ -75,35 +95,40 @@ testbox = new testbox.system.TestBox();
 
 <!--- Run Tests Action?--->
 <cfif structKeyExists( url, "action")>
-	<cfif directoryExists( expandPath( rootMapping & url.path ) )>
+	<cfloop array="#rootPathes#" item="el">
+	
+	<cfif directoryExists( expandPath( el.root & url.path ) )>
 		
 		<cfoutput>
-
-#testbox.init( directory=rootMapping & url.path ).run(
-	directory:{mapping:rootMapping & url.path,recurse:false}
+#testbox.init( directory=el.mapping & url.path ).run(
+	directory:{mapping:el.mapping & url.path,recurse:false}
 	)#</cfoutput>
 	<cfelse>
 		<cfoutput><h1>Invalid incoming directory: #rootMapping & url.path#</h1></cfoutput>
 	</cfif>
+	</cfloop>
 	<cfabort>
 	
 </cfif>
 
 <!--- Get list of files --->
 <cfset qResults="">
-<cfloop array="#rootPathes#" item="rootPath">
-	<cfdirectory action="list" directory="#rootPath & url.path#" name="qry" sort="asc">
+<cfloop array="#rootPathes#" item="el">
+	<cfdirectory action="list" directory="#el.root & url.path#" name="qry" sort="asc">
 	<cfif isSimpleValue(qResults)>
-		<cfset qResults=queryNew(qry.columnlist)>
+		<cfset qResults=queryNew(qry.columnlist&",label,mapping,root")>
 	</cfif>
 	<cfloop query="#qry#">
 		<cfset row=queryAddRow(qResults)>
+		<cfset qResults.label[row]=el.label>
+		<cfset qResults.mapping[row]=el.mapping>
+		<cfset qResults.mapping[row]=el.mapping>
 		<cfloop list="#qry.columnlist#" item="col">
 			<cfset qResults[col][row]=qry[col]>
 		</cfloop>
 	</cfloop>
 </cfloop>
-<cfdump var="#qResults#">
+
 <!--- Get the execute path 
 <cfset executePath = rootMapping & ( url.path eq "/" ? "/" : url.path & "/" )>--->
 <!--- Get the Back Path --->
@@ -219,42 +244,51 @@ testbox = new testbox.system.TestBox();
 	<div id="tb-left" class="centered">
 		<img src="data:image/png;base64,#logo#" alt="TestBox" id="tb-logo"/><br>v#testbox.getVersion()#<br>
 
-		<a href="index.cfm?action=runTestBox&path=#URLEncodedFormat( url.path )#" target="_blank"><button class="btn-red" type="button">Run All</button></a>
+		<a href="index.cfm?#(isNull(url.label)?"":"label=#url.label#&")
+		##(isNull(url.root)?"":"root=#url.root#&")
+		#action=runTestBox&path=#URLEncodedFormat( url.path )#" target="_blank"><button class="btn-red" type="button">Run All</button></a>
 	</div>
 
 	<div id="tb-right">
 		<h1>TestBox Test Browser: </h1>
 		<p>
-			Below is a listing of the files and folders starting from your root <code>#rootPath#</code>.  You can click on individual tests in order to execute them
+			You can click on individual tests in order to execute them
 			or click on the <strong>Run All</strong> button on your left and it will execute a directory runner from the visible folder.
 		</p>
 		
-		<fieldset><legend>Contents: <!--- #executePath# ---></legend>
+		
 		<cfif url.path neq "/">
 			<a href="index.cfm?path=#URLEncodedFormat( backPath )#"><button type="button" class="btn-red">&lt;&lt; Back</button></a><br><hr>
 		</cfif>
-		<cfloop query="qResults">
-			<cfif refind( "^\.", qResults.name )>
-				<cfcontinue>
-			</cfif>
-
-			<cfset dirPath = URLEncodedFormat( ( url.path neq '/' ? '#url.path#/' : '/' ) & qResults.name )>
-			<cfset executePath = contractPath(qresults.directory)&"/" >
-
-			<cfif qResults.type eq "Dir">
-				<cfif !fileExists(qResults.directory&"/"&qResults.name&".cfc")>
-					+<a href="index.cfm?rootPath=#URLEncodedFormat(qresults.directory)#&path=#dirPath#">#qResults.name#</a><br/>
-				</cfif>
-			<!--- <cfelseif listLast( qresults.name, ".") eq "cfm">
-				<a href="#executePath & qResults.name#" target="_blank">#qResults.name#</a><br/> --->
-			<cfelseif listLast( qresults.name, ".") eq "cfc" && isTestcase(toPackage(executePath & qResults.name),false)>
-				<a class="test" href="#executePath & qResults.name#?method=runRemote" target="_blank"><button type="button">#qResults.name#</button></a><br/>
-			<!--- <cfelse>
-				#qResults.name#<br/> --->
-			</cfif>
+		<cfoutput query="qResults" groupcasesensitive="false" group="label">
+			<fieldset><legend>#qResults.label#: <!--- #executePath# ---></legend>
+			<cfoutput>
+				<cfif !refind( "^\.", qResults.name )>
 				
-		</cfloop>
-		</fieldset>
+					
+					<cfset dirPath = URLEncodedFormat( ( url.path neq '/' ? '#url.path#/' : '/' ) & qResults.name )>
+					<cfset executePath = contractPath(qresults.directory)&"/" >
+					<cfif qResults.type eq "Dir">
+						<cfif !fileExists(qResults.directory&"/"&qResults.name&".cfc")>
+							+<a href="index.cfm?label=#URLEncodedFormat(qresults.label)#&root=#URLEncodedFormat(qresults.directory)#&path=#dirPath#">
+							#qResults.name#</a><br/>
+						</cfif>
+					<!--- <cfelseif listLast( qresults.name, ".") eq "cfm">
+						<a href="#executePath & qResults.name#" target="_blank">#qResults.name#</a><br/> --->
+					<cfelseif listLast( qresults.name, ".") eq "cfc" && isTestcase(toPackage(executePath & qResults.name),false)>
+						<cfset fn=contractPath(qResults.directory&"/"&qResults.name)>
+						<cfset fn=mid(fn,2,fn.len()-listLast(fn,'.').len()-2).replace('','.','all').replace('/','.','all')>
+
+						<a class="test" href="index.cfm?runMethod&component=#URLEncodedFormat(fn)#">
+							<button type="button">#qResults.name#</button></a><br/>
+    <!---<a class="test" href="#executePath & qResults.name#?method=runRemote" target="_blank"><button type="button">#qResults.name#</button></a><br/>--->
+					<!--- <cfelse>
+						#qResults.name#<br/> --->
+					</cfif>
+				</cfif>	
+			</cfoutput>
+			</fieldset>
+		</cfoutput>
 
 	</div>
 

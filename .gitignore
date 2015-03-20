@@ -7,7 +7,7 @@ lucee-java/lucee-loader/bin
 lucee-java/lucee-loader/bin/*
 lucee-java/lucee-debug/bin
 lucee-java/lucee-instrumentation/bin
-lucee-java/lucee-debug/web/tests/*
+lucee-java/lucee-debug/web/*
 lucee-java/lucee-debug/bin/*
 lucee-java/lucee-instrumentation/bin/*
 lucee-java/libs/bin
@@ -40,3 +40,7 @@ sample.mov
 /.idea/
 /*.iml
 *.hbm.xml
+**/db.lck
+**/db.properties
+**/db.log
+**/db.script
