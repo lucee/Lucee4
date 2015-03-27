@@ -60,6 +60,7 @@ import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
 
+@SuppressWarnings("UseOfSunClasses")
 public class HashMapPro<K,V>
     extends AbstractMapPro<K,V>
     implements Map<K,V>, MapPro<K,V>, Cloneable, Serializable
