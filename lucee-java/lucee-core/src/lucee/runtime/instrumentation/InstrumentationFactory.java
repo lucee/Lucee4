@@ -32,8 +32,8 @@ import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourcesImpl;
 import lucee.commons.lang.ClassUtil;
 import lucee.commons.lang.SystemOut;
-import sun.management.VMManagement;
 
+@SuppressWarnings("UseOfSunClasses")
 public class InstrumentationFactory {
 	
 	private static Instrumentation inst;
@@ -144,7 +144,7 @@ public class InstrumentationFactory {
 	    Field jvmField = mxbean.getClass().getDeclaredField("jvm");
 
 	    jvmField.setAccessible(true);
-	    VMManagement management = (VMManagement) jvmField.get(mxbean);
+	    sun.management.VMManagement management = (sun.management.VMManagement) jvmField.get(mxbean);
 	    Method method = management.getClass().getDeclaredMethod("getProcessId");
 	    method.setAccessible(true);
 	    Integer processId = (Integer) method.invoke(management);
