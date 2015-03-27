@@ -413,9 +413,6 @@ public abstract class AbstractMapPro<K,V> implements MapPro<K,V>,Externalizable 
 
     public abstract Set<Entry<K,V>> entrySet();
 
-
-    // Comparison and hashing
-
     /**
      * Compares the specified object with this map for equality.  Returns
      * <tt>true</tt> if the given object is also a map and the two maps
