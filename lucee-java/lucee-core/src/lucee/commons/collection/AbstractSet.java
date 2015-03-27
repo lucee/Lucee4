@@ -55,8 +55,6 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
     protected AbstractSet() {
     }
 
-    // Comparison and hashing
-
     /**
      * Compares the specified object with this set for equality.  Returns
      * <tt>true</tt> if the given object is also a set, the two sets have
