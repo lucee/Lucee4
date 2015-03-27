@@ -81,9 +81,9 @@ public class Variable extends ExpressionBase implements Invoker {
 			Types.OBJECT,
 			new Type[]{Types.STRING});
 	// Object getCollection(java.lang.String)
-	final static Method METHOD_SCOPE_GET_COLLECTION= new Method("getCollection",
+	/*final static Method METHOD_SCOPE_GET_COLLECTION= new Method("getCollection",
 			Types.OBJECT,
-			new Type[]{Types.STRING});
+			new Type[]{Types.STRING});*/
 
 	final static Method INIT= new Method("init",
 			Types.COLLECTION_KEY,
@@ -103,13 +103,13 @@ public class Variable extends ExpressionBase implements Invoker {
     }
     
     // Object getCollection (Object,String)
-    private final static Method GET_COLLECTION = new Method("getCollection",
+    /*private final static Method GET_COLLECTION = new Method("getCollection",
 			Types.OBJECT,
-			new Type[]{Types.OBJECT,Types.STRING});
+			new Type[]{Types.OBJECT,Types.STRING});*/
     // Object get (Object,String)
-    private final static Method GET = new Method("get",
+    /*private final static Method GET = new Method("get",
 			Types.OBJECT,
-			new Type[]{Types.OBJECT,Types.STRING});
+			new Type[]{Types.OBJECT,Types.STRING});*/
 
     //public Object get(PageContext pc,Object coll, Key[] keys, Object defaultValue) {
     private final static Method CALLER_UTIL_GET = new Method("get",
@@ -282,14 +282,13 @@ public class Variable extends ExpressionBase implements Invoker {
 						adapter.invokeStatic(VARIABLE_UTIL_IMPL, COLUMNLIST);
 					}
 					else {
-						
-						if(registerKey(bc,name))adapter.invokeVirtual(Types.PAGE_CONTEXT,asCollection(asCollection, last)?GET_COLLECTION_KEY:GET_KEY);
-						else adapter.invokeVirtual(Types.PAGE_CONTEXT,asCollection(asCollection, last)?GET_COLLECTION:GET);
+						registerKey(bc,name);
+						adapter.invokeVirtual(Types.PAGE_CONTEXT,asCollection(asCollection, last)?GET_COLLECTION_KEY:GET_KEY);
 					}
 				}
 				else{
-					if(registerKey(bc,name))adapter.invokeVirtual(Types.PAGE_CONTEXT,asCollection(asCollection, last)?GET_COLLECTION_KEY:GET_KEY);
-					else adapter.invokeVirtual(Types.PAGE_CONTEXT,asCollection(asCollection, last)?GET_COLLECTION:GET);
+					registerKey(bc,name);
+					adapter.invokeVirtual(Types.PAGE_CONTEXT,asCollection(asCollection, last)?GET_COLLECTION_KEY:GET_KEY);
 				}
 				rtn=Types.OBJECT;
 			}
@@ -353,11 +352,11 @@ public class Variable extends ExpressionBase implements Invoker {
 		return asCollection!=null && asCollection.booleanValue();
 	}
 
-	public static boolean registerKey(BytecodeContext bc,Expression name) throws BytecodeException {
-		return registerKey(bc, name, false);
+	public static void registerKey(BytecodeContext bc,Expression name) throws BytecodeException {
+		registerKey(bc, name, false);
 	}
 	
-	public static boolean registerKey(BytecodeContext bc,Expression name,boolean doUpperCase) throws BytecodeException {
+	public static void registerKey(BytecodeContext bc,Expression name,boolean doUpperCase) throws BytecodeException {
 		
 		if(name instanceof Literal) {
 			Literal l=(Literal) name;
@@ -370,7 +369,7 @@ public class Variable extends ExpressionBase implements Invoker {
 			String key=KeyConstants.getFieldName(ls.getString());
 			if(key!=null){
 				bc.getAdapter().getStatic(KEY_CONSTANTS, key, Types.COLLECTION_KEY);
-				return true;
+				return;
 			}
 			int index=bc.registerKey(ls);
 			bc.getAdapter().visitVarInsn(Opcodes.ALOAD, 0);
@@ -378,16 +377,12 @@ public class Variable extends ExpressionBase implements Invoker {
 			bc.getAdapter().push(index);
 			bc.getAdapter().visitInsn(Opcodes.AALOAD);
 			
-			
-			//ExpressionUtil.writeOutSilent(lit,bc, Expression.MODE_REF);
-			//bc.getAdapter().invokeStatic(Page.KEY_IMPL, Page.KEY_INTERN);
-			
-			return true;
+			return;
 		}
 		name.writeOut(bc, MODE_REF);
 		bc.getAdapter().invokeStatic(Page.KEY_IMPL, INIT);
 		//bc.getAdapter().invokeStatic(Types.CASTER, TO_KEY);
-		return true;
+		return;
 	}
 
 	public static boolean canRegisterKey(Expression name) {
@@ -652,12 +647,9 @@ public class Variable extends ExpressionBase implements Invoker {
     		rtn = TypeScope.invokeScope(adapter, scope);
     	}
 		if(doOnlyScope) return rtn;
-		
-		if(registerKey(bc,member.getName()))
-    		adapter.invokeInterface(TypeScope.SCOPES[scope],!last && scope==Scope.SCOPE_UNDEFINED?METHOD_SCOPE_GET_COLLECTION_KEY:METHOD_SCOPE_GET_KEY);
-		else
-			adapter.invokeInterface(TypeScope.SCOPES[scope],!last && scope==Scope.SCOPE_UNDEFINED?METHOD_SCOPE_GET_COLLECTION:METHOD_SCOPE_GET);
-    	return Types.OBJECT;
+		registerKey(bc,member.getName());
+		adapter.invokeInterface(TypeScope.SCOPES[scope],!last && scope==Scope.SCOPE_UNDEFINED?METHOD_SCOPE_GET_COLLECTION_KEY:METHOD_SCOPE_GET_KEY);
+		return Types.OBJECT;
 	}
 	
 	

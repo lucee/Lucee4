@@ -96,11 +96,11 @@ public abstract class Function extends StatementBaseNoFinal implements Opcodes, 
 			new Type[]{Types.COLLECTION_KEY,Types.OBJECT}
     		);
 	
-	static final Method REG_UDF_STR = new Method(
+	/*static final Method REG_UDF_STR = new Method(
 			"registerUDF",
 			Types.VOID,
 			new Type[]{Types.STRING,Types.UDF_PROPERTIES}
-    		);
+    		);*/
 
 	
 	static final Method REG_UDF_KEY = new Method(
