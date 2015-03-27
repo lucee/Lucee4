@@ -63,14 +63,14 @@ public final class FunctionImpl extends Function {
 		}
 		
 		
-		boolean hasKey = Variable.registerKey(bc,name,true);
+		Variable.registerKey(bc,name,true);
 		if(pageType==PAGE_TYPE_COMPONENT) {
 			loadUDFProperties(bc,valueIndex,arrayIndex,false);
-			adapter.invokeVirtual(Types.COMPONENT_IMPL, hasKey?REG_UDF_KEY:REG_UDF_STR);
+			adapter.invokeVirtual(Types.COMPONENT_IMPL,REG_UDF_KEY);
 		}
 		else if(pageType==PAGE_TYPE_INTERFACE) {
 			loadUDFProperties(bc,valueIndex,arrayIndex,false);
-			adapter.invokeVirtual(Types.INTERFACE_IMPL, hasKey?REG_UDF_KEY:REG_UDF_STR);
+			adapter.invokeVirtual(Types.INTERFACE_IMPL, REG_UDF_KEY);
 		}
 		else {
 			adapter.newInstance(Types.UDF_IMPL);
@@ -79,7 +79,7 @@ public final class FunctionImpl extends Function {
 			adapter.invokeConstructor(Types.UDF_IMPL, INIT_UDF_IMPL_PROP);
 			
 			//loadUDF(bc, index);
-			adapter.invokeInterface(Types.VARIABLES, hasKey?SET_KEY:SET_STR);
+			adapter.invokeInterface(Types.VARIABLES, SET_KEY);
 			adapter.pop();
 		}
 	}

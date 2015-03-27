@@ -33,13 +33,13 @@ public final class VariableRef extends ExpressionBase {
 	
 	private Variable variable;
 	// Object touch (Object,String)
-    private final static Method TOUCH =  new Method("touch",
+    /*private final static Method TOUCH =  new Method("touch",
 			Types.OBJECT,
-			new Type[]{Types.OBJECT,Types.STRING});
+			new Type[]{Types.OBJECT,Types.STRING});*/
     // lucee.runtime.type.ref.Reference getReference (Object,String)
-    private final static Method GET_REFERENCE =  new Method("getReference",
+    /*private final static Method GET_REFERENCE =  new Method("getReference",
 			Types.REFERENCE,
-			new Type[]{Types.OBJECT,Types.STRING});
+			new Type[]{Types.OBJECT,Types.STRING});*/
 
 	// Object touch (Object,Key)
     private final static Method TOUCH_KEY =  new Method("touch",
@@ -71,12 +71,8 @@ public final class VariableRef extends ExpressionBase {
 		boolean isLast;
 		for(int i=0;i<count;i++) {
 			isLast=(i+1)==count;
-			if(Variable.registerKey(bc,((DataMember)variable.members.get(i)).getName()))
-				adapter.invokeVirtual(Types.PAGE_CONTEXT,isLast?GET_REFERENCE_KEY:TOUCH_KEY);
-			else
-				adapter.invokeVirtual(Types.PAGE_CONTEXT,isLast?GET_REFERENCE:TOUCH);
-			//((DataMember)variable.members.get(i)).getName().writeOut(bc, MODE_REF);
-    		//adapter.invokeVirtual(Types.PAGE_CONTEXT,isLast?GET_REFERENCE:TOUCH);
+			Variable.registerKey(bc,((DataMember)variable.members.get(i)).getName());
+			adapter.invokeVirtual(Types.PAGE_CONTEXT,isLast?GET_REFERENCE_KEY:TOUCH_KEY);
 		}
 		return Types.REFERENCE;
 	}
