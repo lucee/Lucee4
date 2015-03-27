@@ -42,9 +42,9 @@ public class Assign extends ExpressionBase {
 
 
 //  java.lang.Object set(String,Object)
-    private final static Method METHOD_SCOPE_SET = new Method("set",
+    /*private final static Method METHOD_SCOPE_SET = new Method("set",
 			Types.OBJECT,
-			new Type[]{Types.STRING,Types.OBJECT});
+			new Type[]{Types.STRING,Types.OBJECT});*/
     
 //  java.lang.Object set(String,Object)
     private final static Method METHOD_SCOPE_SET_KEY = new Method("set",
@@ -58,9 +58,9 @@ public class Assign extends ExpressionBase {
     
     
     // Object touch (Object,String)
-    private final static Method TOUCH = new Method("touch",
+    /*private final static Method TOUCH = new Method("touch",
 			Types.OBJECT,
-			new Type[]{Types.OBJECT,Types.STRING});
+			new Type[]{Types.OBJECT,Types.STRING});*/
 
     // Object touch (Object,String)
     private final static Method TOUCH_KEY = new Method("touch",
@@ -74,19 +74,19 @@ public class Assign extends ExpressionBase {
 			new Type[]{Types.OBJECT,Types.COLLECTION_KEY,Types.OBJECT});
     
     //Object set (Object,String,Object)
-    private final static Method SET = new Method("set",
+    /*private final static Method SET = new Method("set",
 			Types.OBJECT,
-			new Type[]{Types.OBJECT,Types.STRING,Types.OBJECT});
+			new Type[]{Types.OBJECT,Types.STRING,Types.OBJECT});*/
 
     // Object getFunction (Object,String,Object[])
-    private final static Method GET_FUNCTION = new Method("getFunction",
+    /*private final static Method GET_FUNCTION = new Method("getFunction",
 			Types.OBJECT,
-			new Type[]{Types.OBJECT,Types.STRING,Types.OBJECT_ARRAY});
+			new Type[]{Types.OBJECT,Types.STRING,Types.OBJECT_ARRAY});*/
     
     // Object getFunctionWithNamedValues (Object,String,Object[])
-    private final static Method GET_FUNCTION_WITH_NAMED_ARGS = new Method("getFunctionWithNamedValues",
+    /*private final static Method GET_FUNCTION_WITH_NAMED_ARGS = new Method("getFunctionWithNamedValues",
 			Types.OBJECT,
-			new Type[]{Types.OBJECT,Types.STRING,Types.OBJECT_ARRAY});
+			new Type[]{Types.OBJECT,Types.STRING,Types.OBJECT_ARRAY});*/
 	
 
     // Object getFunction (Object,String,Object[])
@@ -146,25 +146,22 @@ public class Assign extends ExpressionBase {
 			
 			// Data Member
 			if(member instanceof DataMember)	{
-				//((DataMember)member).getName().writeOut(bc, MODE_REF);
-    			boolean isKey=Variable.registerKey(bc, ((DataMember)member).getName());
+				Variable.registerKey(bc, ((DataMember)member).getName());
 				
     			if(last)value.writeOut(bc, MODE_REF);
-    			if(isKey)adapter.invokeVirtual(Types.PAGE_CONTEXT,last?SET_KEY:TOUCH_KEY);
-    			else adapter.invokeVirtual(Types.PAGE_CONTEXT,last?SET:TOUCH);
-        		rtn=Types.OBJECT;
+    			adapter.invokeVirtual(Types.PAGE_CONTEXT,last?SET_KEY:TOUCH_KEY);
+    			rtn=Types.OBJECT;
 			}
 			
 			// UDF
 			else if(member instanceof UDF) {
 				if(last)throw new BytecodeException("can't asign value to a user defined function",getStart());
 				UDF udf=(UDF) member;
-				boolean isKey=Variable.registerKey(bc, udf.getName());
+				Variable.registerKey(bc, udf.getName());
 				//udf.getName().writeOut(bc, MODE_REF);
 				ExpressionUtil.writeOutExpressionArray(bc, Types.OBJECT, udf.getArguments());
 				
-				if(isKey)adapter.invokeVirtual(Types.PAGE_CONTEXT,udf.hasNamedArgs()?GET_FUNCTION_WITH_NAMED_ARGS_KEY:GET_FUNCTION_KEY);
-				else adapter.invokeVirtual(Types.PAGE_CONTEXT,udf.hasNamedArgs()?GET_FUNCTION_WITH_NAMED_ARGS:GET_FUNCTION);
+				adapter.invokeVirtual(Types.PAGE_CONTEXT,udf.hasNamedArgs()?GET_FUNCTION_WITH_NAMED_ARGS_KEY:GET_FUNCTION_KEY);
 				rtn=Types.OBJECT;
 			}
     	}
@@ -204,22 +201,15 @@ public class Assign extends ExpressionBase {
 		adapter.loadArg(0);
 		if(last) {
 			TypeScope.invokeScope(adapter, variable.scope);
-			//adapter.invokeVirtual(Types.PAGE_CONTEXT,TypeScope.METHODS[variable.scope]);
-			
-			boolean isKey=Variable.registerKey(bc, member.getName());
+			Variable.registerKey(bc, member.getName());
 			value.writeOut(bc, MODE_REF);
-			
-			if(isKey)adapter.invokeInterface(TypeScope.SCOPES[variable.scope],METHOD_SCOPE_SET_KEY);
-			else adapter.invokeInterface(TypeScope.SCOPES[variable.scope],METHOD_SCOPE_SET);
-			
+			adapter.invokeInterface(TypeScope.SCOPES[variable.scope],METHOD_SCOPE_SET_KEY);
 		}
 		else {
 			adapter.loadArg(0);
 			TypeScope.invokeScope(adapter, variable.scope);
-			if(Variable.registerKey(bc, member.getName()))
-    			adapter.invokeVirtual(Types.PAGE_CONTEXT,TOUCH_KEY);
-    		else
-    			adapter.invokeVirtual(Types.PAGE_CONTEXT,TOUCH);
+			Variable.registerKey(bc, member.getName());
+			adapter.invokeVirtual(Types.PAGE_CONTEXT,TOUCH_KEY);
 		}
 		return Types.OBJECT;
 		

@@ -86,12 +86,14 @@ public final class NamedArgument extends Argument {
 				//VariableString.toExprString(name).writeOut(bc, MODE_REF);
 				String str = VariableString.variableToString((Variable) name,true);
 				name=LitString.toExprString(varKeyUpperCase?str.toUpperCase():str);
-				type=Variable.registerKey(bc, VariableString.toExprString(name))?KEY:STRING;
+				Variable.registerKey(bc, VariableString.toExprString(name));
+				type=KEY;
 			}
 		}
 		else  {
 			//CastString.toExprString(name).writeOut(bc, MODE_REF);
-			type=Variable.registerKey(bc, CastString.toExprString(name))?KEY:STRING;
+			Variable.registerKey(bc, CastString.toExprString(name));
+			type=KEY;
 			
 		}
 		//name.writeOut(bc, MODE_REF);
