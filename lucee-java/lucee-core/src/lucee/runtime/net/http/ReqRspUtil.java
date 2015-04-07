@@ -41,6 +41,7 @@ import org.xml.sax.InputSource;
 
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.IOUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.Pair;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.mimetype.MimeType;
@@ -141,19 +142,15 @@ public final class ReqRspUtil {
 		else {
 			String str = req.getHeader("Cookie");
 			if(str!=null) {
-				try{
-					String[] arr = lucee.runtime.type.util.ListUtil.listToStringArray(str, ';'),tmp;
-					java.util.List<Cookie> list=new ArrayList<Cookie>();
-					for(int i=0;i<arr.length;i++){
-						tmp=lucee.runtime.type.util.ListUtil.listToStringArray(arr[i], '=');
-						if(tmp.length>0) {
-							list.add(new Cookie(dec(tmp[0],charset.name(),false), tmp.length>1?dec(tmp[1],charset.name(),false):""));
-						}
+				String[] arr = lucee.runtime.type.util.ListUtil.listToStringArray(str, ';'),tmp;
+				java.util.List<Cookie> list=new ArrayList<Cookie>();
+				for(int i=0;i<arr.length;i++){
+					tmp=lucee.runtime.type.util.ListUtil.listToStringArray(arr[i], '=');
+					if(tmp.length>0) {
+						list.add(new Cookie(dec(tmp[0],charset.name(),false), tmp.length>1?dec(tmp[1],charset.name(),false):""));
 					}
-					cookies=list.toArray(new Cookie[list.size()]);
-					
 				}
-				catch(Throwable t){}
+				cookies=list.toArray(new Cookie[list.size()]);
 			}
 		}
 		if(cookies==null) return EMPTY;
@@ -166,7 +163,9 @@ public final class ReqRspUtil {
 			Method setCharacterEncoding = rsp.getClass().getMethod("setCharacterEncoding", new Class[0]);
 			setCharacterEncoding.invoke(rsp, new Object[0]);
 		} 
-		catch (Throwable t) {}
+		catch (Throwable t) {
+			throw ExceptionUtil.toRuntimeException(t);
+		}
 	}
 
 	public static String getQueryString(HttpServletRequest req) {

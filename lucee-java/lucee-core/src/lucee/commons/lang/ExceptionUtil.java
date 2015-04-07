@@ -28,6 +28,8 @@ import java.util.Iterator;
 import lucee.runtime.exp.NativeException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.exp.PageExceptionImpl;
+import lucee.runtime.exp.PageRuntimeException;
+import lucee.runtime.op.Caster;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.util.CollectionUtil;
 import lucee.runtime.type.util.KeyConstants;
@@ -135,5 +137,9 @@ public final class ExceptionUtil {
 			sb.append(k);
 		}
 		return "available "+keyName+" are ["+sb+"]";
+	}
+
+	public static RuntimeException toRuntimeException(Throwable t) {
+		return new RuntimeException(t);
 	}
 }
