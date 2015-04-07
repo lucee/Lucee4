@@ -26,6 +26,7 @@ import lucee.commons.lang.ClassException;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
+import lucee.runtime.PageSource;
 import lucee.runtime.cache.tag.CacheHandler;
 import lucee.runtime.cache.tag.CacheHandlerFactory;
 import lucee.runtime.cache.tag.CacheItem;
@@ -149,6 +150,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 	private TimeZone tmpTZ;
 	private boolean lazy;
 	private Object params;
+	private int nestingLevel=1;
 	
 	
 	
@@ -181,6 +183,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 		tmpTZ=null;
 		lazy=false;
 		params=null;
+		nestingLevel=1;
 	}
 	
 	
@@ -431,7 +434,13 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
     public void setParams(Object params) {
         this.params=params;
     }
-
+    
+    public void setNestinglevel(double nestingLevel) {
+        this.nestingLevel=(int)nestingLevel;
+    }
+    
+    
+    
 
 	@Override
 	public int doStartTag() throws PageException	{
@@ -567,7 +576,16 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 			boolean logdb=((ConfigImpl)pageContext.getConfig()).hasDebugOptions(ConfigImpl.DEBUG_DATABASE);
 			if(logdb){
 				boolean debugUsage=DebuggerUtil.debugQueryUsage(pageContext,query);
-				((DebuggerPro)pageContext.getDebugger()).addQuery(debugUsage?query:null,datasource!=null?datasource.getName():null,name,sql,query.getRecordcount(),pageContext.getCurrentPageSource(),exe);
+				
+				PageSource source=null;
+				if(nestingLevel>1) {
+					PageContextImpl pci=(PageContextImpl) pageContext;
+					int index=pci.getCurrentLevel()-(nestingLevel);
+					if(index>0) source=pci.getPageSource(index);
+				}
+				if(source==null) source=pageContext.getCurrentPageSource();
+				
+				((DebuggerPro)pageContext.getDebugger()).addQuery(debugUsage?query:null,datasource!=null?datasource.getName():null,name,sql,query.getRecordcount(),source,exe);
 			}
 		}
 		
