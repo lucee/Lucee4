@@ -20,7 +20,7 @@ function printError(error,boolean longversion=false) {
 	if(IsSimpleValue(arguments.error))arguments.error=struct(message:arguments.error);
 	if(not StructKeyExists(arguments.error,'detail'))arguments.error.detail="";
 	else if(arguments.error.message EQ arguments.error.detail)arguments.error.detail="";
-	// if(!IsSimpleValue(error) && error.getClass().getName() EQ "lucee.runtime.exp.CatchBlock")createObject("java","lucee.print").e(error.getPageException())
+
 	if(StructKeyExists(arguments.error,'message') and arguments.error.message NEQ "") {
 		writeOutput('<div class="error">');
 		writeOutput(br(arguments.error.message));
@@ -257,23 +257,7 @@ function _byteFormatShort(numeric left,numeric right,string suffix){
 	return rtn&right&suffix;
 }
 
-/*
-// Config
-config.web=getPageContext().getConfig();
-config.server=config.web.configServer;
-config=config[request.adminType];
 
-// SecurityManager
-securityManager=config.securityManager;
-smClass=createObject('java','lucee.runtime.security.SecurityManager');
-ACCESS.YES= smClass.VALUE_YES;
-ACCESS.NO= smClass.VALUE_NO;
-ACCESS.LOCAL= smClass.VALUE_LOCAL;
-ACCESS.NONE= smClass.VALUE_NONE;
-ACCESS.ALL= smClass.VALUE_ALL;
-
-ACCESS.CFX_USAGE=securityManager.getAccess(smClass.TYPE_CFX_USAGE);
-*/
 </cfscript>
 
 <cffunction name="createUIDFolder" output="no"

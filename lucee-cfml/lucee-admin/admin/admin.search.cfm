@@ -100,6 +100,6 @@
 		This feature is currently in Beta State.
 		If you have any problems while using this Implementation,
 		please post the bugs and errors in our
-		<a href="https://jira.jboss.org/jira/browse/RAILO" target="_blank">bugtracking system</a>. 
+		<a href="https://jira.jboss.org/jira/browse/Lucee" target="_blank">bugtracking system</a>. 
 	</div>
 </cfif>

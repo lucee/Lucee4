@@ -43,7 +43,7 @@
 <cfset zipfile = "#rereplace(cffile.serverdirectory, '[/\\]$', '')##server.separator.file##cffile.serverfile#" />
 	
 <!--- re files --->
-<cfif cffile.serverfileext eq "re">
+<cfif cffile.serverfileext eq "lex">
 	<!--- move to deploy directory --->
 	<cfadmin 
         action="updateRHExtension"

@@ -125,15 +125,15 @@ Error Output --->
 <cfset qry=querynew("id,label,access")>
 	<cfset QueryAddRow(qry ,3)>
 		<cfset qry['id'][1]="1">
-		<cfset qry['label'][1]="www.lucee.ch">
+		<cfset qry['label'][1]="www.lucee.org">
 		<cfset qry['access'][1]=true>
 		
 		<cfset qry['id'][2]="2">
-		<cfset qry['label'][2]="www.lucee2.ch">
+		<cfset qry['label'][2]="www.lucee2.org">
 		<cfset qry['access'][2]=true>
 		
 		<cfset qry['id'][3]="3">
-		<cfset qry['label'][3]="www.lucee3.ch">
+		<cfset qry['label'][3]="www.lucee3.org">
 		<cfset qry['access'][3]=false>
 <cfoutput>
 <table class="tbl" width="600">
@@ -144,8 +144,8 @@ Error Output --->
 <tr>
 	<td colspan="2">
 	<select name="web_access">
-	<option value="yes" <cfif access.web_access>selected</cfif>>Alle Webs d�rfen Lucee verwenden</option>
-	<option value="no" <cfif not access.web_access>selected</cfif>>Nur folgende Webs d�rfen Lucee verwenden</option>
+	<option value="yes" <cfif access.web_access>selected</cfif>>Alle Webs duerfen Lucee verwenden</option>
+	<option value="no" <cfif not access.web_access>selected</cfif>>Nur folgende Webs duerfen Lucee verwenden</option>
 </select>
 <input type="submit" class="button submit" name="subAction" value="#stText.Buttons.Update#">
 	</td>
@@ -158,14 +158,14 @@ Error Output --->
 	
 <cfif access.web_access>
 <h2>Einzelne Webs freigeben</h2>
-Alle Webs k�nnen Lucee verwenden.
+Alle Webs koennen Lucee verwenden.
 <cfelse>
 <cfoutput><form action="#cgi.script_name#" method="post"></cfoutput>
 <table class="tbl">
 <tr>
 	<td colspan="2">
 	<h2>Einzelne Webs freigeben</h2>
-	Nur die Webs, welche hier eine explizite Freigabe haben, k�nnen Lucee auch verwenden.
+	Nur die Webs, welche hier eine explizite Freigabe haben, koennen Lucee auch verwenden.
 	</td>
 </tr>
 <tr>
