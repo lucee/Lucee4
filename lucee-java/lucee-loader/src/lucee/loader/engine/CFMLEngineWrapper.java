@@ -253,7 +253,7 @@ public class CFMLEngineWrapper implements CFMLEngine, EngineChangeListener {
 	 * this interface is new to this class and not offically part of Lucee 3.x, do not use outside the loader
 	 * @param other
 	 * @param checkReferenceEqualityOnly
-	 * @return
+	 * @return if it is the same engine it returns true
 	 */
 	public boolean equalTo(CFMLEngine other, boolean checkReferenceEqualityOnly) {
 		while(other instanceof CFMLEngineWrapper)
