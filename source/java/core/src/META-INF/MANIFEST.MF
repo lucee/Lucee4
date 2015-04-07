@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
-Bundle-Version: 5.0.0.34
+Bundle-Version: 5.0.0.00
 Built-Date: 2015-03-01 00:00:00
 Minor-Name: Velvet
 Minor-Name-Explanation: http://en.wikipedia.org/wiki/Velvet_(dog)
-State: alpha
+State: beta
 Bundle-Name: Lucee Core
 Require-Bundle-Fragment: slf4j.nop;bundle-version=1.6.4
 Bundle-ManifestVersion: 2
