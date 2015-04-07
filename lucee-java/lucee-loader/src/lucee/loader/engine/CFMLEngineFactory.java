@@ -576,7 +576,8 @@ public class CFMLEngineFactory {
 			File parent = getRuningContextRoot();
 			
 			resourceRoot = new File(parent,"lucee-server");
-				// no lucee context
+
+			// no lucee context
 			if(!resourceRoot.exists()) {
 					// check if there is a Railo context
 				File railoRoot = new File(parent,"railo-server");
