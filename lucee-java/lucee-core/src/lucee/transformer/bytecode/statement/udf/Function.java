@@ -23,11 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
@@ -64,6 +59,11 @@ import lucee.transformer.bytecode.util.ASMUtil;
 import lucee.transformer.bytecode.util.ExpressionUtil;
 import lucee.transformer.bytecode.util.Types;
 import lucee.transformer.cfml.evaluator.EvaluatorException;
+
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 public abstract class Function extends StatementBaseNoFinal implements Opcodes, IFunction,HasBody {
 

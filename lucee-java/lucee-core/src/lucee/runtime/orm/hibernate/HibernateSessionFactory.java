@@ -32,13 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.hibernate.MappingException;
-import org.hibernate.cache.RegionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.hibernate.tool.hbm2ddl.SchemaUpdate;
-import org.w3c.dom.Document;
-
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
@@ -62,7 +56,13 @@ import lucee.runtime.listener.ApplicationContext;
 import lucee.runtime.orm.ORMConfiguration;
 import lucee.runtime.reflection.Reflector;
 import lucee.runtime.type.Collection.Key;
-import lucee.commons.io.log.Log;
+
+import org.hibernate.MappingException;
+import org.hibernate.cache.RegionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.hbm2ddl.SchemaUpdate;
+import org.w3c.dom.Document;
 
 
 public class HibernateSessionFactory {

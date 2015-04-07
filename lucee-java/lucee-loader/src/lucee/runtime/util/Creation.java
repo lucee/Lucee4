@@ -29,8 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.w3c.dom.Document;
-
 import lucee.commons.io.res.Resource;
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
@@ -50,6 +48,8 @@ import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.Time;
 import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.scope.ClusterEntry;
+
+import org.w3c.dom.Document;
 
 /**
  * Creation of different Objects

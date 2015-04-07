@@ -23,7 +23,6 @@ import java.io.IOException;
 import lucee.runtime.CFMLFactory;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageSource;
-import lucee.runtime.config.Constants;
 import lucee.runtime.exp.MissingIncludeException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;

@@ -20,6 +20,7 @@ package lucee.runtime.type.scope.storage.db;
 
 import java.sql.SQLException;
 
+import lucee.commons.io.log.Log;
 import lucee.runtime.config.Config;
 import lucee.runtime.db.DatasourceConnection;
 import lucee.runtime.exp.PageException;
@@ -28,7 +29,6 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.scope.storage.StorageScopeEngine;
 import lucee.runtime.type.scope.storage.StorageScopeListener;
 import lucee.runtime.type.scope.storage.clean.DatasourceStorageScopeCleaner;
-import lucee.commons.io.log.Log;
 
 public class MySQL extends SQLExecutorSupport {
 

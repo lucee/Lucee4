@@ -26,6 +26,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lucee.commons.lang.types.RefBoolean;
+import lucee.loader.util.Util;
+import lucee.runtime.Component;
+import lucee.runtime.ComponentScope;
+import lucee.runtime.PageContext;
+import lucee.runtime.db.DataSource;
+import lucee.runtime.db.DatasourceConnection;
+import lucee.runtime.db.SQLItem;
+import lucee.runtime.exp.PageException;
+import lucee.runtime.op.Caster;
+import lucee.runtime.orm.ORMEngine;
+import lucee.runtime.orm.ORMSession;
+import lucee.runtime.orm.ORMTransaction;
+import lucee.runtime.orm.ORMUtil;
+import lucee.runtime.type.Array;
+import lucee.runtime.type.Collection.Key;
+import lucee.runtime.type.KeyImpl;
+import lucee.runtime.type.Struct;
+import lucee.runtime.type.scope.Argument;
+
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.NonUniqueResultException;
@@ -42,28 +62,6 @@ import org.hibernate.engine.query.QueryPlanCache;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.type.Type;
-
-import lucee.commons.lang.StringUtil;
-import lucee.commons.lang.types.RefBoolean;
-import lucee.loader.util.Util;
-import lucee.runtime.Component;
-import lucee.runtime.ComponentScope;
-import lucee.runtime.PageContext;
-import lucee.runtime.PageContextImpl;
-import lucee.runtime.db.DataSource;
-import lucee.runtime.db.DatasourceConnection;
-import lucee.runtime.db.SQLItem;
-import lucee.runtime.exp.PageException;
-import lucee.runtime.op.Caster;
-import lucee.runtime.orm.ORMEngine;
-import lucee.runtime.orm.ORMSession;
-import lucee.runtime.orm.ORMTransaction;
-import lucee.runtime.orm.ORMUtil;
-import lucee.runtime.type.Array;
-import lucee.runtime.type.Collection.Key;
-import lucee.runtime.type.KeyImpl;
-import lucee.runtime.type.Struct;
-import lucee.runtime.type.scope.Argument;
 
 public class HibernateORMSession implements ORMSession {
 

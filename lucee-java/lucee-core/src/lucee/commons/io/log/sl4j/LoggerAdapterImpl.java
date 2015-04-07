@@ -19,13 +19,13 @@
 package lucee.commons.io.log.sl4j;
 
 
+import lucee.commons.io.log.Log;
+import lucee.commons.io.log.LogUtil;
+import lucee.runtime.op.Caster;
+
 import org.slf4j.Marker;
 import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.spi.LocationAwareLogger;
-
-import lucee.commons.io.log.LogUtil;
-import lucee.runtime.op.Caster;
-import lucee.commons.io.log.Log;
 
 public final class LoggerAdapterImpl extends MarkerIgnoringBase implements LocationAwareLogger {
 

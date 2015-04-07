@@ -21,6 +21,7 @@ package lucee.runtime.functions.cache;
 import java.io.IOException;
 import java.util.Iterator;
 
+import lucee.commons.io.cache.Cache;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.exp.ApplicationException;
@@ -30,7 +31,6 @@ import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.type.Array;
 import lucee.runtime.type.util.ListUtil;
-import lucee.commons.io.cache.Cache;
 
 /**
  * 

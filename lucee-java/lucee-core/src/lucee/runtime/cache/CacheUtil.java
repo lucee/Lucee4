@@ -18,14 +18,14 @@
  **/
 package lucee.runtime.cache;
 
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.cache.CacheEntry;
+import lucee.commons.io.cache.CacheFilter;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.dt.TimeSpanImpl;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.cache.CacheEntry;
-import lucee.commons.io.cache.CacheFilter;
 
 public class CacheUtil {
 

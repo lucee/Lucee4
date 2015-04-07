@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import lucee.print;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.SystemOut;

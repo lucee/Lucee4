@@ -23,13 +23,13 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpMethod;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.net.http.HTTPResponseSupport;
 import lucee.commons.net.http.Header;
+
+import org.apache.commons.httpclient.HostConfiguration;
+import org.apache.commons.httpclient.HttpMethod;
 
 public class HTTPResponse3Impl extends HTTPResponseSupport  {
 

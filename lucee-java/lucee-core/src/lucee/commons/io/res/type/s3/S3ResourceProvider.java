@@ -31,9 +31,8 @@ import lucee.commons.lang.types.RefInteger;
 import lucee.commons.lang.types.RefIntegerImpl;
 import lucee.runtime.PageContext;
 import lucee.runtime.engine.ThreadLocalPageContext;
-import lucee.runtime.net.s3.PropertiesImpl;
-import lucee.commons.io.res.type.s3.S3Constants;
 import lucee.runtime.net.s3.Properties;
+import lucee.runtime.net.s3.PropertiesImpl;
 
 public final class S3ResourceProvider implements ResourceProviderPro {
 	

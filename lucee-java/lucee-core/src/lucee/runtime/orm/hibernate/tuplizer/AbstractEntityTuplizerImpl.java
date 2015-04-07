@@ -21,21 +21,6 @@ package lucee.runtime.orm.hibernate.tuplizer;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import org.hibernate.EntityMode;
-import org.hibernate.EntityNameResolver;
-import org.hibernate.HibernateException;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.engine.SessionImplementor;
-import org.hibernate.mapping.PersistentClass;
-import org.hibernate.mapping.Property;
-import org.hibernate.property.Getter;
-import org.hibernate.property.PropertyAccessor;
-import org.hibernate.property.Setter;
-import org.hibernate.proxy.ProxyFactory;
-import org.hibernate.tuple.Instantiator;
-import org.hibernate.tuple.entity.AbstractEntityTuplizer;
-import org.hibernate.tuple.entity.EntityMetamodel;
-
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
 import lucee.runtime.ComponentScope;
@@ -51,6 +36,21 @@ import lucee.runtime.orm.hibernate.tuplizer.accessors.CFCAccessor;
 import lucee.runtime.orm.hibernate.tuplizer.proxy.CFCHibernateProxyFactory;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.KeyConstants;
+
+import org.hibernate.EntityMode;
+import org.hibernate.EntityNameResolver;
+import org.hibernate.HibernateException;
+import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.engine.SessionImplementor;
+import org.hibernate.mapping.PersistentClass;
+import org.hibernate.mapping.Property;
+import org.hibernate.property.Getter;
+import org.hibernate.property.PropertyAccessor;
+import org.hibernate.property.Setter;
+import org.hibernate.proxy.ProxyFactory;
+import org.hibernate.tuple.Instantiator;
+import org.hibernate.tuple.entity.AbstractEntityTuplizer;
+import org.hibernate.tuple.entity.EntityMetamodel;
 
 
 public class AbstractEntityTuplizerImpl extends AbstractEntityTuplizer {

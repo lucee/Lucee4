@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import lucee.commons.io.log.LogAndSource;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
 import lucee.runtime.CFMLFactory;
@@ -51,7 +52,6 @@ import lucee.runtime.security.SecurityManager;
 import lucee.runtime.spooler.SpoolerEngine;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.dt.TimeSpan;
-import lucee.commons.io.log.LogAndSource;
 
 /**
  * interface for Config Object 

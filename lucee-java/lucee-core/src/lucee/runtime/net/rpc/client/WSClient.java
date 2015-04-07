@@ -18,10 +18,6 @@
  **/
 package lucee.runtime.net.rpc.client;
 
-import org.apache.axis.client.Call;
-import org.apache.axis.message.SOAPHeaderElement;
-import org.apache.log4j.Logger;
-
 import lucee.runtime.PageContext;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
@@ -33,6 +29,10 @@ import lucee.runtime.type.Collection;
 import lucee.runtime.type.Iteratorable;
 import lucee.runtime.type.Objects;
 import lucee.runtime.type.Struct;
+
+import org.apache.axis.client.Call;
+import org.apache.axis.message.SOAPHeaderElement;
+import org.apache.log4j.Logger;
 
 public abstract class WSClient implements Objects, Iteratorable {
 	

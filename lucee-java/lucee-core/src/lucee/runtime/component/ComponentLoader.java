@@ -26,6 +26,7 @@ import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.DirectoryResourceFilter;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
 import lucee.commons.io.res.filter.OrResourceFilter;
+import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.lang.MappingUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
@@ -48,7 +49,6 @@ import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.writer.BodyContentUtil;
-import lucee.commons.io.res.filter.ResourceFilter;
 
 public class ComponentLoader {
 	

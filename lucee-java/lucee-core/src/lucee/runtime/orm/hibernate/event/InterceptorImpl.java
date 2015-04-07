@@ -20,9 +20,6 @@ package lucee.runtime.orm.hibernate.event;
 
 import java.io.Serializable;
 
-import org.hibernate.EmptyInterceptor;
-import org.hibernate.type.Type;
-
 import lucee.runtime.Component;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.orm.ORMUtil;
@@ -30,6 +27,9 @@ import lucee.runtime.orm.hibernate.CommonUtil;
 import lucee.runtime.orm.hibernate.HibernateCaster;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Struct;
+
+import org.hibernate.EmptyInterceptor;
+import org.hibernate.type.Type;
 
 public class InterceptorImpl extends EmptyInterceptor {
 

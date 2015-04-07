@@ -20,16 +20,16 @@ package lucee.runtime.orm.hibernate.tuplizer.accessors;
 
 import java.lang.reflect.Method;
 
-import org.hibernate.HibernateException;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.property.Setter;
-
 import lucee.runtime.Component;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.orm.hibernate.CommonUtil;
 import lucee.runtime.orm.hibernate.HibernatePageException;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
+
+import org.hibernate.HibernateException;
+import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.property.Setter;
 
 public final class CFCSetter implements Setter {
 	

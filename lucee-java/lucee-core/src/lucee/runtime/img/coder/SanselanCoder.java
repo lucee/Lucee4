@@ -23,12 +23,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.sanselan.ImageReadException;
-import org.apache.sanselan.Sanselan;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.ExceptionUtil;
+
+import org.apache.sanselan.ImageReadException;
+import org.apache.sanselan.Sanselan;
 
 class SanselanCoder extends Coder {
 	

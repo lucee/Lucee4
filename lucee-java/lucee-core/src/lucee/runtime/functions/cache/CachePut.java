@@ -18,13 +18,13 @@
  **/
 package lucee.runtime.functions.cache;
 
+import lucee.commons.io.cache.Cache;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.dt.TimeSpan;
-import lucee.commons.io.cache.Cache;
 
 /**
  * 

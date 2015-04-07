@@ -20,9 +20,6 @@ package lucee.runtime.engine;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -45,7 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 
-import lucee.print;
+import lucee.cli.servlet.HTTPServletImpl;
 import lucee.commons.collection.MapFactory;
 import lucee.commons.io.CompressUtil;
 import lucee.commons.io.FileUtil;
@@ -94,17 +91,16 @@ import lucee.runtime.op.ExceptonImpl;
 import lucee.runtime.op.OperationImpl;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.util.BlazeDSImpl;
-import lucee.runtime.util.HTTPUtilImpl;
-import lucee.runtime.util.ZipUtilImpl;
-import lucee.runtime.video.VideoUtil;
-import lucee.runtime.video.VideoUtilImpl;
-import lucee.cli.servlet.HTTPServletImpl;
 import lucee.runtime.util.Cast;
 import lucee.runtime.util.Creation;
 import lucee.runtime.util.Decision;
 import lucee.runtime.util.Excepton;
+import lucee.runtime.util.HTTPUtilImpl;
 import lucee.runtime.util.Operation;
 import lucee.runtime.util.ZipUtil;
+import lucee.runtime.util.ZipUtilImpl;
+import lucee.runtime.video.VideoUtil;
+import lucee.runtime.video.VideoUtilImpl;
 
 import com.intergral.fusiondebug.server.FDControllerFactory;
 

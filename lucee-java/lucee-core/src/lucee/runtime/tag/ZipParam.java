@@ -21,6 +21,7 @@ package lucee.runtime.tag;
 import javax.servlet.jsp.tagext.Tag;
 
 import lucee.commons.io.res.Resource;
+import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.io.res.util.UDFFilter;
 import lucee.commons.io.res.util.WildcardPatternFilter;
@@ -30,7 +31,6 @@ import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.tag.TagImpl;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.UDF;
-import lucee.commons.io.res.filter.ResourceFilter;
 
 public final class ZipParam extends TagImpl {
 	

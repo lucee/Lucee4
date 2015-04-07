@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 
 import lucee.commons.io.DevNullOutputStream;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.Md5;
@@ -51,7 +52,6 @@ import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.commons.io.log.Log;
 
 public class GatewayEngineImpl implements GatewayEnginePro {
 

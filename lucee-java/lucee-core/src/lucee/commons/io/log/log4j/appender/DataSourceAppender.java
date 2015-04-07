@@ -18,11 +18,11 @@
  **/
 package lucee.commons.io.log.log4j.appender;
 
+import lucee.runtime.db.DataSource;
+
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
-
-import lucee.runtime.db.DataSource;
 
 public class DataSourceAppender extends AppenderSkeleton implements Appender {
 	

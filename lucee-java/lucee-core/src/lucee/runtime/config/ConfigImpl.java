@@ -36,18 +36,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 
-import org.apache.commons.collections.map.ReferenceMap;
-import org.apache.log4j.Layout;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 import lucee.commons.digest.Hash;
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.log.LegacyLogger;
+import lucee.commons.io.log.Log;
+import lucee.commons.io.log.LogAndSource;
 import lucee.commons.io.log.LoggerAndSourceData;
 import lucee.commons.io.log.log4j.LogAdapter;
 import lucee.commons.io.log.log4j.layout.ClassicLayout;
@@ -144,8 +138,15 @@ import lucee.transformer.library.tag.TagLibException;
 import lucee.transformer.library.tag.TagLibFactory;
 import lucee.transformer.library.tag.TagLibTag;
 import lucee.transformer.library.tag.TagLibTagAttr;
-import lucee.commons.io.log.Log;
-import lucee.commons.io.log.LogAndSource;
+
+import org.apache.commons.collections.map.ReferenceMap;
+import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import flex.messaging.config.ConfigMap;
 
 

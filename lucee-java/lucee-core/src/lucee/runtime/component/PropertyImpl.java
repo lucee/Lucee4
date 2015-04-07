@@ -18,8 +18,6 @@
  **/
 package lucee.runtime.component;
 
-import org.objectweb.asm.Type;
-
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
 import lucee.runtime.converter.ConverterException;
@@ -33,6 +31,8 @@ import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.StructUtil;
 import lucee.transformer.bytecode.util.ASMProperty;
 import lucee.transformer.bytecode.util.ASMUtil;
+
+import org.objectweb.asm.Type;
 
 /**
  */

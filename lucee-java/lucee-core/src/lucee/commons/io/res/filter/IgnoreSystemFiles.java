@@ -19,7 +19,6 @@
 package lucee.commons.io.res.filter;
 
 import lucee.commons.io.res.Resource;
-import lucee.commons.io.res.filter.ResourceNameFilter;
 
 public class IgnoreSystemFiles implements ResourceNameFilter {
 

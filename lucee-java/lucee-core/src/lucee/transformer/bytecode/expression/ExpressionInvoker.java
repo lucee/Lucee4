@@ -21,10 +21,6 @@ package lucee.transformer.bytecode.expression;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.expression.var.DataMember;
@@ -32,6 +28,10 @@ import lucee.transformer.bytecode.expression.var.Member;
 import lucee.transformer.bytecode.expression.var.UDF;
 import lucee.transformer.bytecode.util.ExpressionUtil;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 public final class ExpressionInvoker extends ExpressionBase implements Invoker {
 

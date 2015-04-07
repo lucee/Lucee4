@@ -24,6 +24,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 import lucee.commons.io.IOUtil;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.ContentType;
 import lucee.commons.io.res.Resource;
@@ -39,7 +40,6 @@ import lucee.runtime.functions.other.CreateUUID;
 import lucee.runtime.net.proxy.ProxyData;
 import lucee.runtime.net.proxy.ProxyDataImpl;
 import lucee.runtime.util.URLResolver;
-import lucee.commons.io.log.Log;
 
 class ExecutionThread extends Thread {
 

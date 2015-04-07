@@ -26,8 +26,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.w3c.dom.Node;
-
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
@@ -62,6 +60,9 @@ import lucee.runtime.type.util.CollectionUtil;
 import lucee.runtime.type.wrap.ArrayAsList;
 import lucee.runtime.type.wrap.ListAsArray;
 import lucee.runtime.type.wrap.MapAsStruct;
+
+import org.w3c.dom.Node;
+
 import flex.messaging.io.amf.ASObject;
 
 

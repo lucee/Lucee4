@@ -20,6 +20,16 @@ package lucee.runtime.search.lucene2;
 
 import java.util.Map;
 
+import lucee.commons.collection.MapFactory;
+import lucee.commons.lang.ClassUtil;
+import lucee.commons.lang.StringUtil;
+import lucee.runtime.search.SearchException;
+import lucee.runtime.search.lucene2.analyzer.DanishAnalyzer;
+import lucee.runtime.search.lucene2.analyzer.ItalianAnalyzer;
+import lucee.runtime.search.lucene2.analyzer.NorwegianAnalyzer;
+import lucee.runtime.search.lucene2.analyzer.PortugueseAnalyzer;
+import lucee.runtime.search.lucene2.analyzer.SpanishAnalyzer;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.br.BrazilianAnalyzer;
 import org.apache.lucene.analysis.cjk.CJKAnalyzer;
@@ -33,16 +43,6 @@ import org.apache.lucene.analysis.ru.RussianAnalyzer;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.th.ThaiAnalyzer;
-
-import lucee.commons.collection.MapFactory;
-import lucee.commons.lang.ClassUtil;
-import lucee.commons.lang.StringUtil;
-import lucee.runtime.search.SearchException;
-import lucee.runtime.search.lucene2.analyzer.DanishAnalyzer;
-import lucee.runtime.search.lucene2.analyzer.ItalianAnalyzer;
-import lucee.runtime.search.lucene2.analyzer.NorwegianAnalyzer;
-import lucee.runtime.search.lucene2.analyzer.PortugueseAnalyzer;
-import lucee.runtime.search.lucene2.analyzer.SpanishAnalyzer;
 public final class SearchUtil {
 
 	private static Map<String,Analyzer> analyzers=MapFactory.<String,Analyzer>getConcurrentMap();

@@ -40,7 +40,6 @@ import lucee.commons.lang.ClassUtil;
 import lucee.commons.lang.PCLCollection;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.SystemOut;
-import lucee.loader.TP;
 import lucee.loader.engine.CFMLEngine;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.loader.util.ExtensionFilter;

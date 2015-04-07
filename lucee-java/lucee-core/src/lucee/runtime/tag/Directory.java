@@ -35,8 +35,11 @@ import lucee.commons.io.res.filter.DirectoryResourceFilter;
 import lucee.commons.io.res.filter.FileResourceFilter;
 import lucee.commons.io.res.filter.NotResourceFilter;
 import lucee.commons.io.res.filter.OrResourceFilter;
+import lucee.commons.io.res.filter.ResourceFilter;
+import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.type.file.FileResource;
 import lucee.commons.io.res.type.s3.S3;
+import lucee.commons.io.res.type.s3.S3Constants;
 import lucee.commons.io.res.type.s3.S3Exception;
 import lucee.commons.io.res.type.s3.S3Resource;
 import lucee.commons.io.res.util.ModeObjectWrap;
@@ -61,9 +64,6 @@ import lucee.runtime.type.Query;
 import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.UDF;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.commons.io.res.filter.ResourceFilter;
-import lucee.commons.io.res.filter.ResourceNameFilter;
-import lucee.commons.io.res.type.s3.S3Constants;
 
 /**
 * Handles interactions with directories.

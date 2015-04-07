@@ -33,7 +33,6 @@ import lucee.runtime.dump.DumpTable;
 import lucee.runtime.dump.DumpUtil;
 import lucee.runtime.dump.SimpleDumpData;
 import lucee.runtime.exp.ExpressionException;
-import lucee.runtime.exp.PageException;
 import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Duplicator;

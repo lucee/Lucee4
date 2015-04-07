@@ -20,16 +20,16 @@ package lucee.runtime.cache.eh;
 
 import java.util.List;
 
-import net.sf.ehcache.Element;
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.event.RegisteredEventListeners;
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.cache.CacheEvent;
 import lucee.commons.io.cache.CacheEventListener;
 import lucee.runtime.cache.CacheSupport;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.cache.CacheEntry;
+import net.sf.ehcache.Element;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.event.RegisteredEventListeners;
 
 public abstract class EHCacheSupport extends CacheSupport implements Cache,CacheEvent {
 

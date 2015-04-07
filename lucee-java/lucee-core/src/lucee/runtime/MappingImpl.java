@@ -24,8 +24,6 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.collections.map.ReferenceMap;
-
 import lucee.commons.io.FileUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.ArchiveClassLoader;
@@ -44,6 +42,8 @@ import lucee.runtime.dump.SimpleDumpData;
 import lucee.runtime.listener.ApplicationListener;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.util.ArrayUtil;
+
+import org.apache.commons.collections.map.ReferenceMap;
 
 /**  
  * Mapping class

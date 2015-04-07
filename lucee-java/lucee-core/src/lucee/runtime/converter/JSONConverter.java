@@ -35,8 +35,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.w3c.dom.Node;
-
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
@@ -67,6 +65,8 @@ import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.CollectionUtil;
 import lucee.runtime.type.util.ComponentProUtil;
 import lucee.runtime.type.util.ComponentUtil;
+
+import org.w3c.dom.Node;
 
 /**
  * class to serialize and desirilize WDDX Packes

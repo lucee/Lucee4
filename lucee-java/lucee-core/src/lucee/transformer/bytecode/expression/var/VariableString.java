@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.objectweb.asm.Type;
-
 import lucee.runtime.type.scope.Scope;
 import lucee.runtime.type.scope.ScopeFactory;
 import lucee.transformer.bytecode.BytecodeContext;
@@ -34,6 +32,8 @@ import lucee.transformer.bytecode.expression.Expression;
 import lucee.transformer.bytecode.expression.ExpressionBase;
 import lucee.transformer.bytecode.literal.Identifier;
 import lucee.transformer.bytecode.literal.LitString;
+
+import org.objectweb.asm.Type;
 
 public final class VariableString extends ExpressionBase implements ExprString {
 

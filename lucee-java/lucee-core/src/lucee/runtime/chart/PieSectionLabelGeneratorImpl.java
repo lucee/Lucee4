@@ -20,10 +20,10 @@ package lucee.runtime.chart;
 
 import java.text.AttributedString;
 
+import lucee.runtime.op.Caster;
+
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.data.general.PieDataset;
-
-import lucee.runtime.op.Caster;
 
 public class PieSectionLabelGeneratorImpl implements PieSectionLabelGenerator {
 

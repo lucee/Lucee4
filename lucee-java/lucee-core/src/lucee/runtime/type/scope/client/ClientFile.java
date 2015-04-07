@@ -18,13 +18,13 @@
  **/
 package lucee.runtime.type.scope.client;
 
+import lucee.commons.io.log.Log;
 import lucee.commons.io.res.Resource;
 import lucee.runtime.PageContext;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.scope.Client;
 import lucee.runtime.type.scope.storage.StorageScopeFile;
-import lucee.commons.io.log.Log;
 
 public class ClientFile extends StorageScopeFile implements Client {
 

@@ -30,32 +30,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpConnectionManager;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpState;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.SimpleHttpConnectionManager;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
-import org.apache.commons.httpclient.methods.DeleteMethod;
-import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.HeadMethod;
-import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
-import org.apache.commons.httpclient.methods.OptionsMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.PutMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.commons.httpclient.methods.TraceMethod;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.httpclient.util.EncodingUtil;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -91,6 +65,32 @@ import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
 import lucee.runtime.util.URLResolver;
+
+import org.apache.commons.httpclient.Cookie;
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HostConfiguration;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpConnectionManager;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpState;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
+import org.apache.commons.httpclient.methods.DeleteMethod;
+import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.HeadMethod;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
+import org.apache.commons.httpclient.methods.OptionsMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.methods.TraceMethod;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.util.EncodingUtil;
 
 // MUST change behavor of mltiple headers now is a array, it das so?
 

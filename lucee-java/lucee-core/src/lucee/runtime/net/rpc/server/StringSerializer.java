@@ -22,7 +22,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.encoding.ser.SimpleSerializer;
-import org.apache.commons.lang.StringUtils;
 
 public class StringSerializer extends SimpleSerializer {
 	/*protected static String xmlCodeForChar(char c) {

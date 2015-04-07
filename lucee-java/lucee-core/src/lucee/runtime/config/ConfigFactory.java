@@ -22,6 +22,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import lucee.commons.io.IOUtil;
+import lucee.commons.io.SystemUtil;
+import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
+import lucee.commons.lang.SystemOut;
+import lucee.runtime.Info;
+
 import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,13 +36,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import lucee.commons.io.IOUtil;
-import lucee.commons.io.SystemUtil;
-import lucee.commons.io.res.Resource;
-import lucee.commons.lang.ExceptionUtil;
-import lucee.commons.lang.SystemOut;
-import lucee.runtime.Info;
 
 public abstract class ConfigFactory {
 	static boolean doNew(Resource contextDir) {

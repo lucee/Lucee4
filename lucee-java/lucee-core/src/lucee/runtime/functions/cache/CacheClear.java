@@ -18,13 +18,13 @@
  **/
 package lucee.runtime.functions.cache;
 
+import lucee.commons.io.cache.CacheKeyFilter;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.util.WildCardFilter;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
 import lucee.runtime.op.Caster;
-import lucee.commons.io.cache.CacheKeyFilter;
 
 /**
  * 

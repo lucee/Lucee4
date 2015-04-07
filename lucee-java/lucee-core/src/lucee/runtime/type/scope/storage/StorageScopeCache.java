@@ -20,6 +20,8 @@ package lucee.runtime.type.scope.storage;
 
 import java.io.IOException;
 
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.log.Log;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.CacheConnection;
 import lucee.runtime.config.Config;
@@ -31,8 +33,6 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.scope.ScopeContext;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.log.Log;
 
 /**
  * client scope that store it's data in a datasource

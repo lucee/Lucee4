@@ -20,7 +20,6 @@ package lucee.commons.io.log;
 
 import lucee.commons.io.log.log4j.LogAdapter;
 import lucee.commons.lang.ExceptionUtil;
-import lucee.commons.io.log.Log;
 
 /**
  * Helper class for the logs

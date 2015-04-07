@@ -18,9 +18,8 @@
  **/
 package main;
 
-import java.util.Hashtable;
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
+import java.util.Hashtable;
 
 public class ContextClassloader extends ClassLoader {
     private Hashtable classes = new Hashtable();

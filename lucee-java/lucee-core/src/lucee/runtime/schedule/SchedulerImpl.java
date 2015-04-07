@@ -21,14 +21,7 @@ package lucee.runtime.schedule;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
+import lucee.commons.io.log.LogAndSource;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.StringUtil;
 import lucee.loader.engine.CFMLEngine;
@@ -38,7 +31,14 @@ import lucee.runtime.exp.PageException;
 import lucee.runtime.net.proxy.ProxyData;
 import lucee.runtime.net.proxy.ProxyDataImpl;
 import lucee.runtime.op.Caster;
-import lucee.commons.io.log.LogAndSource;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * scheduler class to execute the scheduled tasks

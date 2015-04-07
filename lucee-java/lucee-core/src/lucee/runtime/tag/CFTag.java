@@ -64,10 +64,10 @@ import lucee.runtime.type.util.ComponentProUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
 import lucee.runtime.type.util.Type;
+import lucee.runtime.util.QueryStack;
 import lucee.runtime.util.QueryStackImpl;
 import lucee.transformer.library.tag.TagLibTag;
 import lucee.transformer.library.tag.TagLibTagAttr;
-import lucee.runtime.util.QueryStack;
 
 
 /**

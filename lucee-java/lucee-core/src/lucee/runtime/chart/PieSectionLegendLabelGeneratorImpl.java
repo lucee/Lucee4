@@ -22,13 +22,13 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.text.AttributedString;
 
-import org.jfree.chart.labels.PieSectionLabelGenerator;
-import org.jfree.data.general.PieDataset;
-
 import lucee.commons.lang.StringList;
 import lucee.commons.lang.font.FontUtil;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.util.ListUtil;
+
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.data.general.PieDataset;
 
 public class PieSectionLegendLabelGeneratorImpl implements
 		PieSectionLabelGenerator {

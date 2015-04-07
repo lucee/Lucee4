@@ -27,7 +27,6 @@ import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Query;
 import lucee.runtime.type.QueryColumn;
-import lucee.runtime.util.QueryStack;
 
 /**
  * Stack for Query Objects

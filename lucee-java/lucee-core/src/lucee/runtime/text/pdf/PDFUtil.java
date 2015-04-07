@@ -28,11 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.pdfbox.exceptions.CryptographyException;
-import org.pdfbox.exceptions.InvalidPasswordException;
-import org.pdfbox.pdmodel.PDDocument;
-import org.pdfbox.util.PDFText2HTML;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.StringUtil;
@@ -44,6 +39,11 @@ import lucee.runtime.img.Image;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Constants;
 import lucee.runtime.op.Decision;
+
+import org.pdfbox.exceptions.CryptographyException;
+import org.pdfbox.exceptions.InvalidPasswordException;
+import org.pdfbox.pdmodel.PDDocument;
+import org.pdfbox.util.PDFText2HTML;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;

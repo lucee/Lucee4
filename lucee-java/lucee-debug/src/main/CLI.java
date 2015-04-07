@@ -27,8 +27,6 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-import lucee.print;
-
 public class CLI {
 	public static void main(String[] args) throws Throwable {
 

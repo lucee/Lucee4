@@ -18,8 +18,6 @@
  **/
 package lucee.runtime.orm.hibernate.event;
 
-import org.hibernate.event.PreUpdateEvent;
-
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
 import lucee.runtime.component.Property;
@@ -32,6 +30,8 @@ import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.UDF;
+
+import org.hibernate.event.PreUpdateEvent;
 
 public abstract class EventListener {
 

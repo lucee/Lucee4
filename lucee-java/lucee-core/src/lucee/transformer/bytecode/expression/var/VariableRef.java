@@ -18,15 +18,15 @@
  **/
 package lucee.transformer.bytecode.expression.var;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.expression.ExpressionBase;
 import lucee.transformer.bytecode.util.TypeScope;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 public final class VariableRef extends ExpressionBase {
 

@@ -21,7 +21,6 @@ package lucee.runtime.util;
 import java.io.IOException;
 
 import lucee.commons.io.res.Resource;
-import lucee.runtime.util.ZipUtil;
 
 public class ZipUtilImpl implements ZipUtil {
 

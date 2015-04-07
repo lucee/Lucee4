@@ -18,12 +18,6 @@
  **/
 package lucee.transformer.bytecode.statement;
 
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.runtime.util.ForEachUtil;
 import lucee.transformer.bytecode.Body;
 import lucee.transformer.bytecode.BytecodeContext;
@@ -36,6 +30,12 @@ import lucee.transformer.bytecode.util.ExpressionUtil;
 import lucee.transformer.bytecode.util.Types;
 import lucee.transformer.bytecode.visitor.OnFinally;
 import lucee.transformer.bytecode.visitor.TryFinallyVisitor;
+
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 public final class ForEach extends StatementBase implements FlowControlBreak,FlowControlContinue,HasBody {
 

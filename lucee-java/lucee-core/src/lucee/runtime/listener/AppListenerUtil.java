@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import lucee.print;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.StringUtil;
@@ -45,6 +44,7 @@ import lucee.runtime.db.DataSource;
 import lucee.runtime.db.DataSourceImpl;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.net.s3.Properties;
 import lucee.runtime.net.s3.PropertiesImpl;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
@@ -61,7 +61,6 @@ import lucee.runtime.type.scope.Undefined;
 import lucee.runtime.type.util.CollectionUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
-import lucee.runtime.net.s3.Properties;
 
 public final class AppListenerUtil {
 

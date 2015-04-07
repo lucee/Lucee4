@@ -21,9 +21,9 @@ package lucee.commons.io.cache;
 import java.io.IOException;
 import java.util.List;
 
+import lucee.commons.io.cache.exp.CacheException;
 import lucee.runtime.config.Config;
 import lucee.runtime.type.Struct;
-import lucee.commons.io.cache.exp.CacheException;
 
 public interface Cache {
 	

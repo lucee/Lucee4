@@ -47,11 +47,10 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimePart;
 
-import org.apache.commons.collections.ReferenceMap;
-
 import lucee.commons.activation.ResourceDataSource;
 import lucee.commons.digest.MD5;
 import lucee.commons.io.SystemUtil;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -78,7 +77,8 @@ import lucee.runtime.op.Caster;
 import lucee.runtime.spooler.mail.MailSpoolerTask;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.ListUtil;
-import lucee.commons.io.log.Log;
+
+import org.apache.commons.collections.ReferenceMap;
 
 import com.sun.mail.smtp.SMTPMessage;
 

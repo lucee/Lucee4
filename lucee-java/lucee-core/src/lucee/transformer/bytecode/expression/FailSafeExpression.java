@@ -18,14 +18,14 @@
  **/
 package lucee.transformer.bytecode.expression;
 
+import lucee.transformer.bytecode.BytecodeContext;
+import lucee.transformer.bytecode.BytecodeException;
+import lucee.transformer.bytecode.util.Types;
+
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.GeneratorAdapter;
-
-import lucee.transformer.bytecode.BytecodeContext;
-import lucee.transformer.bytecode.BytecodeException;
-import lucee.transformer.bytecode.util.Types;
 
 public class FailSafeExpression  extends ExpressionBase implements Opcodes {
 

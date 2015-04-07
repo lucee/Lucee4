@@ -18,11 +18,6 @@
  **/
 package lucee.transformer.bytecode.op;
 
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.cast.CastBoolean;
@@ -31,6 +26,11 @@ import lucee.transformer.bytecode.expression.Expression;
 import lucee.transformer.bytecode.expression.ExpressionBase;
 import lucee.transformer.bytecode.util.ExpressionUtil;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
 
 public final class OpContional extends ExpressionBase {
 

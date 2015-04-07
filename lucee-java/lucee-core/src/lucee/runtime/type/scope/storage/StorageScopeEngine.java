@@ -18,8 +18,8 @@
  **/
 package lucee.runtime.type.scope.storage;
 
-import lucee.runtime.CFMLFactoryImpl;
 import lucee.commons.io.log.Log;
+import lucee.runtime.CFMLFactoryImpl;
 
 public class StorageScopeEngine {
 	

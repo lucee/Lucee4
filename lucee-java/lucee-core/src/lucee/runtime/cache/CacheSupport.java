@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import lucee.runtime.type.Struct;
 import lucee.commons.io.cache.Cache;
 import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.cache.CacheEntryFilter;
 import lucee.commons.io.cache.CacheKeyFilter;
 import lucee.commons.io.cache.exp.CacheException;
+import lucee.runtime.type.Struct;
 
 public abstract class CacheSupport implements Cache {
 

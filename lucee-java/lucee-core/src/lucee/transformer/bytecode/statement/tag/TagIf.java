@@ -22,10 +22,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.commons.GeneratorAdapter;
-
 import lucee.transformer.bytecode.BodyBase;
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
@@ -35,6 +31,10 @@ import lucee.transformer.bytecode.cast.CastBoolean;
 import lucee.transformer.bytecode.expression.ExprBoolean;
 import lucee.transformer.bytecode.expression.Expression;
 import lucee.transformer.bytecode.util.ExpressionUtil;
+
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.commons.GeneratorAdapter;
 
 public final class TagIf extends TagBaseNoFinal {
 

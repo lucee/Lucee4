@@ -27,9 +27,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import lucee.commons.io.res.Resource;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
@@ -39,6 +36,9 @@ import lucee.runtime.type.Query;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.TimeSpan;
+
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 

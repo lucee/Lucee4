@@ -19,6 +19,7 @@
 package lucee.runtime.functions.file;
 
 import lucee.commons.io.res.Resource;
+import lucee.commons.io.res.type.s3.S3Constants;
 import lucee.commons.io.res.util.ResourceAndResourceNameFilter;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.io.res.util.UDFFilter;
@@ -26,7 +27,6 @@ import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
 import lucee.runtime.tag.Directory;
-import lucee.commons.io.res.type.s3.S3Constants;
 
 public class DirectoryCopy implements Function {
 

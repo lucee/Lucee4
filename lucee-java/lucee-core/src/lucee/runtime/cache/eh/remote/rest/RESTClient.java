@@ -27,13 +27,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 
-import org.xml.sax.SAXException;
-
+import lucee.commons.io.cache.CacheEntry;
 import lucee.loader.util.Util;
 import lucee.runtime.cache.eh.remote.Converter;
 import lucee.runtime.cache.eh.remote.rest.sax.CacheFactory;
 import lucee.runtime.cache.eh.remote.rest.sax.CacheMeta;
-import lucee.commons.io.cache.CacheEntry;
+
+import org.xml.sax.SAXException;
 
 public class RESTClient {
 	

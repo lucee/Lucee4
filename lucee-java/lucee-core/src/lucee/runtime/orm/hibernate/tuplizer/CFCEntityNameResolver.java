@@ -17,12 +17,12 @@
  * 
  **/
 package lucee.runtime.orm.hibernate.tuplizer;
-import org.hibernate.EntityNameResolver;
-
 import lucee.runtime.Component;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.orm.hibernate.HibernateCaster;
 import lucee.runtime.orm.hibernate.HibernatePageException;
+
+import org.hibernate.EntityNameResolver;
 
 
 public  class CFCEntityNameResolver implements EntityNameResolver {

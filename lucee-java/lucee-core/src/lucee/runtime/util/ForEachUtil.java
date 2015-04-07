@@ -22,8 +22,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.w3c.dom.Node;
-
 import lucee.runtime.exp.CasterException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
@@ -34,6 +32,8 @@ import lucee.runtime.type.ObjectWrap;
 import lucee.runtime.type.it.EnumAsIt;
 import lucee.runtime.type.it.ForEachQueryIterator;
 import lucee.runtime.type.wrap.MapAsStruct;
+
+import org.w3c.dom.Node;
 
 public class ForEachUtil {
 

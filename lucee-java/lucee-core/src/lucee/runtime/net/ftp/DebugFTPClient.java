@@ -22,10 +22,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-import org.apache.commons.net.ftp.FTPClient;
-
 import lucee.commons.io.SystemUtil;
 import lucee.commons.lang.SystemOut;
+
+import org.apache.commons.net.ftp.FTPClient;
 
 
 /**

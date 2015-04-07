@@ -21,11 +21,11 @@ package lucee.commons.net.http.httpclient3;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.util.EncodingUtil;
-
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.StringUtil;
+
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.util.EncodingUtil;
 
 public class ResourcePart extends FilePart {
 	protected static final String FILE_NAME = "; filename=";

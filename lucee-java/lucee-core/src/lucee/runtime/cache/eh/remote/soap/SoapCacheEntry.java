@@ -22,10 +22,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.util.Date;
 
+import lucee.commons.io.cache.CacheEntry;
 import lucee.loader.util.Util;
 import lucee.runtime.cache.CacheUtil;
 import lucee.runtime.type.Struct;
-import lucee.commons.io.cache.CacheEntry;
 
 public class SoapCacheEntry implements CacheEntry {
 

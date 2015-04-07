@@ -18,8 +18,6 @@
  **/
 package lucee.transformer.library.tag;
 
-import lucee.print;
-
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 

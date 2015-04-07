@@ -27,6 +27,12 @@ import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
+import lucee.commons.lang.Pair;
+import lucee.commons.lang.StringUtil;
+import lucee.runtime.exp.ApplicationException;
+import lucee.runtime.text.xml.ArrayNodeList;
+import lucee.runtime.text.xml.XMLUtil;
+
 import org.apache.axis.Constants;
 import org.apache.axis.wsdl.symbolTable.BaseType;
 import org.apache.axis.wsdl.symbolTable.DefinedType;
@@ -37,12 +43,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-
-import lucee.commons.lang.Pair;
-import lucee.commons.lang.StringUtil;
-import lucee.runtime.exp.ApplicationException;
-import lucee.runtime.text.xml.ArrayNodeList;
-import lucee.runtime.text.xml.XMLUtil;
 
 public class SOAPUtil {
 	

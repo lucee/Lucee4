@@ -21,14 +21,14 @@ package lucee.runtime.db;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.commons.collections.map.ReferenceMap;
-
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.ClassUtil;
 import lucee.runtime.config.Config;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageRuntimeException;
+
+import org.apache.commons.collections.map.ReferenceMap;
 
 public abstract class DataSourceSupport implements DataSourcePro, Cloneable {
 

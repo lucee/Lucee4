@@ -22,13 +22,13 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import lucee.commons.io.log.Log;
 import lucee.commons.io.res.Resource;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Query;
 import lucee.runtime.type.QueryColumn;
 import lucee.runtime.type.dt.DateTime;
-import lucee.commons.io.log.Log;
 
 /**
  * a Search Collection

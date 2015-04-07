@@ -20,6 +20,7 @@ package lucee.runtime.type.scope.storage;
 
 import java.util.Date;
 
+import lucee.commons.io.log.Log;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.converter.ScriptConverter;
@@ -35,7 +36,6 @@ import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.scope.Cookie;
 import lucee.runtime.type.scope.ScopeContext;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.commons.io.log.Log;
 
 /**
  * client scope that store it's data in the cookie of the client

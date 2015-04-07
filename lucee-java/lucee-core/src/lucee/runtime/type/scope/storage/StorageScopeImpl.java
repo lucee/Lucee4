@@ -47,7 +47,6 @@ import lucee.runtime.type.util.CollectionUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.StructSupport;
 import lucee.runtime.type.util.StructUtil;
-import lucee.runtime.type.scope.storage.StorageScope;
 
 public abstract class StorageScopeImpl extends StructSupport implements StorageScope,Sizeable {
 

@@ -20,13 +20,13 @@ package lucee.runtime.search.lucene2;
 
 import java.io.IOException;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.search.Hits;
-
 import lucee.runtime.search.SearchException;
 import lucee.runtime.search.SearchResulItem;
 import lucee.runtime.search.lucene2.highlight.Highlight;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.search.Hits;
 
 public class SearchResulItemHits implements SearchResulItem {
 

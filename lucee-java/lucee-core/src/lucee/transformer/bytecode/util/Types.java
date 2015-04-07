@@ -28,8 +28,6 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.Tag;
 
-import org.objectweb.asm.Type;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.ClassException;
@@ -67,6 +65,7 @@ import lucee.runtime.type.UDF;
 import lucee.runtime.type.UDFImpl;
 import lucee.runtime.type.UDFProperties;
 import lucee.runtime.type.UDFPropertiesImpl;
+import lucee.runtime.type.ref.Reference;
 import lucee.runtime.type.ref.VariableReference;
 import lucee.runtime.type.scope.Scope;
 import lucee.runtime.type.scope.Undefined;
@@ -76,7 +75,8 @@ import lucee.runtime.type.util.ListUtil;
 import lucee.runtime.util.NumberRange;
 import lucee.runtime.writer.BodyContentUtil;
 import lucee.transformer.bytecode.BytecodeException;
-import lucee.runtime.type.ref.Reference;
+
+import org.objectweb.asm.Type;
 
 public final class Types {
 

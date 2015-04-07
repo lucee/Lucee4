@@ -21,11 +21,6 @@
  */
 package lucee.runtime.functions.xml;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.FunctionException;
@@ -33,6 +28,11 @@ import lucee.runtime.ext.function.Function;
 import lucee.runtime.text.xml.XMLUtil;
 import lucee.runtime.text.xml.struct.XMLStructFactory;
 import lucee.runtime.type.util.ListUtil;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 public final class XmlElemNew implements Function {
 	

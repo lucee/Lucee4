@@ -21,7 +21,6 @@ package lucee.runtime.util;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.net.amf.CFMLProxy;
 import lucee.runtime.op.Caster;
-import lucee.runtime.util.BlazeDS;
 import flex.messaging.FlexContext;
 import flex.messaging.MessageException;
 import flex.messaging.config.ConfigMap;

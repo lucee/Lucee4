@@ -39,7 +39,6 @@ import lucee.runtime.Mapping;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.tag.CacheHandlerFactoryCollection;
 import lucee.runtime.exp.SecurityException;
-import lucee.runtime.listener.AppListenerUtil;
 import lucee.runtime.listener.ApplicationListener;
 import lucee.runtime.listener.ClassicAppListener;
 import lucee.runtime.listener.MixedAppListener;

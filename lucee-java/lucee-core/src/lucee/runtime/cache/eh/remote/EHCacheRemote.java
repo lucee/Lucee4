@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
+import lucee.commons.io.cache.CacheEntry;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.runtime.cache.CacheSupport;
 import lucee.runtime.cache.eh.remote.rest.RESTClient;
@@ -35,7 +36,6 @@ import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.commons.io.cache.CacheEntry;
 import lucee.runtime.util.Cast;
 
 public class EHCacheRemote extends CacheSupport {

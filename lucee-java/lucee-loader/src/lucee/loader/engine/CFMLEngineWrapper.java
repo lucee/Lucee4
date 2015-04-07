@@ -32,7 +32,6 @@ import javax.servlet.jsp.JspException;
 
 import lucee.runtime.CFMLFactory;
 import lucee.runtime.PageContext;
-import lucee.runtime.video.VideoUtil;
 import lucee.runtime.util.Cast;
 import lucee.runtime.util.Creation;
 import lucee.runtime.util.Decision;
@@ -41,6 +40,7 @@ import lucee.runtime.util.HTTPUtil;
 import lucee.runtime.util.Operation;
 import lucee.runtime.util.ResourceUtil;
 import lucee.runtime.util.ZipUtil;
+import lucee.runtime.video.VideoUtil;
 
 /**
  * wrapper for a CFMlEngine

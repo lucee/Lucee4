@@ -35,11 +35,6 @@ import java.util.Set;
 
 import javax.servlet.http.Cookie;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.Resource;
@@ -48,6 +43,11 @@ import lucee.commons.io.res.util.ResourceUtil;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.QueryImpl;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 /**
  *  

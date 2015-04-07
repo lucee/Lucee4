@@ -18,7 +18,6 @@
  **/
 package lucee.runtime.functions.system;
 
-import lucee.commons.io.SystemUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.FunctionException;
 

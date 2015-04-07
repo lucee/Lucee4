@@ -24,9 +24,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-import org.apache.commons.fileupload.MultipartStream;
-import org.apache.commons.lang.StringUtils;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.exp.PageException;
@@ -36,6 +33,9 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
+
+import org.apache.commons.fileupload.MultipartStream;
+import org.apache.commons.lang.StringUtils;
 
 
 public class MultiPartResponseUtils {

@@ -25,13 +25,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.objectweb.asm.ClassReader;
-
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourcesImpl;
 import lucee.commons.lang.ClassUtil;
 import lucee.commons.lang.SystemOut;
+
+import org.objectweb.asm.ClassReader;
 
 @SuppressWarnings("UseOfSunClasses")
 public class InstrumentationFactory {

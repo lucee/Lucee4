@@ -27,6 +27,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import lucee.Version;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
@@ -38,7 +39,6 @@ import lucee.runtime.Info;
 import lucee.runtime.config.Config;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
-import lucee.Version;
 
 public class PDF {
 	

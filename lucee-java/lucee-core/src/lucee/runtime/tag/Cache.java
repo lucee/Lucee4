@@ -24,9 +24,8 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-
 import lucee.commons.io.IOUtil;
+import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
@@ -53,7 +52,8 @@ import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.dt.TimeSpanImpl;
-import lucee.commons.io.cache.CacheEntry;
+
+import org.apache.oro.text.regex.MalformedPatternException;
 
 /**
 * Speeds up page rendering when dynamic content does not have to be retrieved each time a user accesses

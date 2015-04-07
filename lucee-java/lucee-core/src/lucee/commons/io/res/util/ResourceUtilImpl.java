@@ -22,11 +22,11 @@ import java.io.IOException;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
+import lucee.commons.io.res.filter.ResourceFilter;
+import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.functions.system.ContractPath;
-import lucee.commons.io.res.filter.ResourceFilter;
-import lucee.commons.io.res.filter.ResourceNameFilter;
 
 public class ResourceUtilImpl implements lucee.runtime.util.ResourceUtil {
 

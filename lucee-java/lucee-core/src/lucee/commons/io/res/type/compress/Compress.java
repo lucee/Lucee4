@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
-
 import lucee.commons.digest.MD5;
 import lucee.commons.io.CompressUtil;
 import lucee.commons.io.IOUtil;
@@ -39,6 +37,8 @@ import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.op.Caster;
+
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 
 public final class Compress {
 	

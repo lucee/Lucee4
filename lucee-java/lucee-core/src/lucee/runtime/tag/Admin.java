@@ -38,15 +38,14 @@ import java.util.TimeZone;
 import javax.servlet.ServletConfig;
 import javax.servlet.jsp.tagext.Tag;
 
-import org.apache.log4j.Level;
-import org.xml.sax.SAXException;
-
 import lucee.commons.collection.MapFactory;
 import lucee.commons.db.DBUtil;
 import lucee.commons.digest.MD5;
 import lucee.commons.io.CompressUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.cache.Cache2;
 import lucee.commons.io.log.LoggerAndSourceData;
 import lucee.commons.io.log.log4j.Log4jUtil;
 import lucee.commons.io.res.Resource;
@@ -55,6 +54,7 @@ import lucee.commons.io.res.filter.ExtensionResourceFilter;
 import lucee.commons.io.res.filter.LogResourceFilter;
 import lucee.commons.io.res.filter.NotResourceFilter;
 import lucee.commons.io.res.filter.OrResourceFilter;
+import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.ClassUtil;
@@ -159,9 +159,9 @@ import lucee.runtime.type.util.ComponentUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.transformer.library.function.FunctionLib;
 import lucee.transformer.library.tag.TagLib;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.cache.Cache2;
-import lucee.commons.io.res.filter.ResourceFilter;
+
+import org.apache.log4j.Level;
+import org.xml.sax.SAXException;
 
 /**
  * 

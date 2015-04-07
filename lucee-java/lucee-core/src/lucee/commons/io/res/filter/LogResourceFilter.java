@@ -18,9 +18,7 @@
  **/
 package lucee.commons.io.res.filter;
 
-import lucee.aprint;
 import lucee.commons.io.res.Resource;
-import lucee.commons.io.res.filter.ResourceFilter;
 
 public class LogResourceFilter implements ResourceFilter {
 	

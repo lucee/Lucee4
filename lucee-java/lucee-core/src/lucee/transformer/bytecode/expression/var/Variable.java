@@ -22,11 +22,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefInteger;
 import lucee.commons.lang.types.RefIntegerImpl;
@@ -60,6 +55,11 @@ import lucee.transformer.bytecode.util.Types;
 import lucee.transformer.bytecode.visitor.ArrayVisitor;
 import lucee.transformer.library.function.FunctionLibFunction;
 import lucee.transformer.library.function.FunctionLibFunctionArg;
+
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 public class Variable extends ExpressionBase implements Invoker {
 	 

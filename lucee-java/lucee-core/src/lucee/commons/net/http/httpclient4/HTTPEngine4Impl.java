@@ -27,6 +27,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lucee.commons.io.IOUtil;
+import lucee.commons.io.TemporaryStream;
+import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
+import lucee.commons.lang.StringUtil;
+import lucee.commons.net.http.Entity;
+import lucee.commons.net.http.HTTPResponse;
+import lucee.commons.net.http.httpclient4.entity.ByteArrayHttpEntity;
+import lucee.commons.net.http.httpclient4.entity.EmptyHttpEntity;
+import lucee.commons.net.http.httpclient4.entity.ResourceHttpEntity;
+import lucee.commons.net.http.httpclient4.entity.TemporaryStreamHttpEntity;
+import lucee.runtime.PageContextImpl;
+import lucee.runtime.engine.ThreadLocalPageContext;
+import lucee.runtime.exp.PageException;
+import lucee.runtime.net.http.ReqRspUtil;
+import lucee.runtime.net.proxy.ProxyData;
+import lucee.runtime.net.proxy.ProxyDataImpl;
+import lucee.runtime.op.Caster;
+import lucee.runtime.op.Decision;
+import lucee.runtime.type.util.CollectionUtil;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -59,27 +80,6 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
-
-import lucee.commons.io.IOUtil;
-import lucee.commons.io.TemporaryStream;
-import lucee.commons.io.res.Resource;
-import lucee.commons.lang.ExceptionUtil;
-import lucee.commons.lang.StringUtil;
-import lucee.commons.net.http.Entity;
-import lucee.commons.net.http.HTTPResponse;
-import lucee.commons.net.http.httpclient4.entity.ByteArrayHttpEntity;
-import lucee.commons.net.http.httpclient4.entity.EmptyHttpEntity;
-import lucee.commons.net.http.httpclient4.entity.ResourceHttpEntity;
-import lucee.commons.net.http.httpclient4.entity.TemporaryStreamHttpEntity;
-import lucee.runtime.PageContextImpl;
-import lucee.runtime.engine.ThreadLocalPageContext;
-import lucee.runtime.exp.PageException;
-import lucee.runtime.net.http.ReqRspUtil;
-import lucee.runtime.net.proxy.ProxyData;
-import lucee.runtime.net.proxy.ProxyDataImpl;
-import lucee.runtime.op.Caster;
-import lucee.runtime.op.Decision;
-import lucee.runtime.type.util.CollectionUtil;
 
 public class HTTPEngine4Impl {
 	
