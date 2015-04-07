@@ -987,7 +987,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
     
     
     
-    protected PageSource getPageSource(int index) {
+    public PageSource getPageSource(int index) {
         return includePathList.get(index-1);
     }
     public synchronized void copyStateTo(PageContextImpl other) {
