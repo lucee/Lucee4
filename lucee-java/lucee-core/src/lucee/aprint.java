@@ -58,11 +58,11 @@ public class aprint {
 
 	public static void date(String value) {
 		long millis=System.currentTimeMillis();
-    	o(
-    			new Date(millis)
-    			+"-"
-    			+(millis-(millis/1000*1000))
-    			+" "+value);
+		o(
+			new Date(millis)
+			+"-"
+			+(millis-(millis/1000*1000))
+			+" "+value);
 	}
 
 	public static void ds(boolean useOutStream) {
