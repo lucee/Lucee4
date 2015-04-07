@@ -8,19 +8,19 @@
   <target name="buildCustom" depends="basic" description="builds the custom packages">
     
     <!-- jars zip  -->
-    <zip destfile="${dist}/bundles/lucee-${number}-jars.zip">
+    <zip destfile="${dist}/bundles/lucee-${version}-jars.zip">
         <zipfileset dir="${dist}" includes="lucee.jar"/>
         <zipfileset dir="${lib}" excludes="license/**,javax.servlet.jar"/>    
     </zip>
 
     <!-- jars tar.gz
-    <tar destfile="${dist}/bundles/custom/all/lucee-${number}-jars.tar.gz" compression="gzip">
+    <tar destfile="${dist}/bundles/custom/all/lucee-${version}-jars.tar.gz" compression="gzip">
       <zipfileset dir="${dist}" includes="lucee.jar"/>
       <zipfileset dir="${lib}" excludes="license/**,javax.servlet.jar"/>  
     </tar>  -->
     
     <!-- war file  -->
-    <zip destfile="${dist}/bundles/lucee-${number}.war">
+    <zip destfile="${dist}/bundles/lucee-${version}.war">
         <!-- jars -->
         <zipfileset dir="${dist}" includes="lucee.jar" prefix="WEB-INF/lib"/>
         <zipfileset dir="${lib}" excludes="javax.servlet.jar" prefix="WEB-INF/lib"/>

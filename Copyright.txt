@@ -1,8 +1,0 @@
-(C) 2006-2012 Railo Technologies GmbH
-License: LGPL 2.1
-
-(C) 2012-2014 the Railo Company Ltd
-License: LGPL 2.1
-
-(C) 2015 Lucee Association Switzerland
-License: LGPL 2.1

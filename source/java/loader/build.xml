@@ -1,0 +1,61 @@
+<project name="LuceeLoader" default="install" basedir=".">
+    
+	<description>Ant build file to build the LuceeLoader</description>
+	
+	<!-- Load properties -->
+	<property file="build.properties"/>
+	
+	<!-- Set jars -->
+	<path id="classpath">
+		<fileset dir="${lib.dir}"/>
+	</path>
+	
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+    <target name="clean" description="Clears the build and dist directories.">
+    	<echo>Deleting ${build.dir} and ${dist.dir}</echo>
+    	<delete dir="${build.dir}" />
+    	<delete dir="${dist.dir}"/>
+    </target>
+	
+	<!-- ================================= 
+          target: init              
+         ================================= -->
+    <target name="init" depends="clean" description="Creates nessesary directories.">
+    	<echo>Creating the build and dist directories.</echo>
+    	<mkdir dir="${build.dir}/classes"/>
+    	<mkdir dir="${dist.dir}"/>
+    </target>
+	
+	<!-- ================================= 
+          target: compile              
+         ================================= -->
+    <target name="compile" depends="init" description="Compiles the src classes.">
+        <echo>Compile the LuceeLoader src.</echo>
+        <javac srcdir="${src.dir}" destdir="${build.dir}/classes" compiler="javac1.5" encoding="ISO-8859-1">
+        	<classpath refid="classpath"/>
+        </javac>
+    </target>
+	
+	<!-- ================================= 
+          target: package              
+         ================================= -->
+    <target name="package" depends="compile" description="Creates the Lucee-loader.jar file.">
+        <echo>Packaging the Lucee-loader.jar file.</echo>
+    	<jar destfile="${dist.dir}/lucee-loader.jar">
+    		<fileset dir="${build.dir}/classes"/>
+    	</jar>
+    </target>
+	
+	<!-- ================================= 
+          target: install              
+         ================================= -->
+    <target name="install" depends="package" description="Copies the Lucee-loader.jar to the Lucee src directory.">
+        <echo>Copy the Lucee-loader.jar to the Lucee core lib directory.</echo>
+    	<copy todir="${lucee.core.lib.dir}">
+    		<fileset dir="${dist.dir}"/>
+    	</copy>
+    </target>
+		
+</project>

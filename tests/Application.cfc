@@ -67,7 +67,7 @@ component {
 	}
 	catch(e){ 
 		// only add mapping when necessary
-		this.componentpaths = [{archive:getDirectoryFromPath(getCurrentTemplatePath())&"testbox.lar"}]; // "{lucee-server}/context/testbox.ra"
+		this.componentpaths = [{archive:getDirectoryFromPath(getCurrentTemplatePath())&"testbox-2.1.0.lar"}]; // "{lucee-server}/context/testbox.ra"
 	}
 	
 

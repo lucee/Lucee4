@@ -1,8 +1,0 @@
-eclipse.preferences.version=1
-encoding//src/lucee/commons/lang/ParserString.java=UTF-8
-encoding//src/lucee/runtime/engine/ExecutionLogSupport.java=UTF-8
-encoding//src/lucee/runtime/orm/hibernate/Dialect.java=UTF-8
-encoding//src/lucee/runtime/search/lucene2/analyzer/ItalianAnalyzer.java=UTF-8
-encoding//src/lucee/runtime/search/lucene2/analyzer/NorwegianAnalyzer.java=UTF-8
-encoding//src/resource/context/admin/debug/Classic.cfc=UTF-8
-encoding//src/resource/context/admin/debug/Modern.cfc=UTF-8
