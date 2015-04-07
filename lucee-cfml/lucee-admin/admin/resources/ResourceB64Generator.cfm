@@ -32,7 +32,7 @@
 	<cfsetting showdebugoutput='##false##'>
 	<cfif getBaseTemplatePath() == getCurrentTemplatePath()>
 
-		<cfapplication name='__RAILO_STATIC_CONTENT' sessionmanagement='##false##' clientmanagement='##false##' applicationtimeout='##createtimespan( 1, 0, 0, 0 )##'>
+		<cfapplication name='__LUCEE_STATIC_CONTENT' sessionmanagement='##false##' clientmanagement='##false##' applicationtimeout='##createtimespan( 1, 0, 0, 0 )##'>
 				
 		<cfset etag 	= '{etag}'>
 		<cfset mimetype = '{mimeType}'>		

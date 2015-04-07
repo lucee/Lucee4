@@ -47,6 +47,7 @@ component {
 		var filename = right( arguments.target, 4 ) == ".cfm" ? left( arguments.target, len( arguments.target ) - 4 ) : arguments.target;
 
 		var resInfo = getResInfo( filename );
+		
 		if(!resInfo.exists) {
 			// maybe the name has the version appendix
 			nameAppendix=hash(server.lucee.version&server.lucee['release-date'],'quick');
@@ -57,7 +58,7 @@ component {
 
 		if ( resInfo.exists ) {
 
-			header name='Expires'       value='#getHttpTimeString( now()  )#';
+			header name='Expires'       value='#getHttpTimeString( now() + 10 )#';
 			header name='Cache-Control' value='max-age=#86400 * 10#';
 			header name='ETag'          value=resInfo.etag;
 
