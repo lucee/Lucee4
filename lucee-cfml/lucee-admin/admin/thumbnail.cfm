@@ -1,4 +1,4 @@
-<cfapplication name='__RAILO_STATIC_CONTENT' sessionmanagement='#false#' clientmanagement='#false#' 
+<cfapplication name='__LUCEE_STATIC_CONTENT' sessionmanagement='#false#' clientmanagement='#false#' 
 				applicationtimeout='#createtimespan( 1, 0, 0, 0 )#'>
 	
 	<cfsetting showdebugoutput="no">
