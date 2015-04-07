@@ -1,0 +1,36 @@
+CREATE USER SA PASSWORD "" ADMIN
+/*C1*/SET SCHEMA PUBLIC
+CONNECT USER SA
+/*C2*/SET SCHEMA PUBLIC
+CONNECT USER SA
+SET AUTOCOMMIT FALSE
+SET AUTOCOMMIT TRUE
+create table mixed_component (unit_id varchar(255) not null, entity_id varchar(255) not null, entity_type_id double not null, primary key (unit_id, entity_id, entity_type_id))
+create table numeric_changed_to_string (unit_id varchar(255) not null, entity_id varchar(255) not null, entity_type_id varchar(255) not null, primary key (unit_id, entity_id, entity_type_id))
+create table removed_composite (unit_id varchar(255) not null, entity_id varchar(255) not null, entity_type_id double, primary key (unit_id, entity_id))
+DISCONNECT
+/*C3*/SET SCHEMA PUBLIC
+CONNECT USER SA
+SET AUTOCOMMIT FALSE
+DISCONNECT
+/*C4*/SET SCHEMA PUBLIC
+CONNECT USER SA
+SET AUTOCOMMIT FALSE
+SET AUTOCOMMIT TRUE
+DISCONNECT
+/*C5*/SET SCHEMA PUBLIC
+CONNECT USER SA
+SET AUTOCOMMIT FALSE
+DISCONNECT
+/*C6*/SET SCHEMA PUBLIC
+CONNECT USER SA
+SET AUTOCOMMIT FALSE
+SET AUTOCOMMIT TRUE
+DISCONNECT
+/*C7*/SET SCHEMA PUBLIC
+CONNECT USER SA
+SET AUTOCOMMIT FALSE
+/*C1*/INSERT INTO MIXED_COMPONENT VALUES('hello','goodbye',7.0E0)
+INSERT INTO MIXED_COMPONENT VALUES('1','1',7.0E0)
+INSERT INTO MIXED_COMPONENT VALUES('true','1',0.0E0)
+DISCONNECT

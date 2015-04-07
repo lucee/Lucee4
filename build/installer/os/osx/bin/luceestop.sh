@@ -1,1 +1,0 @@
-sudo launchctl unload -w /Library/LaunchDaemons/org.apache.tomcat.plist

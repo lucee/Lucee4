@@ -5,9 +5,6 @@
   <import file="build-core.xml"/>
 
   <target name="buildExpress" depends="basic" description="builds the express packages">
-    
-    
-    
     <!-- <zip destfile="${build}/servers/jetty.zip">
         <zipfileset dir="${build}/servers/jetty" excludes="__MACOSX/**"/>
     </zip> -->
@@ -28,7 +25,7 @@
 <echo file="${temp}/unixnojre/startup.sh">#!/bin/bash
 
 cd $(dirname $0)
-java -Djetty.port=8888 -DSTOP.PORT=8887 -DSTOP.KEY=lucee -Xms256M -Xmx1024M -javaagent:lib/ext/lucee-inst.jar -jar start.jar
+java -Djetty.port=8888 -DSTOP.PORT=8887 -DSTOP.KEY=lucee -Xms256M -Xmx1024M -jar start.jar
 </echo>
 <chmod file="${temp}/unixnojre/startup.sh" perm="+x"/>
 
@@ -45,7 +42,7 @@ java -DSTOP.PORT=8887 -DSTOP.KEY=lucee -jar start.jar --stop
 <echo file="${temp}/winnojre/startup.bat">
 
 
-java -Djetty.port=8888 -DSTOP.PORT=8887 -DSTOP.KEY=lucee -Xms256M -Xmx1024M -javaagent:lib/ext/lucee-inst.jar -jar start.jar
+java -Djetty.port=8888 -DSTOP.PORT=8887 -DSTOP.KEY=lucee -Xms256M -Xmx1024M -jar start.jar
 </echo>
 <chmod file="${temp}/winnojre/startup.bat" perm="+x"/>
 
@@ -58,13 +55,22 @@ java -DSTOP.PORT=8887 -DSTOP.KEY=railo -jar start.jar --stop
 
 
     <!-- Windows/Unix (Linux/MacOSX) -->
-    <zip destfile="${dist}/bundles/lucee-${number}-express-jetty.zip">
+    <zip destfile="${dist}/bundles/lucee-${version}-express-jetty.zip">
         <!-- jetty server -->
         <zipfileset dir="${temp}/jetty" filemode="777"/>
 
+        <!-- extensions -->
+        <zipfileset dir="${build}/extensions" prefix="lucee-server/context/deploy" filemode="777">
+            <include name="*.lex"/>
+        </zipfileset>
+
         <!-- jars -->
         <zipfileset dir="${dist}" includes="lucee.jar" prefix="lib/ext" filemode="777"/>
-        <zipfileset dir="${lib}" excludes="javax.servlet.jar" prefix="lib/ext" filemode="777"/>
+        <zipfileset dir="${lib}" includes="org-apache-felix-main-*.jar" prefix="lib/ext" filemode="777"/>
+        <zipfileset dir="${lib}" excludes="" prefix="lucee-server/bundles" filemode="777">
+            <exclude name="javax.servlet.jar"/>
+            <exclude name="org-apache-felix-main-*.jar"/>
+        </zipfileset>
 
         <!-- common files -->
         <zipfileset dir="${build}/common" filemode="777"/>
@@ -81,13 +87,22 @@ java -DSTOP.PORT=8887 -DSTOP.KEY=railo -jar start.jar --stop
 
 
     <!-- Windows/Unix (Linux/MacOSX) -->
-    <zip destfile="${dist}/bundles/lucee-${number}-express.zip">
+    <zip destfile="${dist}/bundles/lucee-${version}-express.zip">
         <!-- tomcat server -->
         <zipfileset dir="${temp}/tomcat" filemode="777"/>
 
+        <!-- extensions -->
+        <zipfileset dir="${build}/extensions" prefix="lucee-server/context/deploy" filemode="777">
+            <include name="*.lex"/>
+        </zipfileset>
+
         <!-- jars -->
         <zipfileset dir="${dist}" includes="lucee.jar" prefix="lib/ext" filemode="777"/>
-        <zipfileset dir="${lib}" excludes="javax.servlet.jar" prefix="lib/ext" filemode="777"/>
+        <zipfileset dir="${lib}" includes="org-apache-felix-main-*.jar" prefix="lib/ext" filemode="777"/>
+        <zipfileset dir="${lib}" excludes="" prefix="lucee-server/bundles" filemode="777">
+            <exclude name="javax.servlet.jar"/>
+            <exclude name="org-apache-felix-main-*.jar"/>
+        </zipfileset>
 
         <!-- common files -->
         <zipfileset dir="${build}/common" filemode="777"/>

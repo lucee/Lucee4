@@ -3,7 +3,6 @@
   <import file="build-core.xml"/>
   <import file="build-express.xml"/>
   <import file="build-custom.xml"/>
-  <import file="build-installer.xml"/>
 
   <target name="info" description="outputs information about all posible building options">
     <echo>You have the following building options, call:</echo>
@@ -11,6 +10,7 @@
     <echo>   "ant core" to build only Lucee itself</echo>
     <echo>   "ant custom" to build Lucee itself and all possible custom bundles (war,jars,...)</echo>
     <echo>   "ant express" to build Lucee itself and all possible express bundles</echo>
+    <echo>   "ant dummy" generate the core dummy, used for the debug project to simulate a core bundle</echo>
 
   </target>
   
@@ -18,8 +18,7 @@
   <target name="core" depends="basic" description="build only Lucee itself"></target>
   <target name="custom" depends="buildCustom" description="build custom bundles"></target>
   <target name="express" depends="buildExpress" description="builds express bundles"></target>
-  <target name="installer" depends="buildInstaller" description="builds express bundles"></target>
-  <target name="all" depends="buildCustom,buildExpress" description="builds ALL bundles"></target>
+  <target name="all" depends="buildExpress,buildCustom" description="builds ALL bundles"></target>
 
 
 </project>
