@@ -10313,6 +10313,15 @@ To use cached data, the current query must use the same SQL statement, data sour
 			<rtexprvalue>true</rtexprvalue>
 			<description></description>
 		</attribute>
+		<attribute>
+			<type>numeric</type>
+			<name>nestingLevel</name>
+			<status>hidden</status>
+			<default>0</default>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>the level for the current pagesource</description>
+		</attribute>
 		
 	</tag>
 	<!-- QueryParam -->
