@@ -69,6 +69,7 @@ public final class ReqRspUtil {
 	
 	
 	private static final Object NULL = new Object();
+	private static final Cookie[] EMPTY = new Cookie[0];
 
 
 	public static String get(Pair<String,Object>[] items, String name) {
@@ -155,6 +156,7 @@ public final class ReqRspUtil {
 				catch(Throwable t){}
 			}
 		}
+		if(cookies==null) return EMPTY;
 		return cookies;
 	}
 
