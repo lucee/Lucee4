@@ -23,12 +23,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.runtime.type.scope.Scope;
 import lucee.transformer.bytecode.Body;
 import lucee.transformer.bytecode.BytecodeContext;
@@ -47,6 +41,12 @@ import lucee.transformer.bytecode.util.ExpressionUtil;
 import lucee.transformer.bytecode.util.Types;
 import lucee.transformer.bytecode.visitor.OnFinally;
 import lucee.transformer.bytecode.visitor.TryCatchFinallyVisitor;
+
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 /**
  * produce  try-catch-finally

@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.ResourceProviderPro;
@@ -40,8 +42,6 @@ import lucee.runtime.functions.cache.Util;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Constants;
 import lucee.runtime.type.Struct;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.cache.CacheEntry;
 
 
 /**

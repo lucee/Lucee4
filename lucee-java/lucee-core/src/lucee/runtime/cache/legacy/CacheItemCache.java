@@ -24,9 +24,8 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-
 import lucee.commons.io.IOUtil;
+import lucee.commons.io.cache.Cache;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
@@ -35,7 +34,8 @@ import lucee.runtime.cache.util.WildCardFilter;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.dt.TimeSpan;
-import lucee.commons.io.cache.Cache;
+
+import org.apache.oro.text.regex.MalformedPatternException;
 
 public class CacheItemCache extends CacheItem {
 

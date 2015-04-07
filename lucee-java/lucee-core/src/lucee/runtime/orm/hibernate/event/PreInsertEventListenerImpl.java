@@ -18,11 +18,11 @@
  **/
 package lucee.runtime.orm.hibernate.event;
 
-import org.hibernate.event.PreInsertEvent;
-import org.hibernate.event.PreInsertEventListener;
-
 import lucee.runtime.Component;
 import lucee.runtime.orm.hibernate.CommonUtil;
+
+import org.hibernate.event.PreInsertEvent;
+import org.hibernate.event.PreInsertEventListener;
 
 public class PreInsertEventListenerImpl extends EventListener implements PreInsertEventListener {
 	

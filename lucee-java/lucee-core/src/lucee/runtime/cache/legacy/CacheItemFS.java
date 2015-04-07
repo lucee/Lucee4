@@ -26,14 +26,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.Md5;
 import lucee.runtime.PageContext;
 import lucee.runtime.type.dt.TimeSpan;
+
+import org.apache.oro.text.regex.MalformedPatternException;
 
  
 class CacheItemFS extends CacheItem {

@@ -20,13 +20,13 @@ package lucee.runtime.exp;
 
 import java.io.PrintWriter;
 
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.op.Caster;
-import lucee.commons.io.log.Log;
 
 /**
  * Handle Excpetions

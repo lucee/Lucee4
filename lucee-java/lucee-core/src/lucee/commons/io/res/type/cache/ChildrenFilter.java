@@ -18,8 +18,8 @@
  **/
 package lucee.commons.io.res.type.cache;
 
-import lucee.commons.lang.StringUtil;
 import lucee.commons.io.cache.CacheKeyFilter;
+import lucee.commons.lang.StringUtil;
 
 public class ChildrenFilter implements CacheKeyFilter {
 

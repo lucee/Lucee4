@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.w3c.dom.Node;
-
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
 import lucee.runtime.ComponentScope;
@@ -58,6 +56,8 @@ import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.util.ComponentProUtil;
 import lucee.runtime.type.util.ComponentUtil;
 import lucee.runtime.type.util.KeyConstants;
+
+import org.w3c.dom.Node;
 
 /**
  * class to serialize and desirilize WDDX Packes

@@ -18,10 +18,10 @@
  **/
 package lucee.runtime.search.lucene2.docs;
 
+import lucee.commons.lang.StringUtil;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-
-import lucee.commons.lang.StringUtil;
 
 public class FieldUtil {
 

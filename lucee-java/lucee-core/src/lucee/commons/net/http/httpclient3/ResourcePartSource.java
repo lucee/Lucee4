@@ -22,9 +22,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.httpclient.methods.multipart.PartSource;
-
 import lucee.commons.io.res.Resource;
+
+import org.apache.commons.httpclient.methods.multipart.PartSource;
 
 public final class ResourcePartSource implements PartSource {
 

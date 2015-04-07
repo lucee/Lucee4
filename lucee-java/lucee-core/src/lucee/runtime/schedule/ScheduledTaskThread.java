@@ -23,12 +23,12 @@ import java.util.TimeZone;
 
 import lucee.commons.date.DateTimeUtil;
 import lucee.commons.date.JREDateTimeUtil;
+import lucee.commons.io.log.Log;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.engine.CFMLEngineImpl;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.type.dt.DateTimeImpl;
-import lucee.commons.io.log.Log;
 
 public class ScheduledTaskThread extends Thread {
 

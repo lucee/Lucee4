@@ -22,19 +22,19 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.ccil.cowan.tagsoup.Parser;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.util.ListUtil;
+
+import org.ccil.cowan.tagsoup.Parser;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 
 public final class HTMLParser extends Parser {

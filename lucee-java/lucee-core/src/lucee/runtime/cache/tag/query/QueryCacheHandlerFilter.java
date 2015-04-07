@@ -18,11 +18,11 @@
  **/
 package lucee.runtime.cache.tag.query;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-
 import lucee.commons.io.res.util.WildCardFilter;
 import lucee.runtime.cache.tag.CacheHandlerFilter;
 import lucee.runtime.type.Query;
+
+import org.apache.oro.text.regex.MalformedPatternException;
 
 public class QueryCacheHandlerFilter implements CacheHandlerFilter {
 	

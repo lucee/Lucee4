@@ -18,12 +18,6 @@
  **/
 package lucee.transformer.bytecode.statement.tag;
 
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.Position;
@@ -33,6 +27,12 @@ import lucee.transformer.bytecode.util.Types;
 import lucee.transformer.bytecode.visitor.NotVisitor;
 import lucee.transformer.bytecode.visitor.OnFinally;
 import lucee.transformer.bytecode.visitor.TryFinallyVisitor;
+
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 public final class TagSilent extends TagBase {
 

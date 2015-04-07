@@ -22,13 +22,13 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.collections.map.ReferenceMap;
-
 import lucee.runtime.type.Array;
 import lucee.runtime.type.ArrayImpl;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
+
+import org.apache.commons.collections.map.ReferenceMap;
 
 /**
  * Method Storage Class

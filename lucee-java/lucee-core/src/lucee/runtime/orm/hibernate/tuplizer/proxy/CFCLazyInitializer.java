@@ -20,13 +20,13 @@ package lucee.runtime.orm.hibernate.tuplizer.proxy;
 
 import java.io.Serializable;
 
-import org.hibernate.engine.SessionImplementor;
-import org.hibernate.proxy.AbstractLazyInitializer;
-
 import lucee.runtime.Component;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.orm.hibernate.CommonUtil;
 import lucee.runtime.orm.hibernate.HibernatePageException;
+
+import org.hibernate.engine.SessionImplementor;
+import org.hibernate.proxy.AbstractLazyInitializer;
 
 /**
  * Lazy initializer for "dynamic-map" entity representations.

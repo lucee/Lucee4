@@ -22,6 +22,12 @@ import java.io.StringReader;
 import java.util.Iterator;
 import java.util.Vector;
 
+import lucee.runtime.PageContext;
+import lucee.runtime.exp.PageException;
+import lucee.runtime.net.rpc.client.WSClient;
+import lucee.runtime.text.xml.XMLCaster;
+import lucee.runtime.text.xml.XMLUtil;
+
 import org.apache.axis.AxisFault;
 import org.apache.axis.MessageContext;
 import org.apache.axis.client.Call;
@@ -32,12 +38,6 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
-
-import lucee.runtime.PageContext;
-import lucee.runtime.exp.PageException;
-import lucee.runtime.net.rpc.client.WSClient;
-import lucee.runtime.text.xml.XMLCaster;
-import lucee.runtime.text.xml.XMLUtil;
 
 public class AxisUtil {
 

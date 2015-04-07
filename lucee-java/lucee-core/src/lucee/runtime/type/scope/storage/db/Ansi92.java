@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.TimeZone;
 
+import lucee.commons.io.log.Log;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.Config;
 import lucee.runtime.converter.ConverterException;
@@ -49,7 +50,6 @@ import lucee.runtime.type.scope.storage.StorageScopeEngine;
 import lucee.runtime.type.scope.storage.StorageScopeListener;
 import lucee.runtime.type.scope.storage.clean.DatasourceStorageScopeCleaner;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.commons.io.log.Log;
 
 public class Ansi92 extends SQLExecutorSupport {
 

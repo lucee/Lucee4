@@ -20,6 +20,8 @@ package lucee.runtime.cache;
 
 import java.io.IOException;
 
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.cache.exp.CacheException;
 import lucee.commons.lang.ClassUtil;
 import lucee.commons.net.JarLoader;
 import lucee.runtime.config.Config;
@@ -27,8 +29,6 @@ import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.reflection.Reflector;
 import lucee.runtime.tag.Admin;
 import lucee.runtime.type.Struct;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.cache.exp.CacheException;
 
 
 public class CacheConnectionImpl implements CacheConnection  {

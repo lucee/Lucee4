@@ -28,9 +28,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.map.ReferenceMap;
-import org.xml.sax.SAXException;
-
 import lucee.commons.digest.HashUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.Resource;
@@ -68,6 +65,9 @@ import lucee.runtime.writer.CFMLWriter;
 import lucee.runtime.writer.CFMLWriterImpl;
 import lucee.runtime.writer.CFMLWriterWS;
 import lucee.runtime.writer.CFMLWriterWSPref;
+
+import org.apache.commons.collections.map.ReferenceMap;
+import org.xml.sax.SAXException;
 
 /**
  * Web Context

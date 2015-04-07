@@ -31,13 +31,6 @@ import java.util.TimeZone;
 
 import javax.xml.parsers.FactoryConfigurationError;
 
-import org.apache.xerces.parsers.DOMParser;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
 import lucee.commons.lang.NumberUtil;
 import lucee.runtime.Component;
 import lucee.runtime.ComponentScope;
@@ -66,6 +59,13 @@ import lucee.runtime.type.util.CollectionUtil;
 import lucee.runtime.type.util.ComponentProUtil;
 import lucee.runtime.type.util.ComponentUtil;
 import lucee.runtime.type.util.KeyConstants;
+
+import org.apache.xerces.parsers.DOMParser;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 /**
  * class to serialize and desirilize WDDX Packes

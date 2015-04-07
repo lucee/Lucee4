@@ -18,10 +18,10 @@
  **/
 package lucee.runtime.orm.hibernate;
 
+import lucee.runtime.orm.ORMTransaction;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import lucee.runtime.orm.ORMTransaction;
 
 public class HibernateORMTransaction implements ORMTransaction {
 	

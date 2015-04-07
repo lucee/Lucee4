@@ -32,7 +32,6 @@ import lucee.runtime.i18n.LocaleFactory;
 import lucee.runtime.instrumentation.InstrumentationUtil;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.Collection;
-import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.ReadOnlyStruct;
 import lucee.runtime.type.dt.DateTimeImpl;

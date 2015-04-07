@@ -26,11 +26,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.hibernate.HibernateException;
-import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.type.ComponentType;
-import org.hibernate.type.Type;
-
 import lucee.commons.io.res.Resource;
 import lucee.loader.util.Util;
 import lucee.runtime.Component;
@@ -39,7 +34,6 @@ import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
 import lucee.runtime.component.Property;
 import lucee.runtime.config.ConfigImpl;
-import lucee.runtime.db.DataSource;
 import lucee.runtime.db.DataSourceUtil;
 import lucee.runtime.db.DatasourceConnection;
 import lucee.runtime.exp.PageException;
@@ -49,6 +43,11 @@ import lucee.runtime.type.CastableStruct;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.ComponentUtil;
+
+import org.hibernate.HibernateException;
+import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.type.ComponentType;
+import org.hibernate.type.Type;
 
 
 public class HibernateUtil {

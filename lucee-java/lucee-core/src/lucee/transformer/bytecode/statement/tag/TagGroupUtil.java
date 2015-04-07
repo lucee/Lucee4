@@ -18,12 +18,6 @@
  **/
 package lucee.transformer.bytecode.statement.tag;
 
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.runtime.type.scope.Undefined;
 import lucee.runtime.util.NumberIterator;
 import lucee.transformer.bytecode.BytecodeContext;
@@ -39,6 +33,12 @@ import lucee.transformer.bytecode.visitor.OnFinally;
 import lucee.transformer.bytecode.visitor.ParseBodyVisitor;
 import lucee.transformer.bytecode.visitor.TryFinallyVisitor;
 import lucee.transformer.bytecode.visitor.WhileVisitor;
+
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 public class TagGroupUtil {
 	

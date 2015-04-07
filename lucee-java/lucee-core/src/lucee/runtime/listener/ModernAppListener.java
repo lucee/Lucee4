@@ -44,7 +44,6 @@ import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
 import lucee.runtime.component.ComponentLoader;
 import lucee.runtime.component.Member;
-import lucee.runtime.config.Constants;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.Abort;
 import lucee.runtime.exp.MissingIncludeException;

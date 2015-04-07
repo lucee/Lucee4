@@ -43,8 +43,8 @@ import lucee.runtime.type.Objects;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.util.ArrayUtil;
-import lucee.runtime.util.VariableUtilImpl;
 import lucee.runtime.util.VariableUtil;
+import lucee.runtime.util.VariableUtilImpl;
 
 
 /**

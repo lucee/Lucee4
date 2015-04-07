@@ -18,11 +18,11 @@
  **/
 package lucee.runtime.type.scope.storage;
 
+import lucee.commons.io.log.Log;
 import lucee.runtime.PageContext;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.scope.ScopeContext;
-import lucee.commons.io.log.Log;
 
 /**
  * client scope that not store it's data

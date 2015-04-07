@@ -18,13 +18,13 @@
  **/
 package lucee.transformer.bytecode.expression.var;
 
-import org.objectweb.asm.Type;
-
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.expression.ExpressionBase;
 import lucee.transformer.bytecode.util.ASMConstants;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Type;
 
 public class NullExpression extends ExpressionBase {
 

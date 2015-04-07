@@ -18,13 +18,13 @@
  **/
 package lucee.runtime.type.scope.session;
 
+import lucee.commons.io.log.Log;
 import lucee.commons.lang.types.RefBoolean;
 import lucee.runtime.PageContext;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.scope.Session;
 import lucee.runtime.type.scope.storage.MemoryScope;
 import lucee.runtime.type.scope.storage.StorageScopeMemory;
-import lucee.commons.io.log.Log;
 
 public class SessionMemory extends StorageScopeMemory implements Session,MemoryScope {
 	

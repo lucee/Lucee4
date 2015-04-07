@@ -20,9 +20,9 @@ package lucee.runtime.type.scope.storage;
 
 import java.sql.SQLException;
 
+import lucee.commons.io.log.Log;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
-import lucee.runtime.PageSource;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.db.DataSource;
@@ -42,7 +42,6 @@ import lucee.runtime.type.scope.ScopeContext;
 import lucee.runtime.type.scope.storage.db.SQLExecutionFactory;
 import lucee.runtime.type.scope.storage.db.SQLExecutor;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.commons.io.log.Log;
 
 /**
  * client scope that store it's data in a datasource

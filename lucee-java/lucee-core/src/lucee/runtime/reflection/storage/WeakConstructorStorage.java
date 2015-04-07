@@ -21,10 +21,10 @@ package lucee.runtime.reflection.storage;
 import java.lang.reflect.Constructor;
 import java.util.WeakHashMap;
 
-import org.apache.commons.collections.map.ReferenceMap;
-
 import lucee.runtime.type.Array;
 import lucee.runtime.type.ArrayImpl;
+
+import org.apache.commons.collections.map.ReferenceMap;
 
 /**
  * Constructor Storage Class

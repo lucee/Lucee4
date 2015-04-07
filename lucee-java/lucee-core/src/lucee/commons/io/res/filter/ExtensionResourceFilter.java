@@ -21,7 +21,6 @@ package lucee.commons.io.res.filter;
 
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.StringUtil;
-import lucee.commons.io.res.filter.ResourceFilter;
 
 /**
  * Filter fuer die <code>listFiles</code> Methode des FIle Objekt, 

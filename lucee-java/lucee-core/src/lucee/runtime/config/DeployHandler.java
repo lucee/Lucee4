@@ -33,9 +33,11 @@ import java.util.zip.ZipInputStream;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.compress.ZipUtil;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
+import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.util.FileWrapper;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.ExceptionUtil;
@@ -46,8 +48,6 @@ import lucee.runtime.extension.RHExtension;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.type.util.ListUtil;
-import lucee.commons.io.log.Log;
-import lucee.commons.io.res.filter.ResourceFilter;
 
 public class DeployHandler {
 	

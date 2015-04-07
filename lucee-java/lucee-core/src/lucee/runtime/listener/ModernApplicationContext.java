@@ -47,6 +47,7 @@ import lucee.runtime.exp.DeprecatedException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.i18n.LocaleFactory;
+import lucee.runtime.net.s3.Properties;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.orm.ORMConfiguration;
@@ -66,7 +67,6 @@ import lucee.runtime.type.UDFCustomType;
 import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.scope.Scope;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.runtime.net.s3.Properties;
 
 public class ModernApplicationContext extends ApplicationContextSupport {
 

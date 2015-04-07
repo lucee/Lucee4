@@ -30,13 +30,10 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-import org.pdfbox.exceptions.CryptographyException;
-import org.pdfbox.exceptions.InvalidPasswordException;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
+import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.io.res.util.WildCardFilter;
 import lucee.commons.lang.StringUtil;
@@ -54,7 +51,10 @@ import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
-import lucee.commons.io.res.filter.ResourceFilter;
+
+import org.apache.oro.text.regex.MalformedPatternException;
+import org.pdfbox.exceptions.CryptographyException;
+import org.pdfbox.exceptions.InvalidPasswordException;
 
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;

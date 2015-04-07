@@ -20,6 +20,7 @@ package lucee.commons.io.res.type.smb;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -30,9 +31,6 @@ import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.Resources;
 import lucee.commons.io.res.util.ResourceLockImpl;
 import lucee.commons.lang.StringUtil;
-import lucee.runtime.exp.ApplicationException;
-
-import java.nio.charset.Charset;
 
 import org.apache.commons.codec.binary.Base32;
 

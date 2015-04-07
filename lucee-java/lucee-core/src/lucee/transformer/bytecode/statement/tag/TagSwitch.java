@@ -21,10 +21,6 @@ package lucee.transformer.bytecode.statement.tag;
 import java.util.Iterator;
 import java.util.List;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.transformer.bytecode.BodyBase;
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
@@ -34,6 +30,10 @@ import lucee.transformer.bytecode.expression.Expression;
 import lucee.transformer.bytecode.util.Types;
 import lucee.transformer.bytecode.visitor.ConditionVisitor;
 import lucee.transformer.bytecode.visitor.DecisionIntVisitor;
+
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 public final class TagSwitch extends TagBaseNoFinal {
 

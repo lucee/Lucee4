@@ -35,26 +35,17 @@ import java.util.Set;
 
 import javax.servlet.ServletException;
 
-import org.apache.log4j.HTMLLayout;
-import org.apache.log4j.Level;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.xml.XMLLayout;
-import org.apache.xerces.parsers.DOMParser;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 import lucee.commons.digest.MD5;
 import lucee.commons.io.FileUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
+import lucee.commons.io.cache.Cache;
 import lucee.commons.io.log.log4j.appender.ConsoleAppender;
 import lucee.commons.io.log.log4j.appender.RollingResourceAppender;
 import lucee.commons.io.log.log4j.layout.ClassicLayout;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
+import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.type.s3.S3ResourceProvider;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.ClassException;
@@ -66,7 +57,6 @@ import lucee.commons.net.IPRange;
 import lucee.commons.net.URLEncoder;
 import lucee.commons.net.http.HTTPEngine;
 import lucee.commons.net.http.HTTPResponse;
-import lucee.loader.TP;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.loader.util.ExtensionFilter;
 import lucee.runtime.Info;
@@ -123,8 +113,17 @@ import lucee.runtime.video.VideoExecuter;
 import lucee.runtime.video.VideoExecuterNotSupported;
 import lucee.transformer.library.function.FunctionLibException;
 import lucee.transformer.library.tag.TagLibException;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.res.filter.ResourceNameFilter;
+
+import org.apache.log4j.HTMLLayout;
+import org.apache.log4j.Level;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.xml.XMLLayout;
+import org.apache.xerces.parsers.DOMParser;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.allaire.cfx.CustomTag;
 

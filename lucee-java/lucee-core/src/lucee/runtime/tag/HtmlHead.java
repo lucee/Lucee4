@@ -19,11 +19,11 @@
 package lucee.runtime.tag;
 
 
+import java.io.IOException;
+
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
-
-import java.io.IOException;
 
 /**
 * Writes the text specified in the text attribute to the 'head' section of a generated HTML page. 

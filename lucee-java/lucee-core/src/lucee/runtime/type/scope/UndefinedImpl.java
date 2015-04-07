@@ -45,8 +45,8 @@ import lucee.runtime.type.UDFPlus;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.StructSupport;
-import lucee.runtime.util.QueryStackImpl;
 import lucee.runtime.util.QueryStack;
+import lucee.runtime.util.QueryStackImpl;
 
 /**
  * Undefined Scope

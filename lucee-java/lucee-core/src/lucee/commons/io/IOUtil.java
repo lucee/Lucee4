@@ -46,12 +46,12 @@ import java.util.zip.ZipFile;
 
 import javax.mail.Transport;
 
-import net.sf.jmimemagic.Magic;
-import net.sf.jmimemagic.MagicMatch;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.net.URLEncoder;
 import lucee.runtime.exp.PageException;
+import net.sf.jmimemagic.Magic;
+import net.sf.jmimemagic.MagicMatch;
 
 import com.lowagie.text.Document;
 

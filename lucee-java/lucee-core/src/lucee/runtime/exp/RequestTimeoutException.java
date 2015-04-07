@@ -18,7 +18,6 @@
  **/
 package lucee.runtime.exp;
 
-import lucee.runtime.PageContext;
 
 public class RequestTimeoutException extends Abort implements Stop {
 

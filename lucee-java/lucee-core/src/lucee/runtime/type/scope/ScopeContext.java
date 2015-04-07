@@ -24,9 +24,8 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpSession;
 
-import org.safehaus.uuid.UUIDGenerator;
-
 import lucee.commons.collection.MapFactory;
+import lucee.commons.io.log.Log;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SizeOf;
 import lucee.commons.lang.StringUtil;
@@ -63,14 +62,15 @@ import lucee.runtime.type.scope.session.SessionDatasource;
 import lucee.runtime.type.scope.session.SessionFile;
 import lucee.runtime.type.scope.session.SessionMemory;
 import lucee.runtime.type.scope.storage.MemoryScope;
+import lucee.runtime.type.scope.storage.StorageScope;
 import lucee.runtime.type.scope.storage.StorageScopeCleaner;
 import lucee.runtime.type.scope.storage.StorageScopeEngine;
 import lucee.runtime.type.scope.storage.clean.DatasourceStorageScopeCleaner;
 import lucee.runtime.type.scope.storage.clean.FileStorageScopeCleaner;
 import lucee.runtime.type.wrap.MapAsStruct;
 import lucee.runtime.util.PageContextUtil;
-import lucee.commons.io.log.Log;
-import lucee.runtime.type.scope.storage.StorageScope;
+
+import org.safehaus.uuid.UUIDGenerator;
 
 /**
  * Scope Context handle Apllication and Session Scopes

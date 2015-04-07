@@ -23,10 +23,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.Resource;
@@ -39,6 +35,10 @@ import lucee.runtime.engine.CFMLEngineImpl;
 import lucee.runtime.exp.PageException;
 import lucee.transformer.library.function.FunctionLibException;
 import lucee.transformer.library.tag.TagLibException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import com.jacob.com.LibraryLoader;
 

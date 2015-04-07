@@ -19,11 +19,11 @@
 package lucee.runtime.tag;
 
 
+import java.io.IOException;
+
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
-
-import java.io.IOException;
 
 public final class HtmlBody extends HtmlHeadBodyBase {
 

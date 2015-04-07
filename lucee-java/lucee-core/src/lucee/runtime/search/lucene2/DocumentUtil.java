@@ -24,9 +24,6 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 
-import org.apache.lucene.document.DateField;
-import org.apache.lucene.document.Document;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.ContentType;
 import lucee.commons.io.res.ContentTypeImpl;
@@ -39,6 +36,9 @@ import lucee.runtime.search.lucene2.docs.FileDocument;
 import lucee.runtime.search.lucene2.docs.HTMLDocument;
 import lucee.runtime.search.lucene2.docs.PDFDocument;
 import lucee.runtime.search.lucene2.docs.WordDocument;
+
+import org.apache.lucene.document.DateField;
+import org.apache.lucene.document.Document;
 
 /**
  * creates a matching Document Object to given File

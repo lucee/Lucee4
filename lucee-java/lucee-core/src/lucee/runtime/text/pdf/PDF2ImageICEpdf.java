@@ -24,18 +24,18 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Set;
 
+import lucee.commons.io.res.Resource;
+import lucee.runtime.exp.ExpressionException;
+import lucee.runtime.exp.PageException;
+import lucee.runtime.img.Image;
+import lucee.runtime.op.Caster;
+
 import org.icepdf.core.pobjects.Catalog;
 import org.icepdf.core.pobjects.Document;
 import org.icepdf.core.pobjects.PDimension;
 import org.icepdf.core.pobjects.PRectangle;
 import org.icepdf.core.pobjects.Page;
 import org.icepdf.core.util.GraphicsRenderingHints;
-
-import lucee.commons.io.res.Resource;
-import lucee.runtime.exp.ExpressionException;
-import lucee.runtime.exp.PageException;
-import lucee.runtime.img.Image;
-import lucee.runtime.op.Caster;
 
 public class PDF2ImageICEpdf extends PDF2Image {
 	

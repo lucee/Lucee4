@@ -23,15 +23,15 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-
+import lucee.commons.io.cache.Cache;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.functions.cache.Util;
 import lucee.runtime.type.dt.TimeSpan;
-import lucee.commons.io.cache.Cache;
+
+import org.apache.oro.text.regex.MalformedPatternException;
 
  
 public abstract class CacheItem {

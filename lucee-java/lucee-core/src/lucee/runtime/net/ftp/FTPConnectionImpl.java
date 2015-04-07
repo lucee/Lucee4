@@ -19,7 +19,6 @@
 
 package lucee.runtime.net.ftp;
 
-import lucee.runtime.net.ftp.FTPConnection;
 
 
 

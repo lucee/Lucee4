@@ -23,9 +23,9 @@ import java.net.MalformedURLException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-import org.xml.sax.SAXException;
-
 import lucee.runtime.type.dt.DateTime;
+
+import org.xml.sax.SAXException;
 
 public final class Bucket implements S3Info {
 

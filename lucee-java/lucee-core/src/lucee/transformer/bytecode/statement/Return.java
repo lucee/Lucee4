@@ -20,9 +20,6 @@ package lucee.transformer.bytecode.statement;
 
 import java.util.Stack;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.commons.GeneratorAdapter;
-
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.Position;
@@ -31,6 +28,9 @@ import lucee.transformer.bytecode.expression.Expression;
 import lucee.transformer.bytecode.util.ASMConstants;
 import lucee.transformer.bytecode.util.Types;
 import lucee.transformer.bytecode.visitor.OnFinally;
+
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.commons.GeneratorAdapter;
 
 /**
  * Return Statement

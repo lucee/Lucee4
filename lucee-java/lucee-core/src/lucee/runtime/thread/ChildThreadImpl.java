@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 
 import lucee.commons.io.DevNullOutputStream;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.lang.Pair;
 import lucee.runtime.Page;
@@ -56,7 +57,6 @@ import lucee.runtime.type.scope.Local;
 import lucee.runtime.type.scope.LocalImpl;
 import lucee.runtime.type.scope.Threads;
 import lucee.runtime.type.scope.Undefined;
-import lucee.commons.io.log.Log;
 
 public class ChildThreadImpl extends ChildThread implements Serializable {
 

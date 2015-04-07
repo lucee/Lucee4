@@ -36,10 +36,6 @@ import java.util.Set;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import lucee.commons.date.TimeZoneUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.IDGenerator;
@@ -58,6 +54,10 @@ import lucee.runtime.type.ObjectWrap;
 import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.scope.CookieImpl;
+
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class DumpUtil {
 

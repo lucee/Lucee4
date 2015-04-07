@@ -44,8 +44,6 @@ import javax.mail.URLName;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
-import com.sun.mail.pop3.POP3SSLStore;
-
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
@@ -69,6 +67,8 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.ListUtil;
+
+import com.sun.mail.pop3.POP3SSLStore;
 
 public abstract class MailClient {
 	

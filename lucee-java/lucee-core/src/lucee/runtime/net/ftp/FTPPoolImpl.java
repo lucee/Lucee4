@@ -24,12 +24,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.net.ftp.FTPClient;
-
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.exp.ApplicationException;
-import lucee.runtime.net.ftp.FTPConnection;
-import lucee.runtime.net.ftp.FTPPool;
+
+import org.apache.commons.net.ftp.FTPClient;
 
 /**
  * Pool of FTP Client

@@ -18,10 +18,6 @@
  **/
 package lucee.transformer.bytecode.op;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-
 import lucee.runtime.exp.TemplateException;
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
@@ -34,6 +30,10 @@ import lucee.transformer.bytecode.expression.ExpressionBase;
 import lucee.transformer.bytecode.literal.LitDouble;
 import lucee.transformer.bytecode.util.Methods;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
 
 public final class OpNegateNumber extends ExpressionBase implements ExprDouble {
 

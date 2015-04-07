@@ -22,15 +22,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageSource;
 import lucee.transformer.Context;
 import lucee.transformer.bytecode.literal.LitString;
 import lucee.transformer.bytecode.visitor.OnFinally;
+
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 public class BytecodeContext implements Context {
 	

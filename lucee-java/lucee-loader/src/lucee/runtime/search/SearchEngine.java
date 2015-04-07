@@ -20,13 +20,13 @@ package lucee.runtime.search;
 
 import java.io.IOException;
 
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-
+import lucee.commons.io.log.LogAndSource;
 import lucee.commons.io.res.Resource;
 import lucee.runtime.config.Config;
 import lucee.runtime.type.Query;
-import lucee.commons.io.log.LogAndSource;
+
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  * interface for a Search Engine

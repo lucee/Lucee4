@@ -22,16 +22,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.Layout;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 import lucee.commons.digest.HashUtil;
 import lucee.commons.io.log.log4j.Log4jUtil;
 import lucee.commons.io.log.log4j.LogAdapter;
 import lucee.runtime.config.Config;
-import lucee.commons.io.log.Log;
+
+import org.apache.log4j.Appender;
+import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 /**
  * 

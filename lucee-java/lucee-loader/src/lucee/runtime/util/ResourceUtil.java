@@ -23,10 +23,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import lucee.commons.io.res.Resource;
-import lucee.runtime.PageContext;
-import lucee.runtime.exp.PageException;
 import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.filter.ResourceNameFilter;
+import lucee.runtime.PageContext;
+import lucee.runtime.exp.PageException;
 
 public interface ResourceUtil {
 	

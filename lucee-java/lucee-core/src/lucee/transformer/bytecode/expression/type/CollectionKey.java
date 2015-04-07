@@ -18,8 +18,6 @@
  **/
 package lucee.transformer.bytecode.expression.type;
 
-import org.objectweb.asm.Type;
-
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.Position;
@@ -27,6 +25,8 @@ import lucee.transformer.bytecode.expression.ExpressionBase;
 import lucee.transformer.bytecode.expression.var.Variable;
 import lucee.transformer.bytecode.literal.LitString;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Type;
 
 public class CollectionKey extends ExpressionBase {
 

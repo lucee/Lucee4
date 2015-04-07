@@ -18,9 +18,9 @@
  **/
 package lucee.runtime.chart;
 
-import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
-
 import lucee.commons.lang.HTMLEntities;
+
+import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
 
 public class ToolTipTagFragmentGeneratorImpl implements
 		ToolTipTagFragmentGenerator {

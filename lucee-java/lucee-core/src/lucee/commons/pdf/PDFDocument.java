@@ -30,11 +30,6 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
@@ -63,6 +58,11 @@ import lucee.runtime.text.xml.XMLUtil;
 import lucee.runtime.type.scope.CGIImpl;
 import lucee.runtime.type.util.ListUtil;
 import lucee.runtime.util.URLResolver;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public final class PDFDocument {
 

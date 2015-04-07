@@ -21,8 +21,6 @@
  */
 package lucee.runtime.functions.string;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.FunctionException;
@@ -30,6 +28,8 @@ import lucee.runtime.exp.PageException;
 import lucee.runtime.functions.BIF;
 import lucee.runtime.op.Caster;
 import lucee.runtime.regex.Perl5Util;
+
+import org.apache.oro.text.regex.MalformedPatternException;
 
 public final class REReplace extends BIF {
 

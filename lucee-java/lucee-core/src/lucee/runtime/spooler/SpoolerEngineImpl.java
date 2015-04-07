@@ -29,8 +29,10 @@ import java.util.List;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.Resource;
+import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.SerializableObject;
 import lucee.commons.lang.StringUtil;
@@ -49,8 +51,6 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.commons.io.log.Log;
-import lucee.commons.io.res.filter.ResourceNameFilter;
 
 public class SpoolerEngineImpl implements SpoolerEngine {
 	

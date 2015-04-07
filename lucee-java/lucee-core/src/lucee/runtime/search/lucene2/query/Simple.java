@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
+import lucee.commons.lang.ParserString;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.index.Term;
@@ -34,8 +36,6 @@ import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
-
-import lucee.commons.lang.ParserString;
 
 /**
  * @deprecated no longer in use

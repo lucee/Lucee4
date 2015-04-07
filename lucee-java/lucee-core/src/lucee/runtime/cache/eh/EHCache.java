@@ -28,13 +28,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.config.Configuration;
-import net.sf.ehcache.config.ConfigurationFactory;
 import lucee.commons.io.CharsetUtil;
+import lucee.commons.io.cache.CacheEntry;
+import lucee.commons.io.cache.exp.CacheException;
 import lucee.commons.io.res.Resource;
+import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.loader.util.Util;
 import lucee.runtime.config.Config;
@@ -43,9 +41,11 @@ import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.CollectionUtil;
-import lucee.commons.io.cache.CacheEntry;
-import lucee.commons.io.cache.exp.CacheException;
-import lucee.commons.io.res.filter.ResourceNameFilter;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.ConfigurationFactory;
 
 public class EHCache extends EHCacheSupport {
 	

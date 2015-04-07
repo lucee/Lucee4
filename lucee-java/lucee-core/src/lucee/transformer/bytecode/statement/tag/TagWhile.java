@@ -18,8 +18,6 @@
  **/
 package lucee.transformer.bytecode.statement.tag;
 
-import org.objectweb.asm.Label;
-
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.Position;
@@ -27,6 +25,8 @@ import lucee.transformer.bytecode.expression.Expression;
 import lucee.transformer.bytecode.statement.FlowControlBreak;
 import lucee.transformer.bytecode.statement.FlowControlContinue;
 import lucee.transformer.bytecode.visitor.WhileVisitor;
+
+import org.objectweb.asm.Label;
 
 public final class TagWhile extends TagBaseNoFinal implements FlowControlBreak,FlowControlContinue {
 

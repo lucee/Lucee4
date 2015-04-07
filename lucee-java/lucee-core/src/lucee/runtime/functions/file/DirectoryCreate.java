@@ -19,12 +19,12 @@
 package lucee.runtime.functions.file;
 
 import lucee.commons.io.res.Resource;
+import lucee.commons.io.res.type.s3.S3Constants;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.tag.Directory;
 import lucee.runtime.tag.util.FileUtil;
-import lucee.commons.io.res.type.s3.S3Constants;
 
 
 public class DirectoryCreate {

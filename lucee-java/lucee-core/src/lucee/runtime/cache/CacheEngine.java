@@ -24,8 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.cache.CacheEntry;
+import lucee.commons.io.cache.exp.CacheException;
 import lucee.loader.util.Util;
 import lucee.runtime.cache.util.CacheKeyFilterAll;
 import lucee.runtime.cache.util.WildCardFilter;
@@ -35,9 +36,8 @@ import lucee.runtime.type.ArrayImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.TimeSpan;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.cache.CacheEntry;
-import lucee.commons.io.cache.exp.CacheException;
+
+import org.apache.oro.text.regex.MalformedPatternException;
 // MUST this must be come from configuration
 public class CacheEngine {
 

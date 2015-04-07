@@ -18,9 +18,6 @@
  **/
 package lucee.transformer.bytecode.literal;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-
 import lucee.runtime.op.Caster;
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.Literal;
@@ -29,6 +26,9 @@ import lucee.transformer.bytecode.expression.ExprFloat;
 import lucee.transformer.bytecode.expression.ExpressionBase;
 import lucee.transformer.bytecode.util.Methods;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
 
 /**
  * Literal Double Value

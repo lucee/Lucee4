@@ -21,6 +21,7 @@ package lucee.runtime.monitor;
 import java.io.IOException;
 import java.util.Map;
 
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.ConfigImpl;
@@ -29,7 +30,6 @@ import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Query;
-import lucee.commons.io.log.Log;
 
 public class AsyncRequestMonitor implements RequestMonitor {
 	

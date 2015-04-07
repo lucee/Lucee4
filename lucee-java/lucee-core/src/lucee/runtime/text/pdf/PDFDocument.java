@@ -27,10 +27,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.pdfbox.exceptions.CryptographyException;
-import org.pdfbox.exceptions.InvalidPasswordException;
-import org.pdfbox.pdmodel.PDDocument;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.type.file.FileResource;
@@ -48,6 +44,10 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.util.StructSupport;
+
+import org.pdfbox.exceptions.CryptographyException;
+import org.pdfbox.exceptions.InvalidPasswordException;
+import org.pdfbox.pdmodel.PDDocument;
 
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;

@@ -18,6 +18,9 @@
  **/
 package lucee.runtime.orm.hibernate.event;
 
+import lucee.runtime.Component;
+import lucee.runtime.orm.hibernate.CommonUtil;
+
 import org.hibernate.event.PostDeleteEvent;
 import org.hibernate.event.PostDeleteEventListener;
 import org.hibernate.event.PostInsertEvent;
@@ -34,9 +37,6 @@ import org.hibernate.event.PreLoadEvent;
 import org.hibernate.event.PreLoadEventListener;
 import org.hibernate.event.PreUpdateEvent;
 import org.hibernate.event.PreUpdateEventListener;
-
-import lucee.runtime.Component;
-import lucee.runtime.orm.hibernate.CommonUtil;
 
 public class AllEventListener extends EventListener implements PreDeleteEventListener, PreInsertEventListener, PreLoadEventListener, PreUpdateEventListener,
 PostDeleteEventListener, PostInsertEventListener, PostLoadEventListener, PostUpdateEventListener {

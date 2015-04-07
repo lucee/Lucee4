@@ -22,13 +22,6 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
-import org.hibernate.engine.SessionImplementor;
-import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.property.Getter;
-import org.hibernate.type.Type;
-
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
@@ -41,6 +34,13 @@ import lucee.runtime.orm.hibernate.HibernatePageException;
 import lucee.runtime.orm.hibernate.HibernateUtil;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
+
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.engine.SessionImplementor;
+import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.property.Getter;
+import org.hibernate.type.Type;
 
 public class CFCGetter implements Getter {
 

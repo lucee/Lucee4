@@ -18,10 +18,6 @@
  **/
 package lucee.transformer.bytecode.literal;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.op.Caster;
@@ -34,6 +30,10 @@ import lucee.transformer.bytecode.expression.ExprString;
 import lucee.transformer.bytecode.expression.ExpressionBase;
 import lucee.transformer.bytecode.op.OpString;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
 
 /**
  * A Literal String

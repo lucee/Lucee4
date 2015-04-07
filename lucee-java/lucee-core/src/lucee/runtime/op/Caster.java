@@ -54,9 +54,6 @@ import java.util.TimeZone;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import lucee.commons.date.DateTimeUtil;
 import lucee.commons.date.JREDateTimeUtil;
 import lucee.commons.date.TimeZoneUtil;
@@ -75,7 +72,6 @@ import lucee.runtime.Component;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.coder.Base64Coder;
-import lucee.runtime.coder.Coder;
 import lucee.runtime.coder.CoderException;
 import lucee.runtime.config.Config;
 import lucee.runtime.converter.ConverterException;
@@ -132,6 +128,9 @@ import lucee.runtime.type.wrap.ListAsArray;
 import lucee.runtime.type.wrap.MapAsStruct;
 import lucee.runtime.util.ArrayIterator;
 import lucee.runtime.util.IteratorWrapper;
+
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 

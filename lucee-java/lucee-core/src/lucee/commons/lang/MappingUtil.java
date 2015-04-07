@@ -26,6 +26,7 @@ import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.DirectoryResourceFilter;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
+import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.runtime.Mapping;
 import lucee.runtime.MappingImpl;
 import lucee.runtime.PageContext;
@@ -35,7 +36,6 @@ import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.transformer.bytecode.util.ASMUtil;
 import lucee.transformer.bytecode.util.SourceNameClassVisitor.SourceInfo;
-import lucee.commons.io.res.filter.ResourceFilter;
 
 public class MappingUtil {
 	//private static final ResourceFilter EXT=new ExtensionResourceFilter(".cfc");

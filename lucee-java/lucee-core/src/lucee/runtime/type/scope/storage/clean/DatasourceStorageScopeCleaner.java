@@ -20,6 +20,7 @@ package lucee.runtime.type.scope.storage.clean;
 
 import java.sql.SQLException;
 
+import lucee.commons.io.log.Log;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.config.ConfigWebImpl;
@@ -31,7 +32,6 @@ import lucee.runtime.type.scope.storage.StorageScopeEngine;
 import lucee.runtime.type.scope.storage.StorageScopeListener;
 import lucee.runtime.type.scope.storage.db.SQLExecutionFactory;
 import lucee.runtime.type.scope.storage.db.SQLExecutor;
-import lucee.commons.io.log.Log;
 
 public class DatasourceStorageScopeCleaner extends StorageScopeCleanerSupport {
 	

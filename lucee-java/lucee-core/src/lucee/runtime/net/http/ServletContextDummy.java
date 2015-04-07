@@ -31,9 +31,6 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 import lucee.commons.io.log.log4j.Log4jUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -43,6 +40,9 @@ import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.it.ItAsEnum;
 import lucee.runtime.util.EnumerationWrapper;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public class ServletContextDummy implements ServletContext {
 	private Struct attributes;
