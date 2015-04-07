@@ -26,17 +26,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.HTMLLayout;
-import org.apache.log4j.Layout;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.net.SyslogAppender;
-import org.apache.log4j.xml.XMLLayout;
-
 import lucee.commons.io.CharsetUtil;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.log.log4j.appender.ConsoleAppender;
 import lucee.commons.io.log.log4j.appender.RollingResourceAppender;
@@ -54,7 +45,16 @@ import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.reflection.Reflector;
-import lucee.commons.io.log.Log;
+
+import org.apache.log4j.Appender;
+import org.apache.log4j.HTMLLayout;
+import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.net.SyslogAppender;
+import org.apache.log4j.xml.XMLLayout;
 
 public class Log4jUtil {
 	

@@ -21,9 +21,9 @@ package lucee.commons.lang;
 import java.io.UnsupportedEncodingException;
 import java.util.BitSet;
 
-import org.apache.commons.codec.net.URLCodec;
-
 import lucee.commons.io.CharsetUtil;
+
+import org.apache.commons.codec.net.URLCodec;
 /** 
  * @deprecated use instead lucee.commons.net.URLEncoder
  * 

@@ -18,12 +18,12 @@
  **/
 package lucee.transformer.bytecode.expression;
 
-import org.objectweb.asm.Type;
-
 import lucee.runtime.exp.TemplateException;
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.Position;
+
+import org.objectweb.asm.Type;
 
 
 /**

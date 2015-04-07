@@ -18,13 +18,13 @@
  **/
 package lucee.runtime.type.scope.session;
 
+import lucee.commons.io.log.Log;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.scope.Session;
 import lucee.runtime.type.scope.storage.StorageScopeCookie;
-import lucee.commons.io.log.Log;
 
 public final class SessionCookie extends StorageScopeCookie implements Session {
 

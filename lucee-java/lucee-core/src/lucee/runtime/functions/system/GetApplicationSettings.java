@@ -39,6 +39,7 @@ import lucee.runtime.listener.AppListenerUtil;
 import lucee.runtime.listener.ApplicationContextPro;
 import lucee.runtime.listener.JavaSettings;
 import lucee.runtime.listener.ModernApplicationContext;
+import lucee.runtime.net.s3.Properties;
 import lucee.runtime.op.Caster;
 import lucee.runtime.orm.ORMConfiguration;
 import lucee.runtime.type.Array;
@@ -54,7 +55,6 @@ import lucee.runtime.type.scope.Undefined;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
-import lucee.runtime.net.s3.Properties;
 
 public class GetApplicationSettings {
 	public static Struct call(PageContext pc) {

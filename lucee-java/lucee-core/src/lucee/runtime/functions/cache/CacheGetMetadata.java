@@ -20,6 +20,8 @@ package lucee.runtime.functions.cache;
 
 import java.io.IOException;
 
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.cache.CacheEntry;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.exp.PageException;
@@ -30,8 +32,6 @@ import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.cache.CacheEntry;
 
 /**
  * 

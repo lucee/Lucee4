@@ -35,6 +35,8 @@ import lucee.commons.io.res.ResourceProviderPro;
 import lucee.commons.io.res.ResourcesImpl;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
 import lucee.commons.io.res.filter.IgnoreSystemFiles;
+import lucee.commons.io.res.filter.ResourceFilter;
+import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.type.http.HTTPResource;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
@@ -42,14 +44,11 @@ import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
 import lucee.runtime.PageSourceImpl;
 import lucee.runtime.config.Config;
-import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.ListUtil;
-import lucee.commons.io.res.filter.ResourceFilter;
-import lucee.commons.io.res.filter.ResourceNameFilter;
 
 public final class ResourceUtil {
 

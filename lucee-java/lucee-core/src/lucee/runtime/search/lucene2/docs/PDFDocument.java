@@ -23,15 +23,15 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Date;
 
+import lucee.commons.io.IOUtil;
+import lucee.commons.io.res.Resource;
+import lucee.commons.lang.StringUtil;
+
 import org.apache.lucene.document.DateField;
 import org.apache.lucene.document.Document;
 import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.pdmodel.PDDocumentInformation;
 import org.pdfbox.util.PDFTextStripper;
-
-import lucee.commons.io.IOUtil;
-import lucee.commons.io.res.Resource;
-import lucee.commons.lang.StringUtil;
 
 /**
  * This class is used to create a document for the lucene search engine.

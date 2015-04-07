@@ -20,8 +20,6 @@ package lucee.runtime.functions.orm;
 
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
-import lucee.runtime.PageContextImpl;
-import lucee.runtime.db.DataSource;
 import lucee.runtime.exp.FunctionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;

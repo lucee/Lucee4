@@ -23,9 +23,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.type.http.HTTPResource;
@@ -49,6 +46,9 @@ import lucee.runtime.type.Array;
 import lucee.runtime.type.Query;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.ListUtil;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public final class Feed extends TagImpl	{
 

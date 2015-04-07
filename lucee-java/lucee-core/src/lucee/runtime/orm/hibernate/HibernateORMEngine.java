@@ -18,7 +18,6 @@
  **/
 package lucee.runtime.orm.hibernate;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,21 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.hibernate.EntityMode;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.engine.query.QueryPlanCache;
-import org.hibernate.event.EventListeners;
-import org.hibernate.event.PostDeleteEventListener;
-import org.hibernate.event.PostInsertEventListener;
-import org.hibernate.event.PostLoadEventListener;
-import org.hibernate.event.PostUpdateEventListener;
-import org.hibernate.event.PreDeleteEventListener;
-import org.hibernate.event.PreLoadEventListener;
-import org.hibernate.tuple.entity.EntityTuplizerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
+import lucee.commons.io.log.Log;
 import lucee.commons.io.res.Resource;
 import lucee.loader.util.Util;
 import lucee.runtime.Component;
@@ -72,9 +57,21 @@ import lucee.runtime.orm.hibernate.tuplizer.AbstractEntityTuplizerImpl;
 import lucee.runtime.text.xml.XMLCaster;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
-import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.util.ListUtil;
-import lucee.commons.io.log.Log;
+
+import org.hibernate.EntityMode;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.event.EventListeners;
+import org.hibernate.event.PostDeleteEventListener;
+import org.hibernate.event.PostInsertEventListener;
+import org.hibernate.event.PostLoadEventListener;
+import org.hibernate.event.PostUpdateEventListener;
+import org.hibernate.event.PreDeleteEventListener;
+import org.hibernate.event.PreLoadEventListener;
+import org.hibernate.tuple.entity.EntityTuplizerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class HibernateORMEngine implements ORMEngine {
 	

@@ -28,8 +28,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.xml.sax.SAXException;
-
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.util.ResourceSupport;
@@ -41,6 +39,8 @@ import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.Array;
 import lucee.runtime.type.util.ListUtil;
+
+import org.xml.sax.SAXException;
 
 public final class S3Resource extends ResourceSupport {
 

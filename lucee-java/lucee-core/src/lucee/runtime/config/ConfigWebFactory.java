@@ -42,16 +42,7 @@ import java.util.TimeZone;
 
 import javax.servlet.ServletConfig;
 
-import org.apache.log4j.Level;
-import org.jfree.chart.block.LabelBlockImpl;
-import org.safehaus.uuid.UUIDGenerator;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-
 import lucee.aprint;
-import lucee.print;
 import lucee.commons.collection.MapFactory;
 import lucee.commons.date.TimeZoneUtil;
 import lucee.commons.digest.MD5;
@@ -168,6 +159,14 @@ import lucee.transformer.library.function.FunctionLib;
 import lucee.transformer.library.function.FunctionLibException;
 import lucee.transformer.library.tag.TagLib;
 import lucee.transformer.library.tag.TagLibException;
+
+import org.apache.log4j.Level;
+import org.jfree.chart.block.LabelBlockImpl;
+import org.safehaus.uuid.UUIDGenerator;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 /**
  * 

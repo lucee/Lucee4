@@ -23,7 +23,6 @@ package lucee.runtime.functions.list;
 
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.FunctionException;
-import lucee.runtime.ext.function.Function;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.functions.BIF;
 import lucee.runtime.op.Caster;

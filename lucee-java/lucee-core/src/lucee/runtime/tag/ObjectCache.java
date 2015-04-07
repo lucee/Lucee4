@@ -20,14 +20,10 @@ package lucee.runtime.tag;
 
 import java.io.IOException;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-
+import lucee.commons.io.cache.Cache;
 import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.ResourcesImpl;
 import lucee.commons.io.res.type.cache.CacheResourceProvider;
-
-import org.apache.oro.text.regex.MalformedPatternException;
-
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.cache.tag.CacheHandlerFactory;
 import lucee.runtime.cache.tag.CacheHandlerFilter;
@@ -43,7 +39,8 @@ import lucee.runtime.ext.tag.TagImpl;
 import lucee.runtime.functions.cache.Util;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.UDF;
-import lucee.commons.io.cache.Cache;
+
+import org.apache.oro.text.regex.MalformedPatternException;
 
 /**
 * Flushes the query cache

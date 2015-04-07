@@ -24,10 +24,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.w3c.dom.Element;
-
 import lucee.commons.collection.MapFactory;
 import lucee.commons.io.FileUtil;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
@@ -48,7 +47,8 @@ import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
-import lucee.commons.io.log.Log;
+
+import org.w3c.dom.Element;
 
 /**
  * represent a single Collection

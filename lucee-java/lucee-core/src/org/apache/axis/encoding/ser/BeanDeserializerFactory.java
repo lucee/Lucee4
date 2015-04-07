@@ -39,13 +39,13 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+import lucee.runtime.type.StructImpl;
+
 import org.apache.axis.description.TypeDesc;
 import org.apache.axis.encoding.Deserializer;
 import org.apache.axis.utils.BeanPropertyDescriptor;
 import org.apache.axis.utils.BeanUtils;
 import org.apache.axis.utils.JavaUtils;
-
-import lucee.runtime.type.StructImpl;
 
 /**
  * DeserializerFactory for Bean

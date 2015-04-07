@@ -21,14 +21,14 @@ package lucee.runtime.search.lucene2.docs;
 import java.io.Reader;
 import java.io.StringReader;
 
-import org.apache.lucene.document.DateField;
-import org.apache.lucene.document.Document;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.op.Caster;
 import lucee.runtime.search.lucene2.html.HTMLParser;
+
+import org.apache.lucene.document.DateField;
+import org.apache.lucene.document.Document;
 
 /** A utility for making Lucene Documents for HTML documents. */
 

@@ -20,9 +20,9 @@ package lucee.runtime.cache;
 
 import java.io.IOException;
 
+import lucee.commons.io.cache.Cache;
 import lucee.runtime.config.Config;
 import lucee.runtime.type.Struct;
-import lucee.commons.io.cache.Cache;
 
 public interface CacheConnection {
 

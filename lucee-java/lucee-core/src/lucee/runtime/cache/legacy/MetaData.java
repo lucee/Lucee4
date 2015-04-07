@@ -27,11 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.WildCardFilter;
 import lucee.runtime.converter.JavaConverter;
+
+import org.apache.oro.text.regex.MalformedPatternException;
 
 public class MetaData implements Serializable {
 	

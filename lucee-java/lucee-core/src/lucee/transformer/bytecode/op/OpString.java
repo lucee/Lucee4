@@ -18,9 +18,6 @@
  **/
 package lucee.transformer.bytecode.op;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.Method;
-
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.Literal;
@@ -30,6 +27,9 @@ import lucee.transformer.bytecode.expression.Expression;
 import lucee.transformer.bytecode.expression.ExpressionBase;
 import lucee.transformer.bytecode.literal.LitString;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.Method;
 
 public final class OpString extends ExpressionBase implements ExprString {
     

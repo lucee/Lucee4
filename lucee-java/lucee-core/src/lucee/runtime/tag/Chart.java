@@ -33,6 +33,31 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+import lucee.commons.color.ColorCaster;
+import lucee.commons.io.IOUtil;
+import lucee.commons.io.res.Resource;
+import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.Md5;
+import lucee.commons.lang.StringUtil;
+import lucee.runtime.chart.BarRenderer3DWrap;
+import lucee.runtime.chart.CategoryToolTipGeneratorImpl;
+import lucee.runtime.chart.LabelFormatUtil;
+import lucee.runtime.chart.PieSectionLabelGeneratorImpl;
+import lucee.runtime.chart.PieSectionLegendLabelGeneratorImpl;
+import lucee.runtime.chart.PieToolTipGeneratorImpl;
+import lucee.runtime.chart.TickUnitsImpl;
+import lucee.runtime.converter.JavaConverter;
+import lucee.runtime.engine.ThreadLocalPageContext;
+import lucee.runtime.exp.ApplicationException;
+import lucee.runtime.exp.ExpressionException;
+import lucee.runtime.exp.PageException;
+import lucee.runtime.ext.tag.BodyTagImpl;
+import lucee.runtime.functions.dateTime.DateAdd;
+import lucee.runtime.img.Image;
+import lucee.runtime.op.Caster;
+import lucee.runtime.op.date.DateCaster;
+import lucee.runtime.type.dt.DateTime;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -78,31 +103,6 @@ import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.util.ShapeUtilities;
-
-import lucee.commons.color.ColorCaster;
-import lucee.commons.io.IOUtil;
-import lucee.commons.io.res.Resource;
-import lucee.commons.io.res.util.ResourceUtil;
-import lucee.commons.lang.Md5;
-import lucee.commons.lang.StringUtil;
-import lucee.runtime.chart.BarRenderer3DWrap;
-import lucee.runtime.chart.CategoryToolTipGeneratorImpl;
-import lucee.runtime.chart.LabelFormatUtil;
-import lucee.runtime.chart.PieSectionLabelGeneratorImpl;
-import lucee.runtime.chart.PieSectionLegendLabelGeneratorImpl;
-import lucee.runtime.chart.PieToolTipGeneratorImpl;
-import lucee.runtime.chart.TickUnitsImpl;
-import lucee.runtime.converter.JavaConverter;
-import lucee.runtime.engine.ThreadLocalPageContext;
-import lucee.runtime.exp.ApplicationException;
-import lucee.runtime.exp.ExpressionException;
-import lucee.runtime.exp.PageException;
-import lucee.runtime.ext.tag.BodyTagImpl;
-import lucee.runtime.functions.dateTime.DateAdd;
-import lucee.runtime.img.Image;
-import lucee.runtime.op.Caster;
-import lucee.runtime.op.date.DateCaster;
-import lucee.runtime.type.dt.DateTime;
 
 
 public final class Chart extends BodyTagImpl implements Serializable {

@@ -23,9 +23,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.hibernate.mapping.PersistentClass;
-import org.hibernate.tuple.Instantiator;
-
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
@@ -35,6 +32,9 @@ import lucee.runtime.orm.hibernate.HibernateORMEngine;
 import lucee.runtime.orm.hibernate.HibernateORMSession;
 import lucee.runtime.orm.hibernate.HibernatePageException;
 import lucee.runtime.orm.hibernate.HibernateUtil;
+
+import org.hibernate.mapping.PersistentClass;
+import org.hibernate.tuple.Instantiator;
 
 public class CFCInstantiator implements Instantiator {
 	

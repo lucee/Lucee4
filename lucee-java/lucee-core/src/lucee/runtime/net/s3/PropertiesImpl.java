@@ -19,10 +19,9 @@
 package lucee.runtime.net.s3;
 
 import lucee.commons.io.res.type.s3.S3;
+import lucee.commons.io.res.type.s3.S3Constants;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
-import lucee.commons.io.res.type.s3.S3Constants;
-import lucee.runtime.net.s3.Properties;
 
 
 public final class PropertiesImpl implements Properties {

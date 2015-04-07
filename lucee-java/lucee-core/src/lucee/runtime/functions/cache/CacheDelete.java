@@ -20,13 +20,13 @@ package lucee.runtime.functions.cache;
 
 import java.io.IOException;
 
+import lucee.commons.io.cache.Cache;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
 import lucee.runtime.op.Caster;
-import lucee.commons.io.cache.Cache;
 
 /**
  * 

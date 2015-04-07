@@ -27,13 +27,12 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import lucee.commons.io.SystemUtil;
+import lucee.commons.io.cache.CacheEntry;
 import lucee.runtime.cache.CacheSupport;
 import lucee.runtime.config.Config;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Constants;
 import lucee.runtime.type.Struct;
-import lucee.commons.io.cache.CacheEntry;
-import lucee.commons.io.log.LogAndSource;
 
 public class RamCache extends CacheSupport {
 

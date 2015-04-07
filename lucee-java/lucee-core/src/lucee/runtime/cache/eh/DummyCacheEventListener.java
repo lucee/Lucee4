@@ -20,11 +20,11 @@ package lucee.runtime.cache.eh;
 
 import java.io.Serializable;
 
+import lucee.aprint;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.event.CacheEventListener;
-import lucee.aprint;
 
 public class DummyCacheEventListener implements CacheEventListener, Serializable {
 

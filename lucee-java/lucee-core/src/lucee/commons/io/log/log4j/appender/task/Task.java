@@ -18,9 +18,6 @@
  **/
 package lucee.commons.io.log.log4j.appender.task;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.spi.LoggingEvent;
-
 import lucee.loader.engine.CFMLEngine;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.runtime.config.Config;
@@ -31,6 +28,9 @@ import lucee.runtime.type.Array;
 import lucee.runtime.type.Struct;
 import lucee.runtime.util.Cast;
 import lucee.runtime.util.Creation;
+
+import org.apache.log4j.Appender;
+import org.apache.log4j.spi.LoggingEvent;
 
 public class Task implements SpoolerTask {
 

@@ -18,10 +18,6 @@
  **/
 package lucee.transformer.bytecode.cast;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.ClassUtil;
 import lucee.commons.lang.StringUtil;
@@ -33,6 +29,10 @@ import lucee.transformer.bytecode.expression.var.Variable;
 import lucee.transformer.bytecode.expression.var.VariableString;
 import lucee.transformer.bytecode.util.Methods_Caster;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 /**
  * cast a Expression to a Double

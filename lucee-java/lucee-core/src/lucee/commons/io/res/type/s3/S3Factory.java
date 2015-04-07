@@ -22,14 +22,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
+import lucee.loader.util.Util;
+import lucee.runtime.text.xml.XMLUtil;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-
-import lucee.loader.util.Util;
-import lucee.runtime.text.xml.XMLUtil;
 
 /**
  * Die Klasse TagLibFactory liest die XML Repraesentation einer TLD ein 

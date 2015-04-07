@@ -39,9 +39,6 @@ import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 import javax.xml.namespace.QName;
 
-import org.apache.axis.client.Call;
-import org.apache.axis.message.SOAPHeaderElement;
-
 import lucee.commons.net.HTTPUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.Config;
@@ -58,6 +55,9 @@ import lucee.runtime.op.Caster;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.dt.DateTime;
+
+import org.apache.axis.client.Call;
+import org.apache.axis.message.SOAPHeaderElement;
 
 public class JaxWSClient extends WSClient {
 	

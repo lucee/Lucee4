@@ -18,12 +18,12 @@
  **/
 package lucee.runtime.type.scope.client;
 
+import lucee.commons.io.log.Log;
 import lucee.runtime.PageContext;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.scope.Client;
 import lucee.runtime.type.scope.storage.MemoryScope;
 import lucee.runtime.type.scope.storage.StorageScopeMemory;
-import lucee.commons.io.log.Log;
 
 public class ClientMemory extends StorageScopeMemory implements Client,MemoryScope {
 

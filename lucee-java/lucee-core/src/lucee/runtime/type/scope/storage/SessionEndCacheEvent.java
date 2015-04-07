@@ -18,6 +18,7 @@
  **/
 package lucee.runtime.type.scope.storage;
 
+import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.cache.CacheEventListener;
 import lucee.runtime.CFMLFactoryImpl;
 import lucee.runtime.config.Config;
@@ -25,7 +26,6 @@ import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ExceptionHandler;
 import lucee.runtime.listener.ApplicationListener;
 import lucee.runtime.op.Caster;
-import lucee.commons.io.cache.CacheEntry;
 
 public class SessionEndCacheEvent implements CacheEventListener {
 

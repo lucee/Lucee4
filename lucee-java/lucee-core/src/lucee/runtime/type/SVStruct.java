@@ -32,8 +32,8 @@ import lucee.runtime.op.ThreadLocalDuplication;
 import lucee.runtime.op.date.DateCaster;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.it.EntryIterator;
-import lucee.runtime.type.util.StructSupport;
 import lucee.runtime.type.ref.Reference;
+import lucee.runtime.type.util.StructSupport;
 
 public final class SVStruct extends StructSupport implements Reference,Struct {
 

@@ -19,6 +19,7 @@
 package lucee.runtime.type.scope.storage;
 
 import lucee.commons.io.IOUtil;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
@@ -34,7 +35,6 @@ import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.scope.ScopeContext;
-import lucee.commons.io.log.Log;
 
 /**
  * client scope that store it's data in a resource

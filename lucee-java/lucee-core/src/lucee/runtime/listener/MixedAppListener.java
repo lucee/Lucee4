@@ -18,7 +18,6 @@
  **/
 package lucee.runtime.listener;
 
-import lucee.print;
 import lucee.commons.lang.types.RefBoolean;
 import lucee.commons.lang.types.RefBooleanImpl;
 import lucee.runtime.PageContext;

@@ -20,6 +20,7 @@ package lucee.runtime.functions.cache;
 
 import java.util.ArrayList;
 
+import lucee.commons.io.cache.exp.CacheException;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.CacheConnection;
@@ -31,7 +32,6 @@ import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.ListUtil;
-import lucee.commons.io.cache.exp.CacheException;
 
 public class CacheSetProperties {
 

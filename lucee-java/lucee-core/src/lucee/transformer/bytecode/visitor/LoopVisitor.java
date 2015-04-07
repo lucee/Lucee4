@@ -18,9 +18,9 @@
  **/
 package lucee.transformer.bytecode.visitor;
 
-import org.objectweb.asm.Label;
-
 import lucee.transformer.bytecode.BytecodeContext;
+
+import org.objectweb.asm.Label;
 
 public interface LoopVisitor {
 	

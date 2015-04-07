@@ -21,9 +21,6 @@ package lucee.runtime.net.rpc.client;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.apache.axis.client.Call;
-import org.apache.axis.message.SOAPHeaderElement;
-
 import lucee.runtime.PageContext;
 import lucee.runtime.config.Config;
 import lucee.runtime.dump.DumpData;
@@ -33,6 +30,9 @@ import lucee.runtime.net.proxy.ProxyData;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.dt.DateTime;
+
+import org.apache.axis.client.Call;
+import org.apache.axis.message.SOAPHeaderElement;
 
 final class CXFClient extends WSClient {
 	

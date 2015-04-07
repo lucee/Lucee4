@@ -20,10 +20,10 @@
 package lucee.runtime.functions.other;
 
 
-import org.safehaus.uuid.UUIDGenerator;
-
 import lucee.runtime.PageContext;
 import lucee.runtime.ext.function.Function;
+
+import org.safehaus.uuid.UUIDGenerator;
 
 /**
  * Implements the CFML Function createGuid

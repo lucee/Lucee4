@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.w3c.dom.Node;
-
 import lucee.commons.lang.CFTypes;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.ExpressionException;
@@ -49,7 +47,8 @@ import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.MemberUtil;
 import lucee.runtime.type.util.Type;
 import lucee.runtime.type.wrap.MapAsStruct;
-import lucee.runtime.util.VariableUtil;
+
+import org.w3c.dom.Node;
 
 /**
  * Class to handle CF Variables (set,get,call)

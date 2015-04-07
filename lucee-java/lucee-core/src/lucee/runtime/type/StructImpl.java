@@ -21,8 +21,6 @@ package lucee.runtime.type;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.commons.collections.map.ReferenceMap;
-
 import lucee.commons.collection.HashMapPro;
 import lucee.commons.collection.LinkedHashMapPro;
 import lucee.commons.collection.MapFactory;
@@ -39,6 +37,8 @@ import lucee.runtime.op.ThreadLocalDuplication;
 import lucee.runtime.type.it.StringIterator;
 import lucee.runtime.type.util.StructSupport;
 import lucee.runtime.type.util.StructUtil;
+
+import org.apache.commons.collections.map.ReferenceMap;
 
 /**
  * CFML data type struct

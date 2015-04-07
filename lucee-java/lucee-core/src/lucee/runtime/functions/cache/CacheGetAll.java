@@ -21,6 +21,8 @@ package lucee.runtime.functions.cache;
 import java.util.Iterator;
 import java.util.List;
 
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.cache.CacheEntry;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.util.WildCardFilter;
 import lucee.runtime.config.ConfigImpl;
@@ -30,8 +32,6 @@ import lucee.runtime.op.Caster;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.cache.CacheEntry;
 
 /**
  * 

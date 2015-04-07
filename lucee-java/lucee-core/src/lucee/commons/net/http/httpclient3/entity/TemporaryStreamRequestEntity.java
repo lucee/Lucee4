@@ -21,10 +21,10 @@ package lucee.commons.net.http.httpclient3.entity;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.commons.httpclient.methods.RequestEntity;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.TemporaryStream;
+
+import org.apache.commons.httpclient.methods.RequestEntity;
 
 
 public class TemporaryStreamRequestEntity implements RequestEntity, Entity3 {

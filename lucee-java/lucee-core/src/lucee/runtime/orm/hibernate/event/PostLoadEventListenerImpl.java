@@ -18,11 +18,11 @@
  **/
 package lucee.runtime.orm.hibernate.event;
 
-import org.hibernate.event.PostLoadEvent;
-import org.hibernate.event.PostLoadEventListener;
-
 import lucee.runtime.Component;
 import lucee.runtime.orm.hibernate.CommonUtil;
+
+import org.hibernate.event.PostLoadEvent;
+import org.hibernate.event.PostLoadEventListener;
 
 public class PostLoadEventListenerImpl extends EventListener implements PostLoadEventListener {
 

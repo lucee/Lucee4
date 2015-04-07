@@ -31,9 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-
 import lucee.commons.date.DateTimeUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
@@ -79,6 +76,9 @@ import lucee.runtime.type.scope.ClusterEntry;
 import lucee.runtime.type.scope.ClusterEntryImpl;
 import lucee.runtime.type.util.ListUtil;
 import lucee.runtime.util.Creation;
+
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 /**
  * implemention of the ctration object

@@ -19,8 +19,6 @@
 package lucee.commons.io.log;
 
 import lucee.runtime.exp.DeprecatedException;
-import lucee.commons.io.log.Log;
-import lucee.commons.io.log.LogAndSource;
 
 public class LegacyLogger implements LogAndSource {
 

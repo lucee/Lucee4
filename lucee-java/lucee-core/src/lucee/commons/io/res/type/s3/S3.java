@@ -36,9 +36,6 @@ import java.util.TimeZone;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.collections.map.ReferenceMap;
-import org.xml.sax.SAXException;
-
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.lang.Md5;
 import lucee.commons.lang.StringUtil;
@@ -53,7 +50,9 @@ import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.dt.DateTime;
-import lucee.commons.io.res.type.s3.S3Constants;
+
+import org.apache.commons.collections.map.ReferenceMap;
+import org.xml.sax.SAXException;
 
 public final class S3 implements S3Constants {
 

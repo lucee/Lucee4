@@ -18,10 +18,10 @@
  **/
 package lucee.runtime.chart;
 
+import lucee.commons.lang.StringUtil;
+
 import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.data.category.CategoryDataset;
-
-import lucee.commons.lang.StringUtil;
 
 public class CategoryToolTipGeneratorImpl implements CategoryToolTipGenerator {
 

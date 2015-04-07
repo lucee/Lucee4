@@ -28,6 +28,7 @@ import lucee.commons.io.FileUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.AndResourceFilter;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
+import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.lang.mimetype.MimeType;
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
@@ -43,7 +44,6 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.commons.io.res.filter.ResourceFilter;
 
 public class Mapping {
 

@@ -42,12 +42,12 @@ import java.util.List;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
+import lucee.Version;
 import lucee.loader.TP;
 import lucee.loader.classloader.LuceeClassLoader;
 import lucee.loader.util.ExtensionFilter;
 import lucee.loader.util.Util;
 import lucee.loader.util.ZipUtil;
-import lucee.Version;
 
 import com.intergral.fusiondebug.server.FDControllerFactory;
 

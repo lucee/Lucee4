@@ -18,12 +18,12 @@
  **/
 package lucee.transformer.bytecode.expression;
 
-import org.objectweb.asm.Type;
-
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.statement.udf.Closure;
 import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Type;
 
 public class ClosureAsExpression extends ExpressionBase {
 

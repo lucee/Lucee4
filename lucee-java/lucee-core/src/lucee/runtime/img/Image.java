@@ -84,13 +84,6 @@ import javax.media.jai.operator.ShearDir;
 import javax.media.jai.operator.TransposeType;
 import javax.swing.ImageIcon;
 
-import org.apache.commons.codec.binary.Base64;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.CFTypes;
@@ -124,6 +117,13 @@ import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.ListUtil;
 import lucee.runtime.type.util.MemberUtil;
 import lucee.runtime.type.util.StructSupport;
+
+import org.apache.commons.codec.binary.Base64;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class Image extends StructSupport implements Cloneable,Struct {
 	private static final long serialVersionUID = -2370381932689749657L;

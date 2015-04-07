@@ -25,13 +25,13 @@ import java.io.IOException;
 
 import javax.imageio.stream.ImageInputStream;
 
-import org.apache.commons.codec.binary.Base64;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.img.coder.Coder;
+
+import org.apache.commons.codec.binary.Base64;
 
 public class ImageUtil {
 	

@@ -20,9 +20,9 @@ package lucee.runtime.cache.ram;
 
 import java.util.Date;
 
+import lucee.commons.io.cache.CacheEntry;
 import lucee.runtime.cache.CacheUtil;
 import lucee.runtime.type.Struct;
-import lucee.commons.io.cache.CacheEntry;
 
 public class RamCacheEntry implements CacheEntry {
 

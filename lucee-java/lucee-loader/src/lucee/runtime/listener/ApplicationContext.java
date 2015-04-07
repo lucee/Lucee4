@@ -24,10 +24,10 @@ import lucee.commons.io.res.Resource;
 import lucee.runtime.Mapping;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.net.s3.Properties;
 import lucee.runtime.orm.ORMConfiguration;
 import lucee.runtime.rest.RestSettings;
 import lucee.runtime.type.dt.TimeSpan;
-import lucee.runtime.net.s3.Properties;
 
 /**
  * DTO Interface for Application Context data (defined by tag application)

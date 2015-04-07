@@ -23,7 +23,6 @@ import lucee.runtime.Component;
 import lucee.runtime.PageContext;
 import lucee.runtime.db.DataSource;
 import lucee.runtime.exp.PageException;
-import lucee.runtime.orm.hibernate.SessionFactoryData;
 import lucee.runtime.type.Array;
 import lucee.runtime.type.Query;
 import lucee.runtime.type.Struct;

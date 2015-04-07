@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-import lucee.print;
-
 
 /**
  * class to handle characters, similar to StringBuffer, but dont copy big blocks of char arrays.

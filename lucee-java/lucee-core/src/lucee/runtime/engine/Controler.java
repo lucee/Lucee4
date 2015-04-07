@@ -25,6 +25,7 @@ import java.util.Map;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
+import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.SystemOut;
 import lucee.commons.lang.types.RefBoolean;
@@ -44,7 +45,6 @@ import lucee.runtime.op.Caster;
 import lucee.runtime.type.scope.ScopeContext;
 import lucee.runtime.type.scope.client.ClientFile;
 import lucee.runtime.type.util.ArrayUtil;
-import lucee.commons.io.res.filter.ResourceFilter;
 
 /**
  * own thread how check the main thread and his data 

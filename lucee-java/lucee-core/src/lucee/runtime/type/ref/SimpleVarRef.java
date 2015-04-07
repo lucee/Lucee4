@@ -22,7 +22,6 @@ import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Collection;
-import lucee.runtime.type.ref.Reference;
 
 public class SimpleVarRef implements Reference {
 

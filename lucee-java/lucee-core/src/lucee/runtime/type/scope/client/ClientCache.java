@@ -18,6 +18,7 @@
  **/
 package lucee.runtime.type.scope.client;
 
+import lucee.commons.io.log.Log;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Collection;
@@ -25,7 +26,6 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.scope.Client;
 import lucee.runtime.type.scope.storage.StorageScopeCache;
-import lucee.commons.io.log.Log;
 
 public final class ClientCache extends StorageScopeCache implements Client {
 	

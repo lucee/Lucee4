@@ -18,10 +18,10 @@
  **/
 package lucee.runtime.search.lucene2.docs;
 
-import org.apache.lucene.document.Document;
-
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.op.Caster;
+
+import org.apache.lucene.document.Document;
 
 
 /** A utility for making Lucene Documents from a File. */

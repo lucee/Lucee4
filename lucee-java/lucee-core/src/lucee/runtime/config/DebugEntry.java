@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import lucee.print;
 import lucee.commons.digest.MD5;
 import lucee.commons.net.IPRange;
 import lucee.runtime.type.Struct;

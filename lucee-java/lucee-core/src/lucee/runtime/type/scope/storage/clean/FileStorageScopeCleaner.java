@@ -25,6 +25,7 @@ import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.AndResourceFilter;
 import lucee.commons.io.res.filter.DirectoryResourceFilter;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
+import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.op.Caster;
@@ -33,7 +34,6 @@ import lucee.runtime.type.scope.Scope;
 import lucee.runtime.type.scope.storage.StorageScopeEngine;
 import lucee.runtime.type.scope.storage.StorageScopeFile;
 import lucee.runtime.type.scope.storage.StorageScopeListener;
-import lucee.commons.io.res.filter.ResourceFilter;
 
 public class FileStorageScopeCleaner extends StorageScopeCleanerSupport {
 	

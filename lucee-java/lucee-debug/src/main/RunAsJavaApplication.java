@@ -18,21 +18,16 @@
  **/
 package main;
 
+import java.io.File;
+import java.util.List;
+
 import org.mortbay.http.HttpContext;
 import org.mortbay.http.HttpServer;
 import org.mortbay.http.SocketListener;
 import org.mortbay.http.handler.ResourceHandler;
 import org.mortbay.jetty.servlet.ServletHandler;
 import org.mortbay.jetty.servlet.ServletHolder;
-import org.mortbay.jetty.servlet.WebApplicationContext;
 import org.mortbay.util.MultiException;
-
-import lucee.print;
-
-import java.io.File;
-import java.util.List;
-
-import javax.smartcardio.ATR;
 
 
 /**

@@ -39,6 +39,7 @@ import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.DirectoryResourceFilter;
 import lucee.commons.io.res.filter.FileResourceFilter;
 import lucee.commons.io.res.filter.OrResourceFilter;
+import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.util.FileWrapper;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.io.res.util.UDFFilter;
@@ -54,7 +55,6 @@ import lucee.runtime.op.Decision;
 import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.UDF;
 import lucee.runtime.type.dt.DateTimeImpl;
-import lucee.commons.io.res.filter.ResourceFilter;
 
 public final class Zip extends BodyTagImpl {
 

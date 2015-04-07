@@ -21,14 +21,14 @@ package lucee.runtime.search.lucene2.highlight;
 import java.io.IOException;
 import java.io.StringReader;
 
+import lucee.commons.lang.StringUtil;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
-
-import lucee.commons.lang.StringUtil;
 
 public class _Highlight {
 

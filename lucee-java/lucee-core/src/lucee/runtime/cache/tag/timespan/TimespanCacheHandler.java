@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.cache.CacheEntry;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.ram.RamCache;
 import lucee.runtime.cache.tag.CacheHandler;
@@ -35,8 +37,6 @@ import lucee.runtime.functions.cache.Util;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.type.dt.TimeSpan;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.cache.CacheEntry;
 
 public class TimespanCacheHandler implements CacheHandler {
 

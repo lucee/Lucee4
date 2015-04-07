@@ -21,11 +21,6 @@ package lucee.transformer.bytecode.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.GeneratorAdapter;
-import org.objectweb.asm.commons.Method;
-
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.op.Caster;
@@ -39,6 +34,11 @@ import lucee.transformer.bytecode.expression.Expression;
 import lucee.transformer.bytecode.literal.LitString;
 import lucee.transformer.bytecode.visitor.OnFinally;
 import lucee.transformer.bytecode.visitor.TryFinallyVisitor;
+
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 public final class ExpressionUtil {
 	

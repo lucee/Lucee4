@@ -38,6 +38,7 @@ import lucee.runtime.debug.Debugger;
 import lucee.runtime.err.ErrorPage;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.listener.ApplicationContext;
+import lucee.runtime.net.ftp.FTPPool;
 import lucee.runtime.query.QueryCache;
 import lucee.runtime.security.Credential;
 import lucee.runtime.type.Array;
@@ -45,6 +46,7 @@ import lucee.runtime.type.Collection;
 import lucee.runtime.type.Iterator;
 import lucee.runtime.type.Query;
 import lucee.runtime.type.UDF;
+import lucee.runtime.type.ref.Reference;
 import lucee.runtime.type.scope.Application;
 import lucee.runtime.type.scope.Argument;
 import lucee.runtime.type.scope.CGI;
@@ -62,8 +64,6 @@ import lucee.runtime.type.scope.URL;
 import lucee.runtime.type.scope.URLForm;
 import lucee.runtime.type.scope.Undefined;
 import lucee.runtime.type.scope.Variables;
-import lucee.runtime.net.ftp.FTPPool;
-import lucee.runtime.type.ref.Reference;
 import lucee.runtime.util.VariableUtil;
 
 /**

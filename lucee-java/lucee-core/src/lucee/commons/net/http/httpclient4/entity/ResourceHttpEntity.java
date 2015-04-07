@@ -22,10 +22,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.http.entity.AbstractHttpEntity;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
+
+import org.apache.http.entity.AbstractHttpEntity;
 
 /**
  * A RequestEntity that represents a Resource.

@@ -22,20 +22,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
-import org.apache.commons.net.ftp.FTPReply;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.tag.TagImpl;
+import lucee.runtime.net.ftp.FTPConnection;
 import lucee.runtime.net.ftp.FTPConnectionImpl;
 import lucee.runtime.net.ftp.FTPConstant;
 import lucee.runtime.net.ftp.FTPPath;
+import lucee.runtime.net.ftp.FTPPool;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
@@ -44,8 +41,11 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.util.ListUtil;
-import lucee.runtime.net.ftp.FTPConnection;
-import lucee.runtime.net.ftp.FTPPool;
+
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPReply;
 
 /**
 * 

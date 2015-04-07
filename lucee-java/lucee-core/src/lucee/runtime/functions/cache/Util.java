@@ -23,6 +23,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
+import lucee.commons.io.cache.Cache;
+import lucee.commons.io.cache.CacheEntryFilter;
+import lucee.commons.io.cache.exp.CacheException;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.CacheConnection;
@@ -30,9 +33,6 @@ import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.engine.ThreadLocalPageContext;
-import lucee.commons.io.cache.Cache;
-import lucee.commons.io.cache.CacheEntryFilter;
-import lucee.commons.io.cache.exp.CacheException;
 
 public class Util {
 	

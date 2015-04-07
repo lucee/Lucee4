@@ -20,6 +20,7 @@ package lucee.runtime.tag;
 
 import java.io.IOException;
 
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageSource;
@@ -40,7 +41,6 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.scope.Scope;
 import lucee.runtime.type.trace.TraceObjectSupport;
-import lucee.commons.io.log.Log;
 
 public final class Trace extends BodyTagImpl {
 

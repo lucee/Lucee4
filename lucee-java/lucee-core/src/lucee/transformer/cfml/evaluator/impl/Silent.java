@@ -18,12 +18,12 @@
  **/
 package lucee.transformer.cfml.evaluator.impl;
 
-import org.w3c.dom.Element;
-
 import lucee.transformer.bytecode.statement.tag.Tag;
 import lucee.transformer.bytecode.util.ASMUtil;
 import lucee.transformer.cfml.evaluator.EvaluatorException;
 import lucee.transformer.cfml.evaluator.EvaluatorSupport;
+
+import org.w3c.dom.Element;
 
 /**
  * Prueft den Kontext des Tag <code>try</code>.

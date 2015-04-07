@@ -20,10 +20,6 @@ package lucee.runtime.functions.owasp;
 
 import java.io.PrintStream;
 
-import org.owasp.esapi.ESAPI;
-import org.owasp.esapi.Encoder;
-import org.owasp.esapi.errors.EncodingException;
-
 import lucee.commons.io.DevNullOutputStream;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
@@ -32,6 +28,10 @@ import lucee.runtime.exp.FunctionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
 import lucee.runtime.op.Caster;
+
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.Encoder;
+import org.owasp.esapi.errors.EncodingException;
 
 public class ESAPIEncode implements Function {
 	

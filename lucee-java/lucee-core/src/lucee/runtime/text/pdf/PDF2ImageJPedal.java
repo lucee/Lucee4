@@ -21,15 +21,15 @@ package lucee.runtime.text.pdf;
 import java.io.IOException;
 import java.util.Set;
 
-import org.jpedal.PdfDecoder;
-import org.jpedal.exception.PdfException;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.img.Image;
 import lucee.runtime.op.Caster;
+
+import org.jpedal.PdfDecoder;
+import org.jpedal.exception.PdfException;
 
 public class PDF2ImageJPedal extends PDF2Image {
 	

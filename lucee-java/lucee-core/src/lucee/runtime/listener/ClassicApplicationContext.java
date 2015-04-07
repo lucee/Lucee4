@@ -35,6 +35,7 @@ import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.DeprecatedException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.exp.PageRuntimeException;
+import lucee.runtime.net.s3.Properties;
 import lucee.runtime.net.s3.PropertiesImpl;
 import lucee.runtime.op.Duplicator;
 import lucee.runtime.orm.ORMConfiguration;
@@ -47,7 +48,6 @@ import lucee.runtime.type.scope.Scope;
 import lucee.runtime.type.scope.URLImpl;
 import lucee.runtime.type.scope.UrlFormImpl;
 import lucee.runtime.type.util.ArrayUtil;
-import lucee.runtime.net.s3.Properties;
 
 /**
  * 

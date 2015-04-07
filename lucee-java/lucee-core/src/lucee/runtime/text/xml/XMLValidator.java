@@ -20,11 +20,6 @@ package lucee.runtime.text.xml;
 
 import java.io.IOException;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.exp.XMLException;
 import lucee.runtime.op.Caster;
@@ -32,6 +27,11 @@ import lucee.runtime.type.Array;
 import lucee.runtime.type.ArrayImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 
 

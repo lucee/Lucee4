@@ -26,11 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.engine.query.QueryPlanCache;
-
+import lucee.commons.io.log.Log;
 import lucee.loader.util.Util;
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
@@ -39,7 +35,6 @@ import lucee.runtime.db.DatasourceConnection;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.orm.ORMConfiguration;
 import lucee.runtime.orm.ORMSession;
-import lucee.runtime.orm.ORMUtil;
 import lucee.runtime.orm.hibernate.naming.CFCNamingStrategy;
 import lucee.runtime.orm.hibernate.naming.DefaultNamingStrategy;
 import lucee.runtime.orm.hibernate.naming.SmartNamingStrategy;
@@ -49,7 +44,11 @@ import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.ListUtil;
-import lucee.commons.io.log.Log;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.engine.query.QueryPlanCache;
 
 public class SessionFactoryData {
 

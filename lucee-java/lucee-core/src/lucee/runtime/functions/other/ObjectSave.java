@@ -22,8 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -33,6 +31,8 @@ import lucee.runtime.converter.JavaConverter;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 public class ObjectSave {
     

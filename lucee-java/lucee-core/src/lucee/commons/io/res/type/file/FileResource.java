@@ -35,10 +35,10 @@ import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.ContentType;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
-import lucee.commons.io.res.util.ResourceOutputStream;
-import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.filter.ResourceNameFilter;
+import lucee.commons.io.res.util.ResourceOutputStream;
+import lucee.commons.io.res.util.ResourceUtil;
 
 /**
  * Implementation og Resource for the local filesystem (java.io.File)

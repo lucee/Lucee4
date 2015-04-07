@@ -18,7 +18,6 @@
  **/
 package lucee.runtime.exp;
 
-import lucee.runtime.PageContext;
 
 public class StopException extends Abort implements Stop {
 	private StackTraceElement[] stacktrace;

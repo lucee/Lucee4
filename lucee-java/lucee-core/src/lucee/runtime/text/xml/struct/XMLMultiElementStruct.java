@@ -18,9 +18,6 @@
  **/
 package lucee.runtime.text.xml.struct;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
@@ -28,6 +25,9 @@ import lucee.runtime.op.Duplicator;
 import lucee.runtime.text.xml.XMLCaster;
 import lucee.runtime.type.Array;
 import lucee.runtime.type.Collection;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * Element that can contain more than one Element

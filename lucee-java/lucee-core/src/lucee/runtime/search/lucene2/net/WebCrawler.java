@@ -26,9 +26,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexWriter;
-
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.HTMLUtil;
@@ -42,7 +40,9 @@ import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.search.lucene2.DocumentUtil;
 import lucee.runtime.tag.Index;
 import lucee.runtime.type.util.ArrayUtil;
-import lucee.commons.io.log.Log;
+
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexWriter;
 
 /**
  * 

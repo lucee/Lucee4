@@ -20,8 +20,8 @@ package lucee.runtime.cache.eh.remote.rest;
 
 import java.util.Date;
 
-import lucee.runtime.type.Struct;
 import lucee.commons.io.cache.CacheEntry;
+import lucee.runtime.type.Struct;
 
 public class RESTCacheEntry implements CacheEntry {
 

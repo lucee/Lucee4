@@ -20,8 +20,6 @@ package lucee.commons.io.cache;
 
 import java.io.Serializable;
 
-import lucee.commons.io.cache.CacheEntry;
-
 /**
  * Ac CacheEventListener is registred to a cache implementing the interface CacheEvent, a CacheEventListener can listen to certain event happening in a cache
  */

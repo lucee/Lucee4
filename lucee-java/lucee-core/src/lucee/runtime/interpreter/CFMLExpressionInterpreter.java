@@ -21,8 +21,6 @@ package lucee.runtime.interpreter;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.apache.commons.collections.map.ReferenceMap;
-
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.ParserString;
 import lucee.runtime.MappingImpl;
@@ -85,6 +83,8 @@ import lucee.runtime.type.scope.ScopeSupport;
 import lucee.transformer.library.function.FunctionLib;
 import lucee.transformer.library.function.FunctionLibFunction;
 import lucee.transformer.library.function.FunctionLibFunctionArg;
+
+import org.apache.commons.collections.map.ReferenceMap;
 
 /**
  * 

@@ -21,8 +21,8 @@ package lucee.runtime.search.lucene2;
 
 
 import lucee.commons.io.res.Resource;
-import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.io.res.filter.ResourceFilter;
+import lucee.commons.io.res.util.ResourceUtil;
 
 /**
  * FilFilter that only allow filter with given extensions 
