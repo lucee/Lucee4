@@ -96,18 +96,28 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		}
 		if(notFailed)fail("overwrite final method2");
 	}
-/*
 
+	public void function testAlternativeSyntax(){
+		new abstract.FinalAltSyntax1();
+		new abstract.FinalAltSyntax2();
 
-	// 
-	try{
-		dump(var:new Invalid3(),label:"should not work");
+		var failed=true;
+		try{
+			new abstract.FinalAltSyntax1Fail();
+			failed=false;
+		}
+		catch(e){}
+		if(!failed)fail("FinalAltSyntax1Fail must fail");
+
+		failed=true;
+		try{
+			new abstract.FinalAltSyntax2Fail();
+			failed=false;
+		}
+		catch(e){}
+		if(!failed)fail("FinalAltSyntax2Fail must fail");
+
+		
 	}
-	catch(e){
-		dump(var:e.message,label:"non abstract component that not implement a abstract function");
-	}
-
-
-*/
 } 
 </cfscript>
