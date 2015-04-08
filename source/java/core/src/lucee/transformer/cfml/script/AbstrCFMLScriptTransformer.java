@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lucee.print;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefBoolean;
 import lucee.commons.lang.types.RefBooleanImpl;
@@ -61,6 +62,7 @@ import lucee.transformer.bytecode.statement.TryCatchFinally;
 import lucee.transformer.bytecode.statement.While;
 import lucee.transformer.bytecode.statement.tag.Attribute;
 import lucee.transformer.bytecode.statement.tag.Tag;
+import lucee.transformer.bytecode.statement.tag.TagComponent;
 import lucee.transformer.bytecode.statement.tag.TagOther;
 import lucee.transformer.bytecode.statement.tag.TagParam;
 import lucee.transformer.bytecode.statement.udf.Closure;
@@ -230,6 +232,7 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 		else if((child=tryStatement(data))!=null) 				parent.addStatement(child);
 		else if(staticStatement(data,parent)) ; // do nothing, happen already inside the method
 		//else if((child=staticStatement(data,parent))!=null) 	parent.addStatement(child);
+		else if((child=componentStatement(data,parent))!=null)	parent.addStatement(child);
 		else if((child=tagStatement(data,parent))!=null)		parent.addStatement(child);
 		else if((child=cftagStatement(data,parent))!=null)		parent.addStatement(child);
 		else if(block(data,parent)){}
@@ -443,6 +446,38 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 		return swit;
 	}
 	
+	
+	private final TagComponent componentStatement(ExprData data, Body parent) throws TemplateException {
+		
+		int pos = data.srcCode.getPos();
+		
+		// get the idendifier in front of
+		String id=identifier(data, false);
+		if(id==null) {
+			data.srcCode.setPos(pos);
+			return null;
+		}
+		int mod=ComponentUtil.toModifier(id, Component.MODIFIER_NONE, Component.MODIFIER_NONE);
+		if(mod==Component.MODIFIER_NONE) {
+			data.srcCode.setPos(pos);
+			return null;
+		}
+
+		comments(data);
+		
+		// do we have a starting component?
+		if(!data.srcCode.isCurrent("component")) {
+			data.srcCode.setPos(pos);
+			return null;
+		}
+		
+		// parse the component
+		TagLibTag tlt = CFMLTransformer.getTLT(data.srcCode,"component",data.config.getIdentification());
+		TagComponent comp =(TagComponent) _multiAttrStatement(parent, data, tlt);
+		comp.addAttribute(new Attribute(false,"modifier",data.factory.createLitString(id),"string"));
+		return comp;
+	}
+	
 	/**
 	 * Liest ein Case Statement ein
 	 * @return case Statement
@@ -570,7 +605,7 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 	 */
 	private final Statement forStatement(ExprData data) throws TemplateException {
 		
-int pos=data.srcCode.getPos();
+		int pos=data.srcCode.getPos();
 		
 		// id
 		String id=variableDec(data, false);
@@ -1124,7 +1159,6 @@ int pos=data.srcCode.getPos();
 	private final Tag __multiAttrStatement(Body parent, ExprData data,TagLibTag tlt) throws TemplateException  {
 		if(data.ep==null) return null;
 		String type=tlt.getName();
-		
 		if(data.srcCode.forwardIfCurrent(type)) {
 			boolean isValid=(data.srcCode.isCurrent(' ') || (tlt.getHasBody() && data.srcCode.isCurrent('{')));
 			if(!isValid){
