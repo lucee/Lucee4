@@ -28,14 +28,16 @@
 	<cffunction name="testdirectoryCopy" localMode="modern">
 
 		<!--- inital create --->
-		<cfdirectory directory="#dir#inc" action="create" mode="777">
-		<cffile action="write" file="#dir#/inc/test1.txt">hello1</cffile>
-		<cffile action="write" file="#dir#/inc/abra.txt">hello1</cffile>
-		<cfdirectory directory="#dir#inc/sub" action="create" mode="777">
-		<cfdirectory directory="#dir#inc/empty" action="create" mode="777">
-		<cfdirectory directory="#dir#inc/testempty" action="create" mode="777">
-		<cffile action="write" file="#dir#inc/sub/test3.txt">hello2</cffile>
+		<cfdirectory directory=	"#dir#inc" action="create" mode="777">
+		<cffile file=			"#dir#/inc/test1.txt" action="write">hello1</cffile>
+		<cffile file=			"#dir#/inc/abra.txt" action="write">hello1</cffile>
+
+		<cfdirectory directory=	"#dir#inc/empty" action="create" mode="777">
+		<cfdirectory directory=	"#dir#inc/testempty" action="create" mode="777">
+		<cfdirectory directory=	"#dir#inc/sub" action="create" mode="777">
+		<cffile file=			"#dir#inc/sub/test3.txt" action="write">hello2</cffile>
 		<cfscript>
+
 		// copy not recursive
 		directoryCopy("#dir#inc","#dir#inc2");
 		directory directory="#dir#inc2" action="list" name="qry" recurse="yes";
@@ -55,7 +57,7 @@
 		directoryCopy("#dir#inc","#dir#inc5",true,"test*"); 
 		directory directory="#dir#inc5" action="list" name="qry" recurse="yes";
 		assertEquals("sub,test1.txt,test3.txt,testempty",listSort(valueList(qry.name),'textnocase'));
-
+		// test1.txt,testempty
 		</cfscript>
 	</cffunction>
 	
