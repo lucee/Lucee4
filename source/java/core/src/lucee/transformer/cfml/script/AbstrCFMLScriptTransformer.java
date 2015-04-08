@@ -219,17 +219,19 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 		if(data.srcCode.forwardIfCurrent(';')){return true;}
 		else if((child=ifStatement(data))!=null) 				parent.addStatement(child);
 		else if((child=propertyStatement(data,parent))!=null)	parent.addStatement(child);
-		else if((child=paramStatement(data,parent))!=null)	parent.addStatement(child);
-		else if((child=funcStatement(data,parent))!=null)		parent.addStatement(child);
+		else if((child=paramStatement(data,parent))!=null)		parent.addStatement(child);
+		else if(funcStatement(data,parent)); // do nothing, happen already inside the method
+		//else if((child=funcStatement(data,parent))!=null)		parent.addStatement(child);
 		else if((child=whileStatement(data))!=null) 			parent.addStatement(child);
 		else if((child=doStatement(data))!=null) 				parent.addStatement(child);
 		else if((child=forStatement(data))!=null) 				parent.addStatement(child);
 		else if((child=returnStatement(data))!=null) 			parent.addStatement(child);
 		else if((child=switchStatement(data))!=null) 			parent.addStatement(child);
 		else if((child=tryStatement(data))!=null) 				parent.addStatement(child);
-		else if((child=staticStatement(data))!=null) 			parent.addStatement(child);
-		else if((child=tagStatement(data,parent))!=null)	parent.addStatement(child);
-		else if((child=cftagStatement(data,parent))!=null)	parent.addStatement(child);
+		else if(staticStatement(data,parent)) ; // do nothing, happen already inside the method
+		//else if((child=staticStatement(data,parent))!=null) 	parent.addStatement(child);
+		else if((child=tagStatement(data,parent))!=null)		parent.addStatement(child);
+		else if((child=cftagStatement(data,parent))!=null)		parent.addStatement(child);
 		else if(block(data,parent)){}
 		
 		else parent.addStatement(expressionStatement(data,parent));
@@ -673,15 +675,15 @@ int pos=data.srcCode.getPos();
 	 * @return function Statement
 	 * @throws TemplateException
 	 */
-	private final Function funcStatement(ExprData data,Body parent) throws TemplateException {
+	private final boolean funcStatement(ExprData data,Body parent) throws TemplateException {
 		int pos=data.srcCode.getPos();
 		
-		// read 5 tokens (returntype,access modifier,non access modifier,"function", function name)
+		// read 5 tokens (returntype,access modifier,"abstract|final|static","function", function name)
 		String str=variableDec(data, false);
 		// if there is no token at all we have no function
 		if(str==null) {
 			data.srcCode.setPos(pos);
-			return null;
+			return false;
 		}
 		comments(data);
 		String[] tokens=new String[]{str,null,null,null,null};
@@ -740,7 +742,7 @@ int pos=data.srcCode.getPos();
 		// no "function" found
 		if(first) {
 			data.srcCode.setPos(pos);
-			return null;
+			return false;
 		}
 		
 		// access modifier
@@ -762,22 +764,41 @@ int pos=data.srcCode.getPos();
 		if(access==-1) access=Component.ACCESS_PUBLIC;
 
 		// Non access modifier
-		int _modifier,modifier=-1;
+		int _modifier,modifier=Component.MODIFIER_NONE;
+		boolean isStatic=false;
 		for(int i=0;i<tokens.length;i++){
-			if(tokens[i]!=null && (_modifier=ComponentUtil.toModifier(tokens[i], -1, -1))!=-1) {
-				// we already have an Non access modifier
-				if(modifier!=-1) {
-					// we already have a return type
-					if(returnType!=null)throw new TemplateException(data.srcCode, "invalid syntax");
-					returnType=tokens[i];
-				}
-				else modifier=_modifier;
-				tokens[i]=null;
+			if(tokens[i]!=null) {
+				_modifier=ComponentUtil.toModifier(tokens[i], Component.MODIFIER_NONE, Component.MODIFIER_NONE);
 				
+				// abstract|final
+				if(_modifier!=Component.MODIFIER_NONE) {
+					// we already have an Non access modifier
+					if(modifier!=Component.MODIFIER_NONE || isStatic) {
+						// we already have a return type
+						if(returnType!=null)throw new TemplateException(data.srcCode, "invalid syntax");
+						returnType=tokens[i];
+					}
+					else modifier=_modifier;
+					tokens[i]=null;
+				}
+				// static
+				else if(tokens[i].equalsIgnoreCase("static")) {
+					// we already have an Non access modifier
+					if(modifier!=Component.MODIFIER_NONE || isStatic) {
+						// we already have a return type
+						if(returnType!=null)throw new TemplateException(data.srcCode, "invalid syntax");
+						returnType=tokens[i];
+					}
+					else isStatic=true;
+					tokens[i]=null;
+				}
 			}
 		}
 		// no modifier defined
-		if(modifier==-1) modifier=Component.MODIFIER_NONE;
+		//if(modifier==-1) modifier=Component.MODIFIER_NONE;
+		
+		// StaticBody body=new StaticBody(data.factory);
+		
 		
 		// return type
 		for(int i=0;i<tokens.length;i++){
@@ -788,92 +809,11 @@ int pos=data.srcCode.getPos();
 		}
 		
 		
-		/*print.e("--------");
-		print.e("name:"+functionName);
-		print.e("access:"+ComponentUtil.toStringAccess(access,""));
-		print.e("modifier:"+ComponentUtil.toModifier(modifier,""));
-		print.e("return:"+returnType);
-		*/
-		
-		//////////////////////////////////////////////////
-		
-		
-		/*// access modifier
-		String strAccess=variableDec(data, false);
-		print.e("access:"+strAccess);
-		if(strAccess==null) {
-			data.srcCode.setPos(pos);
-			return null;
-		}
-		
-		String rtnType=null;
-		if(strAccess.equalsIgnoreCase("FUNCTION")){
-			strAccess=null;
-			comments(data);
-			// only happens when return type is function
-			if(data.srcCode.forwardIfCurrent("function ")){
-				rtnType="function";
-				comments(data);
-			}
-		}
-		else{
-			comments(data);
-			rtnType=variableDec(data, false);
-			if(rtnType==null){
-				data.srcCode.setPos(pos);
-				return null;
-			}
-			if(rtnType.equalsIgnoreCase("FUNCTION")){
-				comments(data);
-				// only happens when return type is function
-				if(data.srcCode.forwardIfCurrent("function ")){
-					comments(data);
-				}
-				else rtnType=null;
-			}
-			comments(data);
-			
-			if(rtnType!=null && !data.srcCode.forwardIfCurrent("function ") && !rtnType.equalsIgnoreCase("FUNCTION")){
-				data.srcCode.setPos(pos);
-				return null;
-			}
-			comments(data);
-		}*/
-
-		/*// check access returntype
-		int access=Component.ACCESS_PUBLIC;
-		if(strAccess!=null && rtnType!=null){
-			access = ComponentUtil.toIntAccess(strAccess,-1);
-			if(access==-1)
-				throw new TemplateException(data.srcCode,"invalid access type ["+strAccess+"], access types are remote, public, package, private");
-		}
-		if(strAccess!=null && rtnType==null){
-			access = ComponentUtil.toIntAccess(strAccess,-1);
-			if(access==-1){
-				rtnType=strAccess;
-				strAccess=null;
-				access=Component.ACCESS_PUBLIC;
-			}
-		}*/
-		
-		
-		
 		Position line = data.srcCode.getPosition();
 		
 		//comments(data);
 		
 		// Name
-			//String id=functionName;//identifier(data,false);
-			
-			
-			/*if(id==null) {
-				if(data.srcCode.isCurrent('(')) {
-					data.srcCode.setPos(pos);
-					return null;
-				}
-				throw new TemplateException(data.srcCode,"invalid name for a function");
-			}*/
-			
 			if(!data.isCFC && !data.isInterface){
 				FunctionLibFunction flf = getFLF(data,functionName);
 				try {
@@ -884,7 +824,20 @@ int pos=data.srcCode.getPos();
 					throw new PageRuntimeException(Caster.toPageException(t));
 				}
 			}
-			return closurePart(data, functionName,access,modifier,returnType,line,false);
+			Function res = closurePart(data, functionName,access,modifier,returnType,line,false);
+			if(isStatic) {
+				boolean isNew=false;
+				StaticBody body = getStaticBody(data, parent);
+				if(body==null) {
+					body=new StaticBody(data.factory);
+					isNew=true;
+				}
+				body.addStatement(res);
+				if(isNew) parent.addStatement(body);
+				return true;
+			}
+			parent.addStatement(res);
+			return true;
 	}
 
 
@@ -1501,18 +1454,36 @@ int pos=data.srcCode.getPos();
 		return property;
 	}
 	
-	private final Body staticStatement(ExprData data) throws TemplateException {
-		if(!data.srcCode.forwardIfCurrent("static",'{')) return null;
-		
+	private final boolean staticStatement(ExprData data, Body parent) throws TemplateException {
+		if(!data.srcCode.forwardIfCurrent("static",'{')) return false;
 		// get one back to have again { so the parser works
 		data.srcCode.previous();
 		
-		StaticBody body=new StaticBody(data.factory);
+		boolean isNew=false;
+		StaticBody body=getStaticBody(data,parent);
+		if(body==null) {
+			body=new StaticBody(data.factory);
+			isNew=true;
+		}
 		
 		statement(data,body,CTX_STATIC);
-		return body;
+		
+		if(isNew)parent.addStatement(body);
+		return true;
 	}
 	
+	private StaticBody getStaticBody(ExprData data, Body parent) {
+		Iterator<Statement> it = parent.getStatements().iterator();
+		Statement s;
+		while(it.hasNext()){
+			s = it.next();
+			if(s instanceof StaticBody) {
+				return (StaticBody) s;
+			}
+		}
+		return null;
+	}
+
 	public Statement paramStatement(ExprData data,Body parent) throws TemplateException  {
 		int pos = data.srcCode.getPos();
 		try {
