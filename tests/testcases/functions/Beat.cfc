@@ -23,18 +23,15 @@
 	--->
 	<cffunction name="testBeat" localMode="modern">
 
-<!--- begin old test code --->
-<cfif server.ColdFusion.ProductName EQ "lucee"> 
-	<cfset valueEquals(left="#beat(createDateTime(2000,1,1,12,0,0))#", right="500")>
-	<cfset valueEquals(left="#beat('13:12:12')#", right="550.138")>
-	<cfset valueEquals(left="#beat() GTE 0#", right="true")>
-	<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+0'))#", right="541.666")>
-	<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+1'))#", right="500")>
-	<cfset valueEquals(left="#beat(parseDateTime('30/06/2001 12:00:00+1'))#", right="500")>
-	<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+2'))#", right="458.333")>
-	<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+3'))#", right="416.666")>
-	<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+4'))#", right="375")>
-</cfif>
+		<cfset valueEquals(left="#beat(createDateTime(2000,1,1,12,0,0,0,"CET"))#", right="500")>
+		<cfset valueEquals(left="#beat() GTE 0#", right="true")>
+		<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+0'))#", right="541.666")>
+		<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+1'))#", right="500")>
+		<cfset valueEquals(left="#beat(parseDateTime('30/06/2001 12:00:00+1'))#", right="500")>
+		<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+2'))#", right="458.333")>
+		<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+3'))#", right="416.666")>
+		<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+4'))#", right="375")>
+
 
 <!--- end old test code --->
 	
