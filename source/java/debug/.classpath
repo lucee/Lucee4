@@ -12,7 +12,6 @@
 	<classpathentry kind="lib" path="/Lucee-jars/backport-util-concurrent-2-2-0.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/bcprov-jdk14-1-36-0.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/ehcache-2-5-2.jar"/>
-	<classpathentry kind="lib" path="/Lucee-jars/ESAPI-2-0-1.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/flex-messaging-core-3-3-0-22497.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/fusiondebug-api-server-1-0-20.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/javaparser-1-0-8.jar"/>
@@ -51,5 +50,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Lucee Core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Lucee Loader"/>
 	<classpathentry kind="lib" path="lib/jetty-all-9.2.7.v20150116.jar"/>
+	<classpathentry kind="lib" path="/Lucee-jars/ESAPI-2-1-0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
