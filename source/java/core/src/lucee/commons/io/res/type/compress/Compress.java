@@ -110,7 +110,7 @@ public final class Compress {
 
 			temp=temp.getRealResource("compress");
 			temp=temp.getRealResource(MD5.getDigestAsString(cid+"-"+ffile.getAbsolutePath()));
-			if(!temp.exists())temp.createDirectory(true);
+			if(!temp.exists())temp.mkdirs();
 		}
 		
 		
