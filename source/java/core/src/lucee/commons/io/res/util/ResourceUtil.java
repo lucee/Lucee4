@@ -1435,15 +1435,17 @@ public final class ResourceUtil {
     	}
     	return list.toArray(new Resource[list.size()]);
 	}
-	public static void removeEmptyFolders(Resource dir) throws IOException {
+    
+    public static void removeEmptyFolders(Resource dir,ResourceFilter filter) throws IOException {
 		if(!dir.isDirectory()) return;
+		
 		
 		Resource[] children = dir.listResources(IgnoreSystemFiles.INSTANCE);
 		
 		if(!ArrayUtil.isEmpty(children)) {
 			boolean hasFiles=false;
 			for(int i=0;i<children.length;i++){
-				if(children[i].isDirectory()) removeEmptyFolders(children[i]);
+				if(children[i].isDirectory()) removeEmptyFolders(children[i],filter);
 				else if(children[i].isFile()) {
 					hasFiles=true;
 				}
@@ -1451,10 +1453,10 @@ public final class ResourceUtil {
 			if(!hasFiles){
 				children = dir.listResources(IgnoreSystemFiles.INSTANCE);
 			}
-			
 		}
-		if(ArrayUtil.isEmpty(children)) dir.remove(true);
+		if(ArrayUtil.isEmpty(children) && (filter==null || filter.accept(dir))) dir.remove(true);
 	}
+
 	public static List<Resource> listRecursive(Resource res,ResourceFilter filter) {
 		List<Resource> list=new ArrayList<Resource>();
 		listRecursive(list, res,filter);
