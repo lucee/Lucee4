@@ -5284,7 +5284,7 @@ public final class ConfigWebAdmin {
     	if(trg.exists()) {
         	trg.remove(true);
         	if(_store) ConfigWebAdmin._storeAndReload((ConfigImpl) config);
-        	ResourceUtil.removeEmptyFolders(context);
+        	ResourceUtil.removeEmptyFolders(context,null);
         	return true;
         }
         return false;
@@ -5316,7 +5316,7 @@ public final class ConfigWebAdmin {
     		
     		if(trg.exists()) {
     			trg.remove(true);
-    			ResourceUtil.removeEmptyFolders(deploy);
+    			ResourceUtil.removeEmptyFolders(deploy,null);
     		}
     		
 			// remove files from lucee web context

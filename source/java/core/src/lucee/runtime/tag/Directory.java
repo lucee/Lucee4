@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2014, the Railo Company Ltd.
- * Copyright (c) 2015, Lucee Assosication Switzerland
+ *
+ * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,6 +34,7 @@ import lucee.commons.io.res.filter.AndResourceFilter;
 import lucee.commons.io.res.filter.DirectoryResourceFilter;
 import lucee.commons.io.res.filter.FileResourceFilter;
 import lucee.commons.io.res.filter.NotResourceFilter;
+import lucee.commons.io.res.filter.OrResourceFilter;
 import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.type.file.FileResource;
@@ -456,17 +457,20 @@ public final class Directory extends TagImpl  {
 		if(sort!=null && query!=null) {
 			String[] arr=sort.toLowerCase().split(",");
 			for(int i=arr.length-1;i>=0;i--) {
-				String[] col=arr[i].trim().split("\\s+");
-				if(col.length==1)query.sort(col[0].trim());
-				else if(col.length==2) {
-					String order=col[1].toLowerCase().trim();
-					if(order.equals("asc"))
-						query.sort(col[0],lucee.runtime.type.Query.ORDER_ASC);
-					else if(order.equals("desc"))
-						query.sort(col[0],lucee.runtime.type.Query.ORDER_DESC);
-					else 
-						throw new ApplicationException("invalid order type ["+col[1]+"]");
+				try {
+					String[] col=arr[i].trim().split("\\s+");
+					if(col.length==1)query.sort(col[0].trim());
+					else if(col.length==2) {
+						String order=col[1].toLowerCase().trim();
+						if(order.equals("asc"))
+							query.sort(col[0],lucee.runtime.type.Query.ORDER_ASC);
+						else if(order.equals("desc"))
+							query.sort(col[0],lucee.runtime.type.Query.ORDER_DESC);
+						else 
+							throw new ApplicationException("invalid order type ["+col[1]+"]");
+					}
 				}
+				catch(Throwable t) {}
 			}		
 		}
 		if(query!=null)query.setExecutionTime(System.nanoTime()-startNS);
@@ -710,7 +714,7 @@ public final class Directory extends TagImpl  {
 	}
 	
 	
-	public static  void actionCopy(PageContext pc,Resource directory,String strDestination,String serverPassword,boolean createPath, Object acl,int storage, ResourceFilter filter, boolean recurse, int nameconflict) throws PageException {
+	public static  void actionCopy(PageContext pc,Resource directory,String strDestination,String serverPassword,boolean createPath, Object acl,int storage, final ResourceFilter filter, boolean recurse, int nameconflict) throws PageException {
 		// check directory
 		SecurityManager securityManager = pc.getConfig().getSecurityManager();
 	    securityManager.checkFileLocation(pc.getConfig(),directory,serverPassword);
@@ -735,21 +739,39 @@ public final class Directory extends TagImpl  {
 	    securityManager.checkFileLocation(pc.getConfig(),newdirectory,serverPassword);
 
 		try {
+			boolean clearEmpty=false;
 			// has already a filter
+			ResourceFilter f=null;
 			if(filter!=null) {
-				if(!recurse) filter=new AndResourceFilter(new ResourceFilter[]{
-						filter,new NotResourceFilter(DirectoryResourceFilter.FILTER)
-				});
+				if(!recurse) {
+					f=new AndResourceFilter(
+							new ResourceFilter[]{
+									filter,
+									new NotResourceFilter(DirectoryResourceFilter.FILTER)
+								}
+							);
+				}
+				else {
+					clearEmpty=true;
+					f=new OrResourceFilter(
+							new ResourceFilter[]{
+									filter,
+									DirectoryResourceFilter.FILTER
+								}
+							);
+				}
 			}
 			else {
-				if(!recurse)filter=new NotResourceFilter(DirectoryResourceFilter.FILTER);
+				if(!recurse)f=new NotResourceFilter(DirectoryResourceFilter.FILTER);
 			}
 			if(!createPath) {
 				Resource p = newdirectory.getParentResource();
 				if(p!=null && !p.exists())
 					throw new ApplicationException("parent directory for ["+newdirectory+"] doesn't exist");
 			}
-			ResourceUtil.copyRecursive(directory, newdirectory,filter);
+			ResourceUtil.copyRecursive(directory, newdirectory,f);
+			if(clearEmpty)ResourceUtil.removeEmptyFolders(newdirectory,f==null?null:new NotResourceFilter(filter));
+			
 		}
 		catch(Throwable t) {
 			throw new ApplicationException(t.getMessage());

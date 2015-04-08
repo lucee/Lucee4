@@ -403,7 +403,7 @@ public class ResourceUtilImpl implements lucee.runtime.util.ResourceUtil {
 
 	@Override
 	public void removeEmptyFolders(Resource dir) throws IOException {
-		ResourceUtil.removeEmptyFolders(dir);
+		ResourceUtil.removeEmptyFolders(dir,null);
 	}
 
 	@Override
