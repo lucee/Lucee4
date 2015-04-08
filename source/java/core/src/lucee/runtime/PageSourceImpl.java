@@ -611,9 +611,15 @@ public final class PageSourceImpl implements PageSource {
 		if(res!=null) {
 			
 			str=res.getAbsolutePath();
-			str=str.substring(str.length()-relPath.length());
-			if(!str.equalsIgnoreCase(relPath)) {
-				str=relPath;
+			int begin=str.length()-relPath.length();
+			if(begin<0) { // TODO patch, analyze the complete functinality and improve
+				str=ListUtil.last(str, "\\/");
+			}
+			else {
+				str=str.substring(begin);
+				if(!str.equalsIgnoreCase(relPath)) {
+					str=relPath;
+				}
 			}
 		}
 		else str=relPath;
