@@ -1171,7 +1171,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 
 		f = contextDir.getRealResource(Constants.CFML_APPLICATION_EVENT_HANDLER);
 		if (!f.exists())
-			createFileFromResourceEL("/resource/context/Application."+TEMPLATE_EXTENSION, f);
+			createFileFromResourceEL("/resource/context/Application."+COMPONENT_EXTENSION, f);
 		
 		f = contextDir.getRealResource("form."+TEMPLATE_EXTENSION);
 		if (!f.exists() || doNew)
