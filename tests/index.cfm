@@ -114,7 +114,7 @@ testbox = new testbox.system.TestBox();
 <!--- Get list of files --->
 <cfset qResults="">
 <cfloop array="#rootPathes#" item="el">
-	<cfdirectory action="list" directory="#el.root & url.path#" name="qry" sort="asc">
+	<cfdirectory action="list" directory="#el.root & url.path#" name="qry" sort="name asc">
 	<cfif isSimpleValue(qResults)>
 		<cfset qResults=queryNew(qry.columnlist&",label,mapping,root")>
 	</cfif>
