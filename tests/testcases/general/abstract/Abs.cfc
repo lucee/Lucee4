@@ -1,3 +1,3 @@
-component modifier="abstract" implements="Interface" {
+abstract component implements="Interface" {
 	abstract function abs();
 }
