@@ -244,6 +244,12 @@ public class ModernAppListener extends AppListenerSupport {
 		}
 		else {
 			apps.put(pc.getApplicationContext().getName(), null);
+			
+			if(rl!=null) {
+				requestedPage=rl.execute(pc, requestedPage);
+				if(requestedPage==null) return;
+			}
+			
 			pc.doInclude(new PageSource[]{requestedPage},false);
 		}
 	}
