@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -175,5 +176,10 @@ public class BundleUtil {
 				+ Constants.FRAMEWORK_BUNDLE_PARENT_BOOT + ", "
 				+ Constants.FRAMEWORK_BUNDLE_PARENT_EXT + ", "
 				+ Constants.FRAMEWORK_BUNDLE_PARENT_FRAMEWORK + "]");
+	}
+
+	public static boolean isSystemBundle(Bundle bundle) {
+		// TODO make a better implementation for this, independent of felix
+		return bundle.getSymbolicName().equals("org.apache.felix.framework");
 	}
 }

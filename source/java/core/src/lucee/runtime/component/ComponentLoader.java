@@ -581,7 +581,8 @@ public class ComponentLoader {
     private static ComponentImpl initComponent(PageContext pc,CIPage page,String callPath,boolean isRealPath,boolean isExtendedComponent, boolean executeConstr) throws PageException {
     	// is not a component, then it has to be a interface
     	if(!(page instanceof ComponentPageImpl))
-			throw new ApplicationException("you cannot instantiate the interface ["+page.getPageSource().getDisplayPath()+"] as a component");
+			throw new ApplicationException("you cannot instantiate the interface ["+
+    	page.getPageSource().getDisplayPath()+"] as a component ("+page.getClass().getName()+""+(page instanceof InterfacePageImpl)+")");
 		
     	ComponentPageImpl cp = (ComponentPageImpl)page;
     	ComponentImpl c = cp.newInstance(pc,callPath,isRealPath, isExtendedComponent,executeConstr);

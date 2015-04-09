@@ -156,8 +156,11 @@ public class BundleLoader {
 			// close all bundles
 			Felix felix;
 			if (old != null) {
-				removeBundles(old);
+				removeBundlesEL(old);
 				felix=old.felix;
+				felix.stop();// stops all active bundles
+				felix = engFac.getFelix(cacheRootDir, config);
+				//felix.start();
 			} 
 			else felix = engFac.getFelix(cacheRootDir, config);
 			BundleContext bc = felix.getBundleContext(); 
@@ -194,6 +197,7 @@ public class BundleLoader {
 	
 				if (f == null)
 					f = engFac.downloadBundle(e.getKey(), e.getValue(),null);
+				System.out.println("key:"+e.getKey());
 				bundles.add(BundleUtil.addBundle(engFac, bc, f,null));
 			}
 			// Add Required Bundle Fragments
@@ -331,17 +335,28 @@ public class BundleLoader {
 			removeBundle(bundles[i]);
 		}
 	}
-	
+
 	public static void removeBundles(BundleCollection bc) throws BundleException {
 		Bundle[] bundles = bc.getBundleContext().getBundles();
+		
 		for(Bundle bundle:bundles){
+			if(!BundleUtil.isSystemBundle(bundle))
 			removeBundle(bundle);
 		}
-		/*removeBundle(bc.master);
-		Iterator<Bundle> it = bc.getSlaves();
-		while (it.hasNext()) {
-			removeBundle(it.next());
-		}*/
+	}
+	public static void removeBundlesEL(BundleCollection bc) {
+		Bundle[] bundles = bc.getBundleContext().getBundles();
+		
+		for(Bundle bundle:bundles){
+			if(!BundleUtil.isSystemBundle(bundle)) {
+				try {
+					removeBundle(bundle);
+				} catch (BundleException e) {
+					// TODO remove 
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public static void removeBundle(Bundle bundle) throws BundleException {
