@@ -173,11 +173,13 @@ public final class CFMLTransformer {
 				
 				// check the root statements for component
 				Iterator<Statement> it = statements.iterator();
+				String str;
 				while(it.hasNext()){
 					stat=it.next();
 					if(stat instanceof PrintOut && (expr=((PrintOut)stat).getExpr()) instanceof LitString) {
 						ls=(LitString) expr;
-						if(ls.getString().indexOf(Constants.LUCEE_COMPONENT_TAG_NAME)!=-1) {
+						str=ls.getString();
+						if(str.indexOf(Constants.LUCEE_COMPONENT_TAG_NAME)!=-1 || str.indexOf(Constants.LUCEE_INTERFACE_TAG_NAME)!=-1) {
 							possibleUndetectedComponent=true;
 							break;
 						}
@@ -224,9 +226,10 @@ public final class CFMLTransformer {
 			catch (ComponentTemplateException e) {
 				throw e.getTemplateException();
 			}
-			catch (TemplateException e) {
+			/*catch (TemplateException e) {
+				e.printStackTrace();
 				_p=null;
-			}
+			}*/
 			// we only use that result if it is a component now 
 			if(_p!=null && !_p.isPage()) return _p;
 		}
