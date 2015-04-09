@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import lucee.print;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefBoolean;
 import lucee.commons.lang.types.RefBooleanImpl;
@@ -861,6 +860,10 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 			}
 			Function res = closurePart(data, functionName,access,modifier,returnType,line,false);
 			if(isStatic) {
+				
+				if(data.context==CTX_INTERFACE)
+					throw new TemplateException(data.srcCode, "static functions are not allowed within the interface body");
+				
 				boolean isNew=false;
 				StaticBody body = getStaticBody(data, parent);
 				if(body==null) {
@@ -1492,6 +1495,9 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 		if(!data.srcCode.forwardIfCurrent("static",'{')) return false;
 		// get one back to have again { so the parser works
 		data.srcCode.previous();
+		
+		if(data.context!=CTX_CFC)
+			throw new TemplateException(data.srcCode, "a static constructor is only allowed within the component body.");
 		
 		boolean isNew=false;
 		StaticBody body=getStaticBody(data,parent);
