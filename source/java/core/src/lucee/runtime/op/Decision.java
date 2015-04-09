@@ -61,6 +61,7 @@ import lucee.runtime.type.Array;
 import lucee.runtime.type.Closure;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
+import lucee.runtime.type.Lambda;
 import lucee.runtime.type.ObjectWrap;
 import lucee.runtime.type.Objects;
 import lucee.runtime.type.Query;
@@ -733,6 +734,13 @@ public final class Decision {
         }
         return false;
 	}
+	public static boolean isLambda(Object obj) {
+		if(obj instanceof Lambda)return true;
+		else if(obj instanceof ObjectWrap) {
+            return isLambda(((ObjectWrap)obj).getEmbededObject(null));
+        }
+        return false;
+	}
 
 	/**
 	 * @param string
@@ -998,6 +1006,7 @@ public final class Decision {
         	if("creditcard".equals(type))	return isCreditCard(value);
         	if("component".equals(type))	return isComponent(value);
         	if("cfc".equals(type))			return isComponent(value);
+        	if("closure".equals(type))		return isClosure(value);
         break;
     	case 'd':
     		if("date".equals(type))			return isDateAdvanced(value,true);  // ist zwar nicht logisch aber ident. zu Neo
@@ -1019,11 +1028,15 @@ public final class Decision {
         	if("integer".equals(type))		return isInteger(value,false);
         	if("image".equals(type))		return Image.isImage(value);
         break;
+        case 'l':
+        	if("lambda".equals(type))			return isLambda(value); 
+        break;
         case 'n':
         	if("numeric".equals(type))		return isCastableToNumeric(value);
         	if("number".equals(type))		return isCastableToNumeric(value);
         	if("node".equals(type))			return isXML(value); 
         break;
+        
         case 'p':
         	if("phone".equals(type))		return isPhone(value);
         break;

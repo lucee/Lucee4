@@ -40,10 +40,12 @@ public final class IsCustomFunction implements Function {
 		if(object instanceof ObjectWrap) {
 			return call(pc,((ObjectWrap)object).getEmbededObject(null),type);
 		}
+		// no function at all
 		if(!Decision.isUserDefinedFunction(object)) return false;
 		
+		// no type we are good
 		if(StringUtil.isEmpty(type,true)) return true;
-		
+
 		// check type
 		type=type.trim();
 		if("closure".equalsIgnoreCase(type)) return Decision.isClosure(object);
