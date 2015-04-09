@@ -9914,7 +9914,15 @@ The following things are considered to be empty:
 			<name>name</name>
 			<type>any</type>
 			<required>Yes</required>
-		<description>Name of a custom function. Must not be in quotation marks. If not a defined variable or function name, Lucee generates an error.</description>
+		<description>the function to test</description>
+    </argument>
+    
+    <argument>
+			<name>type</name>
+			<type>string</type>
+			<values>closure,lambda,udf</values>
+			<required>No</required>
+		<description>limit to a specific type (closure,lambda,udf), if not set all custom function types are accpeted.</description>
     </argument>
 		<return>
 			<type>boolean</type>
