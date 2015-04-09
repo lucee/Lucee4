@@ -105,9 +105,29 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		new static.StaticConstructor();
 		assertEquals("constr-1",static.StaticConstructor::constr1);
 		
-
-		
 	}
 
 
+	public void function testStaticConstructorInInterface(){
+		var failed=true;
+		try{
+			new static.StaticConstructorInInterfaceImpl();
+			failed=false;
+		}
+		catch(e){}
+		if(!failed) fail("must fail StaticConstructorInInterfaceImpl");
+	}
+
+	public void function testStaticFunctionInInterface(){
+		var failed=true;
+		try{
+			new static.StaticFunctionInInterfaceImpl();
+			failed=false;
+		}
+		catch(e){}
+		if(!failed) fail("must fail StaticFunctionInInterfaceImpl");
+	}
 } 
+
+
+
