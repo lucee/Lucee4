@@ -197,7 +197,6 @@ public class BundleLoader {
 	
 				if (f == null)
 					f = engFac.downloadBundle(e.getKey(), e.getValue(),null);
-				System.out.println("key:"+e.getKey());
 				bundles.add(BundleUtil.addBundle(engFac, bc, f,null));
 			}
 			// Add Required Bundle Fragments
