@@ -23,6 +23,7 @@
 	--->
 	<cffunction name="testDateDiff" localMode="modern">
 
+	<cfset setTimeZone("CET")> <!--- this timezone is used for DST tests --->
 <!--- begin old test code --->
 <cfset d1=CreateDateTime(2001, 11, 1, 4, 10, 4)> 
 <cfset d2=CreateDateTime(2004, 03, 4, 6, 3, 1)> 
@@ -36,8 +37,12 @@
 
 
 <cfset valueEquals(left="#DateDiff('h', "{ts '2008-01-01 5:05:05'}", "{ts '2008-03-30 1:00:00'}")#", right="2131")>
+
+
 <cfset valueEquals(left="#DateDiff('h', "{ts '2008-01-01 5:05:05'}", "{ts '2008-03-30 2:00:00'}")#", right="2132")>
-<cfset valueEquals(left="#DateDiff('h', "{ts '2008-01-01 5:05:05'}", "{ts '2008-03-30 3:00:00'}")#", right="2132")>
+
+<!--- switch to summer time, should be the same --->
+<cfset valueEquals(left="#DateDiff('h', "{ts '2008-03-30 2:00:00'}", "{ts '2008-03-30 3:00:00'}")#", right="0")>
 
 <cfset valueEquals(left="#DateDiff('n', "{ts '2008-01-01 5:05:05'}", "{ts '2008-03-30 1:00:00'}")#", right="127914")>
 <cfset valueEquals(left="#DateDiff('n', "{ts '2008-01-01 5:05:05'}", "{ts '2008-03-30 2:00:00'}")#", right="127974")>
