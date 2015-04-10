@@ -38,4 +38,6 @@ sample.mov
 /.idea/
 /*.iml
 *.hbm.xml
-
+tests/**/db.log
+tests/**/db.properties
+tests/**/db.script
