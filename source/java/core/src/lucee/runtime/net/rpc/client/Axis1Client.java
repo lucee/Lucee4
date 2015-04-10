@@ -223,7 +223,7 @@ final class Axis1Client extends WSClient {
     	
 		long start = System.nanoTime();
     	Object rtn = _call(pc, secondChanceConfig, methodName, namedArguments, arguments);
-    	ch.set(pc, id,getCachedWithin(pc),new WebserviceCacheItem(rtn,wsdlUrl,methodName,System.nanoTime()-start));
+    	if(ch!=null)ch.set(pc, id,getCachedWithin(pc),new WebserviceCacheItem(rtn,wsdlUrl,methodName,System.nanoTime()-start));
 		return rtn;
 		
     }
