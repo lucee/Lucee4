@@ -30,6 +30,7 @@ public class NullSupportHelper {
 
 	public static boolean full(PageContext pc) {
 		pc=ThreadLocalPageContext.get(pc);
+		if(pc==null) return false;
 		return pc.getCurrentTemplateDialect()!=CFMLEngine.DIALECT_CFML || pc.getConfig().getFullNullSupport();
 	}
 	public static Object NULL(PageContext pc) {
