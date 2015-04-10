@@ -1116,7 +1116,12 @@ public final class SystemUtil {
 	@Deprecated
 	public static void stop(Thread thread) {
 		if(thread.isAlive()){
-			thread.stop(new StopException(thread));
+			try{
+				thread.stop(new StopException(thread));
+			}
+			catch(UnsupportedOperationException uoe){// Java 8 does not support Thread.stop(Throwable)
+				thread.stop();
+			}
 		}
 	}
 
@@ -1150,7 +1155,13 @@ class StopThread extends Thread {
 			do{
 				if(count>0 && log!=null) LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread on the first approach", thread.getStackTrace());
 				if(count++>10) break; // should never happen
-				thread.stop(t);
+				try{
+					thread.stop(t);
+				}
+				catch(UnsupportedOperationException uoe){
+					LogUtil.log(log, Log.LEVEL_ERROR, "", "Thread.stop(Throwable) is not supported by this JVM and failed with UnsupportedOperationException", thread.getStackTrace());
+					thread.stop();
+				}
 				SystemUtil.sleep(1000);
 			}
 			while(thread.isAlive() && pci.isInitialized());
