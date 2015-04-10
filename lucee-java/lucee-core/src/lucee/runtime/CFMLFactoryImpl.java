@@ -237,10 +237,8 @@ public final class CFMLFactoryImpl extends CFMLFactory {
         		"stop thread ("+pc.getId()+") because run into a timeout "+getPath(pc)+"."+strLocks,pc.getThread().getStackTrace());
         
         // then we release the pagecontext
-        
+        pc.getConfig().getThreadQueue().exit(pc);
         SystemUtil.stop(pc,new RequestTimeoutException(pc.getThread(),"request ("+getPath(pc)+":"+pc.getId()+") has run into a timeout ("+(pc.getRequestTimeout()/1000)+" seconds) and has been stopped."+strLocks),log);
-        
-        
 	}
 
 	private static String getPath(PageContext pc) {
