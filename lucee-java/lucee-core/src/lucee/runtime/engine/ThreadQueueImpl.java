@@ -33,6 +33,7 @@ public class ThreadQueueImpl implements ThreadQueue {
 	public final List<PageContext> list=new ArrayList<PageContext>();
 	private final int max;
 	private long timeout;
+	private int waiting=0;
 	
 	public ThreadQueueImpl(int max, long timeout){
 		this.max=max;
@@ -40,7 +41,18 @@ public class ThreadQueueImpl implements ThreadQueue {
 	}
 	
 	
+	@Override
 	public void enter(PageContext pc) throws IOException {
+		try{
+			synchronized (token) {waiting++;}
+			_enter(pc);
+		}
+		finally {
+			synchronized (token) {waiting--;}
+		}
+	}
+	
+	private void _enter(PageContext pc) throws IOException {
 		//print.e("enter("+Thread.currentThread().getName()+"):"+list.size());
 		long start=System.currentTimeMillis();
 		while(true) {
@@ -68,7 +80,7 @@ public class ThreadQueueImpl implements ThreadQueue {
 	}
 	
 	public int size(){
-		return list.size();
+		return waiting;
 	}
 
 
