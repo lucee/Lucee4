@@ -31,14 +31,13 @@ public abstract class AbsServlet extends HttpServlet implements
 
 	protected CFMLEngine engine;
 
-	/**
-	 * @see lucee.loader.engine.EngineChangeListener#onUpdate(lucee.loader.engine.CFMLEngine)
-	 */
-	public void onUpdate(CFMLEngine newEngine) {
+	@Override
+	public void onUpdate() {
 		try {
+			// make sure that config is registered
 			engine = CFMLEngineFactory.getInstance(getServletConfig(), this);
 		} catch (ServletException e) {
-			engine = newEngine;
+			
 		}
 	}
 }

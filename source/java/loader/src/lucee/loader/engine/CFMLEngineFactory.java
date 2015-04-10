@@ -78,18 +78,19 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 
 	// set to false to disable patch loading, for example in major alpha releases
 	private static final boolean PATCH_ENABLED = true;
-
 	public static final Version VERSION_ZERO = new Version(0,0,0,"0");
-
 	private static final String UPDATE_LOCATION ="http://stable.lucee.org"; // MUST from server.xml
 
+	private static CFMLEngineFactory factory;
+	//private static  CFMLEngineWrapper engineListener;
+	private static CFMLEngineWrapper singelton;
+
+	private static File luceeServerRoot;
+	
 	private Felix felix;
 	private BundleCollection bundleCollection;
-	private CFMLEngine engine;
+	//private CFMLEngineWrapper engine;
 
-	private static CFMLEngineFactory factory;
-	private static File luceeServerRoot;
-	private static CFMLEngineWrapper engineListener;
 	private ClassLoader mainClassLoader = new TP().getClass().getClassLoader();
 	private Version version;
 	private List<EngineChangeListener> listeners = new ArrayList<EngineChangeListener>();
@@ -127,25 +128,22 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	public static CFMLEngine getInstance(ServletConfig config)
 			throws ServletException {
 
-		if (engineListener != null) {
-			if (factory == null)
-				factory = engineListener.getCFMLEngineFactory();
-			return engineListener;
+		if (singelton != null) {
+			if (factory == null) factory = singelton.getCFMLEngineFactory(); // not sure if this ever is done, but it does not hurt
+			return singelton;
 		}
 
-		if (factory == null)
-			factory = new CFMLEngineFactory(config);
+		if (factory == null) factory = new CFMLEngineFactory(config);
 
 		// read init param from config
 		factory.readInitParam(config);
 
-		CFMLEngine engine = factory.getEngine();
-		engine.addServletConfig(config);
-		engineListener = new CFMLEngineWrapper(engine);
-
+		factory.initEngineIfNecessary();
+		singelton.addServletConfig(config);
+		
 		// add listener for update
-		factory.addListener(engineListener);
-		return engineListener;
+		//factory.addListener(singelton);
+		return singelton;
 	}
 
 	/**
@@ -156,25 +154,29 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	 * @throws RuntimeException
 	 */
 	public static CFMLEngine getInstance() throws RuntimeException {
-		if (engineListener != null)
-			return engineListener;
+		if (singelton != null)
+			return singelton;
 		throw new RuntimeException(
 				"engine is not initalized, you must first call getInstance(ServletConfig)");
 	}
 
+	public static void registerInstance(CFMLEngine engine) {
+		if(engine instanceof CFMLEngineWrapper) throw new RuntimeException("that should not happen!");
+		setEngine(engine);
+	}
+	
 	/**
 	 * used only for internal usage
 	 * 
 	 * @param engine
 	 * @throws RuntimeException
 	 */
-	public static void registerInstance(CFMLEngine engine)
-			throws RuntimeException {
+	/*public static void registerInstance(CFMLEngineWrapper engine) throws RuntimeException {
 		if (factory == null)
 			factory = engine.getCFMLEngineFactory();
-
+		
 		// first update existing listener
-		if (engineListener != null) {
+		if (singelton != null) {
 			if (engineListener.equalTo(engine, true))
 				return;
 			engineListener.onUpdate(engine);// perhaps this is still refrenced in the code, because of that we update it
@@ -188,7 +190,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 			engineListener = new CFMLEngineWrapper(engine);
 
 		factory.addListener(engineListener);
-	}
+	}*/
 
 	/**
 	 * returns instance of this factory (singelton-> always the same instance)
@@ -208,13 +210,13 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 		// read init param from config
 		factory.readInitParam(config);
 
-		CFMLEngine e = factory.getEngine();
-		e.addServletConfig(config);
+		factory.initEngineIfNecessary();
+		singelton.addServletConfig(config);
 
 		// make the FDController visible for the FDClient
 		FDControllerFactory.makeVisible();
 
-		return e;
+		return singelton;
 	}
 
 	void readInitParam(ServletConfig config) {
@@ -259,18 +261,13 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 		}
 	}
 
-	private void removeListener(EngineChangeListener listener) {
-		listeners.remove(listener);
-	}
 
 	/**
 	 * @return CFML Engine
 	 * @throws ServletException
 	 */
-	private CFMLEngine getEngine() throws ServletException {
-		if (engine == null)
-			initEngine();
-		return engine;
+	private void initEngineIfNecessary() throws ServletException {
+		if (singelton == null) initEngine();
 	}
 
 	private void initEngine() throws ServletException {
@@ -314,9 +311,9 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 				log(Logger.LOG_DEBUG,"Load Build in Core");
 				// 
 				String coreExt = "lco";
-				engine = getCore();
+				setEngine( getCore());
 
-				lucee = new File(patcheDir, engine.getInfo().getVersion().toString() + "." + coreExt);
+				lucee = new File(patcheDir, singelton.getInfo().getVersion().toString() + "." + coreExt);
 				if (PATCH_ENABLED) {
 					InputStream bis = new TP().getClass().getResourceAsStream(
 							"/core/core." + coreExt);
@@ -333,12 +330,12 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 						bundleCollection);
 				//bundle=loadBundle(lucee);
 				log(Logger.LOG_DEBUG,"loaded bundle:" + bundleCollection.core.getSymbolicName());
-				engine = getEngine(bundleCollection);
-				log(Logger.LOG_DEBUG,"loaded engine:" + engine);
+				setEngine(getEngine(bundleCollection));
+				log(Logger.LOG_DEBUG,"loaded engine:" + singelton);
 			}
-			version = engine.getInfo().getVersion();
+			version = singelton.getInfo().getVersion();
 
-			log(Logger.LOG_DEBUG,"Loaded Lucee Version " + engine.getInfo().getVersion());
+			log(Logger.LOG_DEBUG,"Loaded Lucee Version " + singelton.getInfo().getVersion());
 		} catch (InvocationTargetException e) {
 			e.getTargetException().printStackTrace();
 			throw new ServletException(e.getTargetException());
@@ -348,7 +345,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 		}
 
 		//check updates
-		String updateType = engine.getUpdateType();
+		String updateType = singelton.getUpdateType();
 		if (updateType == null || updateType.length() == 0)
 			updateType = "manuell";
 
@@ -356,6 +353,20 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 			new UpdateChecker(this,null).start();
 		}
 
+	}
+
+	private static CFMLEngineWrapper setEngine(CFMLEngine engine) {
+		//new RuntimeException("setEngine").printStackTrace();
+		if(singelton==null) singelton=new CFMLEngineWrapper(engine);
+		else if(!singelton.isIdentical(engine)) {
+			engine.reset();
+			singelton.setEngine(engine);
+		}
+		else {
+			//new RuntimeException("useless call").printStackTrace();
+		}
+		
+		return singelton;
 	}
 
 	public Felix getFelix(File cacheRootDir, Map<String, Object> config) throws BundleException {
@@ -461,8 +472,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 			}
 			bundleCollection = BundleLoader.loadBundles(this, getFelixCacheDirectory(),
 					getBundleDirectory(), rc, bundleCollection);
-			engine = getEngine(bundleCollection);
-			return engine;
+			return getEngine(bundleCollection);
 		} finally {
 			rc.delete();
 		}
@@ -479,7 +489,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	 * @throws ServletException
 	 */
 	public boolean update(Password password, Identification id) throws IOException, ServletException {
-		if (!engine.can(CFMLEngine.CAN_UPDATE, password))
+		if (!singelton.can(CFMLEngine.CAN_UPDATE, password))
 			throw new IOException("access denied to update CFMLEngine");
 		//new RunUpdate(this).start();
 		return _update(id);
@@ -494,7 +504,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	 * @throws ServletException
 	 */
 	public boolean restart(Password password) throws IOException, ServletException {
-		if (!engine.can(CFMLEngine.CAN_RESTART_ALL, password))
+		if (!singelton.can(CFMLEngine.CAN_RESTART_ALL, password))
 			throw new IOException("access denied to restart CFMLEngine");
 
 		return _restart();
@@ -510,7 +520,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	 */
 	public boolean restart(String configId, Password password)
 			throws IOException, ServletException {
-		if (!engine.can(CFMLEngine.CAN_RESTART_CONTEXT, password))// TODO restart single context
+		if (!singelton.can(CFMLEngine.CAN_RESTART_CONTEXT, password))// TODO restart single context
 			throw new IOException(
 					"access denied to restart CFML Context (configId:"
 							+ configId + ")");
@@ -527,11 +537,10 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	 * @throws ServletException
 	 */
 	private synchronized boolean _restart() throws ServletException {
-		engine.reset();
+		//engine.reset();
 		initEngine();
-		registerInstance(engine);
-		callListeners(engine);
-		System.gc();
+		//registerInstance(engine); they all have only the reference to the wrapper and the wrapper does not change
+		//callListeners(engine);
 		System.gc();
 		return true;
 	}
@@ -548,11 +557,12 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 		if (newLucee == null)
 			return false;
 
-		try {
-			engine.reset();
+		/* happens in setEngine
+		 try {
+			singelton.reset();
 		} catch (Throwable t) {
 			t.printStackTrace();
-		}
+		}*/
 
 		Version v =null;
 		try {
@@ -563,7 +573,8 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 			if (e == null)
 				throw new IOException("can't load engine");
 			version = e.getInfo().getVersion();
-			engine = e;
+			//engine = e;
+			setEngine(e);
 			//e.reset();
 			callListeners(e);
 		} catch (Exception e) {
@@ -587,7 +598,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 				+ symbolicVersion.replace('.', '-') + (".jar"));
 
 		URL updateProvider = getUpdateLocation();
-		if(id==null && engine!=null)id=engine.getIdentification();
+		if(id==null && singelton!=null)id=singelton.getIdentification();
 		
 		System.out.println("download:"+symbolicName+":"+symbolicVersion); // MUST remove
 		URL updateUrl = new URL(updateProvider,
@@ -629,7 +640,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	private File downloadCore(Identification id) throws IOException {
 		URL updateProvider = getUpdateLocation();
 		
-		if(id==null && engine!=null) id=engine.getIdentification();
+		if(id==null && singelton!=null) id=singelton.getIdentification();
 		
 		
 		URL infoUrl = new URL(updateProvider,"/rest/update/provider/update-for/"+version.toString()+(id!=null?id.toQueryString():""));
@@ -677,7 +688,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	}
 
 	public URL getUpdateLocation() throws MalformedURLException {
-		URL location = engine == null ? null : engine.getUpdateLocation();
+		URL location = singelton == null ? null : singelton.getUpdateLocation();
 
 		// read location directly from xml
 		if (location == null) {
@@ -731,7 +742,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	 */
 	public boolean removeUpdate(Password password) throws IOException,
 			ServletException {
-		if (!engine.can(CFMLEngine.CAN_UPDATE, password))
+		if (!singelton.can(CFMLEngine.CAN_UPDATE, password))
 			throw new IOException("access denied to update CFMLEngine");
 		return removeUpdate();
 	}
@@ -748,7 +759,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	 */
 	public boolean removeLatestUpdate(Password password) throws IOException,
 			ServletException {
-		if (!engine.can(CFMLEngine.CAN_UPDATE, password))
+		if (!singelton.can(CFMLEngine.CAN_UPDATE, password))
 			throw new IOException("access denied to update CFMLEngine");
 		return removeLatestUpdate();
 	}
@@ -818,7 +829,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	private void callListeners(CFMLEngine engine) {
 		Iterator<EngineChangeListener> it = listeners.iterator();
 		while (it.hasNext()) {
-			it.next().onUpdate(engine);
+			it.next().onUpdate();
 		}
 	}
 

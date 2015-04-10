@@ -221,7 +221,8 @@ public final class CFMLEngineImpl implements CFMLEngine {
     	this.info=new InfoImpl(bundleCollection==null?null:bundleCollection.core);
     	Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader()); // MUST better location for this
 		
-    	CFMLEngineFactory.registerInstance(this);// patch, not really good but it works
+    	
+    	CFMLEngineFactory.registerInstance((this));// patch, not really good but it works
         ConfigServerImpl cs = getConfigServerImpl();
     	
         // start the controler

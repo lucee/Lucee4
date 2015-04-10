@@ -28,5 +28,5 @@ public interface EngineChangeListener {
 	 * 
 	 * @param newEngine new CFML Engine
 	 */
-	public void onUpdate(CFMLEngine newEngine);
+	public void onUpdate();
 }
