@@ -3,18 +3,29 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.server.session.HashSessionManager;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.MultiException;
+import org.eclipse.jetty.util.component.LifeCycle.Listener;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 
@@ -25,51 +36,6 @@ public class RunAsJavaApplication {
 
     private static final int DEFAULT_PORT = 8080;
 
-    public static void addContextX(Server server, String strContext, String host, String path, 
-    		String strWebContext, String strServerContext) throws IOException {
-
-    	if (strWebContext == null) strWebContext = "./web";
-    	if (strServerContext == null) strServerContext = "./server";
-        
-    	strWebContext=new File(strWebContext).getCanonicalPath();
-    	strServerContext=new File(strServerContext).getCanonicalPath();
-    	
-    	WebAppContext webapp = new WebAppContext();
-        webapp.setContextPath( strContext);
-        server.setHandler(webapp);
-        
-        ServletHandler servletHandler = new ServletHandler();
-        server.setHandler(servletHandler);
-
-        ContextHandler context = new ContextHandler();
-        context.setContextPath(strContext);
-        server.setHandler(context);
-        
-        servletHandler.setHandler(context);
-        // Map a servlet onto the container
-        ServletHolder servlet = servletHandler.addServletWithMapping(lucee.debug.loader.servlet.CFMLServlet.class, 
-        		"*.cfc/*,*.cfm/*,*.cfml/*,*.cfc,*.cfm,*.cfml");
-        servlet.setInitOrder(0);
-        servlet.setInitParameter("lucee-server-directory", strServerContext);
-        servlet = servletHandler.addServletWithMapping(lucee.debug.loader.servlet.LuceeServlet.class,
-        		"*.lucee/*,*.luc/*,*.lucee,*.luc");
-        servlet.setInitOrder(0);
-        servlet.setInitParameter("lucee-server-directory", strServerContext);
-        
-        
-        ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setDirectoriesListed(true);
-        resourceHandler.setWelcomeFiles(new String[]{ "index.cfm","index.lucee" });
-        strWebContext += path;
-        resourceHandler.setResourceBase(strWebContext);
-        
-        
-        
-        
-        HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { resourceHandler,servletHandler,new DefaultHandler()});
-        server.setHandler(handlers);
-    }
 
     
 
@@ -98,10 +64,9 @@ public class RunAsJavaApplication {
         
      // Create the server
         Server server = new Server(port);
+        
  
         // Create a port listener
-        
-        
         String strWebContext = "./web";
         String strServerContext="./server";
         if (args.length > 0) {
@@ -153,10 +118,17 @@ public class RunAsJavaApplication {
     
     	
         // Create a context 
-        ServletContextHandler contextHandler = new ServletContextHandler();
+        ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         contextHandler.setContextPath( strContext );
         contextHandler.setResourceBase(strWebContext);
         
+/*
+        // Create the SessionHandler (wrapper) to handle the sessions
+           HashSessionManager manager = new HashSessionManager();
+           SessionHandler sessionHandler = new SessionHandler(manager);
+           sessionHandler.setHandler(new MyDumpHandler());
+           webapp.setSessionHandler(sessionHandler);
+           */
         
         
         // Create a servlet container
@@ -191,4 +163,32 @@ public class RunAsJavaApplication {
         server.start();
         server.join();
 	}
+}
+
+class MyDumpHandler extends AbstractHandler
+{
+    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+    {
+        PrintWriter out = response.getWriter();
+        response.setContentType("text/plain");
+
+        try
+        {
+            HttpSession session = request.getSession();
+            if (session.isNew())
+            {
+                out.printf("New Session: %s%n", session.getId());
+            }
+            else
+            {
+                out.printf("Old Session: %s%n", session.getId());
+            }
+        }
+        catch (IllegalStateException ex)
+        {
+            out.println("Exception!" + ex);
+            ex.printStackTrace(out);
+        }
+        out.close();
+    }
 }
