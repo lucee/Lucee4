@@ -69,7 +69,7 @@ import org.osgi.framework.BundleContext;
 /**
  * wrapper for a CFMlEngine
  */
-public class CFMLEngineWrapper implements CFMLEngine, EngineChangeListener {
+public class CFMLEngineWrapper implements CFMLEngine {
 
 	private CFMLEngine engine;
 
@@ -158,9 +158,11 @@ public class CFMLEngineWrapper implements CFMLEngine, EngineChangeListener {
 		engine.reset(configId);
 	}
 
-	@Override
-	public void onUpdate(CFMLEngine newEngine) {
-		this.engine = newEngine;
+	public void setEngine(CFMLEngine engine) {
+		this.engine = engine;
+	}
+	public boolean isIdentical(CFMLEngine engine) {
+		return this.engine==engine;
 	}
 
 	@Override
