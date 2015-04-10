@@ -6,23 +6,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	
 	//public function setUp(){}
 
-	public void function testRC4(){
-		var algo="RC4";
-		var value="554122";
-		var key=GenerateSecretKey(algo);
-		var enc=Encrypt(value, key, algo);
-		var dec=Decrypt(enc, key, algo);
-		assertEquals(value,dec);
-	}
-
-	public void function testRC42(){
-		var algo="RC4";
-		var value="554122";
-		var key="test";
-		var enc=Encrypt(value, key, algo);
-		var dec=Decrypt(enc, key, algo);
-		assertEquals(value,dec);
-	}
 
 	public void function testNoModifiers(){
 		var meta=getMetaData(new modifiers.NoModifiers());
