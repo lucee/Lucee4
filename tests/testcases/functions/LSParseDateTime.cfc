@@ -10,7 +10,7 @@
 <cfset orgLocale=getLocale()>
 
 
-
+<cfset setTimeZone("CET")>
 
 <cfset valueEquals(left="#lsParseDateTime( "12/31/2008",'english (us)')#", right="{ts '2008-12-31 00:00:00'}")>
 
