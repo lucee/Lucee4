@@ -10,7 +10,7 @@ License/Copyright
 Lucee is a derivate of the Railo Server (c) Project (Version 4.2) that was published under the GNU Lesser General Public License (LGPL) in Version v2.1 . Lucee is licensed as LGPL v2.1.
 The "Railo Company LCC" (TRC) is copyright owner of the initial code in this project, the "Lucee Association Switzerland" (LAS) is copyright owner of all the code added afterwards and with all significant changes to the existing code TRC and LAS share the copyright.
 
-Plattform
+Platform
 ---------
 Lucee is a JVM language and runs on the JVM as a servlet and will work with any servlet container (e.g. [Apache Tomcat](http://tomcat.apache.org/), [Eclipse Jetty](http://eclipse.org/jetty/)) or application server (e.g. [JBoss AS](http://jbossas.jboss.org/), [GlassFish](https://glassfish.java.net/)). 
 
