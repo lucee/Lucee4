@@ -196,16 +196,6 @@ public class Assign extends ExpressionBase {
     	return rtn;
 	}
 
-	/*private static void setAccess(GeneratorAdapter ga, int access) {
-		if(access>-1) {
-			ga.loadArg(0);
-			ga.checkCast(Types.PAGE_CONTEXT_IMPL);
-			ga.push(access);
-			ga.invokeVirtual(Types.PAGE_CONTEXT_IMPL, SET_ACCESS);
-		}
-	}*/
-
-
 	private Type _writeOutFirst(BytecodeContext bc, Member member, int mode, boolean last, boolean doOnlyScope) throws TransformerException {
 		
 		if(member instanceof DataMember) {
