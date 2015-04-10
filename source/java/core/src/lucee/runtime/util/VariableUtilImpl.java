@@ -124,7 +124,6 @@ public final class VariableUtilImpl implements VariableUtil {
     @Override
 	public Object get(PageContext pc, Object coll, Collection.Key key, Object defaultValue) {
         // Objects
-		//print.out("key:"+key.getString());
 		if(coll instanceof Objects) {
             return ((Objects)coll).get(pc,key,defaultValue);
         }
