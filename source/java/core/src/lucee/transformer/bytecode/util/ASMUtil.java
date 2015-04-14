@@ -47,6 +47,7 @@ import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.Page;
 import lucee.transformer.bytecode.ScriptBody;
 import lucee.transformer.bytecode.Statement;
+import lucee.transformer.bytecode.StaticBody;
 import lucee.transformer.bytecode.cast.Cast;
 import lucee.transformer.bytecode.expression.var.Argument;
 import lucee.transformer.bytecode.expression.var.BIF;
@@ -113,8 +114,8 @@ public final class ASMUtil {
 	 * @param fullName Name des gesuchten Tags.
 	 * @return Existiert ein solches Tag oder nicht.
 	 */
-	public static boolean hasAncestorTag(Tag tag, String fullName) {
-	    return getAncestorTag(tag, fullName)!=null;
+	public static boolean hasAncestorTag(Statement stat, String fullName) {
+	    return getAncestorTag(stat, fullName)!=null;
 	}
 	
 
@@ -299,8 +300,9 @@ public final class ASMUtil {
 	 * @param fullName Name des gesuchten Tags.
 	 * @return uebergeornetes Element oder null.
 	 */
-	public static Tag getAncestorTag(Tag tag, String fullName) {
-		Statement parent=tag;
+	public static Tag getAncestorTag(Statement stat, String fullName) {
+		Statement parent=stat;
+		Tag tag;
 		while(true)	{
 			parent=parent.getParent();
 			if(parent==null)return null;
@@ -1163,5 +1165,13 @@ public final class ASMUtil {
 			if(!(it.next() instanceof DataMember)) return false;
 		}
 		return true;
+	}
+
+
+	public static void addStatements(Body body, List<Statement> statements) {
+		Iterator<Statement> it = statements.iterator();
+		while(it.hasNext()){
+			body.addStatement(it.next());
+		}
 	}
 }

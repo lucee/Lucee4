@@ -29,6 +29,7 @@ import lucee.runtime.listener.AppListenerUtil;
 import lucee.transformer.TransformerException;
 import lucee.transformer.bytecode.Body;
 import lucee.transformer.bytecode.Statement;
+import lucee.transformer.bytecode.StaticBody;
 import lucee.transformer.bytecode.statement.tag.Attribute;
 import lucee.transformer.bytecode.statement.tag.Tag;
 import lucee.transformer.bytecode.util.ASMUtil;
@@ -69,69 +70,89 @@ public final class Function extends EvaluatorSupport {
 				
 		}
 		// attribute modifier
-		Attribute attrModifier = tag.getAttribute("modifier");
-		if(attrModifier!=null) {
-			ExprString expr = tag.getFactory().toExprString(attrModifier.getValue());
-			if(!(expr instanceof Literal))
-				throw new EvaluatorException("Attribute modifier of the Tag Function, must be one of the following literal string values: [abstract] or [final]");
-			String modifier=StringUtil.emptyIfNull(((Literal)expr).getString()).trim();
-			if(!StringUtil.isEmpty(modifier) && !"abstract".equalsIgnoreCase(modifier) && !"final".equalsIgnoreCase(modifier))
-				throw new EvaluatorException("Attribute modifier of the Tag Function, must be one of the following literal string values: [abstract] or [final]");
-			
-			
-			boolean abstr = "abstract".equalsIgnoreCase(modifier);
-			if(abstr)throwIfNotEmpty(tag);
+		boolean isStatic=false;
+		{
+			Attribute attrModifier = tag.getAttribute("modifier");
+			if(attrModifier!=null) {
+				ExprString expr = tag.getFactory().toExprString(attrModifier.getValue());
+				if(!(expr instanceof Literal))
+					throw new EvaluatorException("Attribute modifier of the Tag Function, must be one of the following literal string values: [abstract,final,static]");
+				String modifier=StringUtil.emptyIfNull(((Literal)expr).getString()).trim();
+				if(!StringUtil.isEmpty(modifier) && 
+						!"abstract".equalsIgnoreCase(modifier) && !"final".equalsIgnoreCase(modifier) && !"static".equalsIgnoreCase(modifier))
+					throw new EvaluatorException("Attribute modifier of the Tag Function, must be one of the following literal string values: [abstract,final,static]");
+				
+				isStatic="static".equalsIgnoreCase(modifier);
+				boolean abstr = "abstract".equalsIgnoreCase(modifier);
+				if(abstr)throwIfNotEmpty(tag);
+			}
 		}
 		
 		// cachedWithin
-		Attribute attrCachedWithin = tag.getAttribute("cachedwithin");
-		if(attrCachedWithin!=null) {
-			Expression val = attrCachedWithin.getValue();
-			tag.addAttribute(new Attribute(
-					attrCachedWithin.isDynamicType(), 
-					attrCachedWithin.getName(), 
-					ASMUtil.cachedWithinValue(val),
-					attrCachedWithin.getType()));
+		{
+			Attribute attrCachedWithin = tag.getAttribute("cachedwithin");
+			if(attrCachedWithin!=null) {
+				Expression val = attrCachedWithin.getValue();
+				tag.addAttribute(new Attribute(
+						attrCachedWithin.isDynamicType(), 
+						attrCachedWithin.getName(), 
+						ASMUtil.cachedWithinValue(val),
+						attrCachedWithin.getType()));
+			}
 		}
 		
 		// Attribute localMode
-		Attribute attrLocalMode = tag.getAttribute("localmode");
-		if(attrLocalMode!=null) {
-			Expression expr = attrLocalMode.getValue();
-			String str = ASMUtil.toString(expr,null);
-			if(!StringUtil.isEmpty(str) && AppListenerUtil.toLocalMode(str, -1)==-1)
-				throw new EvaluatorException("Attribute localMode of the Tag Function, must be a literal value (modern, classic, true or false)");
-			//boolean output = ((LitBoolean)expr).getBooleanValue();
-			//if(!output) ASMUtil.removeLiterlChildren(tag, true);
+		{
+			Attribute attrLocalMode = tag.getAttribute("localmode");
+			if(attrLocalMode!=null) {
+				Expression expr = attrLocalMode.getValue();
+				String str = ASMUtil.toString(expr,null);
+				if(!StringUtil.isEmpty(str) && AppListenerUtil.toLocalMode(str, -1)==-1)
+					throw new EvaluatorException("Attribute localMode of the Tag Function, must be a literal value (modern, classic, true or false)");
+				//boolean output = ((LitBoolean)expr).getBooleanValue();
+				//if(!output) ASMUtil.removeLiterlChildren(tag, true);
+			}
 		}
 		
 		
 		// Attribute Output
-		Attribute attrOutput = tag.getAttribute("output");
-		if(attrOutput!=null) {
-			Expression expr = tag.getFactory().toExprBoolean(attrOutput.getValue());
-			if(!(expr instanceof LitBoolean))
-				throw new EvaluatorException("Attribute output of the Tag Function, must be a literal boolean value (true or false, yes or no)");
+		{
+			Attribute attrOutput = tag.getAttribute("output");
+			if(attrOutput!=null) {
+				Expression expr = tag.getFactory().toExprBoolean(attrOutput.getValue());
+				if(!(expr instanceof LitBoolean))
+					throw new EvaluatorException("Attribute output of the Tag Function, must be a literal boolean value (true or false, yes or no)");
+			}
 		}
 		
-		Attribute attrBufferOutput = tag.getAttribute("bufferoutput");
-		if(attrBufferOutput!=null) {
-			Expression expr = tag.getFactory().toExprBoolean(attrBufferOutput.getValue());
-			if(!(expr instanceof LitBoolean))
-				throw new EvaluatorException("Attribute bufferOutput of the Tag Function, must be a literal boolean value (true or false, yes or no)");
+		// Buffer output
+		{
+			Attribute attrBufferOutput = tag.getAttribute("bufferoutput");
+			if(attrBufferOutput!=null) {
+				Expression expr = tag.getFactory().toExprBoolean(attrBufferOutput.getValue());
+				if(!(expr instanceof LitBoolean))
+					throw new EvaluatorException("Attribute bufferOutput of the Tag Function, must be a literal boolean value (true or false, yes or no)");
+			}
 		}
 		
 		
-        //if(ASMUtil.isRoot(pp)) {
-        	Map attrs = tag.getAttributes();
-        	Iterator it = attrs.keySet().iterator();
-        	Attribute attr;
-        	while(it.hasNext()) {
-        		attr=(Attribute) attrs.get(it.next());
-        		checkAttributeValue(tag,attr);
-        	}
-        //}
-        
+        // check attribute values
+    	Map<String, Attribute> attrs = tag.getAttributes();
+    	Iterator<Attribute> it = attrs.values().iterator();
+    	while(it.hasNext()) {
+    		checkAttributeValue(tag,it.next());
+    	}
+    	
+    	// add to static scope
+		if(isStatic) {
+			// remove that tag from parent
+			ASMUtil.remove(tag);
+			
+			Body body=(Body) tag.getParent();
+			StaticBody sb=Static.getScriptBody(body);
+			sb.addStatement(tag);
+			body.addStatement(sb);
+		}
 	}
 	
 	public static void checkFunctionName(String name, FunctionLib[] flibs) throws EvaluatorException {
