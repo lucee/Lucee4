@@ -590,10 +590,10 @@ public class ComponentLoader {
 		// abstract/final check
 		if(!isExtendedComponent) {
 			if(c.getModifier()==Component.MODIFIER_ABSTRACT)
-				throw new ApplicationException("you cannot instantiate the abstract component ["+page.getPageSource().getDisplayPath()+"], this component can only be extended by other components");
+				throw new ApplicationException("you cannot instantiate a abstract component ["+page.getPageSource().getDisplayPath()+"], this component can only be extended by other components");
 		}
 		else if(c.getModifier()==Component.MODIFIER_FINAL)
-			throw new ApplicationException("you cannot extend the final component ["+page.getPageSource().getDisplayPath()+"]");
+			throw new ApplicationException("you cannot extend a final component ["+page.getPageSource().getDisplayPath()+"]");
 			
 		c.setInitalized(true);
         return c;
