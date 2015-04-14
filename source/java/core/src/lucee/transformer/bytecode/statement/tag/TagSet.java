@@ -33,10 +33,6 @@ public final class TagSet extends TagBaseNoFinal  {
 		super(f,start,end);
 	}
 
-	/**
-	 *
-	 * @see lucee.transformer.bytecode.statement.StatementBase#_writeOut(org.objectweb.asm.commons.GeneratorAdapter)
-	 */
 	@Override
 	public void _writeOut(BytecodeContext bc) throws TransformerException {
 		Type rtn = getAttribute("noname").getValue().writeOut(bc, Expression.MODE_VALUE);
