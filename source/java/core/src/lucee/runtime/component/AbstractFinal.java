@@ -72,7 +72,7 @@ public class AbstractFinal {
 				UDF existing = finUDFs.get(key);
 				throw new ApplicationException("the function ["+key+"] from component ["+
 			udf.getPageSource().getDisplayPath()+
-			"] tries to overwrite a final method with the same name from component ["+
+			"] tries to override a final method with the same name from component ["+
 			existing.getPageSource().getDisplayPath()+"]");
 			}
 			finUDFs.put(key, udf);
