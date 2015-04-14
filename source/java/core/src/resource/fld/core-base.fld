@@ -2327,9 +2327,9 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 	
 	<!-- CreateComponent -->
 	<function>
-		<name>CreateComponent</name>
+		<name>LoadComponent</name>
 		<class>lucee.runtime.functions.other.CreateComponent</class>
-		<description>load a component</description>
+		<description>loads a component, in differents to "CreateObject("component",...)" this function always is calling the "init" method of the component (if there is any).</description>
 		<argument>
 			<name>componentName</name>
 			<alias>cfc,cfcName,component</alias>
@@ -2393,9 +2393,9 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 		</return>
 	</function>
 	
-	<!-- webserviceProxy -->
+	<!-- createWebserviceProxy -->
 	<function>
-		<name>webserviceProxy</name>
+		<name>createWebserviceProxy</name>
 		<class>lucee.runtime.functions.other.WebserviceProxy</class>
 		<description>create a Webservice Proxy object, a reference to a remote webservice</description>
 		
@@ -2419,9 +2419,9 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 			<type>any</type>
 		</return>
 	</function>
-	<!-- javaProxy -->
+	<!-- createJavaProxy -->
 	<function>
-		<name>javaProxy</name>
+		<name>createJavaProxy</name>
 		<class>lucee.runtime.functions.other.JavaProxy</class>
 		<description>create a Java Proxy object (not a object instance)</description>
 		

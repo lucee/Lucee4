@@ -184,10 +184,10 @@ you can use tag cfadmin instead. we will add support for this function in a futu
 		<class>lucee.runtime.functions.other.CreateObject</class>
 		<description>
 		this function is deprecated, do the following instead.
-		- For Java use the function "JavaProxy"
-		- For Webservices use the function "WebserviceProxy"
-		- For Components do instead "new ComponentName()"
-		- There is no replacement for "com"
+		- For Java use the function "createJavaProxy"
+		- For Webservices use the function "createWebserviceProxy"
+		- For Components do instead "new ComponentName()" or the function "loadComponent"
+		- There is no replacement for "com" 
 		
 		The CreateObject function takes different arguments depending on the value of the first argument:
         CreateObject('com', class, context, serverName)
@@ -202,7 +202,7 @@ you can use tag cfadmin instead. we will add support for this function in a futu
 - com: for loading a com Object
 - java: for loading a java object
 - webservice: for loading a remote webservice 
-- component: for loading a Component</description>
+- component: for loading a Component (this functions does not call the init method of the component)</description>
     </argument>
 		<argument>
 			<name>classname</name>
