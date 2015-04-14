@@ -468,7 +468,7 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 				if(iUdf!=cUdf)
 					throw new ApplicationException("the function ["+entry.getKey()+"] from component ["+
 						cUdf.getPageSource().getDisplayPath()+
-						"] tries to overwrite a final method with the same name from component ["+
+						"] tries to override a final method with the same name from component ["+
 						iUdf.getPageSource().getDisplayPath()+"]");
 			}
 		}
