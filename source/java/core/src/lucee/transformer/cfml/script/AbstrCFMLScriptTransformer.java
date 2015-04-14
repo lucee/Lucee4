@@ -53,6 +53,7 @@ import lucee.transformer.bytecode.statement.Condition;
 import lucee.transformer.bytecode.statement.Condition.Pair;
 import lucee.transformer.bytecode.statement.DoWhile;
 import lucee.transformer.bytecode.statement.ExpressionAsStatement;
+import lucee.transformer.bytecode.statement.FlowControlFinal;
 import lucee.transformer.bytecode.statement.For;
 import lucee.transformer.bytecode.statement.ForEach;
 import lucee.transformer.bytecode.statement.Return;
@@ -61,6 +62,7 @@ import lucee.transformer.bytecode.statement.TryCatchFinally;
 import lucee.transformer.bytecode.statement.While;
 import lucee.transformer.bytecode.statement.tag.Attribute;
 import lucee.transformer.bytecode.statement.tag.Tag;
+import lucee.transformer.bytecode.statement.tag.TagBase;
 import lucee.transformer.bytecode.statement.tag.TagComponent;
 import lucee.transformer.bytecode.statement.tag.TagOther;
 import lucee.transformer.bytecode.statement.tag.TagParam;
@@ -221,16 +223,16 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 		else if((child=ifStatement(data))!=null) 				parent.addStatement(child);
 		else if((child=propertyStatement(data,parent))!=null)	parent.addStatement(child);
 		else if((child=paramStatement(data,parent))!=null)		parent.addStatement(child);
-		else if(funcStatement(data,parent)); // do nothing, happen already inside the method
-		//else if((child=funcStatement(data,parent))!=null)		parent.addStatement(child);
+		//else if(funcStatement(data,parent)); // do nothing, happen already inside the method
+		else if((child=funcStatement(data,parent))!=null)		parent.addStatement(child);
 		else if((child=whileStatement(data))!=null) 			parent.addStatement(child);
 		else if((child=doStatement(data))!=null) 				parent.addStatement(child);
 		else if((child=forStatement(data))!=null) 				parent.addStatement(child);
 		else if((child=returnStatement(data))!=null) 			parent.addStatement(child);
 		else if((child=switchStatement(data))!=null) 			parent.addStatement(child);
 		else if((child=tryStatement(data))!=null) 				parent.addStatement(child);
-		else if(staticStatement(data,parent)) ; // do nothing, happen already inside the method
-		//else if((child=staticStatement(data,parent))!=null) 	parent.addStatement(child);
+		//else if(staticStatement(data,parent)) ; // do nothing, happen already inside the method
+		else if((child=staticStatement(data,parent))!=null)		parent.addStatement(child);
 		else if((child=componentStatement(data,parent))!=null)	parent.addStatement(child);
 		else if((child=tagStatement(data,parent))!=null)		parent.addStatement(child);
 		else if((child=cftagStatement(data,parent))!=null)		parent.addStatement(child);
@@ -709,7 +711,7 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 	 * @return function Statement
 	 * @throws TemplateException
 	 */
-	private final boolean funcStatement(ExprData data,Body parent) throws TemplateException {
+	private final Statement funcStatement(ExprData data,Body parent) throws TemplateException {
 		int pos=data.srcCode.getPos();
 		
 		// read 5 tokens (returntype,access modifier,"abstract|final|static","function", function name)
@@ -717,7 +719,7 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 		// if there is no token at all we have no function
 		if(str==null) {
 			data.srcCode.setPos(pos);
-			return false;
+			return null;
 		}
 		comments(data);
 		String[] tokens=new String[]{str,null,null,null,null};
@@ -776,7 +778,7 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 		// no "function" found
 		if(first) {
 			data.srcCode.setPos(pos);
-			return false;
+			return null;
 		}
 		
 		// access modifier
@@ -828,12 +830,7 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 				}
 			}
 		}
-		// no modifier defined
-		//if(modifier==-1) modifier=Component.MODIFIER_NONE;
-		
-		// StaticBody body=new StaticBody(data.factory);
-		
-		
+
 		// return type
 		for(int i=0;i<tokens.length;i++){
 			if(tokens[i]!=null) {
@@ -864,18 +861,20 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 				if(data.context==CTX_INTERFACE)
 					throw new TemplateException(data.srcCode, "static functions are not allowed within the interface body");
 				
-				boolean isNew=false;
-				StaticBody body = getStaticBody(data, parent);
+				TagOther tag = createStaticTag(data, res.getStart());
+				
+				//boolean isNew=false;
+				/*StaticBody body = getStaticBody(data, parent);
 				if(body==null) {
 					body=new StaticBody(data.factory);
 					isNew=true;
-				}
-				body.addStatement(res);
-				if(isNew) parent.addStatement(body);
-				return true;
+				}*/
+				tag.getBody().addStatement(res);
+				//if(isNew) parent.addStatement(body);
+				return tag;
 			}
-			parent.addStatement(res);
-			return true;
+			//parent.addStatement(res);
+			return res;
 	}
 
 
@@ -1491,38 +1490,39 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 		return property;
 	}
 	
-	private final boolean staticStatement(ExprData data, Body parent) throws TemplateException {
-		if(!data.srcCode.forwardIfCurrent("static",'{')) return false;
+	private final Tag staticStatement(ExprData data, Body parent) throws TemplateException {
+		if(!data.srcCode.forwardIfCurrent("static",'{')) return null;
 		// get one back to have again { so the parser works
 		data.srcCode.previous();
+		Position start = data.srcCode.getPosition();
 		
-		if(data.context!=CTX_CFC)
-			throw new TemplateException(data.srcCode, "a static constructor is only allowed within the component body.");
-		
-		boolean isNew=false;
-		StaticBody body=getStaticBody(data,parent);
-		if(body==null) {
-			body=new StaticBody(data.factory);
-			isNew=true;
-		}
-		
-		statement(data,body,CTX_STATIC);
-		
-		if(isNew)parent.addStatement(body);
-		return true;
+		TagOther tag = createStaticTag(data,start);
+		statement(data,tag.getBody(),CTX_STATIC);
+		return tag;
 	}
 	
-	private StaticBody getStaticBody(ExprData data, Body parent) {
+	public static TagOther createStaticTag(ExprData data, Position start) throws TemplateException {
+		TagLibTag tlt = CFMLTransformer.getTLT(data.srcCode,"static",data.config.getIdentification());
+		BodyBase body = new BodyBase(data.factory);
+		TagOther tag=new TagOther(data.factory, start, data.srcCode.getPosition());
+		tag.setTagLibTag(tlt);
+		tag.setBody(body);
+		data.ep.add(tlt, tag, data.flibs, data.srcCode);
+		return tag;
+	}
+
+	/*private StaticBody getStaticBody(ExprData data, Body parent) {
 		Iterator<Statement> it = parent.getStatements().iterator();
 		Statement s;
 		while(it.hasNext()){
 			s = it.next();
+			print.e("s:"+s.getClass().getName());
 			if(s instanceof StaticBody) {
 				return (StaticBody) s;
 			}
 		}
 		return null;
-	}
+	}*/
 
 	public Statement paramStatement(ExprData data,Body parent) throws TemplateException  {
 		int pos = data.srcCode.getPos();

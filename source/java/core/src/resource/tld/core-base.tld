@@ -8153,6 +8153,24 @@ To use cached data, the current query must use the same SQL statement, data sour
 		</attribute>
 	</tag>
 	
+	
+	<!-- Static -->
+	<tag>
+		<name>Static</name>
+		<!-- not used -->
+		<tag-class>lucee.runtime.tag.Static</tag-class>
+		<tte-class>lucee.transformer.cfml.evaluator.impl.Static</tte-class>
+		<!-- <ttt-class>lucee.transformer.bytecode.statement.tag.TagStatic</ttt-class>
+		<script>
+			<type>single</type>
+			<rtexprvalue>true</rtexprvalue>
+		</script> -->
+		<body-content>must</body-content>
+		<body-rtexprvalue>false</body-rtexprvalue>
+		<description>defines a static constructor within components</description>
+		<attribute-type>fixed</attribute-type>
+	</tag>
+	
 	<!-- Stopwatch -->
 	<tag>
 		<name>Stopwatch</name>

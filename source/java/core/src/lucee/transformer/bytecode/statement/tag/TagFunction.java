@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import lucee.commons.lang.StringUtil;
+import lucee.commons.lang.types.RefBoolean;
+import lucee.commons.lang.types.RefBooleanImpl;
 import lucee.runtime.Component;
 import lucee.runtime.type.util.ComponentUtil;
 import lucee.transformer.Factory;
@@ -33,12 +35,14 @@ import lucee.transformer.bytecode.Body;
 import lucee.transformer.bytecode.BodyBase;
 import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.Page;
+import lucee.transformer.bytecode.ScriptBody;
 import lucee.transformer.bytecode.Statement;
 import lucee.transformer.bytecode.statement.FlowControlFinal;
 import lucee.transformer.bytecode.statement.IFunction;
 import lucee.transformer.bytecode.statement.PrintOut;
 import lucee.transformer.bytecode.statement.udf.Function;
 import lucee.transformer.bytecode.statement.udf.FunctionImpl;
+import lucee.transformer.cfml.script.AbstrCFMLScriptTransformer;
 import lucee.transformer.expression.Expression;
 import lucee.transformer.expression.literal.LitBoolean;
 import lucee.transformer.expression.literal.LitString;
@@ -73,7 +77,12 @@ public final class TagFunction extends TagBase implements IFunction {
 		//private static final Expression EMPTY = LitString.toExprString("");
 		
 		Body functionBody = new BodyBase(bc.getFactory());
-		Function func = createFunction(bc.getPage(),functionBody);
+		RefBoolean isStatic=new RefBooleanImpl();
+		Function func = createFunction(bc.getPage(),functionBody,isStatic);
+		
+		//ScriptBody sb=new ScriptBody(bc.getFactory());
+		
+		
 		func.setParent(getParent());
 
 		List<Statement> statements = getBody().getStatements();
@@ -193,10 +202,10 @@ public final class TagFunction extends TagBase implements IFunction {
 
 	}
 
-	private Function createFunction(Page page, Body body) throws TransformerException {
+	private Function createFunction(Page page, Body body, RefBoolean isStatic) throws TransformerException {
 		Attribute attr;
-		LitString ANY = body.getFactory().createLitString("any");
-		LitString PUBLIC = body.getFactory().createLitString("public");
+		LitString ANY = page.getFactory().createLitString("any");
+		LitString PUBLIC = page.getFactory().createLitString("public");
 		
 		// name
 		Expression name = removeAttribute("name").getValue();
@@ -218,6 +227,7 @@ public final class TagFunction extends TagBase implements IFunction {
 		Expression bufferOutput = (attr == null) ? null : attr.getValue();
 
 		// modifier
+		isStatic.setValue(false);
 		int modifier=Component.MODIFIER_NONE;
 		attr = removeAttribute("modifier");
 		if(attr!=null) {
@@ -227,6 +237,7 @@ public final class TagFunction extends TagBase implements IFunction {
 				String str = StringUtil.emptyIfNull(l.getString()).trim();
 				if("abstract".equalsIgnoreCase(str))modifier=Component.MODIFIER_ABSTRACT;
 				else if("final".equalsIgnoreCase(str))modifier=Component.MODIFIER_FINAL;
+				else if("static".equalsIgnoreCase(str)) isStatic.setValue(true);
 			}
 		}
 
@@ -236,15 +247,15 @@ public final class TagFunction extends TagBase implements IFunction {
 
 		// dspLabel
 		attr = removeAttribute("displayname");
-		Expression displayname = (attr == null) ? body.getFactory().EMPTY() : attr.getValue();
+		Expression displayname = (attr == null) ? page.getFactory().EMPTY() : attr.getValue();
 
 		// hint
 		attr = removeAttribute("hint");
-		Expression hint = (attr == null) ? body.getFactory().EMPTY() : attr.getValue();
+		Expression hint = (attr == null) ? page.getFactory().EMPTY() : attr.getValue();
 
 		// description
 		attr = removeAttribute("description");
-		Expression description = (attr == null) ? body.getFactory().EMPTY() : attr.getValue();
+		Expression description = (attr == null) ? page.getFactory().EMPTY() : attr.getValue();
 
 		// returnformat
 		attr = removeAttribute("returnformat");
