@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.Thread.State;
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 import lucee.runtime.PageContext;
 import lucee.runtime.config.NullSupportHelper;
@@ -39,6 +40,7 @@ import lucee.runtime.tag.Http3;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.StructImpl;
+import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.it.EntryIterator;
@@ -120,17 +122,17 @@ public class ThreadsImpl extends StructSupport implements lucee.runtime.type.sco
 	@Override
 	public Collection duplicate(boolean deepCopy) {
 		StructImpl sct=new StructImpl();
-		ThreadLocalDuplication.set(this, sct);
+		boolean inside = deepCopy?ThreadLocalDuplication.set(this, sct):true;
 		try{
-			Key[] keys = keys();
-			Object value;
-			for(int i=0;i<keys.length;i++) {
-				value=get(keys[i],null);
-				sct.setEL(keys[i],deepCopy?Duplicator.duplicate(value, deepCopy):value);
+			Iterator<Entry<Key, Object>> it = entryIterator();
+			Entry<Key, Object> e;
+			while(it.hasNext()) {
+				e = it.next();
+				sct.setEL(e.getKey(),deepCopy?Duplicator.duplicate(e.getValue(), deepCopy):e.getValue());
 			}
 		}
 		finally {
-			//ThreadLocalDuplication.remove(this);  removed "remove" to catch sisters and brothers
+			if(!inside)ThreadLocalDuplication.reset();
 		}
 		return sct;
 	}

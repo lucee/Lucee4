@@ -197,7 +197,7 @@ public class StructImpl extends StructSupport {
 	}
 	
 	public static void copy(Struct src,Struct trg,boolean deepCopy) {
-		ThreadLocalDuplication.set(src,trg);
+		boolean inside=ThreadLocalDuplication.set(src,trg);
 		try{
 			Iterator<Entry<Key, Object>> it = src.entryIterator();
 			Entry<Key, Object> e;
@@ -208,7 +208,7 @@ public class StructImpl extends StructSupport {
 			}
 		}
 		finally {
-			//ThreadLocalDuplication.remove(src);
+			if(!inside)ThreadLocalDuplication.reset();
 		}	
 	}
 	

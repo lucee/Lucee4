@@ -38,6 +38,7 @@ import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Duplicator;
 import lucee.runtime.op.ThreadLocalDuplication;
+import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.it.EntryIterator;
 import lucee.runtime.type.it.KeyIterator;
 import lucee.runtime.type.it.StringIterator;
@@ -546,24 +547,24 @@ public final class ArrayImplNS extends ArraySupport implements Array,Sizeable {
 	public Object clone() {
 		return duplicate(true);
 	}
-	
+
 	@Override
 	public Collection duplicate(boolean deepCopy) {
 		ArrayImplNS arr=new ArrayImplNS();
 		arr.dimension=dimension;
-		Collection.Key[] keys=this.keys();
-		
-		ThreadLocalDuplication.set(this, arr);
+		Iterator<Entry<Key, Object>> it = entryIterator();
+		boolean inside=deepCopy?ThreadLocalDuplication.set(this, arr):true;
+		Entry<Key, Object> e;
 		try {
-			Collection.Key k;
-			for(int i=0;i<keys.length;i++) {
-				k=keys[i];
-				arr.set(k,Duplicator.duplicate(this.get(k,null),deepCopy));
+			while(it.hasNext()){
+				e = it.next();
+				if(deepCopy)arr.set(e.getKey(),Duplicator.duplicate(e.getValue(),deepCopy));
+				else arr.set(e.getKey(),e.getValue());
 			}
-		} 
-		catch (ExpressionException e) {}
+		}
+		catch (ExpressionException ee) {}
 		finally{
-			// ThreadLocalDuplication.remove(this); removed "remove" to catch sisters and brothers
+			if(!inside)ThreadLocalDuplication.reset();
 		}
 		
 		return arr;

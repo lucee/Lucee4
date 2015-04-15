@@ -539,7 +539,7 @@ public class QueryColumnImpl implements QueryColumnPro,Sizeable,Objects {
     
     protected static void populate(QueryColumnImpl src,QueryColumnImpl trg, boolean deepCopy) {
         
-        ThreadLocalDuplication.set(src, trg);
+        boolean inside=ThreadLocalDuplication.set(src, trg);
         try{
 	        trg.key=src.key;
 	        trg.query=src.query;
@@ -553,7 +553,7 @@ public class QueryColumnImpl implements QueryColumnPro,Sizeable,Objects {
 	        }
         }
         finally {
-        	// ThreadLocalDuplication.remove(src); removed "remove" to catch sisters and brothers
+        	if(!inside)ThreadLocalDuplication.reset();
         }
     }
 	
