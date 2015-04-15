@@ -213,8 +213,8 @@ public final class ComponentImpl extends StructSupport implements Externalizable
     
     private ComponentImpl _duplicate( boolean deepCopy, boolean isTop) {
     	ComponentImpl trg=new ComponentImpl();
-    	ThreadLocalDuplication.set(this, trg);
-    	//try{
+    	boolean inside=ThreadLocalDuplication.set(this, trg);
+    	try{
 			// attributes
 	    	trg.pageSource=pageSource;
 	        //trg._triggerDataMember=_triggerDataMember;
@@ -258,10 +258,10 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 	    			addUDFS(trg,((ComponentScopeShadow)scope).getShadow(),((ComponentScopeShadow)trg.scope).getShadow());
 	    		}
 	    	}
-	    	/*}
+	    }
     	finally {
-    		ThreadLocalDuplication.remove(this); removed "remove" to catch sisters and brothers
-    	}*/
+    		if(!inside)ThreadLocalDuplication.reset();
+    	}
     	
 		return trg;
 	}

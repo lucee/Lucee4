@@ -119,17 +119,17 @@ public class ThreadsImpl extends StructSupport implements lucee.runtime.type.sco
 	@Override
 	public Collection duplicate(boolean deepCopy) {
 		StructImpl sct=new StructImpl();
-		ThreadLocalDuplication.set(this, sct);
+		boolean inside = deepCopy?ThreadLocalDuplication.set(this, sct):true;
 		try{
-			Key[] keys = keys();
-			Object value;
-			for(int i=0;i<keys.length;i++) {
-				value=get(keys[i],null);
-				sct.setEL(keys[i],deepCopy?Duplicator.duplicate(value, deepCopy):value);
+			Iterator<Entry<Key, Object>> it = entryIterator();
+			Entry<Key, Object> e;
+			while(it.hasNext()) {
+				e = it.next();
+				sct.setEL(e.getKey(),deepCopy?Duplicator.duplicate(e.getValue(), deepCopy):e.getValue());
 			}
 		}
 		finally {
-			//ThreadLocalDuplication.remove(this);  removed "remove" to catch sisters and brothers
+			if(!inside)ThreadLocalDuplication.reset();
 		}
 		return sct;
 	}

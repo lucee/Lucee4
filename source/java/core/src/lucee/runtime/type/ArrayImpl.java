@@ -576,19 +576,19 @@ public class ArrayImpl extends ArraySupport {
 	
 	protected Collection duplicate(ArrayImpl arr,boolean deepCopy) {
 		arr.dimension=dimension;
-		Collection.Key[] keys=this.keys();
-		ThreadLocalDuplication.set(this, arr);
-		Collection.Key k;
+		Iterator<Entry<Key, Object>> it = entryIterator();
+		boolean inside=deepCopy?ThreadLocalDuplication.set(this, arr):true;
+		Entry<Key, Object> e;
 		try {
-			for(int i=0;i<keys.length;i++) {
-				k=keys[i];
-				if(deepCopy)arr.set(k,Duplicator.duplicate(this.get(k,null),deepCopy));
-				else arr.set(k,this.get(k,null));
+			while(it.hasNext()){
+				e = it.next();
+				if(deepCopy)arr.set(e.getKey(),Duplicator.duplicate(e.getValue(),deepCopy));
+				else arr.set(e.getKey(),e.getValue());
 			}
 		}
-		catch (ExpressionException e) {}
+		catch (ExpressionException ee) {}
 		finally{
-			// ThreadLocalDuplication.remove(this);  removed "remove" to catch sisters and brothers
+			if(!inside)ThreadLocalDuplication.reset();
 		}
 		
 		return arr;
