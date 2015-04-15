@@ -227,7 +227,7 @@ public final class ComponentImpl extends StructSupport implements Externalizable
     
     private ComponentImpl _duplicate( boolean deepCopy, boolean isTop) {
     	ComponentImpl trg=new ComponentImpl();
-    	ThreadLocalDuplication.set(this, trg);
+    	boolean inside=ThreadLocalDuplication.set(this, trg);
     	try{
 			// attributes
 	    	trg.pageSource=pageSource;
@@ -284,7 +284,7 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 	    	
     	}
     	finally {
-    		// ThreadLocalDuplication.remove(this); removed "remove" to catch sisters and brothers
+    		if(!inside)ThreadLocalDuplication.reset();
     	}
     	
 		return trg;

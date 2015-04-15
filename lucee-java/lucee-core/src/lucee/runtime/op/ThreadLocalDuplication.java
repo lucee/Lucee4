@@ -30,52 +30,49 @@ public class ThreadLocalDuplication {
 	private static ThreadLocal<Map<Object,Object>> local=new ThreadLocal<Map<Object,Object>>();
 	private static ThreadLocal<RefBoolean> inside=new ThreadLocal<RefBoolean>();
 
-	public static void set(Object o, Object c) {
-		
-		touch().put(o,c);
+	public static boolean set(Object o, Object c) {
+		touch(true).put(o,c);
+		return isInside();
 	}
 
-	/*public static Map<Object, Object> getMap() {
-		return touch();
-	}
-	
-	public static void removex(Object o) {
-		touch().remove(o);
-	}*/
-	
-	private static Object get(Object obj) {
+	/*private static Object get(Object obj) {
 		Map<Object,Object> list = touch();
 		return list.get(obj);
-	}
+	}*/
 	
 
 
 	public static Object get(Object object, RefBoolean before) {
 		if(!isInside()){
-			reset();
-			setIsInside(true);
+			reset(true);
 			before.setValue(false);
 		}
 		else
 			before.setValue(true);
 		
-		Map<Object,Object> list = touch();
-		return list.get(object);
+		Map<Object,Object> list = touch(false);
+		return list==null?null:list.get(object);
 	}
 	
 
-	private static Map<Object,Object> touch() {
+	private static Map<Object,Object> touch(boolean createIfNecessary) {
 		Map<Object,Object> set = local.get();
 		if(set==null) {
+			if(!createIfNecessary) return null;
+			
 			set = new IdentityHashMap<Object,Object>();// it is importend to have a reference comparsion here
 			local.set(set);
 		}
 		return set;
 	}
 	public static void reset() {
+		reset(false);
+	}
+	
+	private static void reset(boolean inside) {
 		Map<Object,Object> set = local.get();
 		if(set!=null) set.clear();
-		setIsInside(false);
+		setIsInside(inside);
 	}
 
 	private static boolean isInside() {

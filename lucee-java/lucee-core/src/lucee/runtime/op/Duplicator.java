@@ -179,14 +179,18 @@ public final class Duplicator {
     		} catch (ClassException e) {
     			newMap=new HashMap();
     		}
-    		ThreadLocalDuplication.set(map,newMap);
-            Iterator it=map.keySet().iterator();
+    		boolean inside=ThreadLocalDuplication.set(map,newMap);
+            try{
+    		Iterator it=map.keySet().iterator();
             while(it.hasNext()) {
                 Object key=it.next();
                 if(deepCopy)newMap.put(StringUtil.toLowerCase(Caster.toString(key)),duplicate(map.get(key), deepCopy));
                 else newMap.put(StringUtil.toLowerCase(Caster.toString(key)),map.get(key));
             }
-            //ThreadLocalDuplication.remove(map); removed "remove" to catch sisters and brothers
+            }
+            finally {
+            	if(!inside)ThreadLocalDuplication.reset();
+            }
             return newMap;
         }
         return duplicateMap(map,deepCopy);
@@ -199,9 +203,14 @@ public final class Duplicator {
 		} catch (ClassException e) {
 			other=new HashMap();
     	}
-		ThreadLocalDuplication.set(map,other);
+		boolean inside=ThreadLocalDuplication.set(map,other);
+		try{
         duplicateMap(map,other, deepCopy);
-        //ThreadLocalDuplication.remove(map); removed "remove" to catch sisters and brothers
+		}
+		finally {
+			if(!inside)ThreadLocalDuplication.reset();
+		}
+        //
         return other;
     }
     

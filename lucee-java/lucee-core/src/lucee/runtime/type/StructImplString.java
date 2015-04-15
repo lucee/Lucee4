@@ -185,7 +185,7 @@ public final class StructImplString extends StructImpl implements Struct {
 	public static void copy(Struct src,Struct trg,boolean deepCopy) {
 		Iterator<Entry<Key, Object>> it = src.entryIterator();
 		Entry<Key, Object> e;
-		ThreadLocalDuplication.set(src, trg);
+		boolean inside=ThreadLocalDuplication.set(src, trg);
 		try {
 			while(it.hasNext()) {
 				e = it.next();
@@ -194,7 +194,7 @@ public final class StructImplString extends StructImpl implements Struct {
 			}
 		}
 		finally {
-			// ThreadLocalDuplication.remove(src);  removed "remove" to catch sisters and brothers
+			if(!inside)ThreadLocalDuplication.reset();
 		}
 	}
 
