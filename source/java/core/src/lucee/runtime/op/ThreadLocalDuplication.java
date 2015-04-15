@@ -30,9 +30,9 @@ public class ThreadLocalDuplication {
 	private static ThreadLocal<Map<Object,Object>> local=new ThreadLocal<Map<Object,Object>>();
 	private static ThreadLocal<RefBoolean> inside=new ThreadLocal<RefBoolean>();
 
-	public static void set(Object o, Object c) {
-		
-		touch().put(o,c);
+	public static boolean set(Object o, Object c) {
+		touch(true).put(o,c);
+		return isInside();
 	}
 
 	/*public static Map<Object, Object> getMap() {
@@ -43,10 +43,10 @@ public class ThreadLocalDuplication {
 		touch().remove(o);
 	}*/
 	
-	private static Object get(Object obj) {
+	/*private static Object get(Object obj) {
 		Map<Object,Object> list = touch();
 		return list.get(obj);
-	}
+	}*/
 	
 
 
@@ -59,19 +59,22 @@ public class ThreadLocalDuplication {
 		else
 			before.setValue(true);
 		
-		Map<Object,Object> list = touch();
-		return list.get(object);
+		Map<Object,Object> list = touch(false);
+		return list==null?null: list.get(object);
 	}
 	
 
-	private static Map<Object,Object> touch() {
+	private static Map<Object,Object> touch(boolean createIfNecessary) {
 		Map<Object,Object> set = local.get();
 		if(set==null) {
+			if(!createIfNecessary) return null;
+			
 			set = new IdentityHashMap<Object,Object>();// it is importend to have a reference comparsion here
 			local.set(set);
 		}
 		return set;
 	}
+	
 	public static void reset() {
 		Map<Object,Object> set = local.get();
 		if(set!=null) set.clear();

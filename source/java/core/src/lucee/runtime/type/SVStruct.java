@@ -220,7 +220,7 @@ public final class SVStruct extends StructSupport implements Reference,Struct {
     @Override
     public Collection duplicate(boolean deepCopy) {
         SVStruct svs = new SVStruct(key);
-        ThreadLocalDuplication.set(this, svs);
+        boolean inside=ThreadLocalDuplication.set(this, svs);
         try{
 	        Collection.Key[] keys = keys();
 	        for(int i=0;i<keys.length;i++) {
@@ -230,7 +230,7 @@ public final class SVStruct extends StructSupport implements Reference,Struct {
 	        return svs;
         }
         finally{
-        	// ThreadLocalDuplication.remove(this); removed "remove" to catch sisters and brothers
+        	if(!inside)ThreadLocalDuplication.reset();
         }
     }
 

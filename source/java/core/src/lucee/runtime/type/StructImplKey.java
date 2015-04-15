@@ -199,7 +199,7 @@ public final class StructImplKey extends StructSupport implements Struct {
 	
 	
 	public static void copy(Struct src,Struct trg,boolean deepCopy) {
-		ThreadLocalDuplication.set(src, trg);
+		boolean inside=ThreadLocalDuplication.set(src, trg);
 		try {
 			Iterator<Entry<Key, Object>> it = src.entryIterator();
 			Entry<Key, Object> e;
@@ -210,7 +210,7 @@ public final class StructImplKey extends StructSupport implements Struct {
 			}
 		}
 		finally {
-			//ThreadLocalDuplication.remove(src); removed "remove" to catch sisters and brothers
+			if(!inside)ThreadLocalDuplication.reset();
 		}
 	}
 

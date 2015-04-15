@@ -1152,7 +1152,7 @@ public class QueryImpl implements Query,Objects {
      */
     public QueryImpl cloneQuery(boolean deepCopy) {
         QueryImpl newResult=new QueryImpl();
-        ThreadLocalDuplication.set(this, newResult);
+        boolean inside=ThreadLocalDuplication.set(this, newResult);
         try{
 	        if(columnNames!=null){
 		        newResult.columnNames=new Collection.Key[columnNames.length];
@@ -1174,7 +1174,7 @@ public class QueryImpl implements Query,Objects {
 	        return newResult;
         }
         finally {
-        	// ThreadLocalDuplication.remove(this); removed "remove" to catch sisters and brothers
+        	if(!inside)ThreadLocalDuplication.reset();
         }
     }
 
@@ -2899,7 +2899,7 @@ public class QueryImpl implements Query,Objects {
 	
 	public static QueryImpl cloneQuery(Query qry,boolean deepCopy) {
         QueryImpl newResult=new QueryImpl();
-        ThreadLocalDuplication.set(qry, newResult);
+        boolean inside=ThreadLocalDuplication.set(qry, newResult);
         try{
 	        newResult.columnNames=qry.getColumnNames();
 	        newResult.columns=new QueryColumnImpl[newResult.columnNames.length];
@@ -2922,7 +2922,7 @@ public class QueryImpl implements Query,Objects {
 	        return newResult;
         }
         finally {
-        	// ThreadLocalDuplication.remove(qry); removed "remove" to catch sisters and brothers
+        	if(!inside)ThreadLocalDuplication.reset();
         }
     }
 	
