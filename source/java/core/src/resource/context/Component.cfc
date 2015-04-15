@@ -1,5 +1,4 @@
-<!--- 
- * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
+/** Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,5 +12,5 @@
  * 
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
- ---><cfcomponent displayname="Component" hint="This is the Base Component"></cfcomponent>
+ */
+ component displayname="Component" hint="This is the Base Component" {}
