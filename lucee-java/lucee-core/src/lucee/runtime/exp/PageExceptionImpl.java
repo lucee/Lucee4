@@ -580,32 +580,30 @@ public String getStackTraceAsString() {
 		
     	if(trace.getFileName()==null || trace.getFileName().endsWith(".java"))
     		return trace.toString();
-    	
-    	Resource res = config.getResource(
-    			trace.getFileName());
-    	if(res.exists()) path=trace.getFileName();
-    	
-    	// get path from source
-    	if(path==null){
-			SourceInfo si=MappingUtil.getMatch(pc,config,trace);
-			if(si!=null) {
-				if(si.absolutePath!=null) {
-					res = config.getResource(si.absolutePath);
-					if(res.exists()) path=si.absolutePath;
+    	if(config!=null) {
+	    	Resource res = config.getResource(
+	    			trace.getFileName());
+	    	if(res.exists()) path=trace.getFileName();
+	    	
+	    	// get path from source
+	    	if(path==null){
+				SourceInfo si=MappingUtil.getMatch(pc,config,trace);
+				if(si!=null) {
+					if(si.absolutePath!=null) {
+						res = config.getResource(si.absolutePath);
+						if(res.exists()) path=si.absolutePath;
+					}
+					if(path==null && si.relativePath!=null) path=si.relativePath;
 				}
-				if(path==null && si.relativePath!=null) path=si.relativePath;
-			}
-			if(path==null) path=trace.getFileName();
+				if(path==null) path=trace.getFileName();
+	    	}
     	}
-		
 		return trace.getClassName() + "." + trace.getMethodName() +
         (trace.isNativeMethod() ? "(Native Method)" :
          (path != null && trace.getLineNumber() >= 0 ?
           "(" + path + ":" + trace.getLineNumber() + ")" :
           (path != null ?  "("+path+")" : "(Unknown Source)")));
-    	
-    	
-    	
+
 	}
     
     
