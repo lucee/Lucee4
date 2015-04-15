@@ -102,8 +102,11 @@ public final class AppListenerUtil {
 		    	return res;
 		    }
 		}
-		PageSource res=requestedPage.getRealPage(Constants.APP_CFM);
-	    if(res.exists()) return res;
+		if(type!=TYPE_NEW) {
+			PageSource res=requestedPage.getRealPage(Constants.APP_CFM);
+			if(res.exists()) return res;
+		}
+		
 		return null;
 	}
 	
@@ -115,8 +118,11 @@ public final class AppListenerUtil {
 		    	return ps;
 			}
 		}
-		PageSource ps = ((PageContextImpl)pc).getPageSourceExisting("/"+Constants.APP_CFM);
-		if(ps!=null) return ps;
+		
+		if(type!=TYPE_NEW) {
+			PageSource ps = ((PageContextImpl)pc).getPageSourceExisting("/"+Constants.APP_CFM);
+			if(ps!=null) return ps;
+		}
 		return null;
 	}
 	
@@ -143,9 +149,11 @@ public final class AppListenerUtil {
 					return res;
 				}
 			}
+			if(type!=TYPE_NEW) {
+				res = ((PageContextImpl)pc).getPageSourceExisting(path.concat(Constants.APP_CFM));
+				if(res!=null) return res;
+			}
 			
-			res = ((PageContextImpl)pc).getPageSourceExisting(path.concat(Constants.APP_CFM));
-			if(res!=null) return res;
 		}
 		return null;
 	}
