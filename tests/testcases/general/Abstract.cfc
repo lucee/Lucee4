@@ -32,9 +32,9 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			notFailed=true;
 		}
 		catch(e){
-			assertTrue(find("you cannot instantiate the abstract component [",e.message));
+			assertTrue(find("you cannot instantiate an abstract component",e.message));
 		}
-		if(notFailed)fail("cannot instantiate a abstract component");
+		if(notFailed)fail("cannot instantiate an abstract component");
 	}
 
 	public void function testCannotExtendFinalComponent(){
@@ -44,7 +44,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			notFailed=true;
 		}
 		catch(e){
-			assertTrue(find("you cannot extend the final component [",e.message));
+			assertTrue(find("you cannot extend a final component [",e.message));
 		}
 		if(notFailed)fail("cannot extend a final component");
 	}
@@ -81,9 +81,9 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			notFailed=true;
 		}
 		catch(e){
-			assertTrue(find("tries to overwrite a final method",e.message));
+			assertTrue(find("tries to override a final method",e.message));
 		}
-		if(notFailed)fail("overwrite final method1");
+		if(notFailed)fail("override final method1");
 
 
 		var notFailed=false;
@@ -92,9 +92,9 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			notFailed=true;
 		}
 		catch(e){
-			assertTrue(find("tries to overwrite a final method",e.message));
+			assertTrue(find("tries to override a final method",e.message));
 		}
-		if(notFailed)fail("overwrite final method2");
+		if(notFailed)fail("override final method2");
 	}
 
 	public void function testAlternativeSyntax(){
