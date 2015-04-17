@@ -102,10 +102,9 @@ public final class InfoImpl implements Info {
 	public static Properties getDefaultProperties(Bundle bundle) {
 		InputStream is=null;
 		Properties prop = new Properties();
+		String keyToValidate="felix.log.level";
     	try{
-    		
-			
-			// check the bundle for the default.properties
+    		// check the bundle for the default.properties
 			if(bundle!=null) {
 	    		try {
 	    			is = bundle.getEntry("default.properties").openStream();
@@ -114,8 +113,8 @@ public final class InfoImpl implements Info {
 	    		catch (Throwable t) {}
 	    		finally {IOUtil.closeEL(is);}
 			}
-			if(prop.getProperty("lucee.core.name")!=null) return prop;
-	
+			if(prop.getProperty(keyToValidate)!=null) return prop;
+			
 			// try from core classloader without leading slash
 			prop = new Properties();
 	    	Class clazz = PageSourceImpl.class;
@@ -124,11 +123,11 @@ public final class InfoImpl implements Info {
     	    	is = cl.getResourceAsStream("default.properties");
 	            prop.load(is);
     		}
-    		catch (Throwable t) {}
+    		catch (Throwable t) {t.printStackTrace();}
     		finally {IOUtil.closeEL(is);}
-			if(prop.getProperty("lucee.core.name")!=null) return prop;
+			if(prop.getProperty(keyToValidate)!=null) return prop;
 	    	
-	    	
+			
 			// try from core classloader with leading slash
 			prop = new Properties();
 	    	try{
@@ -137,7 +136,7 @@ public final class InfoImpl implements Info {
     		}
     		catch (Throwable t) {}
     		finally {IOUtil.closeEL(is);}
-	    	if(prop.getProperty("lucee.core.name")!=null) return prop;
+	    	if(prop.getProperty(keyToValidate)!=null) return prop;
 	    	
     		
 	    	// try from core class with leading slash
@@ -148,7 +147,7 @@ public final class InfoImpl implements Info {
     		}
     		catch (Throwable t) {}
     		finally {IOUtil.closeEL(is);}
-	    	if(prop.getProperty("lucee.core.name")!=null) return prop;
+	    	if(prop.getProperty(keyToValidate)!=null) return prop;
 	    	
     		
 	    	prop = new Properties();
@@ -158,7 +157,7 @@ public final class InfoImpl implements Info {
     		}
     		catch (Throwable t) {}
     		finally {IOUtil.closeEL(is);}
-	    	if(prop.getProperty("lucee.core.name")!=null) return prop;
+	    	if(prop.getProperty(keyToValidate)!=null) return prop;
 	    	
     		return new Properties();
     		
