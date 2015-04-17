@@ -48,6 +48,7 @@ public final class MixedAppListener extends ModernAppListener {
 		return "mixed";
 	}
 	
+	
 	private static PageSource getApplicationPageSource(PageContext pc,PageSource requestedPage, int mode, RefBoolean isCFC) {
 		if(mode==ApplicationListener.MODE_CURRENT2ROOT)
 			return getApplicationPageSourceCurrToRoot(pc, requestedPage, isCFC);
@@ -70,13 +71,9 @@ public final class MixedAppListener extends ModernAppListener {
 	}
 	
 	private static PageSource getApplicationPageSourceCurrToRoot(PageContext pc,PageSource requestedPage, RefBoolean isCFC) {
-	    PageSource res=requestedPage.getRealPage(Constants.CFML_APPLICATION_EVENT_HANDLER);
-	    if(res.exists()) {
-	    	isCFC.setValue(true);
-	    	return res;
-	    }
-	    //res=requestedPage.getRealPage(Constants.APP_CFM);
-	    //if(res.exists()) return res;
+		PageSource res=getApplicationPageSourceCurrent(requestedPage, isCFC);
+		if(res!=null)return res;
+	    
 	    
 	    Array arr=lucee.runtime.type.util.ListUtil.listToArrayRemoveEmpty(requestedPage.getRealpathWithVirtual(),"/");
 		//Config config = pc.getConfig();
@@ -101,11 +98,8 @@ public final class MixedAppListener extends ModernAppListener {
 	
 	private static PageSource getApplicationPageSourceCurrOrRoot(PageContext pc,PageSource requestedPage, RefBoolean isCFC) {
 	    // current 
-		PageSource res=requestedPage.getRealPage(Constants.CFML_APPLICATION_EVENT_HANDLER);
-	    if(res.exists()) {
-	    	isCFC.setValue(true);
-	    	return res;
-	    }
+		PageSource res=getApplicationPageSourceCurrent(requestedPage, isCFC);
+		if(res!=null)return res;
 	    
 	    // root
 	    return getApplicationPageSourceRoot(pc, isCFC);
