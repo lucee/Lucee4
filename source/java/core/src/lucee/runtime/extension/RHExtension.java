@@ -84,6 +84,7 @@ public class RHExtension implements Serializable {
 	private static final Key BUNDLES = KeyImpl.init("bundles");
 	private static final Key TLDS = KeyImpl.init("tlds");
 	private static final Key FLDS = KeyImpl.init("flds");
+	private static final Key EVENT_GATEWAYS = KeyImpl.init("eventGateways");
 	private static final Key TAGS = KeyImpl.init("tags");
 	private static final Key FUNCTIONS = KeyImpl.init("functions");
 	private static final Key CONTEXTS = KeyImpl.init("contexts");
@@ -118,13 +119,14 @@ public class RHExtension implements Serializable {
 	private final String[] contexts;
 	private final String[] webContexts;
 	private final String[] categories;
+	private final String[] gateways;
 
 	private final List<Map<String, String>> cacheHandlers;
 	private final List<Map<String, String>> orms;
 	private final List<Map<String, String>> monitors;
 	private final List<Map<String, String>> searchs;
 	private final List<Map<String, String>> jdbcs;
-
+	
 	private final Resource extensionFile;
 	
 	public RHExtension(Config config, Resource ext, boolean moveIfNecessary) throws PageException, IOException, BundleException {
@@ -178,6 +180,7 @@ public class RHExtension implements Serializable {
 		List<Map<String,String>> monitors=null;
 		List<Map<String,String>> searchs=null;
 		List<Map<String,String>> jdbcs=null;
+		List<Map<String,String>> eventGateways=null;
 		
 		Attributes attr = manifest.getMainAttributes();
 		// version
@@ -266,6 +269,12 @@ public class RHExtension implements Serializable {
 		if(!StringUtil.isEmpty(str,true)) {
 			jdbcs = toSettings(logger,str);
 		}
+
+		// event-handler
+		str=unwrap(attr.getValue("event-handler"));
+		if(!StringUtil.isEmpty(str,true)) {
+			eventGateways = toSettings(logger,str);
+		}
 		
 		// no we read the content of the zip
 		zis = new ZipInputStream( IOUtil.toBufferedInputStream(ext.getInputStream()) ) ;	 
@@ -282,6 +291,7 @@ public class RHExtension implements Serializable {
 		List<String> webContexts=new ArrayList<String>();
 		List<String> applications=new ArrayList<String>();
 		List<String> plugins=new ArrayList<String>();
+		List<String> gateways=new ArrayList<String>();
 		try {
 			while ( ( entry = zis.getNextEntry()) != null ) {
 				path=entry.getName();
@@ -304,7 +314,18 @@ public class RHExtension implements Serializable {
 				// tlds
 				if(!entry.isDirectory() && startsWith(path,type,"tlds") && StringUtil.endsWithIgnoreCase(path, ".tld")) 
 					tlds.add(fileName);
+				
+				// event-gateway
+				if(!entry.isDirectory() && 
+						(startsWith(path,type,"event-gateway") || startsWith(path,type,"eventGateway")) && 
+						( 
+							StringUtil.endsWithIgnoreCase(path, "."+Constants.getCFMLComponentExtension()) || 
+							StringUtil.endsWithIgnoreCase(path, "."+Constants.getLuceeComponentExtension())
+						)
+					)
+					gateways.add(sub);
 
+				
 				// tags
 				if(!entry.isDirectory() && startsWith(path,type,"tags")) 
 					tags.add(sub);
@@ -314,7 +335,6 @@ public class RHExtension implements Serializable {
 					functions.add(sub);
 	
 				// context
-				String realpath;
 				if(!entry.isDirectory() && startsWith(path,type,"context") && !StringUtil.startsWith(fileName(entry), '.')) 
 					contexts.add(sub);
 				
@@ -340,6 +360,7 @@ public class RHExtension implements Serializable {
 		this.flds=flds.toArray(new String[flds.size()]);
 		this.tlds=tlds.toArray(new String[tlds.size()]);
 		this.tags=tags.toArray(new String[tags.size()]);
+		this.gateways=gateways.toArray(new String[gateways.size()]);
 		this.functions=functions.toArray(new String[functions.size()]);
 		
 		this.contexts=contexts.toArray(new String[contexts.size()]);
@@ -645,6 +666,7 @@ public class RHExtension implements Serializable {
       			,WEBCONTEXTS
       			,APPLICATIONS
       			,PLUGINS
+      			,EVENT_GATEWAYS
       	}, 0, "Extensions");
 		
 
@@ -677,7 +699,8 @@ public class RHExtension implements Serializable {
   	    qry.setAt(TAGS, row, Caster.toArray(getTags()));
   	    qry.setAt(CONTEXTS, row, Caster.toArray(getContexts()));
   	  	qry.setAt(WEBCONTEXTS, row, Caster.toArray(getWebContexts()));
-  	  	qry.setAt(CATEGORIES, row, Caster.toArray(getCategories()));
+  	  	qry.setAt(EVENT_GATEWAYS, row, Caster.toArray(getEventGateways()));
+	    qry.setAt(CATEGORIES, row, Caster.toArray(getCategories()));
   	  	qry.setAt(APPLICATIONS, row, Caster.toArray(getApplications()));
   		qry.setAt(PLUGINS, row, Caster.toArray(getPlugins()));
 	    qry.setAt(START_BUNDLES, row, Caster.toBoolean(getStartBundles()));
@@ -889,6 +912,11 @@ public class RHExtension implements Serializable {
 
 	public String[] getTags() {
 		return tags==null?EMPTY:tags;
+	}
+	
+
+	public String[] getEventGateways() {
+		return gateways==null?EMPTY:gateways;
 	}
 
 	public String[] getApplications() {

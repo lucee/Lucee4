@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 
+import lucee.print;
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.log.Log;
@@ -1876,6 +1877,15 @@ public abstract class ConfigImpl implements Config {
     	if(!dir.exists())dir.mkdir();
     	return dir;
     }
+    
+
+    public Resource getEventGatewayDirectory() {
+    	Resource dir = getConfigDir().getRealResource("context/admin/gdriver");
+    	if(!dir.exists())dir.mkdir();
+    	return dir;
+    }
+    
+    
     
     public Resource getClassesDirectory() {
     	Resource dir = getConfigDir().getRealResource("classes");
