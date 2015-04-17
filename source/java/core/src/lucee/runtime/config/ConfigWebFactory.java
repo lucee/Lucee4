@@ -2015,7 +2015,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		 */
 		// Default query of query DB
 		try {
-			setDatasource(config, datasources, QOQ_DATASOURCE_NAME, new ClassDefinitionImpl("org.hsqldb.jdbcDriver","hypersonic.hsqldb","1.8.0",config.getIdentification()), "hypersonic-hsqldb", "", -1, "jdbc:hsqldb:.", "sa", "", -1, -1, 60000, true, true, DataSource.ALLOW_ALL,
+			setDatasource(config, datasources, QOQ_DATASOURCE_NAME, new ClassDefinitionImpl("org.hsqldb.jdbcDriver","hsqldb","1.8.0",config.getIdentification()), "hypersonic-hsqldb", "", -1, "jdbc:hsqldb:.", "sa", "", -1, -1, 60000, true, true, DataSource.ALLOW_ALL,
 					false, false, null, new StructImpl(), "");
 		} catch (Exception e) {
 			log.error("Datasource", e);
@@ -3459,13 +3459,20 @@ public final class ConfigWebFactory extends ConfigFactory {
 
 		Element orm = hasAccess ? getChildByName(doc.getDocumentElement(), "orm") : null;
 		boolean hasCS = configServer != null;
+		
+		
 
 		// engine
-		//String defaultEngineClass = "rasia.extension.orm.hibernate.HibernateORMEngine";
 		ClassDefinition cdDefault = new ClassDefinitionImpl(DummyORMEngine.class);
 
 		ClassDefinition cd = null;
 		if (orm != null) {
+			
+			// in the beginning we had attr class but only as default with dummy
+			String cls=orm.getAttribute("class");
+			if(DummyORMEngine.class.getName().equals(cls))
+				orm.removeAttribute(cls);
+			
 			cd=getClassDefinition(orm, "engine-", config.getIdentification());
 			if(cd==null) cd=getClassDefinition(orm, "", config.getIdentification());
 		}
