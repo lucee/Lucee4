@@ -43,17 +43,19 @@ public interface TemplateUtil {
 	public long getCompileTime(PageContext pc, PageSource ps,long defaultValue);
 
 	public long getCompileTime(PageContext pc, PageSource ps) throws PageException;
-	
-
-	
 
     public Component searchComponent(PageContext pc,PageSource loadingLocation,String rawPath, Boolean searchLocal, Boolean searchRoot, boolean isExtendedComponent,boolean executeConstr) throws PageException;
+    
     public Interface searchInterface(PageContext pc,PageSource loadingLocation,String rawPath,boolean executeConstr) throws PageException;
+    
     public Page searchPage(PageContext pc,PageSource child,String rawPath, Boolean searchLocal, Boolean searchRoot) throws PageException;
 
+	public Component loadComponent(PageContext pc, Page page, String callPath, boolean isRealPath, boolean silent,boolean isExtendedComponent, boolean executeConstr) throws PageException;
+	
 	public Component loadComponent(PageContext pc, PageSource ps,String callPath, boolean isRealPath, boolean silent, boolean executeConstr) throws PageException;
+	
 	public Page loadPage(PageContext pc,PageSource ps, boolean forceReload) throws PageException;
-    public Interface loadInterface(PageContext pc,Page page, PageSource ps,String callPath, boolean isRealPath) throws PageException;
-    public Component loadComponent(PageContext pc,Page page, String callPath, boolean isRealPath, boolean silent,boolean isExtendedComponent, boolean executeConstr) throws PageException;
-
+    
+	public Interface loadInterface(PageContext pc,Page page, PageSource ps,String callPath, boolean isRealPath) throws PageException;
+    
 }
