@@ -4918,7 +4918,6 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     	
     	// Import Package
     	String importPackage=getString("importpackage",null);
-    	
     	// add importPackage to set
 		if(!StringUtil.isEmpty(importPackage)) {
 			String[] arr = ListUtil.trimItems(ListUtil.listToStringArray(importPackage, ','));
@@ -4930,9 +4929,14 @@ public final class Admin extends TagImpl implements DynamicAttributes {
 		// remove all packages defined in dynamic imports
     	if(!StringUtil.isEmpty(dynamicImportPackage)) {
     		String[] arr = ListUtil.trimItems(ListUtil.listToStringArray(dynamicImportPackage, ','));
-			for(int i=0;i<arr.length;i++){
-				relatedPackages.remove(arr[i]);
+			List<String> newDynImport=new ArrayList<String>();
+    		for(int i=0;i<arr.length;i++){
+    			if(!relatedPackages.contains(arr[i]))
+    				newDynImport.add(arr[i]);
+				//relatedPackages.remove(arr[i]);
 			}
+    		if(arr.length!=newDynImport.size())
+    			dynamicImportPackage=ListUtil.listToListEL(newDynImport, ",");
     	}
     	// Set to List
 		importPackage=ListUtil.toList(relatedPackages, ",");
