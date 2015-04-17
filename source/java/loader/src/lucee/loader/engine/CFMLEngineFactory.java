@@ -594,7 +594,7 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 
 	public File downloadBundle(String symbolicName, String symbolicVersion,Identification id) throws IOException {
 		File jarDir = getBundleDirectory();
-		File jar = new File(jarDir, symbolicName + "-"
+		File jar = new File(jarDir, symbolicName.replace('.', '-') + "-"
 				+ symbolicVersion.replace('.', '-') + (".jar"));
 
 		URL updateProvider = getUpdateLocation();
