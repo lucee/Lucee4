@@ -60,7 +60,7 @@ import lucee.runtime.type.util.UDFUtil;
 import lucee.runtime.writer.BodyContentUtil;
 
 /**
- * defines a abstract class for a User defined Functions
+ * defines an abstract class for a User defined Functions
  */
 public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 	
