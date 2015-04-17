@@ -1730,15 +1730,20 @@ public final class ConfigWebAdmin {
         	}
         }
     }
+    
 
-	public void updateGatewayEntry(String id,ClassDefinition cd, String componentPath, String listenerCfcPath,int startupMode,Struct custom, boolean readOnly) throws PageException {
-		
+	public void updateGatewayEntry(String id,ClassDefinition cd, String componentPath, 
+			String listenerCfcPath,int startupMode,Struct custom, boolean readOnly) throws PageException {
 		checkWriteAccess();
     	boolean hasAccess=ConfigWebUtil.hasAccess(config,SecurityManagerImpl.TYPE_GATEWAY);
+    	if(!hasAccess) throw new SecurityException("no access to update gateway entry");
         
-    	if(!hasAccess)
-            throw new SecurityException("no access to update gateway entry");
-        
+		_updateGatewayEntry(id, cd, componentPath, listenerCfcPath, startupMode, custom, readOnly);
+	}
+
+	void _updateGatewayEntry(String id,ClassDefinition cd, String componentPath, 
+			String listenerCfcPath,int startupMode,Struct custom, boolean readOnly) throws PageException {
+		
     	
         // check parameters
         id=id.trim();
@@ -1830,14 +1835,13 @@ public final class ConfigWebAdmin {
 	private void _removeORMEngine() {
     	Element orm=_getRootElement("orm");
         removeClass(orm,"engine-");
+        removeClass(orm,"");// in the beginning we had no prefix
     }
-
-	/*public static void updateORMEngine(ConfigImpl config, ClassDefinition cd, boolean reload) throws IOException, SAXException, PageException, BundleException {
-		ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
-    	admin._updateORMEngine(cd);
-    	admin._store();
-    	if(reload)admin._reload();
-	}*/
+	
+	public void removeORMEngine() throws SecurityException {
+		checkWriteAccess();
+		_removeORMEngine();
+	}
 
 	public void updateORMEngine(ClassDefinition cd) throws PageException {
     	checkWriteAccess();
@@ -1846,19 +1850,12 @@ public final class ConfigWebAdmin {
     }
 	private void _updateORMEngine(ClassDefinition cd) throws PageException {
     	Element orm=_getRootElement("orm");
+    	removeClass(orm,"");// in the beginning we had no prefix
         setClass(orm,ORMEngine.class,"engine-",cd);
     }
 	
 
 
-	public void removeORMEngine() throws SecurityException {
-		checkWriteAccess();
-		
-        Element orm=_getRootElement("orm");
-        removeClass(orm,"engine-");
-        
-      	
-	}
 
 
 	public void updateCacheConnection(String name, ClassDefinition cd, int _default, Struct custom,boolean readOnly,boolean storage) throws PageException {
@@ -4362,6 +4359,17 @@ public final class ConfigWebAdmin {
         			clearFunction=true;
 				}
 				
+				// event-gateway
+				if(!entry.isDirectory() && 
+						( startsWith(path,type,"event-gateways") || startsWith(path,type,"eventGateways") ) && 
+						( StringUtil.endsWithIgnoreCase(path, "."+Constants.getCFMLComponentExtension()) || StringUtil.endsWithIgnoreCase(path, "."+Constants.getLuceeComponentExtension()) )
+				) {
+					String sub = subFolder(entry);
+					logger.log(Log.LEVEL_INFO,"extension","deploy event-gateway "+sub);
+        			updateEventGateway(zis, sub,false); 
+				}
+
+				
 				// context
 				String realpath;
 				if(!entry.isDirectory() && startsWith(path,type,"context") && !StringUtil.startsWith(fileName(entry), '.')) {
@@ -4540,6 +4548,7 @@ public final class ConfigWebAdmin {
 			// remove functions
 			removeFunctions(rhe.getFunctions()); 
 						
+			removeEventGateways(rhe.getEventGateways()); 
 			
 			
 			// context
@@ -4732,20 +4741,23 @@ public final class ConfigWebAdmin {
 	}
 
 	void updateTLD(InputStream is,String name, boolean closeStream) throws IOException {
-		updateLibrary(config.getTldFile(),is,name,closeStream);
+		write(config.getTldFile(),is,name,closeStream);
 	}
 	void updateFLD(InputStream is,String name, boolean closeStream) throws IOException {
-		updateLibrary(config.getFldFile(),is,name,closeStream);
+		write(config.getFldFile(),is,name,closeStream);
 	}
 	
 
 	void updateTag(InputStream is,String name, boolean closeStream) throws IOException {
-		updateLibrary(config.getTagMapping().getPhysical(),is,name,closeStream);
+		write(config.getTagMapping().getPhysical(),is,name,closeStream);
 	}
 	void updateFunction(InputStream is,String name, boolean closeStream) throws IOException {
-		updateLibrary(config.getFunctionMapping().getPhysical(),is,name,closeStream);
+		write(config.getFunctionMapping().getPhysical(),is,name,closeStream);
 	}
-	
+	void updateEventGateway(InputStream is,String name, boolean closeStream) throws IOException {
+		write(config.getEventGatewayDirectory(),is,name,closeStream);
+	}
+
 	/*static void updateTLD(Config config,InputStream is,String name, boolean closeStream) throws IOException {
 		updateLD(config.getTldFile(),is,name,closeStream);
 	}
@@ -4753,7 +4765,7 @@ public final class ConfigWebAdmin {
 		updateLD(config.getFldFile(),is,name,closeStream);
 	}*/
 	
-	private static void updateLibrary(Resource dir,InputStream is,String name, boolean closeStream) throws IOException {
+	private static void write(Resource dir,InputStream is,String name, boolean closeStream) throws IOException {
 		if(!dir.exists())dir.createDirectory(true);
     	Resource file = dir.getRealResource(name);
     	Resource p = file.getParentResource();
@@ -4762,23 +4774,31 @@ public final class ConfigWebAdmin {
 	}
 
 	public void removeTLD(String name) throws IOException {
-		removeLibrary(config.getTldFile(),name);
+		removeFromDirectory(config.getTldFile(),name);
 	}
 	
 	public void removeTLDs(String[] names) throws IOException {
 		if(ArrayUtil.isEmpty(names)) return;
 		Resource file = config.getTldFile();
 		for(int i=0;i<names.length;i++){
-			removeLibrary(file,names[i]);
+			removeFromDirectory(file,names[i]);
 		}
 	}
 	
+
+	public void removeEventGateways(String[] relpath) throws IOException {
+		if(ArrayUtil.isEmpty(relpath)) return;
+		Resource dir = config.getEventGatewayDirectory();// get Event gateway Directory
+		for(int i=0;i<relpath.length;i++){
+			removeFromDirectory(dir,relpath[i]);
+		}
+	}
 
 	public void removeFunctions(String[] relpath) throws IOException {
 		if(ArrayUtil.isEmpty(relpath)) return;
 		Resource file = config.getFunctionMapping().getPhysical();
 		for(int i=0;i<relpath.length;i++){
-			removeLibrary(file,relpath[i]);
+			removeFromDirectory(file,relpath[i]);
 		}
 	}
 	
@@ -4787,7 +4807,7 @@ public final class ConfigWebAdmin {
 		if(ArrayUtil.isEmpty(relpath)) return;
 		Resource file = config.getTagMapping().getPhysical();
 		for(int i=0;i<relpath.length;i++){
-			removeLibrary(file,relpath[i]);
+			removeFromDirectory(file,relpath[i]);
 		}
 	}
 	
@@ -4795,15 +4815,15 @@ public final class ConfigWebAdmin {
 		if(ArrayUtil.isEmpty(names)) return;
 		Resource file = config.getFldFile();
 		for(int i=0;i<names.length;i++){
-			removeLibrary(file,names[i]);
+			removeFromDirectory(file,names[i]);
 		}
 	}
 
 	public void removeFLD(String name) throws IOException {
-		removeLibrary(config.getFldFile(),name);
+		removeFromDirectory(config.getFldFile(),name);
 	}
 	
-	private void removeLibrary(Resource dir,String relpath) throws IOException {
+	private void removeFromDirectory(Resource dir,String relpath) throws IOException {
 		if(dir.isDirectory()){
 			Resource file = dir.getRealResource(relpath);
 			if(file.isFile()) 
