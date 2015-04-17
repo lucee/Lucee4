@@ -330,7 +330,7 @@ Path placeholders:
 			dns of a ntp time server
 	-->
 	<orm
-		class="lucee.runtime.orm.DummyORMEngine"/>
+		engine-class="lucee.runtime.orm.DummyORMEngine"/>
 	
 	<!--
 		enable and disable debugging
