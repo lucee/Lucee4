@@ -6,7 +6,6 @@
 	<classpathentry kind="lib" path="/Lucee-jars/apache-poi-ooxml-3-8-0.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/apache-poi-ooxml-schemas-3-8-0.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/apache-poi-tm-extractors-3-8-0.jar"/>
-	<classpathentry kind="lib" path="/Lucee-jars/apache-ws-axis-1-4-0.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/apache-xml-xalan-2-7-1.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/apache-xml-xerces-2-11-0.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/backport-util-concurrent-2-2-0.jar"/>
@@ -28,8 +27,6 @@
 	<classpathentry kind="lib" path="/Lucee-jars/org-apache-commons-collections-3-2-1.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/org-apache-commons-discovery-0-4-0.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/org-apache-commons-httpclient-3-0-1.jar"/>
-	<classpathentry kind="lib" path="/Lucee-jars/org-apache-commons-httpclient-4-1-3.jar"/>
-	<classpathentry kind="lib" path="/Lucee-jars/org-apache-commons-httpmime-4-1-3.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/org-apache-commons-lang-2-6-0.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/org-apache-commons-net-3-1-0.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/org-apache-felix-main-4-2-1.jar"/>
@@ -51,5 +48,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Lucee Loader"/>
 	<classpathentry kind="lib" path="lib/jetty-all-9.2.7.v20150116.jar"/>
 	<classpathentry kind="lib" path="/Lucee-jars/ESAPI-2-1-0.jar"/>
+	<classpathentry kind="lib" path="/Users/mic/Projects/Lucee5/tests/testcases/tickets/Issue0296/test2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
