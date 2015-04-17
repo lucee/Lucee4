@@ -184,8 +184,8 @@ you can use tag cfadmin instead. we will add support for this function in a futu
 		<class>lucee.runtime.functions.other.CreateObject</class>
 		<description>
 		this function is deprecated, do the following instead.
-		- For Java use the function "createJavaProxy"
-		- For Webservices use the function "createWebserviceProxy"
+		- For Java use the function "JavaNew"
+		- For Webservices use the function "WebserviceNew"
 		- For Components do instead "new ComponentName()" or the function "loadComponent"
 		- There is no replacement for "com" 
 		
