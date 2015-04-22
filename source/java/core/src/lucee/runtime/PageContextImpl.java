@@ -306,12 +306,10 @@ public final class PageContextImpl extends PageContext {
 	private Tag currentTag=null;
 	private Thread thread;
 	private long startTime;
-	//private boolean isCFCRequest;
 	
 	private DatasourceManagerImpl manager;
 	private Struct threads;
 	private boolean hasFamily=false;
-	//private CFMLFactoryImpl factory;
 	private PageContextImpl parent;
 	private Map<String,DatasourceConnection> transConns=new ConcurrentHashMap<String,DatasourceConnection>();
 	private List<Statement> lazyStats;
@@ -378,6 +376,7 @@ public final class PageContextImpl extends PageContext {
 	}
 	public void setRequestTimeoutException(Throwable requestTimeoutException) {
 		this.requestTimeoutException=requestTimeoutException;
+		
 	}
 
 	
@@ -962,9 +961,6 @@ public final class PageContextImpl extends PageContext {
 		other.applicationContext=applicationContext;
 		other.thread=Thread.currentThread();
 		other.startTime=System.currentTimeMillis();
-		//other.isCFCRequest = isCFCRequest;
-		
-		
 		
 		// path
 		other.base=base;
@@ -2923,14 +2919,6 @@ public final class PageContextImpl extends PageContext {
 		this.base = base;
 	}
 
-	/* *
-	 * @return the isCFCRequest
-	 * /
-	public boolean isCFCRequestX() {
-		StringUtil.endsWithIgnoreCase(req.getServletPath(),"."+config.getComponentExtension());
-		return isCFCRequest;
-	}*/
-	
 	@Override
 	public DataSourceManager getDataSourceManager() {
 		return manager;
