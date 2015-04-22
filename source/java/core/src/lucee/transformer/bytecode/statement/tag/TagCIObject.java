@@ -19,8 +19,11 @@ package lucee.transformer.bytecode.statement.tag;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
+import lucee.print;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.ExceptionUtil;
@@ -123,23 +126,24 @@ public abstract class TagCIObject extends TagBase{
 	}
 
 
-	public StaticBody getStaticBody() {
+	public List<StaticBody> getStaticBodies() {
 		Body b = getBody();
-		//writeOutImports(bc, body, pageType);
+		List<StaticBody> list=null;
 		if(!ASMUtil.isEmpty(b)) {
 			Statement stat;
 			Iterator<Statement> it = b.getStatements().iterator();
 	    	while(it.hasNext()) {
 	        	stat = it.next();
-	        	
-	        	// IFunction
+	        	// StaticBody
 	        	if(stat instanceof StaticBody) {
 	        		it.remove();
-	        		return (StaticBody) stat;
+	        		if(list==null) list=new ArrayList<StaticBody>();
+	        		list.add((StaticBody)stat);
+	        		//return (StaticBody) stat;
 	        	}
 	        }
 		}
-    	return null;
+    	return list;
 	}
 
 }

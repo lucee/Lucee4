@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lucee.print;
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
@@ -1113,8 +1114,10 @@ public final class Page extends BodyBase implements Root {
 			adapter.invokeVirtual(Types.COMPONENT_IMPL, BEFORE_STATIC_CONSTR);
 			adapter.storeLocal(oldData);
 			//ExpressionUtil.visitLine(bc, component.getStart());
-			StaticBody sb=component.getStaticBody();
-			if(sb!=null) writeOutConstrBody(bc,sb,IFunction.PAGE_TYPE_COMPONENT);
+			List<StaticBody> list = component.getStaticBodies();
+			if(list!=null) {
+				writeOutConstrBody(bc,list,IFunction.PAGE_TYPE_COMPONENT);
+			}
 			//ExpressionUtil.visitLine(bc, component.getEnd());
 		int t = tcf.visitTryEndCatchBeging(bc);
 			// BodyContentUtil.flushAndPop(pc,bc);
@@ -1138,15 +1141,20 @@ public final class Page extends BodyBase implements Root {
 	    adapter.endMethod();
 	}
 	
-	private void writeOutConstrBody(BytecodeContext bc,StaticBody body, int pageType) throws TransformerException {
-		// get annd remove all functions from body
-		
+	private void writeOutConstrBody(BytecodeContext bc, List<StaticBody> bodies, int pageType) throws TransformerException {
+		// get and remove all functions from body
 		List<IFunction> funcs=new ArrayList<IFunction>();
-		extractFunctions(bc,body,funcs,pageType);
+		
+		Iterator<StaticBody> it = bodies.iterator();
+		while(it.hasNext()){
+			extractFunctions(bc,it.next(),funcs,pageType);
+		}
 		writeUDFProperties(bc,funcs,pageType);
 		
-		
-		BodyBase.writeOut(bc,body);
+		it = bodies.iterator();
+		while(it.hasNext()){
+			BodyBase.writeOut(bc,it.next());
+		}
 	}
 
 	private void writeOutInitComponent(ConstrBytecodeContext constr,List<LitString> keys, ClassWriter cw, Tag component,String name) throws TransformerException {
