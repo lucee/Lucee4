@@ -91,7 +91,7 @@ public class CFMLEngineWrapper implements CFMLEngine {
 	@Override
 	public void service(HttpServlet servlet, HttpServletRequest req,
 			HttpServletResponse rsp) throws ServletException, IOException {
-		engine.serviceCFML(servlet, req, rsp);
+		engine.service(servlet, req, rsp);
 	}
 
 	@Override
