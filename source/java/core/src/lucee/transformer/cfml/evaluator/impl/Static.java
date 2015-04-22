@@ -82,7 +82,6 @@ public final class Static extends EvaluatorSupport {
 	}
 
 	static StaticBody getScriptBody(Body body) {
-		StaticBody sb=null;
 		Iterator<Statement> it = body.getStatements().iterator();
 		Statement s;
 		while(it.hasNext()){

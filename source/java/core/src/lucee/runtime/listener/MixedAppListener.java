@@ -36,7 +36,7 @@ public final class MixedAppListener extends ModernAppListener {
 	public void onRequest(PageContext pc, PageSource requestedPage, RequestListener rl) throws PageException {
 		RefBoolean isCFC=new RefBooleanImpl(false);
 		
-		PageSource appPS=//pc.isCFCRequest()?null:
+		PageSource appPS=
 			getApplicationPageSource(pc, requestedPage, mode, isCFC);
 		
 		if(isCFC.toBooleanValue())_onRequest(pc, requestedPage,appPS,rl);

@@ -39,7 +39,7 @@ public final class ClassicAppListener extends AppListenerSupport {
 	@Override
 	public void onRequest(PageContext pc,PageSource requestedPage, RequestListener rl) throws PageException {
 		
-		PageSource application=//pc.isCFCRequest()?null:
+		PageSource application=
 			AppListenerUtil.getApplicationPageSource(pc,requestedPage,Constants.CFML_CLASSIC_APPLICATION_EVENT_HANDLER,mode);
 		
 		_onRequest(pc, requestedPage, application,rl);
