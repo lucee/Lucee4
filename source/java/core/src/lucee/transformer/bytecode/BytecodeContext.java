@@ -235,9 +235,6 @@ public class BytecodeContext implements Context {
 		this.currentTag = currentTag;
 	}
 
-	/*public StaticConstrBytecodeContext getStaticConstructorX() {
-		return staticConstr;
-	}*/
 	public ConstrBytecodeContext getConstructor() {
 		return constr;
 	}

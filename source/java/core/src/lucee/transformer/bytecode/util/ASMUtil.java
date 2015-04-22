@@ -47,7 +47,6 @@ import lucee.transformer.bytecode.BytecodeContext;
 import lucee.transformer.bytecode.Page;
 import lucee.transformer.bytecode.ScriptBody;
 import lucee.transformer.bytecode.Statement;
-import lucee.transformer.bytecode.StaticBody;
 import lucee.transformer.bytecode.cast.Cast;
 import lucee.transformer.bytecode.expression.var.Argument;
 import lucee.transformer.bytecode.expression.var.BIF;
