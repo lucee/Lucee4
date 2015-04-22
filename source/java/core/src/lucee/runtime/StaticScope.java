@@ -57,7 +57,9 @@ public class StaticScope extends StructSupport implements Variables,Objects {
 		this.dataMemberDefaultAccess=dataMemberDefaultAccess;
 	}
 
-	
+	public PageSource getPageSource() {
+		return this.cp.getPageSource();
+	}
 
 	@Override
 	public int size() {
