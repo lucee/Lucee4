@@ -127,6 +127,19 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		catch(e){}
 		if(!failed) fail("must fail StaticFunctionInInterfaceImpl");
 	}
+
+
+	public void function testStaticConstructorLifeCycle(){
+		// reset the static scope
+		file action="touch" file="static/StaticConstructorLifeCycle.cfc";
+
+		assertEquals("0-0",static.StaticConstructorLifeCycle::getCount());
+		new static.StaticConstructorLifeCycle();
+		assertEquals("1-1",static.StaticConstructorLifeCycle::getCount());
+		new static.StaticConstructorLifeCycle();
+		assertEquals("2-2",static.StaticConstructorLifeCycle::getCount());
+	}
+
 } 
 
 
