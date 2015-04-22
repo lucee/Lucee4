@@ -43,7 +43,6 @@ import lucee.transformer.bytecode.BodyBase;
 import lucee.transformer.bytecode.FunctionBody;
 import lucee.transformer.bytecode.ScriptBody;
 import lucee.transformer.bytecode.Statement;
-import lucee.transformer.bytecode.StaticBody;
 import lucee.transformer.bytecode.cast.CastBoolean;
 import lucee.transformer.bytecode.cast.CastOther;
 import lucee.transformer.bytecode.expression.FunctionAsExpression;
@@ -863,17 +862,9 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 				
 				TagOther tag = createStaticTag(data, res.getStart());
 				
-				//boolean isNew=false;
-				/*StaticBody body = getStaticBody(data, parent);
-				if(body==null) {
-					body=new StaticBody(data.factory);
-					isNew=true;
-				}*/
 				tag.getBody().addStatement(res);
-				//if(isNew) parent.addStatement(body);
 				return tag;
 			}
-			//parent.addStatement(res);
 			return res;
 	}
 
@@ -1510,19 +1501,6 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 		data.ep.add(tlt, tag, data.flibs, data.srcCode);
 		return tag;
 	}
-
-	/*private StaticBody getStaticBody(ExprData data, Body parent) {
-		Iterator<Statement> it = parent.getStatements().iterator();
-		Statement s;
-		while(it.hasNext()){
-			s = it.next();
-			print.e("s:"+s.getClass().getName());
-			if(s instanceof StaticBody) {
-				return (StaticBody) s;
-			}
-		}
-		return null;
-	}*/
 
 	public Statement paramStatement(ExprData data,Body parent) throws TemplateException  {
 		int pos = data.srcCode.getPos();
