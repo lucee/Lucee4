@@ -1,9 +1,10 @@
 component {
 	
 	static {
+		//systemOutput("<print-stack-trace>",true,true);
 		static.count1=0;
 	}
-	static {
+	static { 
 		static.count2=0;
 	}
 
