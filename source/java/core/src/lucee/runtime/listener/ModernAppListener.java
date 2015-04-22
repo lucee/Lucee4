@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.Cookie;
 
+import lucee.print;
 import lucee.commons.io.DevNullOutputStream;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -42,6 +43,7 @@ import lucee.runtime.ComponentPageImpl;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
+import lucee.runtime.PageSourceImpl;
 import lucee.runtime.component.ComponentLoader;
 import lucee.runtime.component.Member;
 import lucee.runtime.config.Constants;
@@ -96,7 +98,7 @@ public class ModernAppListener extends AppListenerSupport {
 	@Override
 	public void onRequest(PageContext pc, PageSource requestedPage, RequestListener rl) throws PageException {
 		// on requestStart
-		PageSource appPS=//pc.isCFCRequest()?null:
+		PageSource appPS=
 			AppListenerUtil.getApplicationPageSource(pc,requestedPage,pc.getRequestDialect()==CFMLEngine.DIALECT_CFML?Constants.CFML_APPLICATION_EVENT_HANDLER:Constants.LUCEE_APPLICATION_EVENT_HANDLER,mode);
 		
 		_onRequest(pc, requestedPage, appPS,rl);
@@ -141,11 +143,12 @@ public class ModernAppListener extends AppListenerSupport {
 	    	
 			// onRequest
 			if(goon.toBooleanValue()) {
-			boolean isCFC=ResourceUtil.getExtension(targetPage,"")
-					.equalsIgnoreCase(pc.getRequestDialect()==CFMLEngine.DIALECT_CFML?
-							Constants.getCFMLComponentExtension():Constants.getLuceeComponentExtension());
+				
+			boolean isComp=isComponent(pc,requestedPage);
 			Object method;
-			if(isCFC && app.contains(pc,ON_CFCREQUEST) && (method=pc.urlFormScope().get(KeyConstants._method,null))!=null) { 
+			print.e(targetPage);
+			print.e(isComp+"+"+app.contains(pc,ON_CFCREQUEST)+"+"+((method=pc.urlFormScope().get(KeyConstants._method,null))!=null));
+			if(isComp && app.contains(pc,ON_CFCREQUEST) && (method=pc.urlFormScope().get(KeyConstants._method,null))!=null) { 
 				
 				Struct url = (Struct)Duplicator.duplicate(pc.urlFormScope(),true);
 
@@ -215,12 +218,11 @@ public class ModernAppListener extends AppListenerSupport {
 				
 				
 			}
-			//else if(!isCFC && app.contains(pc,ON_REQUEST)) {}
 			else {
 				// TODO impl die nicht so generisch ist
 				try{
 
-					if(!isCFC && app.contains(pc,ON_REQUEST))
+					if(!isComp && app.contains(pc,ON_REQUEST))
 						call(app,pci, ON_REQUEST, new Object[]{targetPage},false);
 					else
 						pci.doInclude(new PageSource[]{requestedPage},false);
@@ -254,6 +256,15 @@ public class ModernAppListener extends AppListenerSupport {
 		}
 	}
 	
+
+	private boolean isComponent(PageContext pc, PageSource requestedPage) {
+		// CFML
+		if(pc.getRequestDialect()==CFMLEngine.DIALECT_CFML) {
+			return ResourceUtil.getExtension(requestedPage.getRealpath(),"").equalsIgnoreCase(Constants.getCFMLComponentExtension());
+		}
+		// Lucee
+		return !PageSourceImpl.isTemplate(pc,requestedPage,true);
+	}
 
 	private PageException handlePageException(PageContextImpl pci, Component app, PageException pe, PageSource requestedPage, String targetPage, RefBoolean goon) throws PageException {
 		PageException _pe=pe;

@@ -884,4 +884,19 @@ public final class PageSourceImpl implements PageSource {
 		// MUST is the mapping always configWeb?
 		return ((ConfigWeb)getMapping().getConfig()).getFactory().toDialect(ResourceUtil.getExtension(relPath, Constants.getLuceeComponentExtension()));
 	}
+
+	/**
+	 * return if the PageSource represent a template (no component,no interface)
+	 * @param pc
+	 * @param ps
+	 * @return
+	 * @throws PageException
+	 */
+	public static boolean isTemplate(PageContext pc,PageSource ps, boolean defaultValue) {
+		try {
+			return !(ps.loadPage(pc, false) instanceof CIPage);
+		} catch (PageException e) {e.printStackTrace();
+			return defaultValue;
+		}
+	}
 }
