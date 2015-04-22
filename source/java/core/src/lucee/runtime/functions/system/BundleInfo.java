@@ -19,6 +19,7 @@ package lucee.runtime.functions.system;
 
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.ApplicationException;
+import lucee.runtime.exp.FunctionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
 import lucee.runtime.java.JavaObject;
@@ -35,10 +36,14 @@ public class BundleInfo implements Function {
 	private static final long serialVersionUID = 3928190461638362170L;
 
 	public static Struct call(PageContext pc , Object obj) throws PageException {
-		if(obj instanceof ObjectWrap) obj=((ObjectWrap)obj).getEmbededObject();
-		else if(obj instanceof JavaObject) obj=((JavaObject)obj).getEmbededObject();
+		if(obj==null) throw new FunctionException(pc, "bundleInfo", 1, "object", "value is null");
 		
-		ClassLoader cl = obj.getClass().getClassLoader();
+		Class<?> clazz;
+		if(obj instanceof JavaObject) clazz=((JavaObject)obj).getClazz();
+		else if(obj instanceof ObjectWrap) clazz=((ObjectWrap)obj).getEmbededObject().getClass();
+		else clazz=obj.getClass();
+		
+		ClassLoader cl = clazz.getClassLoader();
 		if(cl instanceof BundleClassLoader) {
 			BundleClassLoader bcl=(BundleClassLoader) cl;
 			Bundle b=bcl.getBundle();
