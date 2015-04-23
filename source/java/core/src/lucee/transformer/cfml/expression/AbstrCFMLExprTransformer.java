@@ -1248,7 +1248,7 @@ public abstract class AbstrCFMLExprTransformer {
 		BIF bif=new BIF(data.factory,flf.getName(),flf);
 		bif.setArgType(flf.getArgType());
 		try {
-			bif.setClass(flf.getFunctionClassDefinition().getClazz());
+			bif.setClassDefinition(flf.getFunctionClassDefinition());
 		} catch (Throwable t) {
 			throw new PageRuntimeException(t);
 		}
@@ -1710,7 +1710,7 @@ public abstract class AbstrCFMLExprTransformer {
 			BIF bif=new BIF(name,flf);
 			bif.setArgType(flf.getArgType());
 			try {
-				bif.setClass(flf.getFunctionClassDefinition().getClazz());
+				bif.setClassDefinition(flf.getFunctionClassDefinition());
 			} catch (Throwable t) {
 				throw new PageRuntimeException(t);
 			}

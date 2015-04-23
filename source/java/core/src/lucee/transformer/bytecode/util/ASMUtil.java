@@ -1148,7 +1148,7 @@ public final class ASMUtil {
 		BIF bif=new BIF(factory,flf.getName(),flf);
 		bif.setArgType(flf.getArgType());
 		try {
-			bif.setClass(flf.getFunctionClassDefinition().getClazz());
+			bif.setClassDefinition(flf.getFunctionClassDefinition());
 		} catch (Throwable t) {
 			throw new PageRuntimeException(t);
 		}
