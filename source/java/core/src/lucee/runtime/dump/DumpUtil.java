@@ -55,9 +55,14 @@ import lucee.runtime.type.Array;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.ObjectWrap;
 import lucee.runtime.type.QueryImpl;
+import lucee.runtime.type.Struct;
+import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.scope.CookieImpl;
+import lucee.runtime.type.util.KeyConstants;
 
+import org.apache.felix.framework.BundleWiringImpl.BundleClassLoader;
+import org.osgi.framework.Bundle;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -480,7 +485,7 @@ public class DumpUtil {
 		
 		// reflect
 		//else {
-			DumpTable table = new DumpTable(o.getClass().getName(),"#cc9999","#ffcccc","#000000");
+			DumpTable table = new DumpTable(o.getClass().getName(),"#6289a3","#dee3e9","#000000");
 			
 			Class clazz=o.getClass();
 			if(o instanceof Class) clazz=(Class) o;
@@ -493,8 +498,8 @@ public class DumpUtil {
 			
 			// Fields
 			Field[] fields=clazz.getFields();
-			DumpTable fieldDump = new DumpTable("#cc9999","#ffcccc","#000000");
-			fieldDump.appendRow(7,new SimpleDumpData("name"),new SimpleDumpData("pattern"),new SimpleDumpData("value"));
+			DumpTable fieldDump = new DumpTable("#6289a3","#dee3e9","#000000");
+			fieldDump.appendRow(-1,new SimpleDumpData("name"),new SimpleDumpData("pattern"),new SimpleDumpData("value"));
 			for(int i=0;i<fields.length;i++) {
 				Field field = fields[i];
 				DumpData value;
@@ -511,8 +516,8 @@ public class DumpUtil {
 			// Methods
 			StringBuilder objMethods=new StringBuilder();
 			Method[] methods=clazz.getMethods();
-			DumpTable methDump = new DumpTable("#cc9999","#ffcccc","#000000");
-			methDump.appendRow(7,new SimpleDumpData("return"),new SimpleDumpData("interface"),new SimpleDumpData("exceptions"));
+			DumpTable methDump = new DumpTable("#6289a3","#dee3e9","#000000");
+			methDump.appendRow(-1,new SimpleDumpData("return"),new SimpleDumpData("interface"),new SimpleDumpData("exceptions"));
 			for(int i=0;i<methods.length;i++) {
 				Method method = methods[i];
 				
@@ -549,10 +554,31 @@ public class DumpUtil {
 			}
 			if(methods.length>0)table.appendRow(1,new SimpleDumpData("methods"),methDump);
 			
-			DumpTable inherited = new DumpTable("#cc9999","#ffcccc","#000000");
+			
+			DumpTable inherited = new DumpTable("#6289a3","#dee3e9","#000000");
 			inherited.appendRow(7,new SimpleDumpData("Methods inherited from java.lang.Object"));
 			inherited.appendRow(0,new SimpleDumpData(objMethods.toString()));
 			table.appendRow(1,new SimpleDumpData(""),inherited);
+			
+			// Bundle Info
+			ClassLoader cl = clazz.getClassLoader();
+			if(cl instanceof BundleClassLoader) {
+				BundleClassLoader bcl=(BundleClassLoader) cl;
+				Bundle b=bcl.getBundle();
+				Struct sct=new StructImpl();
+				sct.setEL(KeyConstants._id, b.getBundleId());
+				sct.setEL(KeyConstants._name, b.getSymbolicName());
+				sct.setEL("location", b.getLocation());
+				sct.setEL(KeyConstants._version, b.getVersion().toString());
+				
+				DumpTable bd = new DumpTable("#6289a3","#dee3e9","#000000");
+				bd.appendRow(1,new SimpleDumpData("id"),new SimpleDumpData(b.getBundleId()));
+				bd.appendRow(1,new SimpleDumpData("symbolic-name"),new SimpleDumpData(b.getSymbolicName()));
+				bd.appendRow(1,new SimpleDumpData("version"),new SimpleDumpData(b.getVersion().toString()));
+				bd.appendRow(1,new SimpleDumpData("location"),new SimpleDumpData(b.getLocation()));
+				table.appendRow(1,new SimpleDumpData("bundle-info"),bd);
+			}
+			
 			return setId(id,table);
 		//}
 		}
