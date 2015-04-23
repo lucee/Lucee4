@@ -70,11 +70,11 @@ public final class Query extends EvaluatorSupport {
 						if(member instanceof BIF) {
 							BIF bif=(BIF) member;
 
-							if(bif.getClazz().getName().equals(PreserveSingleQuotes.class.getName())) {
+							if(bif.getClassDefinition().getClassName().equals(PreserveSingleQuotes.class.getName())) {
 								printOut.setExpr(bif.getArguments()[0].getValue());
 								continue;
 							}
-							else if(bif.getClazz().getName().equals(ListQualify.class.getName())) {
+							else if(bif.getClassDefinition().getClassName().equals(ListQualify.class.getName())) {
 								Argument[] args = bif.getArguments();
 								List<Argument> arr=new ArrayList<Argument>();
 								
@@ -95,8 +95,8 @@ public final class Query extends EvaluatorSupport {
 								continue;
 							}
 							else if(
-								bif.getClazz().getName().equals(QuotedValueList.class.getName()) ||
-								bif.getClazz().getName().equals(ValueList.class.getName())
+								bif.getClassDefinition().getClassName().equals(QuotedValueList.class.getName()) ||
+								bif.getClassDefinition().getClassName().equals(ValueList.class.getName())
 								) {
 								//printOut.setPreserveSingleQuote(false);
 								continue;

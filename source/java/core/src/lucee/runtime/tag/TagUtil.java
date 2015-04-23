@@ -26,7 +26,11 @@ import java.util.Map.Entry;
 import javax.servlet.http.Cookie;
 import javax.servlet.jsp.tagext.Tag;
 
+import org.osgi.framework.BundleException;
+
 import lucee.commons.io.DevNullOutputStream;
+import lucee.commons.lang.ClassException;
+import lucee.commons.lang.ClassUtil;
 import lucee.commons.lang.Pair;
 import lucee.commons.lang.StringUtil;
 import lucee.loader.engine.CFMLEngine;
@@ -41,7 +45,10 @@ import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.PageRuntimeException;
+import lucee.runtime.ext.function.BIF;
 import lucee.runtime.ext.tag.DynamicAttributes;
+import lucee.runtime.functions.BIFProxy;
 import lucee.runtime.op.Caster;
 import lucee.runtime.reflection.Reflector;
 import lucee.runtime.reflection.pairs.MethodInstance;
@@ -62,7 +69,7 @@ public class TagUtil {
 	public static final short ORIGINAL_CASE = 0;
 	public static final short UPPER_CASE = 1;
 	public static final short LOWER_CASE = 2;
-
+	
 	//private static final String "invalid call of the function ["+tlt.getName()+", you can not mix named on regular arguments]" = "invalid argument for function, only named arguments are allowed like struct(name:\"value\",name2:\"value2\")";
 
 	public static void setAttributeCollection(PageContext pc,Tag tag, MissingAttribute[] missingAttrs, Struct _attrs, int attrType) throws PageException {
@@ -313,5 +320,33 @@ public class TagUtil {
 			//t.printStackTrace();
 		}
     }
+
+	/**
+	 * used by the bytecode builded
+	 * @param pc pageContext
+	 * @param className
+	 * @param bundleName
+	 * @param bundleVersion
+	 * @return
+	 * @throws BundleException 
+	 * @throws ClassException 
+	 */
+	
+	public static Object invokeBIF(PageContext pc, Object[] args, String className, String bundleName, String bundleVersion) throws PageException {
+		try {
+			Class<?> clazz = ClassUtil.loadClassByBundle(className, bundleName, bundleVersion, pc.getConfig().getIdentification());
+			BIF bif;
+			if(Reflector.isInstaneOf(clazz, BIF.class)) 
+				bif=(BIF)clazz.newInstance();
+			else
+				bif = new BIFProxy(clazz);
+			
+			return bif.invoke(pc, args);
+			
+		}
+		catch (Exception e) {
+			throw Caster.toPageException(e);
+		}
+	}
 	
 }

@@ -59,6 +59,7 @@ import lucee.runtime.op.Caster;
 import lucee.runtime.op.Constants;
 import lucee.runtime.op.Operator;
 import lucee.runtime.security.SecurityManager;
+import lucee.runtime.tag.TagUtil;
 import lucee.runtime.type.Array;
 import lucee.runtime.type.Closure;
 import lucee.runtime.type.Collection;
@@ -258,6 +259,8 @@ public final class Types {
 	public static final Type BODY_TAG = Type.getType(BodyTag.class);
 	public static final Type DYNAMIC_ATTRIBUTES = Type.getType(DynamicAttributes.class);
 	public static final Type IDENTIFICATION = Type.getType(Identification.class);
+	public static final Type TAG_UTIL = Type.getType(TagUtil.class);
+	public static final Type BIF = Type.getType(lucee.runtime.ext.function.BIF.class);
 	
 	 
 

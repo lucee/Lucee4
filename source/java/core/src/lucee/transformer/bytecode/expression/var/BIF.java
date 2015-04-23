@@ -18,6 +18,7 @@
  **/
 package lucee.transformer.bytecode.expression.var;
 
+import lucee.runtime.db.ClassDefinition;
 import lucee.transformer.Factory;
 import lucee.transformer.expression.ExprString;
 import lucee.transformer.library.function.FunctionLibFunction;
@@ -30,7 +31,7 @@ public final class BIF extends FunctionMember {
 	
 		private ExprString name;
 		private int argType;
-		private Class clazz;
+		private ClassDefinition cd;
 		private String returnType=ANY;
 		private FunctionLibFunction flf;
 
@@ -58,8 +59,8 @@ public final class BIF extends FunctionMember {
 			this.argType=argType;
 		}
 
-		public void setClass(Class clazz) {
-			this.clazz=clazz;
+		public void setClassDefinition(ClassDefinition cd) {
+			this.cd=cd;
 		}
 
 		public void setReturnType(String returnType) {
@@ -76,8 +77,8 @@ public final class BIF extends FunctionMember {
 		/**
 		 * @return the class
 		 */
-		public Class getClazz() {
-			return clazz;
+		public ClassDefinition getClassDefinition() {
+			return cd;
 		}
 
 		/**

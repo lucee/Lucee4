@@ -21,10 +21,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lucee.commons.lang.ClassException;
+import lucee.commons.lang.ClassUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefInteger;
 import lucee.commons.lang.types.RefIntegerImpl;
+import lucee.runtime.db.ClassDefinition;
 import lucee.runtime.exp.TemplateException;
+import lucee.runtime.tag.TagUtil;
 import lucee.runtime.type.scope.Scope;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.UDFUtil;
@@ -53,6 +57,7 @@ import lucee.transformer.library.function.FunctionLibFunctionArg;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.commons.Method;
+import org.osgi.framework.BundleException;
 
 public class VariableImpl extends ExpressionBase implements Variable {
 	 
@@ -151,7 +156,9 @@ public class VariableImpl extends ExpressionBase implements Variable {
 	private static final Method STATIC_TOUCH0 = new Method("staticTouch",Types.OBJECT,new Type[]{});
 	private static final Method STATIC_GET1 = new Method("staticGet",Types.OBJECT,new Type[]{Types.OBJECT});
 	private static final Method STATIC_TOUCH1 = new Method("staticTouch",Types.OBJECT,new Type[]{Types.OBJECT});
-
+	private static final Method INVOKE_BIF = new Method("invokeBIF",Types.OBJECT,
+			new Type[]{Types.PAGE_CONTEXT,Types.OBJECT_ARRAY,Types.STRING,Types.STRING,Types.STRING});
+	
 	private int scope=Scope.SCOPE_UNDEFINED;
 	List<Member> members=new ArrayList<Member>();
 	int countDM=0;
@@ -396,8 +403,14 @@ public class VariableImpl extends ExpressionBase implements Variable {
     	GeneratorAdapter adapter = bc.getAdapter();
 		adapter.loadArg(0);
 		// class
-		Class<?> bifClass = bif.getClazz();
-		Type bifType = Type.getType(bifClass);//Types.toType(bif.getClassName());
+		ClassDefinition bifCD = bif.getClassDefinition();
+		Class clazz;
+		try {
+			clazz = bifCD.getClazz();
+		} 
+		catch (Exception e) {
+			throw new TransformerException(e,line);
+		}
 		Type rtnType=Types.toType(bif.getReturnType());
 		if(rtnType==Types.VOID)rtnType=Types.STRING;
 		
@@ -405,7 +418,7 @@ public class VariableImpl extends ExpressionBase implements Variable {
 		Argument[] args = bif.getArguments();
 		Type[] argTypes;
 		// Arg Type FIX
-		if(bif.getArgType()==FunctionLibFunction.ARG_FIX)	{
+		if(bif.getArgType()==FunctionLibFunction.ARG_FIX && !bifCD.isBundle())	{
 			
 			if(isNamed(bif.getName(),args)) {
 				NamedArgument[] nargs=toNamedArguments(args);
@@ -455,7 +468,7 @@ public class VariableImpl extends ExpressionBase implements Variable {
 					args[y].writeOutValue(bc, Types.isPrimitiveType(argTypes[y+1])?MODE_VALUE:MODE_REF);
 				}
 				// if no method exists for the exact match of arguments, call the method with all arguments (when exists)
-				if(methodExists(bifClass,"call",argTypes,rtnType)==Boolean.FALSE) {
+				if(methodExists(clazz,"call",argTypes,rtnType)==Boolean.FALSE) {
 					ArrayList<FunctionLibFunctionArg> _args = bif.getFlf().getArg();
 					
 					Type[] tmp = new Type[_args.size()+1];
@@ -482,13 +495,25 @@ public class VariableImpl extends ExpressionBase implements Variable {
 		}
 		// Arg Type DYN
 		else	{
-			
 			argTypes=new Type[2];
 			argTypes[0]=Types.PAGE_CONTEXT;
 			argTypes[1]=Types.OBJECT_ARRAY;
 			ExpressionUtil.writeOutExpressionArray(bc, Types.OBJECT, args);	
 		}
-		adapter.invokeStatic(bifType,new Method("call",rtnType,argTypes));
+		// only class
+		if(!bifCD.isBundle()) {
+			adapter.invokeStatic(Type.getType(clazz),new Method("call",rtnType,argTypes));
+		}
+		// bundle
+		else {
+			//in that case we need 3 addional args 
+			adapter.push(bifCD.getClassName());// className
+			adapter.push(bifCD.getName());// bundle name
+			adapter.push(bifCD.getVersionAsString());// bundle version
+			
+			adapter.invokeStatic(Types.TAG_UTIL,INVOKE_BIF);
+		}
+		
 		if(mode==MODE_REF || !last) {
 			if(Types.isPrimitiveType(rtnType)) {
 				adapter.invokeStatic(Types.CASTER,new Method("toRef",Types.toRefType(rtnType),new Type[]{rtnType}));

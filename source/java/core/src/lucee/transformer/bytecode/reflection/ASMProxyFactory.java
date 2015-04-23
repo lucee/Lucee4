@@ -53,7 +53,6 @@ public class ASMProxyFactory {
 
 	public static final Type ASM_METHOD=Type.getType(ASMMethod.class);
 	public static final Type CLASS404=Type.getType(ClassNotFoundException.class);
-	public static final Type CLASS_UTIL=Type.getType(ClassUtil.class);
 	
 	
 	
