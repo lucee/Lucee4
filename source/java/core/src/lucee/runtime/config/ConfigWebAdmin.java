@@ -4378,7 +4378,7 @@ public final class ConfigWebAdmin {
 	        		updateContext(zis, realpath,false,false);
 				}
 				// web contextS
-				if(!entry.isDirectory() && startsWith(path,type,"webcontexts") && !StringUtil.startsWith(fileName(entry), '.')) {
+				if(!entry.isDirectory() && (startsWith(path,type,"webcontexts")) && !StringUtil.startsWith(fileName(entry), '.')) {
 					realpath=path.substring(12);
 	        		logger.log(Log.LEVEL_INFO,"extension","deploy webcontext "+realpath);
 	        		updateWebContexts(zis, realpath,false,false);
