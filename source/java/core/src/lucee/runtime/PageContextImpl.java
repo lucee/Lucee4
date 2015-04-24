@@ -798,6 +798,11 @@ public final class PageContextImpl extends PageContext {
 	}
 
 	@Override
+	public void doInclude(String realPath) throws PageException {
+		doInclude(getRelativePageSources(realPath),false);
+	}
+	
+	@Override
 	public void doInclude(String realPath, boolean runOnce) throws PageException {
 		doInclude(getRelativePageSources(realPath),runOnce);
 	}

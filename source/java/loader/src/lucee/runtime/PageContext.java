@@ -724,6 +724,7 @@ public abstract class PageContext extends javax.servlet.jsp.PageContext {
 	 */
 	public abstract void setVariablesScope(Variables scope);
 
+
 	/**
 	 * includes a path from a absolute path
 	 * 
@@ -739,10 +740,10 @@ public abstract class PageContext extends javax.servlet.jsp.PageContext {
 	 * 
 	 * @param source absolute path as file object
 	 * @throws ServletException
-	 * @Deprecated used <code> doInclude(String source, boolean runOnce)</code>
-	 *             instead.
+	 * @deprecated used <code> doInclude(String source, boolean runOnce)</code>
+	 *             instead. Still used by extensions ...
 	 */
-	//public abstract void doInclude(String source) throws PageException;
+	public abstract void doInclude(String source) throws PageException;
 
 	/**
 	 * includes a path from a absolute path
