@@ -7,9 +7,6 @@
 <cfset stText.Buttons.updateTrial="Update as Trial">
 <cfset stText.Buttons.updateFull="Update as Full Version">
 
-<cfif StructKeyExists(form,'action2')>
-	<cfset url.action2="install3">
-</cfif>
 <cfparam name="inc" default="">
 <cfparam name="url.action2" default="list">
 <cfparam name="form.mainAction" default="none">
