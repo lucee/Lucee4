@@ -103,7 +103,7 @@ public final class SMTPClient implements Serializable  {
 	
 	private static final String TEXT_HTML = "text/html";
 	private static final String TEXT_PLAIN = "text/plain";
-	private static final SerializableObject LOCK = new SerializableObject();
+	//private static final SerializableObject LOCK = new SerializableObject();
 
 	private static Map<TimeZone, SimpleDateFormat> formatters=new ReferenceMap(ReferenceMap.SOFT,ReferenceMap.SOFT);
 	//private static final int PORT = 25; 
@@ -722,7 +722,7 @@ public final class SMTPClient implements Serializable  {
 			
 			MimeMessageAndSession msgSess;
 			boolean recyleConnection=((ServerImpl)server).reuseConnections();
-			synchronized(LOCK) {
+			{//synchronized(LOCK) {
 				try {
 					msgSess = createMimeMessage(config,server.getHostName(),server.getPort(),_username,_password,_tls,_ssl,!recyleConnection);
 				} catch (MessagingException e) {
