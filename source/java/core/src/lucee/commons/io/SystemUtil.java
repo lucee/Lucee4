@@ -33,6 +33,7 @@ import java.net.MalformedURLException;
 import java.net.NetworkInterface;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -1132,6 +1133,21 @@ public final class SystemUtil {
 	public static void stop(PageContext pc, Throwable t,Log log) {
 		new StopThread(pc,t,log).start();
 	}
+
+
+    public static String getLocalHostName() {
+
+        String result = System.getenv(isWindows() ? "COMPUTERNAME" : "HOSTNAME");
+
+        if (!StringUtil.isEmpty(result))
+            return result;
+
+        try {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException ex) {
+            return "";
+        }
+    }
 }
 
 class StopThread extends Thread {
