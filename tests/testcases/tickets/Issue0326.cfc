@@ -25,18 +25,33 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	//public function afterTests(){}
 	
 	//public function setUp(){}
+	public void function testArray(){
+		var test=['c','a','b'];
+		arraySort(test,"text");
+		assertEquals("a,b,c",arrayToList(test));
+	}
 
-	public void function test(){
+	public void function testMemberFunction(){
+		var test=['c','a','b'];
+		test.sort("text");
+		assertEquals("a,b,c",arrayToList(test));
+	}
+
+	public void function testList(){
+		var test=createObject('java','java.util.ArrayList').init(['c','a','b']);
+		arraySort(test,"text");
+		assertEquals("a,b,c",arrayToList(test));
+	}
+
+	public void function testNativeArray(){
 		var TimeZone = createObject( "java", "java.util.TimeZone" );
 
 		var allZones = TimeZone.getAvailableIds();
 		var before=arrayToList(allZones);
 
 
-		res=arraySort(allZones, "text");
+		arraySort(allZones, "text");
 		var after=arrayToList(allZones);
-		//writeDump(allZones);
-
 		assertFalse(before==after);
 		
 	}

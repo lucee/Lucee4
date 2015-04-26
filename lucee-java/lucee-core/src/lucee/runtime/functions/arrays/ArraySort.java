@@ -21,11 +21,13 @@
  */
 package lucee.runtime.functions.arrays;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.CasterException;
-import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.FunctionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.exp.PageRuntimeException;
@@ -39,25 +41,61 @@ import lucee.runtime.type.util.ArrayUtil;
 public final class ArraySort extends BIF {
 
 	private static final long serialVersionUID = -747941236369495141L;
+	
+	public static boolean call(PageContext pc , Object objArr, Object sortTypeOrClosure) throws PageException {
+		return call(pc , objArr, sortTypeOrClosure, "asc",false);
+	}
+	public static boolean call(PageContext pc , Object objArr, Object sortTypeOrClosure, String sortorder) throws PageException {
+		return call(pc , objArr, sortTypeOrClosure, sortorder,false);
+	}
+	
+	
+	public static boolean call(PageContext pc , Object objArr, Object sortTypeOrClosure, String sortorder, boolean localeSensitive) throws PageException {
+		
+		// Comparator
+		Comparator comp;
+		if(sortTypeOrClosure instanceof UDF)
+			comp=new UDFComparator(pc, (UDF)sortTypeOrClosure);
+		else 
+			comp=ArrayUtil.toComparator(pc,Caster.toString(sortTypeOrClosure), sortorder,localeSensitive);
+		
+		// we always need to convert the original object, because we do not return the result
+		if(objArr instanceof Array) 			((Array)objArr).sort(comp);
+		else if(objArr instanceof List) 		Collections.sort((List)objArr, comp);
+		else if(objArr instanceof Object[]) 	Arrays.sort((Object[])objArr, comp);
+		// else if(objArr instanceof boolean[])	Arrays.sort((boolean[])objArr);
+		else if(objArr instanceof byte[])		Arrays.sort((byte[])objArr);
+		else if(objArr instanceof char[])		Arrays.sort((char[])objArr);
+		else if(objArr instanceof short[])		Arrays.sort((short[])objArr);
+		else if(objArr instanceof int[])		Arrays.sort((int[])objArr);
+		else if(objArr instanceof long[])		Arrays.sort((long[])objArr);
+		else if(objArr instanceof float[])		Arrays.sort((float[])objArr);
+		else if(objArr instanceof double[])		Arrays.sort((double[])objArr);
+		else throw new FunctionException(pc, "ArraySort", 1, "array", "cannot sort object from type ["+Caster.toTypeName(objArr)+"]");
+		
+		return true;
+	}
+	
 
+	
+	// used for member function
 	public static boolean call(PageContext pc , Array array, Object sortTypeOrClosure) throws PageException {
 		return call(pc , array, sortTypeOrClosure, "asc",false);
 	}
+	
 	public static boolean call(PageContext pc , Array array, Object sortTypeOrClosure, String sortorder) throws PageException {
 		return call(pc , array, sortTypeOrClosure, sortorder,false);
 	}
 	
-	public static boolean call(PageContext pc , Array array, Object sortTypeOrClosure, String sortorder, boolean localeSensitive) throws PageException {
-		if(array.getDimension()>1)
-			throw new ExpressionException("only 1 dimensional arrays can be sorted");
-
-		if(sortTypeOrClosure instanceof UDF){
-			UDFComparator comp=new UDFComparator(pc, (UDF)sortTypeOrClosure);
-			array.sort(comp);
-		}
-		else {
-			array.sort(ArrayUtil.toComparator(pc,Caster.toString(sortTypeOrClosure), sortorder,localeSensitive));
-		}
+	public static boolean call(PageContext pc , Array arr, Object sortTypeOrClosure, String sortorder, boolean localeSensitive) throws PageException {
+		// Comparator
+		Comparator comp;
+		if(sortTypeOrClosure instanceof UDF)
+			comp=new UDFComparator(pc, (UDF)sortTypeOrClosure);
+		else 
+			comp=ArrayUtil.toComparator(pc,Caster.toString(sortTypeOrClosure), sortorder,localeSensitive);
+		
+		arr.sort(comp);
 		return true;
 	}
 	
