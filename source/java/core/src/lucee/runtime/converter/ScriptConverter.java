@@ -63,8 +63,8 @@ import org.w3c.dom.Node;
  */
 public final class ScriptConverter extends ConverterSupport {
 	private static final Collection.Key REMOTING_FETCH = KeyImpl.intern("remotingFetch");
-	private static final char   QUOTE_CHAR = '"';
-	private static final String QUOTE_STR  = "\"";
+	private static final char   QUOTE_CHR = '"';
+	private static final String QUOTE_STR = String.valueOf(QUOTE_CHR);
 
 	private int deep=1;
 	private boolean ignoreRemotingFetch=true;
@@ -88,13 +88,13 @@ public final class ScriptConverter extends ConverterSupport {
     private void _serializeSerializable(Serializable serializable, StringBuilder sb) throws ConverterException {
        
         sb.append(goIn());
-	    sb.append("evaluateJava(").append(QUOTE_CHAR);
+	    sb.append("evaluateJava(").append(QUOTE_CHR);
 	    try {
 		    sb.append(JavaConverter.serialize(serializable));
         } catch (IOException e) {
             throw toConverterException(e);
         }
-	    sb.append(QUOTE_CHAR).append(')');
+	    sb.append(QUOTE_CHR).append(')');
     }
 	
 	/**
@@ -177,9 +177,9 @@ public final class ScriptConverter extends ConverterSupport {
             String key=Caster.toString(it.next(),"");
             if(doIt)sb.append(',');
             doIt=true;
-            sb.append(QUOTE_CHAR);
+            sb.append(QUOTE_CHR);
             sb.append(escape(key));
-            sb.append(QUOTE_CHAR);
+            sb.append(QUOTE_CHR);
             sb.append(':');
             _serialize(struct.get(key,null),sb,done);
         }
@@ -202,9 +202,9 @@ public final class ScriptConverter extends ConverterSupport {
             if(hasIgnores && ignoreSet.contains(key)) continue;
             if(doIt)sb.append(',');
             doIt=true;
-            sb.append(QUOTE_CHAR);
+            sb.append(QUOTE_CHR);
             sb.append(escape(key.getString()));
-            sb.append(QUOTE_CHAR);
+            sb.append(QUOTE_CHR);
             sb.append(':');
             _serialize(struct.get(key,null),sb,new HashSet<Object>());
         }
@@ -235,9 +235,9 @@ public final class ScriptConverter extends ConverterSupport {
             Object key=it.next();
             if(doIt)sb.append(',');
             doIt=true;
-            sb.append(QUOTE_CHAR);
+            sb.append(QUOTE_CHR);
             sb.append(escape(key.toString()));
-            sb.append(QUOTE_CHAR);
+            sb.append(QUOTE_CHR);
             sb.append(':');
             _serialize(map.get(key),sb,done);
         }
@@ -259,13 +259,13 @@ public final class ScriptConverter extends ConverterSupport {
 		sb.append(goIn());
 		try {
 			sb.append("evaluateComponent(")
-					.append(QUOTE_CHAR)
+					.append(QUOTE_CHR)
 					.append(c.getAbsName())
-					.append(QUOTE_CHAR)
+					.append(QUOTE_CHR)
 					.append(',')
-					.append(QUOTE_CHAR)
+					.append(QUOTE_CHR)
 					.append( ComponentUtil.md5(c) )
-					.append(QUOTE_CHAR)
+					.append(QUOTE_CHR)
 					.append(",{");
 		} catch (Exception e) {
 			throw toConverterException(e);
@@ -284,9 +284,9 @@ public final class ScriptConverter extends ConverterSupport {
 	            if(member instanceof UDF)continue;
 	            if(doIt)sb.append(',');
 	            doIt=true;
-	            sb.append(QUOTE_CHAR);
+	            sb.append(QUOTE_CHR);
 	            sb.append(escape(e.getKey().getString()));
-	            sb.append(QUOTE_CHAR);
+	            sb.append(QUOTE_CHR);
 	            sb.append(':');
 	            _serialize(member,sb,done);
 	        }
@@ -328,9 +328,9 @@ public final class ScriptConverter extends ConverterSupport {
                 if(member instanceof UDF)continue;
                 if(doIt)sb.append(',');
                 doIt=true;
-                sb.append(QUOTE_CHAR);
+                sb.append(QUOTE_CHR);
                 sb.append(escape(k.getString()));
-                sb.append(QUOTE_CHAR);
+                sb.append(QUOTE_CHR);
                 sb.append(':');
                 _serialize(member,sb,done);
             }
@@ -367,9 +367,9 @@ public final class ScriptConverter extends ConverterSupport {
 		    if(oDoIt)sb.append(',');
 		    oDoIt=true;
 		    sb.append(goIn());
-            sb.append(QUOTE_CHAR);
+            sb.append(QUOTE_CHR);
             sb.append(escape(k.getString()));
-            sb.append(QUOTE_CHAR);
+            sb.append(QUOTE_CHR);
 			sb.append(":[");
 			boolean doIt=false;
 			for(int y=1;y<=len;y++) {
@@ -409,9 +409,9 @@ public final class ScriptConverter extends ConverterSupport {
 			// String
 			if(object instanceof String) {
 			    sb.append(goIn());
-			    sb.append(QUOTE_CHAR);
+			    sb.append(QUOTE_CHR);
 			    sb.append(escape(object.toString()));
-			    sb.append(QUOTE_CHAR);
+			    sb.append(QUOTE_CHR);
 			    deep--;
 			    return;
 			}
@@ -537,9 +537,9 @@ public final class ScriptConverter extends ConverterSupport {
     private void _serializeXML(Node node, StringBuilder sb) {
     	node=XMLCaster.toRawNode(node);
     	sb.append(goIn());
-	    sb.append("xmlParse(").append(QUOTE_CHAR);
+	    sb.append("xmlParse(").append(QUOTE_CHR);
 	    sb.append(escape(XMLCaster.toString(node,"")));
-	    sb.append(QUOTE_CHAR).append(")");
+	    sb.append(QUOTE_CHR).append(")");
     	
 	}
 
