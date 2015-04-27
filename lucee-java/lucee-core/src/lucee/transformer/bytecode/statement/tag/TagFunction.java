@@ -75,8 +75,9 @@ public final class TagFunction extends TagBase implements IFunction {
 	}
 
 	public void _writeOut(BytecodeContext bc, int type) throws BytecodeException {
+		
 		Body functionBody = new BodyBase();
-		Function func = createFunction(bc.getPage(),functionBody);
+		Function func = createFunction(bc.getPage(),functionBody,bc.getOutput());
 		func.setParent(getParent());
 
 		List<Statement> statements = getBody().getStatements();
@@ -197,9 +198,9 @@ public final class TagFunction extends TagBase implements IFunction {
 
 	}
 
-	private Function createFunction(Page page, Body body) throws BytecodeException {
+	private Function createFunction(Page page, Body body,boolean defaultOutput) throws BytecodeException {
 		Attribute attr;
-
+		
 		// name
 		Expression name = removeAttribute("name").getValue();
 		/*if(name instanceof LitString) {
@@ -213,8 +214,7 @@ public final class TagFunction extends TagBase implements IFunction {
 
 		// output
 		attr = removeAttribute("output");
-		LitBoolean defaultOutput = ((ConfigWebImpl)ThreadLocalPageContext.get().getConfig()).getDefaultFunctionOutput() ? LitBoolean.TRUE : LitBoolean.FALSE;
-		Expression output = (attr == null) ? defaultOutput : attr.getValue();
+		Expression output = (attr == null) ? (defaultOutput ? LitBoolean.TRUE : LitBoolean.FALSE) : attr.getValue();
 		
 		// bufferOutput
 		attr = removeAttribute("bufferoutput");

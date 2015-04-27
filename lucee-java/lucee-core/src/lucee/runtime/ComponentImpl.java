@@ -1429,7 +1429,9 @@ public final class ComponentImpl extends StructSupport implements Externalizable
         sct.set(KeyConstants._path,ps.getDisplayPath());
         sct.set(KeyConstants._type,"component");
             
-        Class<?> skeleton = comp.getJavaAccessClass(pc,new RefBooleanImpl(false),((ConfigImpl)pc.getConfig()).getExecutionLogEnabled(),false,false,((ConfigImpl)pc.getConfig()).getSuppressWSBeforeArg());
+        Class<?> skeleton = comp.getJavaAccessClass(pc,new RefBooleanImpl(false),((ConfigImpl)pc.getConfig()).getExecutionLogEnabled(),false,false,
+        		((ConfigImpl)pc.getConfig()).getSuppressWSBeforeArg(),
+        		((ConfigImpl)pc.getConfig()).getDefaultFunctionOutput());
         if(skeleton !=null)sct.set(KeyConstants._skeleton, skeleton);
         
         HttpServletRequest req = pc.getHttpServletRequest();
@@ -1836,18 +1838,18 @@ public final class ComponentImpl extends StructSupport implements Externalizable
     
     @Override
     public Class getJavaAccessClass(RefBoolean isNew) throws PageException {
-    	return getJavaAccessClass(ThreadLocalPageContext.get(),isNew, false,true,true,true);
+    	return getJavaAccessClass(ThreadLocalPageContext.get(),isNew);
     }
     
     public Class getJavaAccessClass(PageContext pc,RefBoolean isNew) throws PageException {
-    	return getJavaAccessClass(pc,isNew, false,true,true,true);
+    	return getJavaAccessClass(pc,isNew, false,true,true,true,((ConfigImpl)ThreadLocalPageContext.getConfig(pc)).getDefaultFunctionOutput());
     }
 
-    public Class getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean suppressWSbeforeArg) throws PageException {
+    public Class getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean suppressWSbeforeArg, boolean output) throws PageException {
     	isNew.setValue(false);
     	ComponentProperties props =(takeTop)?top.properties:properties;
     	if(props.javaAccessClass==null) {
-    		props.javaAccessClass=ComponentUtil.getComponentJavaAccess(pc,this,isNew,create,writeLog,suppressWSbeforeArg);
+    		props.javaAccessClass=ComponentUtil.getComponentJavaAccess(pc,this,isNew,create,writeLog,suppressWSbeforeArg,output);
 		}
     	return props.javaAccessClass;
     }
