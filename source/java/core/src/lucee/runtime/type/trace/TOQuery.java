@@ -1816,22 +1816,49 @@ public class TOQuery extends TOCollection implements Query,com.allaire.cfx.Query
 
 	@Override
 	public SQL getSql() {
+		log();
 		return qry.getSql();
 	}
 
 	@Override
 	public String getTemplate() {
+		log();
 		return qry.getTemplate();
 	}
 
 	@Override
 	public long getExecutionTime() {
+		log();
 		return qry.getExecutionTime();
 	}
 	
 	@Override
 	public java.util.Iterator getIterator() {
+		log();
 		return new ForEachQueryIterator(this, ThreadLocalPageContext.get().getId());
-    } 
+    }
 
+	@Override
+	public String getCacheType() {
+		log();
+		return qry.getCacheType();
+	}
+
+	@Override
+	public void setCacheType(String cacheType) {
+		log(cacheType);
+		qry.setCacheType(cacheType);
+	}
+
+	@Override
+	public int getColumnCount() {
+		log();
+		return qry.getColumnCount();
+	}
+
+	@Override
+	public void enableShowQueryUsage() {
+		log();
+		qry.enableShowQueryUsage();
+	} 
 }

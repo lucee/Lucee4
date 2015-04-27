@@ -29,7 +29,6 @@ import lucee.runtime.type.util.StructUtil;
 
 public class QueryStruct extends StructSupport {
 
-	private QueryImpl qi=null;
 	private Query qry;
 	private int row;
 

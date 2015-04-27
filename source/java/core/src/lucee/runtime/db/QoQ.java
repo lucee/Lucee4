@@ -81,9 +81,8 @@ public final class QoQ {
     	Select[] arrSelects = selects.getSelects();
     	
     	
-    	QueryImpl target=new QueryImpl(new Collection.Key[0],0,"query");
-		target.setSql(sql);
-    	
+    	QueryImpl target=new QueryImpl(new Collection.Key[0],0,"query",sql);
+		
     	for(int i=0;i<arrSelects.length;i++) {
     		arrSelects[i].getFroms();
     		Column[] froms = arrSelects[i].getFroms();
@@ -182,11 +181,8 @@ public final class QoQ {
 		
 		Collection.Key[] headers = 
 			selects.keySet().toArray(new Collection.Key[selects.size()]);
-		//QueryImpl rtn=new QueryImpl(headers,0,"query");
-		//rtn.setSql(sql);
 		
 	// loop records
-		//Column[] orders = select.getOrderbys();
 		Operation where = select.getWhere();
 		
 		boolean hasMaxrow=maxrows>-1 && !hasOrders;

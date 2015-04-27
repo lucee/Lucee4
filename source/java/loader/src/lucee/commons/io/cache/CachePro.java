@@ -20,6 +20,8 @@ package lucee.commons.io.cache;
 import java.io.IOException;
 
 import lucee.commons.io.cache.exp.CacheException;
+import lucee.runtime.config.Config;
+import lucee.runtime.type.Struct;
 
 public interface CachePro extends Cache {
 
@@ -37,4 +39,10 @@ public interface CachePro extends Cache {
 	 * @throws CacheException
 	 */
 	public void verify() throws CacheException;
+
+	/**
+	 * if the cache does not necessary decouple values, this method should make sure of it.
+	 * @throws CacheException
+	 */
+	public CachePro decouple();
 }

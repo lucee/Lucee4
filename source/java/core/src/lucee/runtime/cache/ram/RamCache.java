@@ -28,11 +28,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.cache.CacheEntry;
+import lucee.commons.io.cache.CachePro;
 import lucee.commons.io.cache.exp.CacheException;
 import lucee.runtime.cache.CacheSupport;
 import lucee.runtime.config.Config;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Constants;
+import lucee.runtime.op.Duplicator;
 import lucee.runtime.type.Struct;
 
 public class RamCache extends CacheSupport {
@@ -45,6 +47,7 @@ public class RamCache extends CacheSupport {
 	private long idleTime;
 	private long until;
 	private int controlInterval=DEFAULT_CONTROL_INTERVAL*1000;
+	private boolean decouple;
 	
 
 	
@@ -76,14 +79,25 @@ public class RamCache extends CacheSupport {
 	
 	@Override
 	public boolean contains(String key) {
-		return getQuiet(key,null)!=null;
+		return _getQuiet(key,null)!=null;
 	}
-
-	
-	
 
 	@Override
 	public CacheEntry getQuiet(String key, CacheEntry defaultValue) {
+		RamCacheEntry entry = entries.get(key);
+		if(entry==null) {
+			return defaultValue;
+		}
+		if(!valid(entry)) {
+			entries.remove(key);
+			return defaultValue;
+		}
+		if(decouple)entry=new RamCacheEntry(entry.getKey(), decouple(entry.getValue()), entry.idleTimeSpan(), entry.liveTimeSpan());
+		return entry;
+	}
+	
+	
+	private CacheEntry _getQuiet(String key, CacheEntry defaultValue) {
 		RamCacheEntry entry = entries.get(key);
 		if(entry==null) {
 			return defaultValue;
@@ -97,8 +111,9 @@ public class RamCache extends CacheSupport {
 
 	@Override
 	public CacheEntry getCacheEntry(String key, CacheEntry defaultValue) {
-		RamCacheEntry ce = (RamCacheEntry) getQuiet(key, null);
+		RamCacheEntry ce = (RamCacheEntry) _getQuiet(key, null);
 		if(ce!=null) {
+			if(decouple)ce=new RamCacheEntry(ce.getKey(), decouple(ce.getValue()), ce.idleTimeSpan(), ce.liveTimeSpan());
 			hitCount++;
 			return ce.read();
 		}
@@ -134,7 +149,7 @@ public class RamCache extends CacheSupport {
 		
 		RamCacheEntry entry= entries.get(key);
 		if(entry==null){
-			entries.put(key, new RamCacheEntry(key,value,
+			entries.put(key, new RamCacheEntry(key,decouple(value),
 					idleTime==null?this.idleTime:idleTime.longValue(),
 					until==null?this.until:until.longValue()));
 		}
@@ -193,6 +208,18 @@ public class RamCache extends CacheSupport {
 	@Override
 	public void verify() throws CacheException {
 		// this cache is in memory and always ok
+	}
+
+	@Override
+	public CachePro decouple() {
+		decouple = true;
+		return this;
+	}
+	
+
+	private Object decouple(Object value) {
+		if(!decouple) return value;
+		return Duplicator.duplicate(value, true);
 	}
 
 }

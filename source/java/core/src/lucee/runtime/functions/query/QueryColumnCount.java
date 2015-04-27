@@ -34,7 +34,7 @@ public final class QueryColumnCount extends BIF {
 
 	public static double call(PageContext pc , Query qry) {
     	if(qry instanceof QueryImpl)
-        	return ((QueryImpl)qry).getColumnCount();
+        	return qry.getColumnCount();
     	return qry.getColumnNames().length;
     }
 	
