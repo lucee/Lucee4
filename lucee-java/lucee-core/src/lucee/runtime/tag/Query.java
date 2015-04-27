@@ -517,7 +517,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 				if(ci instanceof QueryCacheItem) {
 					QueryCacheItem ce = (QueryCacheItem) ci;
 					if(ce.isCachedAfter(cachedAfter))
-						query= ce.query;
+						query= (lucee.runtime.type.Query) ce.query.duplicate(true);
 				}
 			}
 		}
@@ -563,7 +563,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 				//if(cachedWithin!=null)
 				String id = CacheHandlerFactory.createId(sql,datasource!=null?datasource.getName():null,username,password);
 				CacheHandler ch = ConfigWebUtil.getCacheHandlerFactories(pageContext.getConfig()).query.getInstance(pageContext.getConfig(), cachedWithin);
-				ch.set(pageContext, id,cachedWithin,new QueryCacheItem(query));
+				ch.set(pageContext, id,cachedWithin,new QueryCacheItem((lucee.runtime.type.Query)query.duplicate(true)));
 			}
 			exe=query.getExecutionTime();
 		}

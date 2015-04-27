@@ -60,7 +60,8 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		} 
 		var columnList2=qry.columnlist;
 		assertEquals(columnList1,columnList2);
-		
+		queryAddColumn(qry,"susi2");
+
 	}
 } 
 </cfscript>
