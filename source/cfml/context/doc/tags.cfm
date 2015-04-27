@@ -1,5 +1,6 @@
 <cfinclude template="/lucee/admin/resources/text.cfm">
 
+<cfparam name="URL.item"      default="">
 <cfparam name="URL.namespace" default="cf">
 
 
@@ -7,14 +8,14 @@
 <cfset arrAllItems   = Application.objects.utils.getAllTags()>
 
 <cfif len( url.item )>
-	
+
 	<cfif !arrAllItems.findNoCase( url.item )>
-	
+
 		<cfset url.item = "">
 	</cfif>
 
 	<cfloop array="#arrNamespaces#" item="ns">
-		
+
 		<cfif left( url.item, len( ns ) ) == ns>
 
 			<cfset url.item = mid( url.item, len( ns ) + 1 )>
@@ -25,7 +26,7 @@
 
 
 <cfsavecontent variable="Request.htmlBody">
-	
+
 	<script type="text/javascript">
 
 		<cfoutput>
@@ -51,14 +52,14 @@
 
 	<form id="form-item-selector" action="#CGI.SCRIPT_NAME#">
 		<div class="centered x-large">
-			
-			#stText.doc.choosetag#: 
+
+			#stText.doc.choosetag#:
 			<input type="text" name="item" id="search-item" autocomplete="off">
 
-			<input type="submit" value="#stText.Buttons.OK#"> 
+			<input type="submit" value="#stText.Buttons.OK#">
 		</div>
 		<cfif len( url.item )>
-				
+
 			<div class="centered" style="padding: 0.5em;"><a href="#CGI.SCRIPT_NAME#">see all tags</a></div>
 		</cfif>
 	</form>
@@ -90,15 +91,15 @@
 		<!--- Body --->
 		<h2>#stText.doc.bodyTitle#</h2>
 		<div class="text">#stText.doc.body[ data.bodyType ]#</div>
-		
+
 		<h2>#stText.doc.example#</h2>
 
 		<cfset arrAttrNames= data.attributes.keyArray().sort( 'textnocase' )>
 
 		<cfif data.hasNameAppendix><cfset tagName &= "CustomName"></cfif>
-		
+
 		<!--- TODO: color coded example tag --->
-		<pre>	<span class="syntaxTag">&lt;#tagName#</span><cfif data.attributeType == "noname"> <span class="syntaxAttr">##<cfloop array="#arrAttrNames#" index="key">#data.attributes[key].type# <cfbreak></cfloop>expression##</span> <cfelse><!--- 
+		<pre>	<span class="syntaxTag">&lt;#tagName#</span><cfif data.attributeType == "noname"> <span class="syntaxAttr">##<cfloop array="#arrAttrNames#" index="key">#data.attributes[key].type# <cfbreak></cfloop>expression##</span> <cfelse><!---
 	---><cfloop array="#arrAttrNames#" index="key"><cfset attr = data.attributes[ key ]><cfif attr.status EQ "hidden"><cfcontinue></cfif>
 		<cfif !attr.required><span class="syntaxAttr">[</span></cfif><!---
 		---><span class="syntaxAttr">#key#</span>=<span class="syntaxText">"<cfif !attr.required><i></cfif>#attr.type#<cfif !attr.required></i></cfif>"</span><!---
@@ -119,8 +120,8 @@
 			<pre><span class="syntaxTag">	&lt;cfscript></span>
 		<span class="syntaxAttr">#data.name#</span><!---
 	No Name ---><cfif data.attributeType == "noname"> <span class="syntaxAttr">##<cfloop array="#arrAttrNames#" index="key">#data.attributes[ key ].type# <cfbreak></cfloop>expression##</span><!---
-	Single type ---><cfelseif data.script.type == "single"><span class="syntaxAttr"><cfloop array="#arrAttrNames#" index="key"><cfset ss = data.attributes[ key ].scriptSupport><cfif ss != "none"> <!--- 
-	 ---><cfif ss == "optional">[</cfif>#data.attributes[ key ].type#<cfif data.script.rtexpr> expression</cfif><cfif ss == "optional">]</cfif><cfbreak></cfif></cfloop></span><!--- 
+	Single type ---><cfelseif data.script.type == "single"><span class="syntaxAttr"><cfloop array="#arrAttrNames#" index="key"><cfset ss = data.attributes[ key ].scriptSupport><cfif ss != "none"> <!---
+	 ---><cfif ss == "optional">[</cfif>#data.attributes[ key ].type#<cfif data.script.rtexpr> expression</cfif><cfif ss == "optional">]</cfif><cfbreak></cfif></cfloop></span><!---
 	multiple ---><cfelse><cfloop array="#arrAttrNames#" index="key"><cfset attr=data.attributes[key]><cfif attr.status == "hidden"><cfcontinue></cfif>
 		<cfif !attr.required><span class="syntaxAttr">[</span></cfif><!---
 		---><span class="syntaxAttr">#key#</span>=<span class="syntaxText">"<cfif !attr.required><i></cfif>#attr.type#<cfif !attr.required></i></cfif>"</span><!---
@@ -182,7 +183,7 @@
 		<cfloop array="#arrAllItems#" item="ai" index="ii">
 
 			<cfif left( ai, 3 ) != lastPrefix>
-				
+
 				<div style="height: 0.65em;"></div>
 				<cfset lastPrefix = left( ai, 3 )>
 			</cfif>
