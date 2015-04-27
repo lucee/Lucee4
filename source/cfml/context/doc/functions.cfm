@@ -1,21 +1,22 @@
 <cfinclude template="/lucee/admin/resources/text.cfm">
 <cfset stText.doc.attr.default="Default Value">
 
+<cfparam name="URL.item"      default="">
 
 <cfset arrAllItems = Application.objects.utils.getAllFunctions()>
 
 
 <cfif len( url.item )>
-	
+
 	<cfif !arrAllItems.findNoCase( url.item )>
-	
+
 		<cfset url.item = "">
 	</cfif>
 </cfif>
 
 
 <cfsavecontent variable="Request.htmlBody">
-	
+
 	<script type="text/javascript">
 
 		<cfoutput>
@@ -42,14 +43,14 @@
 
 	<form id="form-item-selector" action="#CGI.SCRIPT_NAME#">
 		<div class="centered x-large">
-			
-			#stText.doc.chooseFunction#: 
+
+			#stText.doc.chooseFunction#:
 			<input type="text" name="item" id="search-item" autocomplete="off">
 
-			<input type="submit" value="#stText.Buttons.OK#"> 
+			<input type="submit" value="#stText.Buttons.OK#">
 		</div>
 		<cfif len( url.item )>
-			
+
 			<div class="centered" style="padding: 0.5em;"><a href="#CGI.SCRIPT_NAME#">see all functions</a></div>
 		</cfif>
 	</form>
@@ -57,7 +58,7 @@
 
 
 	<cfif len( url.item )>
-		
+
 		<cfset data = getFunctionData( url.item )>
 
 		<h2>Function <em>#uCase( url.item )#</em></h2>
@@ -93,7 +94,7 @@
 					<cfelseif data.argMax GT 0>
 					#replace(stText.doc.arg.max,"{max}",data.argMax)#
 					</cfif>
-				
+
 				</cfif>
 			</div>
 		</cfif>
@@ -134,15 +135,15 @@
 		</cfif>
 
 	<cfelse><!--- len( url.item) !--->
-		
-		<!--- render index !--->		
+
+		<!--- render index !--->
 		<br>
 
 		<cfset lastPrefix = left( arrAllItems[ 1 ], 1 )>
 		<cfloop array="#arrAllItems#" index="ai">
 
 			<cfif left( ai, 1 ) != lastPrefix>
-				
+
 				<div style="height: 0.65em;"></div>
 				<cfset lastPrefix = left( ai, 1 )>
 			</cfif>

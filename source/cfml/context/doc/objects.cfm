@@ -1,21 +1,22 @@
 <cfinclude template="/lucee/admin/resources/text.cfm">
 
+<cfparam name="URL.item"      default="">
 
 <cfset itemList = Application.objects.utils.getMemberFunctions()>
 
 <cfset arrAllItems = itemList.keyArray().sort( 'textnocase' )>
 
 <cfif len( url.item )>
-	
+
 	<cfif !arrAllItems.findNoCase( url.item )>
-	
+
 		<cfset url.item = "">
 	</cfif>
 </cfif>
 
 
 <cfsavecontent variable="Request.htmlBody">
-	
+
 	<script type="text/javascript">
 
 		<cfoutput>
@@ -43,14 +44,14 @@
 
 	<form id="form-item-selector" action="#CGI.SCRIPT_NAME#">
 		<div class="centered x-large">
-			
-			#stText.doc.chooseFunction#: 
+
+			#stText.doc.chooseFunction#:
 			<input type="text" name="item" id="search-item" autocomplete="off">
 
-			<input type="submit" value="#stText.Buttons.OK#"> 
+			<input type="submit" value="#stText.Buttons.OK#">
 		</div>
 		<cfif len( url.item )>
-			
+
 			<div class="centered" style="padding: 0.5em;"><a href="#CGI.SCRIPT_NAME#">see all object methods</a></div>
 		</cfif>
 	</form>
@@ -123,18 +124,18 @@
 		<cfset lastObj    = "">
 		<cfset lastPrefix = "">
 		<cfloop array="#arrAllItems#" item="objMethod">
-			
+
 			<cfset obj    = listFirst( objMethod, '.' )>
 			<cfset method = listLast( objMethod, '.' )>
 
 			<cfif obj != lastObj>
-			
+
 				<h3 style="margin-top: 1.0em;">#listFirst( objMethod, '.' )#</h3>
 				<cfset lastObj = obj>
 			</cfif>
-		
+
 			<cfif left( method, 1 ) != lastPrefix>
-				
+
 				<div style="height: 0.65em;">&nbsp;</div>
 				<cfset lastPrefix = left( method, 1 )>
 			</cfif>
