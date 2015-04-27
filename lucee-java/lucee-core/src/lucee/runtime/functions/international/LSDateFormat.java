@@ -29,12 +29,13 @@ import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
+import lucee.runtime.functions.BIF;
 import lucee.runtime.i18n.LocaleFactory;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.date.DateCaster;
 import lucee.runtime.type.dt.DateTime;
 
-public final class LSDateFormat implements Function {
+public final class LSDateFormat extends BIF implements Function {
 
 	private static final long serialVersionUID = 4720003854756942610L;
 	
@@ -68,5 +69,18 @@ public final class LSDateFormat implements Function {
 			if(res!=null)return res;
 		}
 		return DateCaster.toDateAdvanced(object,timeZone);
+	}
+	
+	@Override
+	public Object invoke(PageContext pc, Object[] args) throws PageException {
+		if (args.length == 1) {
+			return call(pc, args[0]);
+		} else if (args.length == 2) {
+        	return call(pc, args[0], Caster.toString(args[1]));
+        } else if (args.length == 3){
+        	return call(pc, args[0], Caster.toString(args[1]), Caster.toString(args[2]));
+        } else {
+        	return call(pc, args[0], Caster.toString(args[1]), Caster.toString(args[2]), Caster.toString(args[3]));		
+        }
 	}
 }
