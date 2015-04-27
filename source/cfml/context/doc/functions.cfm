@@ -1,7 +1,6 @@
 <cfinclude template="/lucee/admin/resources/text.cfm">
 <cfset stText.doc.attr.default="Default Value">
 
-<cfparam name="URL.item"      default="">
 
 <cfset arrAllItems = Application.objects.utils.getAllFunctions()>
 
