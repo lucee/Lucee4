@@ -306,7 +306,7 @@ public final class CFMLTransformer {
 				ConfigWebUtil.getEngine(config).getInfo().getFullVersionInfo(),
 				sourceLastModified,
 				sc.getWriteLog(),
-				sc.getDialect()==CFMLEngine.DIALECT_LUCEE || config.getSuppressWSBeforeArg());
+				sc.getDialect()==CFMLEngine.DIALECT_LUCEE || config.getSuppressWSBeforeArg(),config.getDefaultFunctionOutput());
 		
 		TagData data = new TagData(factory,_tlibs,flibs,config.getCoreTagLib(sc.getDialect()).getScriptTags(),sc,page,dnuc);
 		

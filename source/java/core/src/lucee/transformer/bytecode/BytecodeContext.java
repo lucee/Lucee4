@@ -50,6 +50,7 @@ public class BytecodeContext implements Context {
 	//private StaticConstrBytecodeContext staticConstr;
 	private ConstrBytecodeContext constr;
 	private final boolean suppressWSbeforeArg;
+	private final boolean output;
 	private Stack<OnFinally> insideFinallies=new Stack<OnFinally>();
 	
 	private static long _id=0;
@@ -63,7 +64,7 @@ public class BytecodeContext implements Context {
 	protected PageSource ps;
 
 	public BytecodeContext(PageSource ps,ConstrBytecodeContext constr,Page page,List<LitString> keys,ClassWriter classWriter,String className, GeneratorAdapter adapter,
-			Method method,boolean writeLog, boolean suppressWSbeforeArg) {
+			Method method,boolean writeLog, boolean suppressWSbeforeArg, boolean output) {
 		this.classWriter = classWriter;
 		this.className = className;
 		this.writeLog = writeLog;
@@ -74,6 +75,7 @@ public class BytecodeContext implements Context {
 		this.constr=constr;
 		this.page=page;
 		this.suppressWSbeforeArg=suppressWSbeforeArg;
+		this.output=output;
 		if(ps!=null)this.ps=ps;
 		else if(constr!=null)this.ps=constr.ps;
 	}
@@ -90,6 +92,7 @@ public class BytecodeContext implements Context {
 		this.constr=constr;
 		this.page=bc.getPage();
 		this.suppressWSbeforeArg=bc.suppressWSbeforeArg;
+		this.output=bc.output;
 		this.ps=bc.ps;
 	}
 	
@@ -267,6 +270,10 @@ public class BytecodeContext implements Context {
 		return suppressWSbeforeArg;
 	}
 
+	public boolean getOutput() {
+		return output;
+	}
+
 	public Config getConfig() {
 		if(ps!=null) return ps.getMapping().getConfig();
 		return ThreadLocalPageContext.getConfig();
@@ -296,4 +303,5 @@ public class BytecodeContext implements Context {
 		}
 		return false;
 	}
+
 }

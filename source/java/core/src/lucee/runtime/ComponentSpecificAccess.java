@@ -498,6 +498,10 @@ public final class ComponentSpecificAccess extends StructSupport implements Comp
 	public Class getJavaAccessClass(PageContext pc, RefBoolean isNew, boolean writeLog, boolean takeTop, boolean create, boolean supressWSbeforeArg) throws PageException {
 		return component.getJavaAccessClass(pc, isNew, writeLog, takeTop, create, supressWSbeforeArg);
 	}
+	@Override
+	public Class getJavaAccessClass(PageContext pc, RefBoolean isNew, boolean writeLog, boolean takeTop, boolean create, boolean supressWSbeforeArg, boolean output) throws PageException {
+		return component.getJavaAccessClass(pc, isNew, writeLog, takeTop, create, supressWSbeforeArg,output);
+	}
 
 	@Override
 	public int getModifier() {

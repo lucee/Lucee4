@@ -76,7 +76,7 @@ public abstract class TagCIObject extends TagBase{
 				, CFMLEngineFactory.getInstance().getInfo().getFullVersionInfo()
 				, p.getLastModifed()
 				, p.writeLog()
-				, p.getSupressWSbeforeArg());
+				, p.getSupressWSbeforeArg(),p.getOutput());
 		//page.setIsComponent(true); // MUST can be a interface as well
 		page.addStatement(this);
 		

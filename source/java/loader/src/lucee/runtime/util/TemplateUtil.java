@@ -37,7 +37,7 @@ public interface TemplateUtil {
      * @return
      * @throws PageException
      */
-	public Class<?> getComponentJavaAccess(PageContext pc,Component component, RefBoolean isNew,boolean create,boolean writeLog, boolean suppressWSbeforeArg) throws PageException;
+	public Class<?> getComponentJavaAccess(PageContext pc,Component component, RefBoolean isNew,boolean create,boolean writeLog, boolean suppressWSbeforeArg, boolean output) throws PageException;
 	public Class<?> getComponentPropertiesClass(PageContext pc,Component component) throws PageException;
 	
 	public long getCompileTime(PageContext pc, PageSource ps,long defaultValue);

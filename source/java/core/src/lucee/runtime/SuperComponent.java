@@ -485,6 +485,11 @@ public class SuperComponent extends MemberSupport implements Component, Member {
 	public Class getJavaAccessClass(PageContext pc, RefBoolean isNew, boolean writeLog, boolean takeTop, boolean create, boolean supressWSbeforeArg) throws PageException {
 		return comp.getJavaAccessClass(pc, isNew, writeLog, takeTop, create, supressWSbeforeArg);
 	}
+
+	@Override
+	public Class getJavaAccessClass(PageContext pc, RefBoolean isNew, boolean writeLog, boolean takeTop, boolean create, boolean supressWSbeforeArg,boolean output) throws PageException {
+		return comp.getJavaAccessClass(pc, isNew, writeLog, takeTop, create, supressWSbeforeArg,output);
+	}
 	
 	@Override
 	public boolean isPersistent() {

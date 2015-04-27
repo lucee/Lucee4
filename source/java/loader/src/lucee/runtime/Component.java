@@ -78,13 +78,26 @@ public interface Component extends Struct, Objects, CIObject {
 	 * @param isNew
 	 * @throws PageException
 	 * @deprecated use instead
-	 *             <code>getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean supressWSbeforeArg)</code>
+	 *             <code>getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean supressWSbeforeArg,boolean output)</code>
 	 */
 	public Class<?> getJavaAccessClass(RefBoolean isNew) throws PageException;
 
+	/**
+	 * returns java class to the component interface (all UDFs),
+	 * this class is generated dynamic when used
+	 * 
+	 * @param isNew
+	 * @throws PageException
+	 * @deprecated use instead
+	 *             <code>getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean supressWSbeforeArg, boolean output)</code>
+	 */
 	public Class<?> getJavaAccessClass(PageContext pc, RefBoolean isNew,
 			boolean writeLog, boolean takeTop, boolean create,
 			boolean supressWSbeforeArg) throws PageException;
+	
+	public Class<?> getJavaAccessClass(PageContext pc, RefBoolean isNew,
+			boolean writeLog, boolean takeTop, boolean create,
+			boolean supressWSbeforeArg,boolean output) throws PageException;
 
 	/**
 	 * @return Returns the display name.

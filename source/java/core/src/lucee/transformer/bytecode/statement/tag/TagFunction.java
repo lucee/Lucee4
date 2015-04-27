@@ -78,7 +78,7 @@ public final class TagFunction extends TagBase implements IFunction {
 		
 		Body functionBody = new BodyBase(bc.getFactory());
 		RefBoolean isStatic=new RefBooleanImpl();
-		Function func = createFunction(bc.getPage(),functionBody,isStatic);
+		Function func = createFunction(bc.getPage(),functionBody,isStatic,bc.getOutput());
 		
 		//ScriptBody sb=new ScriptBody(bc.getFactory());
 		
@@ -202,7 +202,7 @@ public final class TagFunction extends TagBase implements IFunction {
 
 	}
 
-	private Function createFunction(Page page, Body body, RefBoolean isStatic) throws TransformerException {
+	private Function createFunction(Page page, Body body, RefBoolean isStatic, boolean defaultOutput) throws TransformerException {
 		Attribute attr;
 		LitString ANY = page.getFactory().createLitString("any");
 		LitString PUBLIC = page.getFactory().createLitString("public");
@@ -220,7 +220,7 @@ public final class TagFunction extends TagBase implements IFunction {
 
 		// output
 		attr = removeAttribute("output");
-		Expression output = (attr == null) ? page.getFactory().TRUE() : attr.getValue();
+		Expression output = (attr == null) ? (defaultOutput?page.getFactory().TRUE():page.getFactory().TRUE()) : attr.getValue();
 		
 		// bufferOutput
 		attr = removeAttribute("bufferoutput");

@@ -1958,19 +1958,30 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 
     
     @Override
-    public Class getJavaAccessClass(RefBoolean isNew) throws PageException {
-    	return getJavaAccessClass(ThreadLocalPageContext.get(),isNew, false,true,true,true);
+    public Class<?> getJavaAccessClass(RefBoolean isNew) throws PageException {
+    	return getJavaAccessClass(ThreadLocalPageContext.get(),isNew);
     }
     
-    public Class getJavaAccessClass(PageContext pc,RefBoolean isNew) throws PageException {
-    	return getJavaAccessClass(pc,isNew, false,true,true,true);
+    public Class<?> getJavaAccessClass(PageContext pc,RefBoolean isNew) throws PageException {
+    	return getJavaAccessClass(pc,isNew, false,true,true,true,false);
     }
 
-    public Class getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean suppressWSbeforeArg) throws PageException {
+    @Override
+    public Class<?> getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean suppressWSbeforeArg) throws PageException {
     	isNew.setValue(false);
     	ComponentProperties props =(takeTop)?top.properties:properties;
     	if(props.javaAccessClass==null) {
-    		props.javaAccessClass=ComponentUtil.getComponentJavaAccess(pc,this,isNew,create,writeLog,suppressWSbeforeArg);
+    		props.javaAccessClass=ComponentUtil.getComponentJavaAccess(pc,this,isNew,create,writeLog,suppressWSbeforeArg,true);
+		}
+    	return props.javaAccessClass;
+    }
+
+    @Override
+    public Class<?> getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean suppressWSbeforeArg, boolean output) throws PageException {
+    	isNew.setValue(false);
+    	ComponentProperties props =(takeTop)?top.properties:properties;
+    	if(props.javaAccessClass==null) {
+    		props.javaAccessClass=ComponentUtil.getComponentJavaAccess(pc,this,isNew,create,writeLog,suppressWSbeforeArg,output);
 		}
     	return props.javaAccessClass;
     }

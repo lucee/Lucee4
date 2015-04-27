@@ -33,8 +33,8 @@ public class TemplateUtilImpl implements TemplateUtil {
 	@Override
 	public Class<?> getComponentJavaAccess(PageContext pc, Component component,
 			RefBoolean isNew, boolean create, boolean writeLog,
-			boolean suppressWSbeforeArg) throws PageException {
-		return ComponentUtil.getComponentJavaAccess(pc, component, isNew, create, writeLog, suppressWSbeforeArg);
+			boolean suppressWSbeforeArg, boolean output) throws PageException {
+		return ComponentUtil.getComponentJavaAccess(pc, component, isNew, create, writeLog, suppressWSbeforeArg,output);
 	}
 
 	@Override
