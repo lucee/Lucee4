@@ -12887,6 +12887,7 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 		<member-name>lSDateFormat</member-name>
 		<class>lucee.runtime.functions.international.LSDateFormat</class>
 		<keywords>date,string,formatting</keywords>
+		<status>hidden</status>
 		<description>Formats a date string to a given output using the current sessions locale</description>
 		<argument>
 			<name>date</name>
