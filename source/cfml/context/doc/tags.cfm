@@ -1,6 +1,5 @@
 <cfinclude template="/lucee/admin/resources/text.cfm">
 
-<cfparam name="URL.item"      default="">
 <cfparam name="URL.namespace" default="cf">
 
 
