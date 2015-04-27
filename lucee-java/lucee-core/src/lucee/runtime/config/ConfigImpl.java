@@ -3206,6 +3206,15 @@ public abstract class ConfigImpl implements Config {
 	public boolean getDotNotationUpperCase() {
 		return dotNotationUpperCase;
 	}
+	
+	private boolean defaultFunctionOutput=true;
+	protected void setDefaultFunctionOutput(boolean defaultFunctionOutput) {
+		this.defaultFunctionOutput=defaultFunctionOutput;
+	}
+
+	public boolean getDefaultFunctionOutput() {
+		return defaultFunctionOutput;
+	}
 
 	private boolean getSuppressWSBeforeArg=true;
 	protected void setSuppressWSBeforeArg(boolean getSuppressWSBeforeArg) {
