@@ -56,22 +56,22 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public void function testStringEchoArray() localMode="modern" {
 		data=strWS.echoArray(['Susi']);
-		assertEquals("['Susi']",serialize(data));
+		assertEquals('["Susi"]',serialize(data));
 	}
 
 	public void function testStringEchoStringArray() localMode="modern" {
 		data=strWS.echoStringArray(["Susi"]);
-		assertEquals("['Susi']",serialize(data));
+		assertEquals('["Susi"]',serialize(data));
 	}
 
 	public void function testStringEchoStringStringArray() localMode="modern" {
 		data=strWS.echoStringStringArray([["Susi"]]);
-		assertEquals("[['Susi']]",serialize(data));
+		assertEquals('[["Susi"]]',serialize(data));
 	}
 
 	public void function testStringEchoStringStringStringArray() localMode="modern" {
 		data=strWS.echoStringStringStringArray([[["Susi"]]]);
-		assertEquals("[[['Susi']]]",serialize(data));
+		assertEquals('[[["Susi"]]]',serialize(data));
 	}
 
 
@@ -225,7 +225,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 /** Older tests **/
 	public void function testReturnStruct() localMode="modern" {
 		sct=service.getStruct();
-		assertEquals({"a":1},serialize(sct));
+		assertEquals('{"a":1}',serialize(sct));
 	}
 
 	public void function testSetStruct() localMode="modern" {
