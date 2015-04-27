@@ -146,8 +146,6 @@ public class ModernAppListener extends AppListenerSupport {
 				
 			boolean isComp=isComponent(pc,requestedPage);
 			Object method;
-			print.e(targetPage);
-			print.e(isComp+"+"+app.contains(pc,ON_CFCREQUEST)+"+"+((method=pc.urlFormScope().get(KeyConstants._method,null))!=null));
 			if(isComp && app.contains(pc,ON_CFCREQUEST) && (method=pc.urlFormScope().get(KeyConstants._method,null))!=null) { 
 				
 				Struct url = (Struct)Duplicator.duplicate(pc.urlFormScope(),true);
