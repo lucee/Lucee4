@@ -29,6 +29,7 @@ import lucee.runtime.cache.tag.CacheHandlerFilter;
 import lucee.runtime.cache.tag.CacheItem;
 import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.op.Caster;
+import lucee.runtime.op.Duplicator;
 
 public class RequestCacheHandler implements CacheHandler {
 	
@@ -51,7 +52,7 @@ public class RequestCacheHandler implements CacheHandler {
 
 	@Override
 	public CacheItem get(PageContext pc, String id) {
-		return data.get().get(id);
+		return duplicate(data.get().get(id));
 	}
 
 	@Override
@@ -62,7 +63,12 @@ public class RequestCacheHandler implements CacheHandler {
 	@Override
 	public void set(PageContext pc, String id,Object cachedwithin, CacheItem value) {
 		// cachedwithin is ignored in this cache, it should be "request"
-		data.get().put(id,value);
+		data.get().put(id,duplicate(value));
+	}
+
+	private CacheItem duplicate(CacheItem value) {
+		if(value==null) return null;
+		return (CacheItem) Duplicator.duplicate(value, true);
 	}
 
 	@Override

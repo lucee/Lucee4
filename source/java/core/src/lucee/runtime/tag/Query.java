@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
+import lucee.print;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.StringUtil;
 import lucee.loader.engine.CFMLEngine;
@@ -561,10 +562,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 			}
 			exe=query.getExecutionTime();
 		}
-        else {
-        	if(query instanceof QueryImpl) ((QueryImpl)query).setCacheType(cacheId); // FUTURE add method to interface
-        	else query.setCached(hasCached);
-        }
+        else query.setCacheType(cacheId);
 		
 		if(pageContext.getConfig().debug() && debug) {
 			boolean logdb=((ConfigImpl)pageContext.getConfig()).hasDebugOptions(ConfigImpl.DEBUG_DATABASE);

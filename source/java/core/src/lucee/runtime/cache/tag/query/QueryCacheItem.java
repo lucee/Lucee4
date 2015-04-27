@@ -28,9 +28,11 @@ import lucee.runtime.cache.tag.udf.UDFArgConverter;
 import lucee.runtime.dump.DumpData;
 import lucee.runtime.dump.DumpProperties;
 import lucee.runtime.dump.Dumpable;
+import lucee.runtime.op.Duplicator;
+import lucee.runtime.type.Duplicable;
 import lucee.runtime.type.Query;
 
-public class QueryCacheItem implements CacheItem, Dumpable, Serializable {
+public class QueryCacheItem implements CacheItem, Dumpable, Serializable,Duplicable {
 
 	private static final long serialVersionUID = 7327671003736543783L;
 
@@ -82,6 +84,12 @@ public class QueryCacheItem implements CacheItem, Dumpable, Serializable {
 	@Override
 	public DumpData toDumpData(PageContext pageContext, int maxlevel, DumpProperties properties) {
 		return query.toDumpData(pageContext, maxlevel, properties);
+	}
+
+	@Override
+	public Object duplicate(boolean deepCopy) {
+		// TODO Auto-generated method stub
+		return new QueryCacheItem((Query)query.duplicate(true));
 	}
 
 }

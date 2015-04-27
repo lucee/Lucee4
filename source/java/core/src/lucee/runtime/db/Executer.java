@@ -39,7 +39,9 @@ import lucee.runtime.sql.old.ZOrderBy;
 import lucee.runtime.sql.old.ZQuery;
 import lucee.runtime.sql.old.ZSelectItem;
 import lucee.runtime.sql.old.ZqlParser;
+import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
+import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Query;
 import lucee.runtime.type.QueryColumn;
 import lucee.runtime.type.QueryImpl;
@@ -96,7 +98,7 @@ public final class Executer {
 		Vector vSelects=query.getSelect();
 		int selCount=vSelects.size();
 		
-		Map<String,Object> selects=MapFactory.<String,Object>getConcurrentMap();
+		Map<Collection.Key,Object> selects=MapFactory.<Collection.Key,Object>getConcurrentMap();
 		boolean isSMS=false;
 	// headers
 		for(int i=0;i<selCount;i++) {
@@ -111,7 +113,7 @@ public final class Executer {
 				Key k;
 				while(it.hasNext()){
 					k = it.next();
-					selects.put(k.getString(),k.getString());
+					selects.put(k,k.getString());
 				}
 				isSMS=false;
 			}
@@ -124,14 +126,13 @@ public final class Executer {
 				if(alias==null)alias=column;
 				alias=alias.toLowerCase();
 				
-				selects.put(alias,select);
+				selects.put(KeyImpl.init(alias),select);
 			}
 		}
-		String[] headers = selects.keySet().toArray(new String[selects.size()]);
+		Key[] headers = selects.keySet().toArray(new Collection.Key[selects.size()]);
 		
 		// aHeaders.toArray(new String[aHeaders.size()]);
-		QueryImpl rtn=new QueryImpl(headers,0,"query");
-		rtn.setSql(sql);
+		QueryImpl rtn=new QueryImpl(headers,0,"query",sql);
 		
 	// loop records
 		Vector orders = query.getOrderBy();
@@ -153,7 +154,6 @@ public final class Executer {
 							headers[cell],
 							rtn.getRecordcount(),
 							getValue(pc,sql,qr,row,headers[cell],value)
-							//executeExp(qr, selects[cell].getExpression(),row)
 						);
 				}
 			}
@@ -215,7 +215,7 @@ public final class Executer {
 	 * @return value
 	 * @throws PageException
 	 */
-	private Object getValue(PageContext pc,SQL sql,Query querySource, int row, String key, Object value) throws PageException {
+	private Object getValue(PageContext pc,SQL sql,Query querySource, int row, Collection.Key key, Object value) throws PageException {
 		if(value instanceof ZSelectItem)return executeExp(pc,sql,querySource, ((ZSelectItem)value).getExpression(),row);
 		return querySource.getAt(key,row);
 	}

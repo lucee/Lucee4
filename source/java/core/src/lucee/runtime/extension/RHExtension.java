@@ -648,7 +648,7 @@ public class RHExtension implements Serializable {
 
 	public static Query toQuery(Config config,Element[] children) throws PageException {
 		Log log = config.getLog("deploy");
-		QueryImpl qry = new QueryImpl(new Key[]{
+		Query qry = new QueryImpl(new Key[]{
       			KeyConstants._id
       			,KeyConstants._version
       			,KeyConstants._name

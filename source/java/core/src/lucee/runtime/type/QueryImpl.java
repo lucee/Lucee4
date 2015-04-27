@@ -498,6 +498,10 @@ public class QueryImpl implements Query,Objects {
 	 * @param name 
 	 */
 	public QueryImpl(Collection.Key[] columnKeys, int rowNumber,String name) throws DatabaseException {
+		this(columnKeys,rowNumber,name,null);
+	}
+	
+	public QueryImpl(Collection.Key[] columnKeys, int rowNumber,String name, SQL sql) throws DatabaseException {
 		this.name=name;
         columncount=columnKeys.length;
 		recordcount=rowNumber;
@@ -508,6 +512,7 @@ public class QueryImpl implements Query,Objects {
 			columns[i]=new QueryColumnImpl(this,columnNames[i],Types.OTHER,recordcount);
 		}
 		validateColumnNames(columnNames);
+		this.sql=sql;
 	}
 	
 	/**
@@ -1141,7 +1146,7 @@ public class QueryImpl implements Query,Objects {
     
     @Override
     public Collection duplicate(boolean deepCopy) {
-        return cloneQuery(true);
+        return cloneQuery(deepCopy);
     }
     
 
@@ -1638,13 +1643,6 @@ public class QueryImpl implements Query,Objects {
 	 */
 	public SQL getSql() {
 		return sql;
-	}
-
-	/**
-	 * @param sql the sql to set
-	 */
-	public void setSql(SQL sql) {
-		this.sql = sql;
 	}
 
 
@@ -2914,7 +2912,7 @@ public class QueryImpl implements Query,Objects {
 	        newResult.template=qry.getTemplate();
 	        newResult.recordcount=qry.getRecordcount();
 	        newResult.columncount=newResult.columnNames.length;
-	        newResult.cacheType=qry instanceof QueryImpl?((QueryImpl)qry).getCacheType():null;
+	        newResult.cacheType=qry.getCacheType();
 	        newResult.name=qry.getName();
 	        newResult.exeTime=qry.getExecutionTime();
 	        newResult.updateCount=qry.getUpdateCount();

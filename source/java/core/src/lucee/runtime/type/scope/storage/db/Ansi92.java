@@ -158,7 +158,7 @@ public class Ansi92 extends SQLExecutorSupport {
 						,new SQLItem[]{
 					new SQLItemImpl(System.currentTimeMillis(),Types.VARCHAR)
 				});
-		QueryImpl query;
+		Query query;
 		try{
 			query = new QueryImpl(ThreadLocalPageContext.get(),dc,sqlSelect,-1,-1,-1,"query");
 		}

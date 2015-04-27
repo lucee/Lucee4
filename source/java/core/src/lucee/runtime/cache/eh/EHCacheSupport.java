@@ -24,6 +24,8 @@ import lucee.commons.io.cache.Cache;
 import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.cache.CacheEvent;
 import lucee.commons.io.cache.CacheEventListener;
+import lucee.commons.io.cache.CachePro;
+import lucee.commons.io.cache.exp.CacheException;
 import lucee.runtime.cache.CacheSupport;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.KeyConstants;
@@ -81,7 +83,13 @@ public abstract class EHCacheSupport extends CacheSupport implements Cache,Cache
 		getCache().put(new Element(key, value ,eternal, idle, live));
 	}
 
-	
+
+
+	@Override
+	public CachePro decouple() {
+		// is already decoupled by default
+		return this;
+	}
 	
 
 	@Override

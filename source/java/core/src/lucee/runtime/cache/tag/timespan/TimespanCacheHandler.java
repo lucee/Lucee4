@@ -24,6 +24,7 @@ import java.util.List;
 
 import lucee.commons.io.cache.Cache;
 import lucee.commons.io.cache.CacheEntry;
+import lucee.commons.io.cache.CachePro;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.ram.RamCache;
 import lucee.runtime.cache.tag.CacheHandler;
@@ -141,9 +142,14 @@ public class TimespanCacheHandler implements CacheHandler {
 	private Cache getCache(PageContext pc) {
 		Cache c = Util.getDefault(pc,cacheType,null);
 		if(c==null) {
-			if(defaultCache==null)defaultCache=new RamCache().init(0, 0, RamCache.DEFAULT_CONTROL_INTERVAL);
+			if(defaultCache==null){
+				RamCache rm = new RamCache().init(0, 0, RamCache.DEFAULT_CONTROL_INTERVAL);
+				rm.decouple();
+				defaultCache=rm;
+			}
 			return defaultCache;
 		}
+		if(c instanceof CachePro) return ((CachePro) c).decouple();
 		return c;
 	}
 

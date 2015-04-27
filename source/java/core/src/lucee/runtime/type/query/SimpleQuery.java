@@ -102,6 +102,7 @@ public class SimpleQuery implements Query, ResultSet, Objects {
 	private long exeTime;
 	private int recordcount;
 	private ArrayInt arrCurrentRow=new ArrayInt();
+	private String cacheType;
 	
 
 	public SimpleQuery(PageContext pc,DatasourceConnection dc,SQL sql,int maxrow, int fetchsize,int timeout, String name,String template,TimeZone tz) throws PageException {
@@ -2202,5 +2203,21 @@ public class SimpleQuery implements Query, ResultSet, Objects {
 	public java.util.Iterator getIterator() {
 		return new ForEachQueryIterator(this, ThreadLocalPageContext.get().getId());
     }
+
+
+	@Override
+	public String getCacheType() {
+		return cacheType;
+	}
+
+	@Override
+	public void setCacheType(String cacheType) {
+		this.cacheType=cacheType;
+	}
+
+	@Override
+	public int getColumnCount() {
+		return columnNames.length;
+	}
 
 }

@@ -352,7 +352,11 @@ public interface Query extends Collection, Iterator, com.allaire.cfx.Query {
 	 * @throws PageException
 	 */
 	public void sort(Collection.Key strColumn, int order) throws PageException;
-
+	
+	public String getCacheType();
+	
+	public void setCacheType(String cacheType);
+	
 	/**
 	 * sets if query is form cache or not
 	 * 
@@ -384,6 +388,8 @@ public interface Query extends Collection, Iterator, com.allaire.cfx.Query {
 	public Collection.Key[] getColumnNames();
 
 	public String[] getColumnNamesAsString();
+	
+	public int getColumnCount();
 
 	public Query getGeneratedKeys();
 
@@ -401,5 +407,8 @@ public interface Query extends Collection, Iterator, com.allaire.cfx.Query {
 	 * @deprecated use <code>getExecutionTime()</code> instead
 	 */
 	public int executionTime();
+
+	public void enableShowQueryUsage();
+
 
 }

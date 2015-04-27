@@ -100,6 +100,6 @@ public final class QueryEntryImpl implements QueryEntry {
 
 	@Override
 	public String getCacheType() {
-		return (qry instanceof QueryImpl)?((QueryImpl)qry).getCacheType():null;
+		return qry.getCacheType();
 	}
 }
