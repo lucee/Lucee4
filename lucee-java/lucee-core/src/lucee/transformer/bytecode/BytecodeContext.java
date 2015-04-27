@@ -45,6 +45,7 @@ public class BytecodeContext implements Context {
 	private BytecodeContext staticConstr;
 	private BytecodeContext constr;
 	private final boolean suppressWSbeforeArg;
+	private final boolean output;
 	
 	private static long _id=0;
 	private synchronized static String id() {
@@ -57,7 +58,7 @@ public class BytecodeContext implements Context {
 	private PageSource source;
 
 	public BytecodeContext(PageSource source,BytecodeContext statConstr,BytecodeContext constr,Page page,List<LitString> keys,ClassWriter classWriter,String className, GeneratorAdapter adapter,
-			Method method,boolean writeLog, boolean suppressWSbeforeArg) {
+			Method method,boolean writeLog, boolean suppressWSbeforeArg, boolean output) {
 		this.classWriter = classWriter;
 		this.className = className;
 		this.writeLog = writeLog;
@@ -68,6 +69,7 @@ public class BytecodeContext implements Context {
 		this.constr=constr;
 		this.page=page;
 		this.suppressWSbeforeArg=suppressWSbeforeArg;
+		this.output=output;
 		if(source!=null)this.source=source;
 		else if(constr!=null)this.source=constr.source;
 		else if(statConstr!=null)this.source=statConstr.source;
@@ -85,6 +87,7 @@ public class BytecodeContext implements Context {
 		this.constr=constr;
 		this.page=bc.getPage();
 		this.suppressWSbeforeArg=bc.suppressWSbeforeArg;
+		this.output=bc.output;
 		this.source=bc.source;
 	}
 	
@@ -260,6 +263,10 @@ public class BytecodeContext implements Context {
 	
 	public boolean getSupressWSbeforeArg(){
 		return suppressWSbeforeArg;
+	}
+
+	public boolean getOutput() {
+		return output;
 	}
 
 	public PageSource getPageSource() {

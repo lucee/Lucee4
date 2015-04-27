@@ -1366,6 +1366,8 @@ public final class ConfigWebFactory extends ConfigFactory {
 		// suppress ws before arg
 		sb.append(config.getSuppressWSBeforeArg());
 		sb.append(';');
+		sb.append(config.getDefaultFunctionOutput());
+		sb.append(';');
 
 		// full null support
 		sb.append(config.getFullNullSupport());
