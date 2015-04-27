@@ -1464,9 +1464,12 @@ public final class ConfigWebFactory extends ConfigFactory {
 		_getDotNotationUpperCase(sb,config.getTagMapping());
 		//_getDotNotationUpperCase(sb,config.getServerTagMapping());
 		//_getDotNotationUpperCase(sb,config.getServerFunctionMapping());
-		
+
 		// suppress ws before arg
 		sb.append(config.getSuppressWSBeforeArg());
+		sb.append(';');
+		// function output
+		sb.append(config.getDefaultFunctionOutput());
 		sb.append(';');
 
 		// full null support
@@ -4661,6 +4664,15 @@ public final class ConfigWebFactory extends ConfigFactory {
 			}
 			NullSupportHelper.fullNullSupport = fns;
 			((ConfigServerImpl) config).setFullNullSupport(fns);
+		}
+		
+		// default output setting
+		String output = compiler.getAttribute("default-function-output");
+		if (!StringUtil.isEmpty(output, true)) {
+			config.setDefaultFunctionOutput(Caster.toBooleanValue(output, true));
+		}
+		else if (hasCS) {
+			config.setDefaultFunctionOutput(configServer.getDefaultFunctionOutput());
 		}
 		
 		// suppress WS between cffunction and cfargument

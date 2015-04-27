@@ -36,9 +36,9 @@ public class ConstrBytecodeContext extends BytecodeContext {
 			Page page, List<LitString> keys,
 			ClassWriter classWriter, String className,
 			GeneratorAdapter adapter, Method method, boolean writeLog,
-			boolean suppressWSbeforeArg) {
+			boolean suppressWSbeforeArg, boolean output) {
 		super(ps, null, page, keys, classWriter, className, adapter,
-				method, writeLog, suppressWSbeforeArg);
+				method, writeLog, suppressWSbeforeArg,output);
 	}
  
 	public void addUDFProperty(Function function, int arrayIndex, int valueIndex, int type) {
