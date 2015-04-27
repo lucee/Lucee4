@@ -69,6 +69,7 @@ public final class ServerImpl extends ScopeSupport implements Server,SharedScope
     private static final Key TOTAL_MEMORY = KeyImpl.intern("totalMemory");
     private static final Key VERSION_NAME = KeyImpl.intern("versionName");
 	private static final Key VERSION_NAME_EXPLANATION = KeyImpl.intern("versionNameExplanation");
+	private static final Key HOST_NAME = KeyImpl.intern("hostname");
 
 
 	private static String jep;
@@ -135,7 +136,7 @@ public final class ServerImpl extends ScopeSupport implements Server,SharedScope
 			os.setEL(KeyConstants._version,System.getProperty("os.version") );
 			os.setEL(ADDITIONAL_INFORMATION,"");
 			os.setEL(BUILD_NUMBER,"");
-
+			os.setEL(HOST_NAME, SystemUtil.getLocalHostName());
 			
 			os.setReadOnly(true);
 		super.setEL (KeyConstants._os,os);
@@ -200,7 +201,7 @@ public final class ServerImpl extends ScopeSupport implements Server,SharedScope
 	@Override
 	public Object set(Collection.Key key, Object value) throws PageException {
 		if(isReadOnlyKey(key))
-			throw new ExpressionException("you can't rewrite key ["+key+"] from server scope, key is readonly");
+			throw new ExpressionException("Key ["+key+"] in Server scope is read-only and can not be modified");
 		return super.set (key, value);
 	}
 
