@@ -1,30 +1,30 @@
-<!--- 
+<!---
  *
  * Copyright (c) 2014, the Railo Company LLC. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ---><cfscript>
 component extends="org.lucee.cfml.test.LuceeTestCase"	{
-	
+
 	public function beforeTests(){
 		variables.serviceURL =createURL("Jira2615/TestService.cfc?wsdl");
 		variables.service = CreateObject("webservice", serviceURL);
-		
+
 		variables.sctURL =createURL("Jira2615/TestStruct.cfc?wsdl");
 		variables.sctWS = CreateObject("webservice", sctURL);
-		
+
 		variables.strURL =createURL("Jira2615/TestString.cfc?wsdl");
 		variables.strWS = CreateObject("webservice", strURL);
 
@@ -36,10 +36,10 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 		variables.myiURL =createURL("Jira2615/TestMyItem.cfc?wsdl");
 		variables.myiWS = CreateObject("webservice", myiURL);
-		
+
 		variables.serviceAnyURL =createURL("Jira2615/TestServiceAny.cfc?wsdl");
 		variables.serviceAny = CreateObject("webservice", serviceAnyURL);
-		
+
 
 	}
 
@@ -56,22 +56,22 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public void function testStringEchoArray() localMode="modern" {
 		data=strWS.echoArray(['Susi']);
-		assertEquals("['Susi']",serialize(data));
+		assertEquals('["Susi"]',serialize(data));
 	}
 
 	public void function testStringEchoStringArray() localMode="modern" {
 		data=strWS.echoStringArray(["Susi"]);
-		assertEquals("['Susi']",serialize(data));
+		assertEquals('["Susi"]',serialize(data));
 	}
 
 	public void function testStringEchoStringStringArray() localMode="modern" {
 		data=strWS.echoStringStringArray([["Susi"]]);
-		assertEquals("[['Susi']]",serialize(data));
+		assertEquals('[["Susi"]]',serialize(data));
 	}
 
 	public void function testStringEchoStringStringStringArray() localMode="modern" {
 		data=strWS.echoStringStringStringArray([[["Susi"]]]);
-		assertEquals("[[['Susi']]]",serialize(data));
+		assertEquals('[[["Susi"]]]',serialize(data));
 	}
 
 
@@ -79,35 +79,35 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 /** STRUCT **/
 	public void function testStructEchoAny() localMode="modern" {
 		data=sctWS.echoAny({'a':12});
-		assertEquals("{'a':12}",serialize(data));
-		
+		assertEquals('{"a":12}',serialize(data));
+
 		data=sctWS.echoAny([{'a':1},{'a':2}]);
-		assertEquals("[{'a':1},{'a':2}]",serialize(data));
+		assertEquals('[{"a":1},{"a":2}]',serialize(data));
 	}
 
 	public void function testStructEchoStruct() localMode="modern" {
 		data=sctWS.echoStruct({'a':23});
-		assertEquals("{'a':23}",serialize(data));
+		assertEquals('{"a":23}',serialize(data));
 	}
 
 	public void function testStructEchoArray() localMode="modern" {
 		data=sctWS.echoArray([{'a':45}]);
-		assertEquals("[{'a':45}]",serialize(data));
+		assertEquals('[{"a":45}]',serialize(data));
 	}
 
 	public void function testStructEchoStructArray() localMode="modern" {
 		data=sctWS.echoStructArray([{'a':1},{'b':2}]);
-		assertEquals("[{'a':1},{'b':2}]",serialize(data));
+		assertEquals('[{"a":1},{"b":2}]',serialize(data));
 	}
 
 	public void function testStructEchoStructStructArray() localMode="modern" {
 		data=sctWS.echoStructStructArray([[{'a':1},{'b':2}]]);
-		assertEquals("[[{'a':1},{'b':2}]]",serialize(data));
+		assertEquals('[[{"a":1},{"b":2}]]',serialize(data));
 	}
 
 	public void function testStructEchoStructStructStructArray() localMode="modern" {
 		data=sctWS.echoStructStructStructArray([[[{'a':1},{'b':2}]]]);
-		assertEquals("[[[{'a':1},{'b':2}]]]",serialize(data));
+		assertEquals('[[[{"a":1},{"b":2}]]]',serialize(data));
 	}
 
 
@@ -115,7 +115,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	public void function testArrayEchoAny() localMode="modern" {
 		data=arrWS.echoAny([1,2,3]);
 		assertEquals("[1,2,3]",serialize(data));
-		
+
 		data=arrWS.echoAny([[1,2,3]]);
 		assertEquals("[[1,2,3]]",serialize(data));
 	}
@@ -133,35 +133,35 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 /** QUERY **/
 	public void function testQueryEchoAny() localMode="modern" {
 		data=qryWS.echoAny(query('a':[1,2,3])  );
-		assertEquals("query('a':[1,2,3])",serialize(data));
-		
+		assertEquals('query("a":[1,2,3])',serialize(data));
+
 		data=qryWS.echoAny([query('a':[1,2,3])]);
-		assertEquals("[query('a':[1,2,3])]",serialize(data));
+		assertEquals('[query("a":[1,2,3])]',serialize(data));
 	}
 
 	public void function testQueryEchoQuery() localMode="modern" {
 		data=qryWS.echoQuery(query('a':[1,2,3]));
-		assertEquals("query('a':[1,2,3])",serialize(data));
+		assertEquals('query("a":[1,2,3])',serialize(data));
 	}
 
 	public void function testQueryEchoArray() localMode="modern" {
 		data=qryWS.echoArray([query('a':[1,2,3])]);
-		assertEquals("[query('a':[1,2,3])]",serialize(data));
+		assertEquals('[query("a":[1,2,3])]',serialize(data));
 	}
 
 	public void function testQueryEchoQueryArray() localMode="modern" {
 		data=qryWS.echoQueryArray([query('a':[1,2,3])]);
-		assertEquals("[query('a':[1,2,3])]",serialize(data));
+		assertEquals('[query("a":[1,2,3])]',serialize(data));
 	}
 
 	public void function testQueryEchoQueryQueryArray() localMode="modern" {
 		data=qryWS.echoQueryQueryArray([[query('a':[1,2,3])]]);
-		assertEquals("[[query('a':[1,2,3])]]",serialize(data));
+		assertEquals('[[query("a":[1,2,3])]]',serialize(data));
 	}
 
 	public void function testQueryEchoQueryQueryQueryArray() localMode="modern" {
 		data=qryWS.echoQueryQueryQueryArray([[[query('a':[1,2,3])]]]);
-		assertEquals("[[[query('a':[1,2,3])]]]",serialize(data));
+		assertEquals('[[[query("a":[1,2,3])]]]',serialize(data));
 	}
 
 
@@ -205,9 +205,9 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public void function testMyItemEchoMyItemMyItemMyItemArray() localMode="modern" {
 		//data=myiWS.callMyItemMyItemMyItemArray([[new Jira2615.MyItem("Test")]]);
-		
+
 		data=myiWS.callMyItemMyItemMyItemArray([[[new Jira2615.MyItem("Test")]]]);
-		
+
 		data=myiWS.echoMyItemMyItemMyItemArray([[[new Jira2615.MyItem("Test")]]]);
 		assertEquals(true,isArray(data));
 		data=data[1];
@@ -225,7 +225,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 /** Older tests **/
 	public void function testReturnStruct() localMode="modern" {
 		sct=service.getStruct();
-		assertEquals("{'a':1}",serialize(sct));
+		assertEquals('{"a":1}',serialize(sct));
 	}
 
 	public void function testSetStruct() localMode="modern" {
@@ -234,7 +234,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public void function testEchoSetStruct() localMode="modern" {
 		sct=service.echoStruct({'b':12});
-		assertEquals("{'b':12}",serialize(sct));
+		assertEquals('{"b":12}',serialize(sct));
 	}
 
 
@@ -306,12 +306,12 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		assertEquals("2:getmyitemarray",items[2].getName());
 	}
 
-	
-	
+
+
 	private string function createURL(string calledName){
 		var baseURL="http://#cgi.HTTP_HOST##getDirectoryFromPath(contractPath(getCurrenttemplatepath()))#";
 		return baseURL&""&calledName;
 	}
 
-} 
+}
 </cfscript>
