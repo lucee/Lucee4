@@ -5,6 +5,8 @@ Welcome to the Lucee Server source code repository.
 Lucee Server, or simply Lucee, is a dynamic Java based tag and scripting language used for rapid development from simple to highly sophisticated web applications. Lucee simplifies technologies like webservices (REST,SOAP,HTTP), ORM (Hibernate), searching (Lucene), datasources (MSSQl,Oracle,MySQL ...), caching (infinispan,ehcache,memcached ...) and a lot more. It was never easier to integrate any backend technology with the internet.
 Lucee is of course open source (LGPL 2.1) and available for free!
 
+### PLEASE NOTE: The issue tracker has moved to [JIRA](https://luceeserver.atlassian.net). ###
+
 License/Copyright
 -----------------
 Lucee is a derivate of the Railo Server (c) Project (Version 4.2) that was published under the GNU Lesser General Public License (LGPL) in Version v2.1 . Lucee is licensed as LGPL v2.1.
