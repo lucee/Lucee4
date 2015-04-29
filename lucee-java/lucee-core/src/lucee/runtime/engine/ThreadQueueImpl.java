@@ -36,7 +36,8 @@ public class ThreadQueueImpl implements ThreadQueue {
 	private int waiting=0;
 	
 	public ThreadQueueImpl(int max, long timeout){
-		this.max=max;
+		if(max<=1)this.max=1;
+		else this.max=max-1;
 		this.timeout=timeout;
 	}
 	
@@ -71,6 +72,7 @@ public class ThreadQueueImpl implements ThreadQueue {
 		}
 	}
 	
+	@Override
 	public void exit(PageContext pc){
 		//print.e("exist("+Thread.currentThread().getName()+")");
 		synchronized (token) {
@@ -79,11 +81,16 @@ public class ThreadQueueImpl implements ThreadQueue {
 		}
 	}
 	
+	@Override
 	public int size(){
 		return waiting;
 	}
 
+	public int maximal(){
+		return max;
+	}
 
+	@Override
 	public void clear() {
 		list.clear();
 		token.notifyAll();
