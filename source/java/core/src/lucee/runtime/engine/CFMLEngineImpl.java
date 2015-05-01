@@ -79,10 +79,10 @@ import lucee.runtime.PageContext;
 import lucee.runtime.PageSource;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigServer;
-import lucee.runtime.config.ConfigServerFactory;
+import lucee.runtime.config.XMLConfigServerFactory;
 import lucee.runtime.config.ConfigServerImpl;
 import lucee.runtime.config.ConfigWeb;
-import lucee.runtime.config.ConfigWebFactory;
+import lucee.runtime.config.XMLConfigWebFactory;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.config.DeployHandler;
 import lucee.runtime.config.Identification;
@@ -314,7 +314,7 @@ public final class CFMLEngineImpl implements CFMLEngine {
             	ResourceProvider frp = ResourcesImpl.getFileResourceProvider();
             	Resource context = frp.getResource(factory.getResourceRoot().getAbsolutePath()).getRealResource("context");
             	//CFMLEngineFactory.registerInstance(this);// patch, not really good but it works
-                configServer=ConfigServerFactory.newInstance(
+                configServer=XMLConfigServerFactory.newInstance(
                         this,
                         initContextes,
                         contextes,
@@ -333,7 +333,7 @@ public final class CFMLEngineImpl implements CFMLEngine {
             Resource configDir=getConfigDirectory(sg,configServer,countExistingContextes,isCustomSetting);
             
             CFMLFactoryImpl factory=new CFMLFactoryImpl(this);
-            ConfigWebImpl config=ConfigWebFactory.newInstance(factory,configServer,configDir,isCustomSetting.toBooleanValue(),sg);
+            ConfigWebImpl config=XMLConfigWebFactory.newInstance(factory,configServer,configDir,isCustomSetting.toBooleanValue(),sg);
             factory.setConfig(config);
             return factory;
         }

@@ -186,7 +186,7 @@ import org.xml.sax.SAXException;
 /**
  * 
  */
-public final class ConfigWebFactory extends ConfigFactory {
+public final class XMLConfigWebFactory extends XMLConfigFactory {
 	
 	private static final String TEMPLATE_EXTENSION = "cfm";
 	private static final String COMPONENT_EXTENSION = "cfc";
@@ -335,27 +335,27 @@ public final class ConfigWebFactory extends ConfigFactory {
 		boolean reload=false;
 		
 		// fix stuff from older config files
-		if(ConfigWebAdmin.fixLFI(doc)) {
+		if(XMLConfigAdmin.fixLFI(doc)) {
 			String xml = XMLCaster.toString(doc);
 			// TODO 4.5->5.0
 			xml=StringUtil.replace(xml, "<lucee-configuration", "<cfLuceeConfiguration",false);
 			xml=StringUtil.replace(xml, "</lucee-configuration", "</cfLuceeConfiguration",false);
 			IOUtil.write(config.getConfigFile(), xml, CharsetUtil.UTF8, false);
 			try {
-				doc = ConfigWebFactory.loadDocument(config.getConfigFile());
+				doc = XMLConfigWebFactory.loadDocument(config.getConfigFile());
 			}
 			catch (SAXException e) {
 			}
 		}
-		if(ConfigWebAdmin.fixSalt(doc)) reload=true;
-		if(ConfigWebAdmin.fixS3(doc)) reload=true;
-		if(ConfigWebAdmin.fixPSQ(doc)) reload=true;
-		if(ConfigWebAdmin.fixLogging(cs,config,doc)) reload=true;
+		if(XMLConfigAdmin.fixSalt(doc)) reload=true;
+		if(XMLConfigAdmin.fixS3(doc)) reload=true;
+		if(XMLConfigAdmin.fixPSQ(doc)) reload=true;
+		if(XMLConfigAdmin.fixLogging(cs,config,doc)) reload=true;
 		
 		if (reload) {
 			XMLCaster.writeTo(doc, config.getConfigFile());
 			try {
-				doc = ConfigWebFactory.loadDocument(config.getConfigFile());
+				doc = XMLConfigWebFactory.loadDocument(config.getConfigFile());
 			}
 			catch (SAXException e) {
 			}
@@ -2374,7 +2374,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 
 				boolean physicalFirst = archive == null || !primary.equalsIgnoreCase("archive");
 				hasSet = true;
-				mappings[i] = new MappingImpl(config, ConfigWebAdmin.createVirtual(ctMapping), physical, archive, inspTemp, physicalFirst, hidden, readonly, true, false, true,
+				mappings[i] = new MappingImpl(config, XMLConfigAdmin.createVirtual(ctMapping), physical, archive, inspTemp, physicalFirst, hidden, readonly, true, false, true,
 						null);
 				// print.out(mappings[i].isPhysicalFirst());
 			}
@@ -4335,7 +4335,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 				boolean hidden = toBoolean(cMapping.getAttribute("hidden"), false);
 				//boolean trusted = toBoolean(cMapping.getAttribute("trusted"), false);
 				short inspTemp = inspectTemplate(cMapping);
-				String virtual = ConfigWebAdmin.createVirtual(cMapping);
+				String virtual = XMLConfigAdmin.createVirtual(cMapping);
 
 				//int clMaxEl = toInt(cMapping.getAttribute("classloader-max-elements"), 100);
 

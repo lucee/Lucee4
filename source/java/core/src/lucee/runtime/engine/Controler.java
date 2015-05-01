@@ -37,7 +37,7 @@ import lucee.runtime.PageSourcePool;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigServer;
 import lucee.runtime.config.ConfigWeb;
-import lucee.runtime.config.ConfigWebAdmin;
+import lucee.runtime.config.XMLConfigAdmin;
 import lucee.runtime.config.DeployHandler;
 import lucee.runtime.lock.LockManagerImpl;
 import lucee.runtime.net.smtp.SMTPConnectionPool;
@@ -108,7 +108,7 @@ public final class Controler extends Thread {
 			}
             
             //try{Deploy Handler.deploy(configServer);}catch(Throwable t){t.printStackTrace();}
-            try{ConfigWebAdmin.checkForChangesInConfigFile(configServer);}catch(Throwable t){}
+            try{XMLConfigAdmin.checkForChangesInConfigFile(configServer);}catch(Throwable t){}
 
             try{DeployHandler.deploy(configServer);}catch(Throwable t){t.printStackTrace();}
             
@@ -117,7 +117,7 @@ public final class Controler extends Thread {
             if(doMinute) {
             	// deploy extensions, archives ...
 				//try{DeployHandler.deploy(configServer);}catch(Throwable t){t.printStackTrace();}
-                try{ConfigWebAdmin.checkForChangesInConfigFile(configServer);}catch(Throwable t){}
+                try{XMLConfigAdmin.checkForChangesInConfigFile(configServer);}catch(Throwable t){}
             }
             // every hour
             if(doHour) {
@@ -195,7 +195,7 @@ public final class Controler extends Thread {
 					// clean LockManager
 					if(cfmlFactory.getUsedPageContextLength()==0)try{((LockManagerImpl)config.getLockManager()).clean();}catch(Throwable t){}
 					
-					try{ConfigWebAdmin.checkForChangesInConfigFile(config);}catch(Throwable t){}
+					try{XMLConfigAdmin.checkForChangesInConfigFile(config);}catch(Throwable t){}
 	            	
 				}
 				// every hour

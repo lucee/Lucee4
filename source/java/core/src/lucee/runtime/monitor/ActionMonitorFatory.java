@@ -22,8 +22,8 @@ import java.io.IOException;
 
 import lucee.commons.io.SystemUtil;
 import lucee.runtime.config.ConfigServer;
-import lucee.runtime.config.ConfigWebFactory;
-import lucee.runtime.config.ConfigWebFactory.MonitorTemp;
+import lucee.runtime.config.XMLConfigWebFactory;
+import lucee.runtime.config.XMLConfigWebFactory.MonitorTemp;
 
 public class ActionMonitorFatory {
 	public static ActionMonitorCollector getActionMonitorCollector() {
@@ -31,7 +31,7 @@ public class ActionMonitorFatory {
 		return new ActionMonitorCollectorRefImpl();
 	}
 
-	public static ActionMonitorCollector getActionMonitorCollector(ConfigServer cs, ConfigWebFactory.MonitorTemp[] temps) throws IOException {
+	public static ActionMonitorCollector getActionMonitorCollector(ConfigServer cs, XMLConfigWebFactory.MonitorTemp[] temps) throws IOException {
 		// try to load with interface
 		try{
 			ActionMonitorCollector collector = new ActionMonitorCollectorImpl();

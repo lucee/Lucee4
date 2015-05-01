@@ -20,7 +20,7 @@ package lucee.runtime.functions.cache;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.eh.EHCache;
 import lucee.runtime.config.Config;
-import lucee.runtime.config.ConfigWebAdmin;
+import lucee.runtime.config.XMLConfigAdmin;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.config.Password;
 import lucee.runtime.exp.FunctionException;
@@ -78,7 +78,7 @@ public class CacheRegionNew implements Function {
     static String _call( PageContext pc, String cacheName, Struct properties, Boolean throwOnError, String strWebAdminPassword ) throws PageException {
         Password webAdminPassword = Util.getPassword( pc, strWebAdminPassword,false );
         try {
-            ConfigWebAdmin adminConfig = ConfigWebAdmin.newInstance( (ConfigWebImpl)pc.getConfig(), webAdminPassword );
+            XMLConfigAdmin adminConfig = XMLConfigAdmin.newInstance( (ConfigWebImpl)pc.getConfig(), webAdminPassword );
             adminConfig.updateCacheConnection( cacheName, new ClassDefinitionImpl(cacheClassName, null, null, pc.getConfig().getIdentification()), Config.CACHE_TYPE_NONE, properties, false, false );
             adminConfig.storeAndReload();
         } catch ( Exception e ) {

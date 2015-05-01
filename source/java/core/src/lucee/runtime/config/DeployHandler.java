@@ -77,7 +77,7 @@ public class DeployHandler {
 					
 					// Lucee Extensions
 					else if("lex".equalsIgnoreCase(ext))
-						ConfigWebAdmin.updateRHExtension((ConfigImpl) config, child,true);
+						XMLConfigAdmin.updateRHExtension((ConfigImpl) config, child,true);
 				}
 				catch (Throwable t) {
 					Log log = config.getLog("deploy");
@@ -176,11 +176,11 @@ public class DeployHandler {
 			
 			logger.log(Log.LEVEL_INFO,"archive","add "+type+" mapping ["+virtual+"] with archive ["+trgFile.getAbsolutePath()+"]");
 			if("regular".equalsIgnoreCase(type))
-				ConfigWebAdmin.updateMapping((ConfigImpl)config,virtual, null, trgFile.getAbsolutePath(), "archive", inspect, topLevel);
+				XMLConfigAdmin.updateMapping((ConfigImpl)config,virtual, null, trgFile.getAbsolutePath(), "archive", inspect, topLevel);
 			else if("cfc".equalsIgnoreCase(type))
-				ConfigWebAdmin.updateComponentMapping((ConfigImpl)config,virtual, null, trgFile.getAbsolutePath(), "archive", inspect);
+				XMLConfigAdmin.updateComponentMapping((ConfigImpl)config,virtual, null, trgFile.getAbsolutePath(), "archive", inspect);
 			else if("ct".equalsIgnoreCase(type))
-				ConfigWebAdmin.updateCustomTagMapping((ConfigImpl)config,virtual, null, trgFile.getAbsolutePath(), "archive", inspect);
+				XMLConfigAdmin.updateCustomTagMapping((ConfigImpl)config,virtual, null, trgFile.getAbsolutePath(), "archive", inspect);
 			
 			
 		}
@@ -234,7 +234,7 @@ public class DeployHandler {
 		
 		// is the extension already installed
 		try {
-			if(ConfigWebAdmin.hasRHExtensions(ci, id)!=null) return;
+			if(XMLConfigAdmin.hasRHExtensions(ci, id)!=null) return;
 		} 
 		catch (Throwable t) {}
 		
@@ -260,7 +260,7 @@ public class DeployHandler {
 				IOUtil.copy(rsp.getContentAsStream(), res, true);
 				
 				// now forward it to the regular process
-				ConfigWebAdmin.updateRHExtension((ConfigImpl) config, res,true);
+				XMLConfigAdmin.updateRHExtension((ConfigImpl) config, res,true);
 			}
 			catch(Throwable t){
 				log.error("extension", t);
