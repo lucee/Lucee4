@@ -176,7 +176,7 @@ public final class ConfigServerFactory extends ConfigFactory{
         configServer.setLabels(labels);
 	}
 	
-	public static void createContextFiles(Resource configDir, ConfigServer config, boolean doNew) {
+	private static void createContextFiles(Resource configDir, ConfigServer config, boolean doNew) {
 		
 		Resource contextDir = configDir.getRealResource("context");
 		Resource adminDir = contextDir.getRealResource("admin");
