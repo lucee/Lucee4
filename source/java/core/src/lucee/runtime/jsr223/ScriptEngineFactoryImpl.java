@@ -74,7 +74,7 @@ public class ScriptEngineFactoryImpl implements ScriptEngineFactory {
 			return engine.getInfo().getVersion().toString();
 		
 		if(key.equalsIgnoreCase(ScriptEngine.LANGUAGE))
-			return (isCFML?Constants.CFML_NAME:Constants.LUCEE_NAME).toLowerCase()+"-"+(tag?"tag":"script");
+			return (isCFML?Constants.CFML_NAME:Constants.LUCEE_NAME).toLowerCase()+(tag?"-tag":"");
 		
 		if(key.equalsIgnoreCase("THREADING")) return "THREAD-ISOLATED";
 		throw new IllegalArgumentException("Invalid key");
