@@ -84,6 +84,11 @@ public class ThreadQueueImpl implements ThreadQueue {
 	public int size(){
 		return waiting;
 	}
+	
+	
+	public int maximal(){
+		return max;
+	}
 
 
 	@Override
