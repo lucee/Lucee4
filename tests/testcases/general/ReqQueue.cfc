@@ -23,7 +23,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	public void function test(){
 		var config=getPageContext().getConfig();
 		var factory=config.getFactory();
-		max=config.getThreadQueue().maximal();
+		max=config.getQueueMax();
 		local.names=[];
 		local.https={};
 		request.listen=true;
