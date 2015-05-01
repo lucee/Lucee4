@@ -369,13 +369,6 @@ Error Output --->
 				<!--- Maximal Concurrent Request --->
 				<h2>#stText.application.ConcurrentRequest#</h2>
 				<div class="itemintro">#stText.application.ConcurrentRequestDesc#</div>
-
-				<div class="warning nofocus">
-					This feature is experimental.
-					If you have any problems while using this Implementation,
-					please post the bugs and errors in our
-					<a href="http://issues.lucee.org" target="_blank">bugtracking system</a>. 
-				</div>
 		<table class="maintbl">
 			<tbody>
 				
