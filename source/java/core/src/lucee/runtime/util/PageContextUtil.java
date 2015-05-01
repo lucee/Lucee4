@@ -93,7 +93,7 @@ public class PageContextUtil {
 
 	public static PageContext getPageContext(String host, String scriptName, String queryString
 			, Cookie[] cookies,Map<String, Object> headers,Map<String, String> parameters, 
-			Map<String, Object> attributes, OutputStream os, boolean register, long timeout) throws ServletException {
+			Map<String, Object> attributes, OutputStream os, boolean register, long timeout, boolean ignoreScopes) throws ServletException {
 		
 		
 		// Engine
@@ -131,7 +131,7 @@ public class PageContextUtil {
 			servlet=new HTTPServletImpl(servletConfig, servletConfig.getServletContext(), servletConfig.getServletName());
 		}
 		
-		return factory.getLuceePageContext(servlet,req,rsp,null,false,-1,false,register,timeout,false);
+		return factory.getLuceePageContext(servlet,req,rsp,null,false,-1,false,register,timeout,false,ignoreScopes);
 	}
 	
 	

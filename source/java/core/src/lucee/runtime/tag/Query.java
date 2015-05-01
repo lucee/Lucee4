@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
-import lucee.print;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.StringUtil;
 import lucee.loader.engine.CFMLEngine;

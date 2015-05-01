@@ -89,7 +89,7 @@ public interface Component extends Struct, Objects, CIObject {
 	 * @param isNew
 	 * @throws PageException
 	 * @deprecated use instead
-	 *             <code>getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean supressWSbeforeArg, boolean output)</code>
+	 *             <code>getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean supressWSbeforeArg, boolean output, boolean returnValue)</code>
 	 */
 	public Class<?> getJavaAccessClass(PageContext pc, RefBoolean isNew,
 			boolean writeLog, boolean takeTop, boolean create,
@@ -97,7 +97,7 @@ public interface Component extends Struct, Objects, CIObject {
 	
 	public Class<?> getJavaAccessClass(PageContext pc, RefBoolean isNew,
 			boolean writeLog, boolean takeTop, boolean create,
-			boolean supressWSbeforeArg,boolean output) throws PageException;
+			boolean supressWSbeforeArg,boolean output,boolean returnValue) throws PageException;
 
 	/**
 	 * @return Returns the display name.

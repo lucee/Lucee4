@@ -3,3 +3,4 @@ Premain-Class: lucee.runtime.instrumentation.Agent
 Agent-Class: lucee.runtime.instrumentation.Agent
 Can-Redefine-Classes: true
 Can-Retransform-Classes: true
+Main-Class: lucee.runtime.script.Main

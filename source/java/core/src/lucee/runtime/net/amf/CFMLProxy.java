@@ -210,7 +210,7 @@ public class CFMLProxy {
 				req.addHeader("AMF-Forward", "true");
 		HttpServletResponseDummy rsp = new HttpServletResponseDummy(os);
 
-		return factory.getLuceePageContext(factory.getServlet(), req, rsp, null, false, -1, false,register,timeout,true);
+		return factory.getLuceePageContext(factory.getServlet(), req, rsp, null, false, -1, false,register,timeout,true,false);
 	}
 	
 	private void writeBackResponse(PageContext pc, HttpServletResponse rsp) {

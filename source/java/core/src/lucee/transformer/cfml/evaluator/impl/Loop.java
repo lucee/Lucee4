@@ -166,7 +166,7 @@ public final class Loop extends EvaluatorSupport {
 						new SourceCode(text,false,page.getSourceCode().getDialect()),
 						new TransfomerSettings(
 								page.getSourceCode().getDialect()==CFMLEngine.DIALECT_CFML && config.getDotNotationUpperCase(),
-								page.getSourceCode().getDialect()==CFMLEngine.DIALECT_CFML && config.getHandleUnQuotedAttrValueAsString()));
+								page.getSourceCode().getDialect()==CFMLEngine.DIALECT_CFML && config.getHandleUnQuotedAttrValueAsString(),page.ignoreScopes));
 				
 				tag.addAttribute(new Attribute(false,"condition",page.getFactory().toExprBoolean(expr),"boolean"));
 			}

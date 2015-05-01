@@ -84,7 +84,7 @@ public abstract class CFMLFactory extends JspFactory {
 	public abstract PageContext getLuceePageContext(HttpServlet servlet,
 			HttpServletRequest req, HttpServletResponse rsp,
 			String errorPageURL, boolean needsSession, int bufferSize,
-			boolean autoflush,boolean register, long timeout,boolean register2RunningThreads);
+			boolean autoflush,boolean register, long timeout,boolean register2RunningThreads, boolean ignoreScopes);
 
 	/**
 	 * Similar to the releasePageContext Method, but take lucee PageContext as

@@ -71,7 +71,7 @@ public final class IsDefined implements Function {
 	
 	// used for older compiled code in ra files
 	public static boolean invoke(PageContext pc , String[] varNames, boolean allowNull) {
-		int scope = VariableInterpreter.scopeString2Int(varNames[0]);
+		int scope = VariableInterpreter.scopeString2Int(pc.ignoreScopes(),varNames[0]);
 		
 		
 		Object defVal=allowNull?Null.NULL:null;

@@ -50,7 +50,7 @@ public class ThreadUtil {
         
         // copy state
         PageContextImpl pci = (PageContextImpl) pc;
-		PageContextImpl dest = factory.getPageContextImpl(factory.getServlet(), req, rsp, null, false, -1, false,register2Thread, isChild,pc.getRequestTimeout(),register2RunningThreads);
+		PageContextImpl dest = factory.getPageContextImpl(factory.getServlet(), req, rsp, null, false, -1, false,register2Thread, isChild,pc.getRequestTimeout(),register2RunningThreads,false);
 		pci.copyStateTo(dest);
 		return dest;
 	}
@@ -92,7 +92,7 @@ public class ThreadUtil {
         
         return (PageContextImpl) factory.getLuceePageContext(
         		factory.getServlet(), 
-        		req, rsp, null, false, -1, false,register,timeout,false);
+        		req, rsp, null, false, -1, false,register,timeout,false,false);
 		
 	}
 
@@ -127,7 +127,7 @@ public class ThreadUtil {
         
         return (PageContextImpl) factory.getLuceePageContext(
         		factory.getServlet(), 
-        		req, rsp, null, false, -1, false,register,timeout,false);
+        		req, rsp, null, false, -1, false,register,timeout,false,false);
 		
 	}
 	

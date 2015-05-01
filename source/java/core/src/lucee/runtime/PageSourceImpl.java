@@ -258,7 +258,7 @@ public final class PageSourceImpl implements PageSource {
 			if(page!=null) {
 			//if(page!=null && !recompileAlways) {
 				if(srcLastModified!=page.getSourceLastModified()) {
-					this.page=page=compile(config,mapping.getClassRootDirectory(),page);
+					this.page=page=compile(config,mapping.getClassRootDirectory(),page,false,false);
                 	page.setPageSource(this);
 					page.setLoadType(LOAD_PHYSICAL);
 				}
@@ -273,7 +273,7 @@ public final class PageSourceImpl implements PageSource {
                     // new class
                     if(!classFile.exists()) {
                     //if(!classFile.exists() || recompileAfterStartUp) {
-                    	this.page=page= compile(config,classRootDir,null);
+                    	this.page=page= compile(config,classRootDir,null,false,false);
                         isNew=true;
                     }
                     // load page
@@ -284,20 +284,20 @@ public final class PageSourceImpl implements PageSource {
     					} catch (Throwable t) {t.printStackTrace();
 							this.page=page=null;
 						}
-                    	if(page==null) this.page=page=compile(config,classRootDir,null);
+                    	if(page==null) this.page=page=compile(config,classRootDir,null,false,false);
                               
                     }
                     
                     // check if there is a newwer version
                     if(!isNew && srcLastModified!=page.getSourceLastModified()) {
                     	isNew=true;
-                    	this.page=page=compile(config,classRootDir,page);
+                    	this.page=page=compile(config,classRootDir,page,false,false);
     				}
                     
                     // check version
                     if(!isNew && page.getVersion()!=pc.getConfig().getFactory().getEngine().getInfo().getFullVersionInfo()) {
                     	isNew=true;
-                    	this.page=page=compile(config,classRootDir,page);
+                    	this.page=page=compile(config,classRootDir,page,false,false);
                     }
                     
                     page.setPageSource(this);
@@ -313,9 +313,9 @@ public final class PageSourceImpl implements PageSource {
 	}
     
 
-	private synchronized Page compile(ConfigWeb config,Resource classRootDir, Page existing) throws TemplateException {
+	private synchronized Page compile(ConfigWeb config,Resource classRootDir, Page existing, boolean returnValue, boolean ignoreScopes) throws TemplateException {
 		try {
-			return _compile(config, classRootDir,existing);
+			return _compile(config, classRootDir,existing,returnValue,ignoreScopes);
         }
 			catch(RuntimeException re) {re.printStackTrace();
 	    	String msg=StringUtil.emptyIfNull(re.getMessage());
@@ -337,11 +337,11 @@ public final class PageSourceImpl implements PageSource {
         }
 	}
 
-	private Page _compile(ConfigWeb config,Resource classRootDir, Page existing) throws IOException, SecurityException, IllegalArgumentException, PageException {
+	private Page _compile(ConfigWeb config,Resource classRootDir, Page existing,boolean returnValue, boolean ignoreScopes) throws IOException, SecurityException, IllegalArgumentException, PageException {
         ConfigWebImpl cwi=(ConfigWebImpl) config;
         int dialect=getDialect();
         Result result = cwi.getCompiler().
-        	compile(cwi,this,cwi.getTLDs(dialect),cwi.getFLDs(dialect),classRootDir);
+        	compile(cwi,this,cwi.getTLDs(dialect),cwi.getFLDs(dialect),classRootDir,returnValue,ignoreScopes);
         //Class<?> clazz = mapping.getPhysicalClass(getClazz(),barr);
         try{
         	

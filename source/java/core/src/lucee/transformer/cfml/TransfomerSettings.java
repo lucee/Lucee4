@@ -24,9 +24,11 @@ public class TransfomerSettings {
 	//private static final TransfomerSettings TRANS_SETTING_DOT_NOT_ORIGINAL = new TransfomerSettings(false);
 	public final boolean dotNotationUpper; 
 	public final boolean handleUnQuotedAttrValueAsString;
+	public final boolean ignoreScopes;
 	
-	public TransfomerSettings(boolean dotNotationUpper, boolean handleUnQuotedAttrValueAsString) {
+	public TransfomerSettings(boolean dotNotationUpper, boolean handleUnQuotedAttrValueAsString,boolean ignoreScopes) {
 		this.dotNotationUpper = dotNotationUpper;
 		this.handleUnQuotedAttrValueAsString = handleUnQuotedAttrValueAsString;
+		this.ignoreScopes=ignoreScopes;
 	}
 }

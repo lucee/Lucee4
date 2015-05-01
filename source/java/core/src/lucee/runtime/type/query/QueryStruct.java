@@ -23,7 +23,6 @@ import java.util.Iterator;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Query;
-import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.util.StructSupport;
 import lucee.runtime.type.util.StructUtil;
 

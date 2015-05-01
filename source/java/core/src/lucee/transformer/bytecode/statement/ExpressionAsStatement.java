@@ -49,9 +49,19 @@ public final class ExpressionAsStatement extends StatementBaseNoFinal {
 	@Override
 	public void _writeOut(BytecodeContext bc) throws TransformerException {
 		GeneratorAdapter adapter = bc.getAdapter();
-		if(!(expr instanceof Literal)) {
-			Type type = expr.writeOut(bc, Expression.MODE_VALUE);
-			if(!type.equals(Types.VOID))ASMUtil.pop(adapter, type);
+		int rtn=bc.getReturn();
+		// set rtn
+		if(rtn>-1) {
+			Type type = expr.writeOut(bc, Expression.MODE_REF);
+			bc.getAdapter().storeLocal(rtn);
+		}
+		else {
+			if(!(expr instanceof Literal)) {
+				Type type = expr.writeOut(bc, Expression.MODE_VALUE);
+				if(!type.equals(Types.VOID)){
+					ASMUtil.pop(adapter, type);
+				}
+			}
 		}
 	}
 	

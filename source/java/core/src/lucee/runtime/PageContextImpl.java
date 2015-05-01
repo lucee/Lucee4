@@ -327,6 +327,7 @@ public final class PageContextImpl extends PageContext {
 
 	private int currentTemplateDialect=CFMLEngine.DIALECT_LUCEE;
 	private int requestDialect=CFMLEngine.DIALECT_LUCEE;
+	private boolean ignoreScopes=false;
 
 	/** 
 	 * default Constructor
@@ -397,7 +398,7 @@ public final class PageContextImpl extends PageContext {
 			   errorPageURL,
 			   needsSession,
 			   bufferSize,
-			   autoFlush,false);
+			   autoFlush,false,false);
 	}
 	
 	/**
@@ -418,7 +419,8 @@ public final class PageContextImpl extends PageContext {
 			 boolean needsSession, 
 			 int bufferSize, 
 			 boolean autoFlush,
-			 boolean isChild) {
+			 boolean isChild, boolean ignoreScopes) {
+		this.ignoreScopes=ignoreScopes;
 		access=-1;
 		modifier=0;
 		requestId=counter++;
@@ -1078,6 +1080,12 @@ public final class PageContextImpl extends PageContext {
 	
 	public Scope scope(String strScope,Scope defaultValue) throws PageException {
 		if(strScope==null)return defaultValue;
+		if(ignoreScopes()) {
+			if("arguments".equals(strScope))	return argumentsScope();
+			if("local".equals(strScope))		return localScope();
+			return defaultValue;
+		}
+		
 		strScope=strScope.toLowerCase().trim(); 
 		if("variables".equals(strScope))	return variablesScope(); 
 		if("url".equals(strScope))			return urlScope();
@@ -2888,7 +2896,7 @@ public final class PageContextImpl extends PageContext {
 					pageSource,
 					config.getTLDs(dialect),
 					config.getFLDs(dialect),
-					classRootDir
+					classRootDir,false,false
 					);
 		} catch (Exception e) {
 			throw Caster.toPageException(e);
@@ -3307,5 +3315,10 @@ public final class PageContextImpl extends PageContext {
 	
 	public ELContext getELContext() {
 		throw new RuntimeException("not supported!");
+	}
+
+	@Override
+	public boolean ignoreScopes() {
+		return ignoreScopes;
 	}
 }

@@ -105,7 +105,7 @@ public final class VariableInterpreter {
         StringList list = parse(pc,new ParserString(var),false);
         if(list==null) throw new InterpreterException("invalid variable declaration ["+var+"]");
         
-		int scope=scopeString2Int(list.next());
+		int scope=scopeString2Int(pc.ignoreScopes(),list.next());
 		Object coll =null; 
 		if(scope==Scope.SCOPE_UNDEFINED) {
 		    coll=pc.undefinedScope().get(list.current());
@@ -126,7 +126,7 @@ public final class VariableInterpreter {
         StringList list = parse(pc,new ParserString(var),false);
         if(list==null) throw new InterpreterException("invalid variable declaration ["+var+"]");
         
-		int scope=scopeString2Int(list.next());
+		int scope=scopeString2Int(pc.ignoreScopes(),list.next());
 		Object coll =null; 
 		if(scope==Scope.SCOPE_UNDEFINED) {
 		    coll=pc.undefinedScope().getCollection(list.current());
@@ -210,7 +210,7 @@ public final class VariableInterpreter {
         StringList list = parse(pc,new ParserString(var),false);
         if(list==null) return defaultValue;
         
-		int scope=scopeString2Int(list.next());
+		int scope=scopeString2Int(pc.ignoreScopes(),list.next());
 		Object coll =null; 
 		if(scope==Scope.SCOPE_UNDEFINED) {
 		    coll=pc.undefinedScope().get(KeyImpl.init(list.current()),NullSupportHelper.NULL());
@@ -237,7 +237,7 @@ public final class VariableInterpreter {
         StringList list = parse(pc,new ParserString(var),false);
         if(list==null) return defaultValue;
         
-		int scope=scopeString2Int(list.next());
+		int scope=scopeString2Int(pc.ignoreScopes(),list.next());
 		Object coll =null; 
 		if(scope==Scope.SCOPE_UNDEFINED) {
 		    try {
@@ -279,7 +279,7 @@ public final class VariableInterpreter {
 		if(list.size()==1) {
 			return new VariableReference(pc.undefinedScope(),list.next()); 
 		}
-		int scope=scopeString2Int(list.next());
+		int scope=scopeString2Int(pc.ignoreScopes(),list.next());
 		
 		Object coll;
 		if(scope==Scope.SCOPE_UNDEFINED){
@@ -347,7 +347,7 @@ public final class VariableInterpreter {
 		}
 		
 		// min 2 elements
-		int scope=scopeString2Int(list.next());
+		int scope=scopeString2Int(pc.ignoreScopes(),list.next());
 		Object coll;
 		if(scope==Scope.SCOPE_UNDEFINED){
 			coll=pc.touch(pc.undefinedScope(),KeyImpl.init(list.current()));
@@ -380,7 +380,7 @@ public final class VariableInterpreter {
 			return pc.undefinedScope().remove(KeyImpl.init(list.next()));
 		}
         
-		int scope=scopeString2Int(list.next());
+		int scope=scopeString2Int(pc.ignoreScopes(),list.next());
 		
 		Object coll;
 		if(scope==Scope.SCOPE_UNDEFINED){
@@ -409,7 +409,7 @@ public final class VariableInterpreter {
 		StringList list = parse(pc,new ParserString(var),false);
 		if(list==null) return false;
         try {
-			int scope=scopeString2Int(list.next());
+			int scope=scopeString2Int(pc.ignoreScopes(),list.next());
 			Object coll =NULL; 
 			if(scope==Scope.SCOPE_UNDEFINED) {
 				coll=pc.undefinedScope().get(list.current(),null);
@@ -522,9 +522,21 @@ public final class VariableInterpreter {
 	 * @param type type to translate
 	 * @return int representation matching to given string
 	 */
-	public static int scopeString2Int(String type) {
+	public static int scopeString2Int(boolean ignoreScope, String type) {
 		type=StringUtil.toLowerCase(type);
 		char c=type.charAt(0);
+		
+		// ignore scope only handles only reconize local,arguments as scope, the rest is ignored
+		if(ignoreScope) {
+			if('a'==c) {
+				if("arguments".equals(type))	return Scope.SCOPE_ARGUMENTS;
+			}
+			else if('l'==c) {
+				if("local".equals(type))				return Scope.SCOPE_LOCAL;// LLL
+			}
+			return Scope.SCOPE_UNDEFINED;
+		}
+		
 		if('a'==c) {
 			if("application".equals(type)) 		return Scope.SCOPE_APPLICATION;
 			else if("arguments".equals(type))	return Scope.SCOPE_ARGUMENTS;

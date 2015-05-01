@@ -26,7 +26,6 @@ import javax.xml.rpc.ServiceException;
 
 import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.cache.CachePro;
-import lucee.commons.io.cache.exp.CacheException;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.runtime.cache.CacheSupport;
 import lucee.runtime.cache.eh.remote.rest.RESTClient;

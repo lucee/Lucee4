@@ -1410,7 +1410,7 @@ public class CFMLExpressionInterpreter {
                 return new Variable(new lucee.runtime.interpreter.ref.var.Scope(ScopeSupport.SCOPE_VAR),name);
             }
         }
-        int scope = VariableInterpreter.scopeString2Int(idStr);
+        int scope = VariableInterpreter.scopeString2Int(pc.ignoreScopes(),idStr);
         if(scope==Scope.SCOPE_UNDEFINED) {
             return new Variable(new lucee.runtime.interpreter.ref.var.Scope(Scope.SCOPE_UNDEFINED),idStr);
         }

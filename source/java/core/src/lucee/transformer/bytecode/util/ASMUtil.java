@@ -65,6 +65,7 @@ import lucee.transformer.bytecode.statement.tag.Tag;
 import lucee.transformer.bytecode.statement.tag.TagComponent;
 import lucee.transformer.bytecode.statement.tag.TagTry;
 import lucee.transformer.bytecode.util.SourceNameClassVisitor.SourceInfo;
+import lucee.transformer.cfml.TransfomerSettings;
 import lucee.transformer.cfml.evaluator.EvaluatorException;
 import lucee.transformer.expression.ExprDouble;
 import lucee.transformer.expression.ExprString;
@@ -1144,8 +1145,8 @@ public final class ASMUtil {
 	}
 
 
-	public static BIF createBif(Factory factory, FunctionLibFunction flf) {
-		BIF bif=new BIF(factory,flf.getName(),flf);
+	public static BIF createBif(TransfomerSettings ts,Factory factory, FunctionLibFunction flf) {
+		BIF bif=new BIF(ts,factory,flf.getName(),flf);
 		bif.setArgType(flf.getArgType());
 		try {
 			bif.setClassDefinition(flf.getFunctionClassDefinition());

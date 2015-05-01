@@ -37,9 +37,6 @@ import lucee.transformer.bytecode.BytecodeFactory;
 import lucee.transformer.bytecode.Page;
 import lucee.transformer.bytecode.util.ASMUtil;
 import lucee.transformer.bytecode.util.ClassRenamer;
-import lucee.transformer.cfml.TransfomerSettings;
-import lucee.transformer.cfml.evaluator.EvaluatorPool;
-import lucee.transformer.cfml.script.CFMLScriptTransformer;
 import lucee.transformer.cfml.tag.CFMLTransformer;
 import lucee.transformer.library.function.FunctionLib;
 import lucee.transformer.library.tag.TagLib;
@@ -66,22 +63,22 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 	}
 	
 	public Result compile(ConfigImpl config,PageSource ps, TagLib[] tld, FunctionLib[] fld, 
-        Resource classRootDir) throws TemplateException, IOException {
-		return _compile(config, ps, null,null, tld, fld, classRootDir);
+        Resource classRootDir, boolean returnValue, boolean ignoreScopes) throws TemplateException, IOException {
+		return _compile(config, ps, null,null, tld, fld, classRootDir,returnValue,ignoreScopes);
 	}
 	
 	public Result compile(ConfigImpl config,SourceCode sc, TagLib[] tld, FunctionLib[] fld, 
-		Resource classRootDir, String className) throws TemplateException, IOException {
+		Resource classRootDir, String className, boolean returnValue,boolean ignoreScopes) throws TemplateException, IOException {
 		
 		// just to be sure
 		PageSource ps=null;
 		if(sc instanceof PageSourceCode) 
 			ps=((PageSourceCode)sc).getPageSource();
 		
-		return _compile(config, ps, sc,className, tld, fld, classRootDir);
+		return _compile(config, ps, sc,className, tld, fld, classRootDir,returnValue,ignoreScopes);
 	}
 	
-	private byte[] _compiless(ConfigImpl config,PageSource ps,SourceCode sc,String className, TagLib[] tld, FunctionLib[] fld, 
+	/*private byte[] _compiless(ConfigImpl config,PageSource ps,SourceCode sc,String className, TagLib[] tld, FunctionLib[] fld, 
 			Resource classRootDir,TransfomerSettings settings) throws TemplateException {
 		Factory factory = BytecodeFactory.getInstance(config);
 		
@@ -109,19 +106,19 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 		//extr.transform(factory, page, ep, tld, fld, scriptTags, cfml, settings)
 		
 		return null;
-	}
+	}*/
 	
 	private Result _compile(ConfigImpl config,PageSource ps,SourceCode sc,String className, TagLib[] tld, FunctionLib[] fld, 
-        Resource classRootDir) throws TemplateException, IOException {
+        Resource classRootDir, boolean returnValue, boolean ignoreScopes) throws TemplateException, IOException {
 		Result result=null;
 		//byte[] barr = null;
 			Page page = null;
 			Factory factory = BytecodeFactory.getInstance(config);
 	        try {
 	        	page = sc==null? 
-	        			cfmlTransformer.transform(factory,config,ps,tld,fld):
+	        			cfmlTransformer.transform(factory,config,ps,tld,fld,returnValue,ignoreScopes):
 	        			cfmlTransformer.transform(factory,config,sc,tld,fld,System.currentTimeMillis(),
-	        					sc.getDialect()==CFMLEngine.DIALECT_CFML && config.getDotNotationUpperCase());
+	        					sc.getDialect()==CFMLEngine.DIALECT_CFML && config.getDotNotationUpperCase(),returnValue,ignoreScopes);
 	        	page.setSplitIfNecessary(false);
 	        	try {
 	        		result=new Result(page,page.execute(className));
@@ -131,10 +128,10 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 	        		String msg=StringUtil.emptyIfNull(re.getMessage());
 	        		if(StringUtil.indexOfIgnoreCase(msg, "Method code too large!")!=-1) {
 	        			page = sc==null? 
-	    	        			cfmlTransformer.transform(factory,config,ps,tld,fld):
+	    	        			cfmlTransformer.transform(factory,config,ps,tld,fld,returnValue,ignoreScopes):
 	    	        			cfmlTransformer.transform(factory,config,sc,tld,fld,
 	    	        					System.currentTimeMillis(),
-	    	        					sc.getDialect()==CFMLEngine.DIALECT_CFML && config.getDotNotationUpperCase());
+	    	        					sc.getDialect()==CFMLEngine.DIALECT_CFML && config.getDotNotationUpperCase(),returnValue,ignoreScopes);
 
 	        			page.setSplitIfNecessary(true);
 	        			result = new Result(page,page.execute(className));
@@ -145,9 +142,9 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 		        	String msg=StringUtil.emptyIfNull(cfe.getMessage());
 		        	if(StringUtil.indexOfIgnoreCase(msg, "Invalid method Code length")!=-1) {
 		        		page = ps!=null? 
-			        			cfmlTransformer.transform(factory,config,ps,tld,fld):
+			        			cfmlTransformer.transform(factory,config,ps,tld,fld,returnValue,ignoreScopes):
 			        			cfmlTransformer.transform(factory,config,sc,tld,fld,System.currentTimeMillis(),
-			        					sc.getDialect()==CFMLEngine.DIALECT_CFML && config.getDotNotationUpperCase());
+			        					sc.getDialect()==CFMLEngine.DIALECT_CFML && config.getDotNotationUpperCase(),returnValue,ignoreScopes);
 			        	
 		        		
 		        		
@@ -223,8 +220,8 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 	}
 
 	
-	public Page transform(ConfigImpl config,PageSource source, TagLib[] tld, FunctionLib[] fld) throws TemplateException, IOException {
-		return cfmlTransformer.transform(BytecodeFactory.getInstance(config),config,source,tld,fld);
+	public Page transform(ConfigImpl config,PageSource source, TagLib[] tld, FunctionLib[] fld, boolean returnValue, boolean ignoreScopes) throws TemplateException, IOException {
+		return cfmlTransformer.transform(BytecodeFactory.getInstance(config),config,source,tld,fld,returnValue,ignoreScopes);
 	}
 	
 

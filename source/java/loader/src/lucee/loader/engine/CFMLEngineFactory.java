@@ -888,6 +888,9 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 		if(root==null)root=getDirectoryByProp("org.apache.geronimo.base.dir"); // Geronimo
 		if(root==null)root=getDirectoryByProp("com.sun.aas.instanceRoot"); // Glassfish
 		if(root==null)root=getDirectoryByProp("env.DOMAIN_HOME"); // weblogic
+		if(root==null) root=getClassLoaderRoot(mainClassLoader).getParentFile().getParentFile();
+		
+		System.out.println("root dir:"+root);
 		
 		if(root==null)throw new IOException(
 				"can't locate the root of the servlet container, please define a location (physical path) for the server configuration"

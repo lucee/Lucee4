@@ -21,14 +21,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import lucee.commons.lang.ClassException;
-import lucee.commons.lang.ClassUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefInteger;
 import lucee.commons.lang.types.RefIntegerImpl;
 import lucee.runtime.db.ClassDefinition;
 import lucee.runtime.exp.TemplateException;
-import lucee.runtime.tag.TagUtil;
 import lucee.runtime.type.scope.Scope;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.UDFUtil;
@@ -57,7 +54,6 @@ import lucee.transformer.library.function.FunctionLibFunctionArg;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.commons.Method;
-import org.osgi.framework.BundleException;
 
 public class VariableImpl extends ExpressionBase implements Variable {
 	 

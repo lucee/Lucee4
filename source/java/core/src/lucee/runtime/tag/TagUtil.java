@@ -26,8 +26,6 @@ import java.util.Map.Entry;
 import javax.servlet.http.Cookie;
 import javax.servlet.jsp.tagext.Tag;
 
-import org.osgi.framework.BundleException;
-
 import lucee.commons.io.DevNullOutputStream;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.ClassUtil;
@@ -45,7 +43,6 @@ import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
-import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.ext.function.BIF;
 import lucee.runtime.ext.tag.DynamicAttributes;
 import lucee.runtime.functions.BIFProxy;
@@ -63,6 +60,8 @@ import lucee.runtime.type.util.KeyConstants;
 import lucee.transformer.library.tag.TagLib;
 import lucee.transformer.library.tag.TagLibTag;
 import lucee.transformer.library.tag.TagLibTagAttr;
+
+import org.osgi.framework.BundleException;
 
 public class TagUtil {
 	
