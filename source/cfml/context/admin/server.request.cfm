@@ -180,7 +180,7 @@ Error Output --->
 
 	</script>
 </cfsavecontent>
-<cfhtmlhead text="#headText#">
+<cfhtmlhead text="#headText#"/>
 
 <cfoutput>
 	<cfif not hasAccess>
