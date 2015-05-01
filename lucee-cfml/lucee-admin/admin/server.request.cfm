@@ -57,6 +57,18 @@ Defaults --->
 					remoteClients="#request.getRemoteClients()#">
 
 				<cfif request.admintype =="server">
+					<cfscript>
+						if(structKeyExists(form,'timeout_days')) {
+							timeoutMS=
+								(form.timeout_seconds*1000)+
+								(form.timeout_minutes*60*1000)+
+								(form.timeout_hours*60*60*1000)+
+								(form.timeout_days*60*60*24*1000);
+						}
+						else timeoutMS="";// emty string==removed
+					</cfscript>
+
+
 					<cfadmin 
 					action="updateQueueSetting"
 					type="#request.adminType#"
@@ -64,7 +76,7 @@ Defaults --->
 					
 					enable="#structKeyExists(form,'ConcurrentRequestEnable') and form.ConcurrentRequestEnable#"
 					max="#structKeyExists(form,'ConcurrentRequestMax')?form.ConcurrentRequestMax:""#"
-					timeout="#structKeyExists(form,'ConcurrentRequestTimeout')?form.ConcurrentRequestTimeout:""#"
+					timeout="#timeoutMS#"
 					remoteClients="#request.getRemoteClients()#">
 				</cfif>
 				
@@ -171,7 +183,7 @@ Error Output --->
 			
 			
 			$('#ConcurrentRequestMax').prop('disabled', !isChecked);
-			$('#ConcurrentRequestTimeout').prop('disabled', !isChecked);
+			$('#ConcurrentRequestTimeout input').prop('disabled', !isChecked);
 		}
 		$(function(){
 			$('#ConcurrentRequestEnableSpan input.checkbox').bind('click change', concurrent);
@@ -413,10 +425,61 @@ Error Output --->
 					<th scope="row">#stText.application.ConcurrentRequestTimeout#</th>
 					<td>
 						<cfif hasAccess>
-							<cfinput type="text" name="ConcurrentRequestTimeout" value="#queueSettings.timeout#" 
-									class="number" required="yes" validate="integer"  id="ConcurrentRequestTimeout"
-									message="#stText.application.ConcurrentRequestTimeoutError#">
+							<!---<cfinput type="text" name="ConcurrentRequestTimeout" value="#queueSettings.timeout#" 
+									class="number" required="yes" validate="integer"  id="ConcurrentRequestTimeoutOld"
+									message="#stText.application.ConcurrentRequestTimeoutError#">--->
 							
+							<cfscript>
+								seconds=int(queueSettings.timeout/1000);
+								minutes=int(seconds/60);
+								seconds-=minutes*60;
+								hours=int(minutes/60);
+								minutes-=hours*60;
+								days=int(hours/24);
+								hours-=days*24;
+							</cfscript>
+							<table class="maintbl" style="width:auto" id="ConcurrentRequestTimeout">
+							<thead>
+								<tr>
+									<th>#stText.General.Days#</th>
+									<th>#stText.General.Hours#</th>
+									<th>#stText.General.Minutes#</th>
+									<th>#stText.General.Seconds#</th>
+								</tr>
+							</thead>
+							<tbody>
+								<cfif hasAccess>
+
+
+									<tr>
+										<td><cfinput type="text" name="timeout_days" value="#days#" 
+											class="number" required="yes" validate="integer" 
+											message="#stText.Scopes.TimeoutDaysValue#request#stText.Scopes.TimeoutEndValue#"></td>
+										<td><cfinput type="text" name="timeout_hours" value="#hours#" 
+											class="number" required="yes" validate="integer" 
+											message="#stText.Scopes.TimeoutHoursValue#request#stText.Scopes.TimeoutEndValue#"></td>
+										<td><cfinput type="text" name="timeout_minutes" value="#minutes#" 
+											class="number" required="yes" validate="integer" 
+											message="#stText.Scopes.TimeoutMinutesValue#request#stText.Scopes.TimeoutEndValue#"></td>
+										<td><cfinput type="text" name="timeout_seconds" value="#seconds#" 
+											class="number" required="yes" validate="integer" 
+											message="#stText.Scopes.TimeoutSecondsValue#request#stText.Scopes.TimeoutEndValue#"></td>
+									</tr>
+								<cfelse>
+									<tr>
+										<td class="right"><b>#days#</b></td>
+										<td class="right"><b>#hours#</b></td>
+										<td class="right"><b>#minutes#</b></td>
+										<td class="right"><b>#seconds#</b></td>
+									</tr>
+								</cfif>
+							</tbody>
+
+						</table>
+
+
+
+
 						<cfelse>
 							<b>#yesNoFormat(queueSettings.timeout)#</b>
 						</cfif>
