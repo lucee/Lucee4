@@ -2035,7 +2035,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 						, dataSource.getAttribute("host"),
 						dataSource.getAttribute("database"), toInt(dataSource.getAttribute("port"), -1), dataSource.getAttribute("dsn"), dataSource.getAttribute("username"),
 						ConfigWebUtil.decrypt(dataSource.getAttribute("password")), toInt(dataSource.getAttribute("connectionLimit"), -1),
-						toInt(dataSource.getAttribute("connectionTimeout"), -1), toLong(dataSource.getAttribute("metaCacheTimeout"), 60000),
+						toInt(dataSource.getAttribute("connectionTimeout"), -1), Caster.toLongValue(dataSource.getAttribute("metaCacheTimeout"), 60000),
 						toBoolean(dataSource.getAttribute("blob"), true), toBoolean(dataSource.getAttribute("clob"), true),
 						toInt(dataSource.getAttribute("allow"), DataSource.ALLOW_ALL), toBoolean(dataSource.getAttribute("validate"), false),
 						toBoolean(dataSource.getAttribute("storage"), false), dataSource.getAttribute("timezone"), toStruct(dataSource.getAttribute("custom")), dataSource.getAttribute("dbdriver"));
@@ -4816,16 +4816,6 @@ public final class ConfigWebFactory extends ConfigFactory {
 		if (intValue == Integer.MIN_VALUE)
 			return defaultValue;
 		return intValue;
-	}
-
-	public static long toLong(String value, long defaultValue) {
-
-		if (value == null || value.trim().length() == 0)
-			return defaultValue;
-		long longValue = Caster.toLongValue(value.trim(), Long.MIN_VALUE);
-		if (longValue == Long.MIN_VALUE)
-			return defaultValue;
-		return longValue;
 	}
 
 	/**
