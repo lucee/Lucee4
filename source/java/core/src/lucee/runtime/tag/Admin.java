@@ -1295,7 +1295,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         
         ConfigWeb[] webs = server.getConfigWebs();
         for(int i=0;i<webs.length;i++){
-        	ConfigWebFactory.deployWebContext(server,webs[i], true);
+        	ConfigWebUtil.deployWebContext(server,webs[i], true);
         }
     }
     

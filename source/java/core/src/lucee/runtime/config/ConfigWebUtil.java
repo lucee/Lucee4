@@ -34,7 +34,9 @@ import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
+import lucee.commons.lang.SystemOut;
 import lucee.loader.engine.CFMLEngine;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.runtime.Mapping;
@@ -83,6 +85,50 @@ public final class ConfigWebUtil {
 		if (StringUtil.startsWithIgnoreCase(str, "encrypted:"))
 			return str;
 		return "encrypted:" + new BlowfishEasy("sdfsdfs").encryptString(str);
+	}
+	
+
+	/**
+	 * deploys all content in "web-context-deployment" to a web context, used for new context mostly or update existings
+	 * @param cs
+	 * @param cw
+	 * @param throwError
+	 * @throws IOException
+	 */
+	public static void deployWebContext(ConfigServer cs, ConfigWeb cw, boolean throwError) throws IOException  {
+		Resource deploy = cs.getConfigDir().getRealResource("web-context-deployment"),trg;
+        if(!deploy.isDirectory()) return;
+			trg=cw.getConfigDir().getRealResource("context");
+        	try {
+				_deployWebContext(cw,deploy,trg);	
+			}
+			catch (IOException ioe) {
+				if(throwError) throw ioe;
+				SystemOut.printDate(cw.getErrWriter(), ExceptionUtil.getStacktrace(ioe, true));
+			}
+	}
+
+	private static void _deployWebContext(ConfigWeb cw,Resource src, Resource trg) throws IOException {
+		if(!src.isDirectory())return;
+		if(trg.isFile()) trg.delete();
+		if(!trg.exists()) trg.mkdirs();
+		Resource _src,_trg;
+		Resource[] children = src.listResources();
+		if(ArrayUtil.isEmpty(children)) return;
+		
+		for(int i=0;i<children.length;i++){
+			_src=children[i];
+			_trg=trg.getRealResource(_src.getName());
+			if(_src.isDirectory()) 
+				_deployWebContext(cw,_src,_trg);
+			if(_src.isFile()) {
+				if(_src.length()!=_trg.length()) {
+					_src.copyTo(_trg, false);
+					SystemOut.printDate(cw.getOutWriter(), "write file:" + _trg);
+					
+				}
+			}
+		}
 	}
     
     /**
