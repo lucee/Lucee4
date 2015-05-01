@@ -1,4 +1,3 @@
-railo-java/railo/build
 source/java/core/bin
 source/java/bin/*
 source/java/core/dist
@@ -17,6 +16,11 @@ source/java/debug/bin/*
 source/java/instrumentation/bin/*
 source/java/libs/bin
 source/java/loader/build
+
+db.log
+db.properties
+db.script
+
 **/.DS_Store
 **/.svn/
 /*.project
@@ -38,6 +42,4 @@ sample.mov
 /.idea/
 /*.iml
 *.hbm.xml
-tests/**/db.log
-tests/**/db.properties
-tests/**/db.script
+
