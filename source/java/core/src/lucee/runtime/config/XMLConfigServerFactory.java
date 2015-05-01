@@ -47,7 +47,7 @@ import com.jacob.com.LibraryLoader;
 /**
  * 
  */
-public final class ConfigServerFactory extends ConfigFactory{
+public final class XMLConfigServerFactory extends XMLConfigFactory{
     
     /**
      * creates a new ServletConfig Impl Object
@@ -154,7 +154,7 @@ public final class ConfigServerFactory extends ConfigFactory{
      * @throws BundleException 
      */
     static void load(ConfigServerImpl configServer, Document doc, boolean isReload, boolean doNew) throws ClassException, PageException, IOException, TagLibException, FunctionLibException, BundleException {
-        ConfigWebFactory.load(null,configServer,doc, isReload,doNew);
+        XMLConfigWebFactory.load(null,configServer,doc, isReload,doNew);
         loadLabel(configServer,doc);
     }
     

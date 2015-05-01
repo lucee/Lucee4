@@ -18,7 +18,7 @@
 package lucee.runtime.functions.cache;
 
 import lucee.runtime.PageContext;
-import lucee.runtime.config.ConfigWebAdmin;
+import lucee.runtime.config.XMLConfigAdmin;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.config.Password;
 import lucee.runtime.exp.PageException;
@@ -36,7 +36,7 @@ public class CacheRegionExists implements Function {
         Password webAdminPassword = Util.getPassword( pc, strWebAdminPassword ,false);
 
         try {
-            ConfigWebAdmin adminConfig = ConfigWebAdmin.newInstance( (ConfigWebImpl)pc.getConfig(), webAdminPassword );
+            XMLConfigAdmin adminConfig = XMLConfigAdmin.newInstance( (ConfigWebImpl)pc.getConfig(), webAdminPassword );
             return adminConfig.cacheConnectionExists( cacheName );
         }
         catch ( Exception e ) {

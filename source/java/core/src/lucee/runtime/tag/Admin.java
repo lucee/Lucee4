@@ -79,7 +79,7 @@ import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigServer;
 import lucee.runtime.config.ConfigServerImpl;
 import lucee.runtime.config.ConfigWeb;
-import lucee.runtime.config.ConfigWebAdmin;
+import lucee.runtime.config.XMLConfigAdmin;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.config.Constants;
@@ -245,7 +245,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     private String action=null;
     private short type;
     private Password password;
-    private ConfigWebAdmin admin;
+    private XMLConfigAdmin admin;
     private ConfigImpl config;
     
     private static final ResourceFilter FILTER_CFML_TEMPLATES=new LogResourceFilter(
@@ -558,7 +558,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
                 config=(ConfigImpl)pageContext.getConfig().getConfigServer(password);
             
             adminSync = config.getAdminSync();
-        	admin = ConfigWebAdmin.newInstance(config,password);
+        	admin = XMLConfigAdmin.newInstance(config,password);
         } 
         catch (Exception e) {
             throw Caster.toPageException(e);
@@ -1325,7 +1325,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     private void doGetPlugins() throws PageException {
         Resource dir = config.getPluginDirectory();
     	
-    	String[] list = dir.list(new ConfigWebAdmin.PluginFilter());
+    	String[] list = dir.list(new XMLConfigAdmin.PluginFilter());
     	lucee.runtime.type.Query qry=
         	new QueryImpl(
         			new Collection.Key[]{KeyConstants._name},
@@ -4343,13 +4343,13 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     	// path
     	if(obj instanceof String) {
     		Resource src = ResourceUtil.toResourceExisting(config, (String)obj);
-    		ConfigWebAdmin.updateRHExtension(config, src,true);
+    		XMLConfigAdmin.updateRHExtension(config, src,true);
     	}
     	else {
     		try{
 	    		Resource tmp = SystemUtil.getTempFile("lex", true);
 	    		IOUtil.copy(new ByteArrayInputStream(Caster.toBinary(obj)), tmp, true);
-	    		ConfigWebAdmin.updateRHExtension(config, tmp,true);
+	    		XMLConfigAdmin.updateRHExtension(config, tmp,true);
     		}
     		catch(IOException ioe){
     			throw Caster.toPageException(ioe);

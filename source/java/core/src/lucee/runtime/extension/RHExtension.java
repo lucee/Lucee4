@@ -45,7 +45,7 @@ import lucee.commons.lang.StringUtil;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigWeb;
-import lucee.runtime.config.ConfigWebAdmin;
+import lucee.runtime.config.XMLConfigAdmin;
 import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.config.Constants;
 import lucee.runtime.db.ClassDefinition;
@@ -302,7 +302,7 @@ public class RHExtension implements Serializable {
 					(startsWith(path,type,"jars") || startsWith(path,type,"jar") 
 					|| startsWith(path,type,"bundles") || startsWith(path,type,"bundle") 
 					|| startsWith(path,type,"lib") || startsWith(path,type,"libs")) && StringUtil.endsWithIgnoreCase(path, ".jar")) {
-					bf = ConfigWebAdmin.installBundle(config,zis,fileName,version,false);
+					bf = XMLConfigAdmin.installBundle(config,zis,fileName,version,false);
 					bundles.add(bf);
 	
 				}

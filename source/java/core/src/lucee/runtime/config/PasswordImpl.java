@@ -273,14 +273,14 @@ public class PasswordImpl implements Password {
 	public static void updatePassword(ConfigImpl config, Password passwordOld, Password passwordNew) throws SAXException, IOException, PageException, BundleException {
 		if(!config.hasPassword()) { 
 	    	config.setPassword(passwordNew);
-	        ConfigWebAdmin admin = ConfigWebAdmin.newInstance(config,passwordNew);
+	        XMLConfigAdmin admin = XMLConfigAdmin.newInstance(config,passwordNew);
 	        admin.setPassword(passwordNew);
 	        admin.storeAndReload();
 	    }
 	    else {
 	    	ConfigWebUtil.checkPassword(config,"write",passwordOld);
 	    	ConfigWebUtil.checkGeneralWriteAccess(config,passwordOld);
-	    	ConfigWebAdmin admin = ConfigWebAdmin.newInstance(config,passwordOld);
+	    	XMLConfigAdmin admin = XMLConfigAdmin.newInstance(config,passwordOld);
 	        admin.setPassword(passwordNew);
 	        admin.storeAndReload();
 	    }

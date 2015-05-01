@@ -143,7 +143,7 @@ import com.allaire.cfx.CustomTag;
 /**
  * 
  */
-public final class ConfigWebAdmin {
+public final class XMLConfigAdmin {
 
     
 	//private static final Object NULL = new Object();
@@ -161,8 +161,8 @@ public final class ConfigWebAdmin {
      * @throws SAXException
      * @throws IOException
      */
-    public static ConfigWebAdmin newInstance(ConfigImpl config, Password password) throws SAXException, IOException {
-        return new ConfigWebAdmin(config, password);
+    public static XMLConfigAdmin newInstance(ConfigImpl config, Password password) throws SAXException, IOException {
+        return new XMLConfigAdmin(config, password);
     }
     
 
@@ -228,7 +228,7 @@ public final class ConfigWebAdmin {
         }
     }
     
-    private ConfigWebAdmin(ConfigImpl config, Password password) throws SAXException, IOException {
+    private XMLConfigAdmin(ConfigImpl config, Password password) throws SAXException, IOException {
     	this.config=config;
     	this.password=password;
         doc=loadDocument(config.getConfigFile());
@@ -244,7 +244,7 @@ public final class ConfigWebAdmin {
 		if(diff<10 && diff>-10) return; 
 		// reload
 		try {
-			ConfigWebAdmin admin = ConfigWebAdmin.newInstance(ci, null);
+			XMLConfigAdmin admin = XMLConfigAdmin.newInstance(ci, null);
 			admin._reload();
 			SystemOut.printDate(ci.getOutWriter(), "reloaded the configuration ["+file+"] automaticly");
 		} 
@@ -257,7 +257,7 @@ public final class ConfigWebAdmin {
     	checkWriteAccess();
     	
         Element resources=_getRootElement("resources");
-        Element[] rpElements = ConfigWebFactory.getChildren(resources,"resource-provider");
+        Element[] rpElements = XMLConfigWebFactory.getChildren(resources,"resource-provider");
       	String s;
         // update
         if(rpElements!=null) {
@@ -302,7 +302,7 @@ public final class ConfigWebAdmin {
     }
     
     public static synchronized void _storeAndReload(ConfigImpl config) throws PageException, SAXException, ClassException, IOException, TagLibException, FunctionLibException, BundleException  {
-    	ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+    	XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._store();
     	admin._reload();
     }
@@ -336,15 +336,15 @@ public final class ConfigWebAdmin {
         if(config instanceof ConfigServerImpl) {
         	
             ConfigServerImpl cs=(ConfigServerImpl) config;
-            ConfigServerFactory.reloadInstance(cs);
+            XMLConfigServerFactory.reloadInstance(cs);
             ConfigWeb[] webs=cs.getConfigWebs();
             for(int i=0;i<webs.length;i++) {
-                ConfigWebFactory.reloadInstance((ConfigServerImpl) config,(ConfigWebImpl)webs[i],true);
+                XMLConfigWebFactory.reloadInstance((ConfigServerImpl) config,(ConfigWebImpl)webs[i],true);
             }
         }
         else {
         	ConfigServerImpl cs=((ConfigWebImpl)config).getConfigServerImpl();
-            ConfigWebFactory.reloadInstance(cs,(ConfigWebImpl)config,false);
+            XMLConfigWebFactory.reloadInstance(cs,(ConfigWebImpl)config,false);
         }
     }
     
@@ -383,7 +383,7 @@ public final class ConfigWebAdmin {
         ConfigWebUtil.getFile(config,config.getRootDirectory(),logFile,FileUtil.TYPE_FILE);
         
         
-        Element logging = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "logging");
+        Element logging = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "logging");
 		Element[] children = XMLUtil.getChildElementsAsArray(logging);
 		Element logger=null;
     	
@@ -511,7 +511,7 @@ public final class ConfigWebAdmin {
         hostName=hostName.trim();
         
         
-        Element[] children = ConfigWebFactory.getChildren(mail,"server");
+        Element[] children = XMLConfigWebFactory.getChildren(mail,"server");
       	
         // Update
         for(int i=0;i<children.length;i++) {
@@ -548,7 +548,7 @@ public final class ConfigWebAdmin {
     	checkWriteAccess();
     	
         Element mail=_getRootElement("mail");
-        Element[] children = ConfigWebFactory.getChildren(mail,"server");
+        Element[] children = XMLConfigWebFactory.getChildren(mail,"server");
         if(children.length>0) {
 	      	for(int i=0;i<children.length;i++) {
 	      	    Element el=children[i];
@@ -564,7 +564,7 @@ public final class ConfigWebAdmin {
 	public void removeLogSetting(String name) throws SecurityException {
 		checkWriteAccess();
     	Element logging=_getRootElement("logging");
-        Element[] children = ConfigWebFactory.getChildren(logging,"logger");
+        Element[] children = XMLConfigWebFactory.getChildren(logging,"logger");
         if(children.length>0) {
         	String _name;
 	      	for(int i=0;i<children.length;i++) {
@@ -579,21 +579,21 @@ public final class ConfigWebAdmin {
 	}
     
     static void updateMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect, boolean toplevel) throws SAXException, IOException, PageException, BundleException {
-    	ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+    	XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._updateMapping(virtual, physical, archive, primary, inspect, toplevel);
     	admin._storeAndReload();
     }
     
 
     static void updateComponentMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect) throws SAXException, IOException, PageException, BundleException {
-    	ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+    	XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._updateComponentMapping(virtual, physical, archive, primary, inspect);
     	admin._storeAndReload();
     }
     
 
     static void updateCustomTagMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect) throws SAXException, IOException, PageException, BundleException {
-    	ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+    	XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._updateCustomTag(virtual, physical, archive, primary, inspect);
     	admin._storeAndReload();
     }
@@ -650,7 +650,7 @@ public final class ConfigWebAdmin {
         
         Element mappings=_getRootElement("mappings");
         // Update
-        Element[] children = ConfigWebFactory.getChildren(mappings,"mapping");
+        Element[] children = XMLConfigWebFactory.getChildren(mappings,"mapping");
       	for(int i=0;i<children.length;i++) {
       	    String v=children[i].getAttribute("virtual");
       	    if(v!=null) {
@@ -691,7 +691,7 @@ public final class ConfigWebAdmin {
   		el.setAttribute("toplevel",Caster.toString(toplevel));
   		
   		// set / to the end
-  		children = ConfigWebFactory.getChildren(mappings,"mapping");
+  		children = XMLConfigWebFactory.getChildren(mappings,"mapping");
       	for(int i=0;i<children.length;i++) {
       	    String v=children[i].getAttribute("virtual");
       	    
@@ -731,7 +731,7 @@ public final class ConfigWebAdmin {
         	throw new ExpressionException("physical path cannot be a empty value");
         
         Element rest=_getRootElement("rest");
-        Element[] children = ConfigWebFactory.getChildren(rest,"mapping");
+        Element[] children = XMLConfigWebFactory.getChildren(rest,"mapping");
         
         // remove existing default
         if(_default) {
@@ -786,7 +786,7 @@ public final class ConfigWebAdmin {
         
         Element mappings=_getRootElement("mappings");
 
-        Element[] children = ConfigWebFactory.getChildren(mappings,"mapping");
+        Element[] children = XMLConfigWebFactory.getChildren(mappings,"mapping");
       	for(int i=0;i<children.length;i++) {
       	    String v=children[i].getAttribute("virtual");
       	    if(v!=null) {
@@ -817,7 +817,7 @@ public final class ConfigWebAdmin {
         
         Element mappings=_getRootElement("rest");
 
-        Element[] children = ConfigWebFactory.getChildren(mappings,"mapping");
+        Element[] children = XMLConfigWebFactory.getChildren(mappings,"mapping");
       	for(int i=0;i<children.length;i++) {
       	    String v=children[i].getAttribute("virtual");
       	    if(v!=null) {
@@ -840,7 +840,7 @@ public final class ConfigWebAdmin {
     	checkWriteAccess();
     	
         Element mappings=_getRootElement("custom-tag");
-        Element[] children = ConfigWebFactory.getChildren(mappings,"mapping");
+        Element[] children = XMLConfigWebFactory.getChildren(mappings,"mapping");
       	for(int i=0;i<children.length;i++) {
       	    if(virtual.equals(createVirtual(children[i])))mappings.removeChild(children[i]);
       	}
@@ -850,7 +850,7 @@ public final class ConfigWebAdmin {
     	checkWriteAccess();
     	
         Element mappings=_getRootElement("component");
-        Element[] children = ConfigWebFactory.getChildren(mappings,"mapping");
+        Element[] children = XMLConfigWebFactory.getChildren(mappings,"mapping");
         String v;
       	for(int i=0;i<children.length;i++) {
       		v=createVirtual(children[i]);
@@ -897,7 +897,7 @@ public final class ConfigWebAdmin {
         
         // Update
         String v;
-        Element[] children = ConfigWebFactory.getChildren(mappings,"mapping");
+        Element[] children = XMLConfigWebFactory.getChildren(mappings,"mapping");
         for(int i=0;i<children.length;i++) {
         	Element el=children[i];
       		v=createVirtual(el);
@@ -943,7 +943,7 @@ public final class ConfigWebAdmin {
         }
         
         Element mappings=_getRootElement("component");
-        Element[] children = ConfigWebFactory.getChildren(mappings,"mapping");
+        Element[] children = XMLConfigWebFactory.getChildren(mappings,"mapping");
         Element el;
         
         /* ignore when exists
@@ -1141,7 +1141,7 @@ public final class ConfigWebAdmin {
         Element tags=_getRootElement("ext-tags");
         
         // Update
-        Element[] children = ConfigWebFactory.getChildren(tags,"ext-tag");
+        Element[] children = XMLConfigWebFactory.getChildren(tags,"ext-tag");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("name");
       	    
@@ -1186,7 +1186,7 @@ public final class ConfigWebAdmin {
         Element tags=_getRootElement("ext-tags");
         
         // Update
-        Element[] children = ConfigWebFactory.getChildren(tags,"ext-tag");
+        Element[] children = XMLConfigWebFactory.getChildren(tags,"ext-tag");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("name");
       	    
@@ -1222,7 +1222,7 @@ public final class ConfigWebAdmin {
         
         
     	Element newTags = _getRootElement("ext-tags");
-    	Element[] children = ConfigWebFactory.getChildren(tags,"cfx-tag");
+    	Element[] children = XMLConfigWebFactory.getChildren(tags,"cfx-tag");
     	String type;
       	// copy
     	for(int i=0;i<children.length;i++) {
@@ -1273,7 +1273,7 @@ public final class ConfigWebAdmin {
     
     public static boolean fixPSQ(Document doc) {
     	
-    	Element datasources=ConfigWebFactory.getChildByName(doc.getDocumentElement(),"data-sources",false,true);
+    	Element datasources=XMLConfigWebFactory.getChildByName(doc.getDocumentElement(),"data-sources",false,true);
         if(datasources!=null && datasources.hasAttribute("preserve-single-quote")){
         	Boolean b=Caster.toBoolean(datasources.getAttribute("preserve-single-quote"),null);
         	if(b!=null)datasources.setAttribute("psq",Caster.toString(!b.booleanValue()));
@@ -1291,50 +1291,57 @@ public final class ConfigWebAdmin {
      * @return
      */
     public static boolean fixLogging(ConfigServerImpl cs,ConfigImpl config,Document doc) {
+
+    	{// if version is bigger than 4.2 there is nothig to do
+    		Element luceeConfiguration = doc.getDocumentElement();
+    		String strVersion = luceeConfiguration.getAttribute("version");
+    		double version=Caster.toDoubleValue(strVersion, 1.0d);
+    		config.setVersion(version);
+    		if(version>=4.2D) return false;
+    	}
     	
-    	if(config.setVersion(doc)>=4.2D) return false;
     		
     	//setVersion(Caster.toDoubleValue(Info.getVersionAsString().substring(0,3),1.0D));
         
     	
     	// mapping
-    	Element src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "mappings");
+    	Element src = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "mappings");
     	fixLogging(cs,doc,src, "mapping",false,"{lucee-config}/logs/mapping.log");
     	
     	// rest
-    	src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "rest");
+    	src = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "rest");
     	fixLogging(cs,doc,src, "rest",false,"{lucee-config}/logs/rest.log");
     	
     	// gateway
-    	src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "gateways");
+    	src = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "gateways");
     	fixLogging(cs,doc,src, "gateway",false,"{lucee-config}/logs/gateway.log");
     	
     	// remote clients
-    	src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "remote-clients");
+    	src = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "remote-clients");
     	fixLogging(cs,doc,src, "remoteclient",false,"{lucee-config}/logs/remoteclient.log");
     	
     	// orm
-    	src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "orm");
+    	src = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "orm");
     	fixLogging(cs,doc,src, "orm",false,"{lucee-config}/logs/orm.log");
     	
     	// mail
-    	src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "mail");
+    	src = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "mail");
     	fixLogging(cs,doc,src, "mail",false,"{lucee-config}/logs/mail.log");
     			
 		// search
-    	src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "search");
+    	src = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "search");
     	fixLogging(cs,doc,src, "search",false,"{lucee-config}/logs/search.log");
     	
     	// scheduler
-    	src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "scheduler");
+    	src = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "scheduler");
     	fixLogging(cs,doc,src, "scheduler",false,"{lucee-config}/logs/scheduler.log");
     	
 		// scope
-    	src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "scope");
+    	src = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "scope");
     	fixLogging(cs,doc,src, "scope",false,"{lucee-config}/logs/scope.log");
     	
     	// application
-    	Element app = src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "application");
+    	Element app = src = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "application");
     	fixLogging(cs,doc,src, "application","application-log","application-log-level",false,"{lucee-config}/logs/application.log");
     	
     	// exception
@@ -1378,7 +1385,7 @@ public final class ConfigWebAdmin {
 	    	if(deleteSourceAttributes)src.removeAttribute(logName);
 	    	if(deleteSourceAttributes)src.removeAttribute(levelName);
     		
-    		Element logging = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "logging");
+    		Element logging = XMLConfigWebFactory.getChildByName(doc.getDocumentElement(), "logging");
     		
     		// first of all we have to make sure this is not already existing, if it does we ignore the old settings
     		Element[] children = XMLUtil.getChildElementsAsArray(logging);
@@ -1417,9 +1424,9 @@ public final class ConfigWebAdmin {
 
 
     public static boolean fixS3(Document doc) {
-    	Element resources=ConfigWebFactory.getChildByName(doc.getDocumentElement(),"resources",false,true);
+    	Element resources=XMLConfigWebFactory.getChildByName(doc.getDocumentElement(),"resources",false,true);
         
-        Element[] providers = ConfigWebFactory.getChildren(resources,"resource-provider");
+        Element[] providers = XMLConfigWebFactory.getChildren(resources,"resource-provider");
         
         // replace extension class with core class
         for(int i=0;i<providers.length;i++) {
@@ -1499,7 +1506,7 @@ public final class ConfigWebAdmin {
         
         Element mappings=_getRootElement("ext-tags");
 
-        Element[] children = ConfigWebFactory.getChildren(mappings,"ext-tag");
+        Element[] children = XMLConfigWebFactory.getChildren(mappings,"ext-tag");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("name"); 
   	    	if(n!=null && n.equalsIgnoreCase(name)) {
@@ -1561,7 +1568,7 @@ public final class ConfigWebAdmin {
         Element datasources=_getRootElement("data-sources");
         
         // Update
-        Element[] children = ConfigWebFactory.getChildren(datasources,"data-source");
+        Element[] children = XMLConfigWebFactory.getChildren(datasources,"data-source");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("name");
       	    
@@ -1640,7 +1647,7 @@ public final class ConfigWebAdmin {
     }
     
     static void removeJDBCDriver(ConfigImpl config, ClassDefinition cd, boolean reload) throws IOException, SAXException, PageException, BundleException {
-		ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+		XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._removeJDBCDriver(cd);
     	admin._store(); // store is necessary, otherwise it get lost
     	
@@ -1655,7 +1662,7 @@ public final class ConfigWebAdmin {
 		Element parent=_getRootElement("jdbc");
         
 		// Remove
-		Element[] children = ConfigWebFactory.getChildren(parent,"driver");
+		Element[] children = XMLConfigWebFactory.getChildren(parent,"driver");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("class");
       	    if(n.equalsIgnoreCase(cd.getClassName())) {
@@ -1701,7 +1708,7 @@ public final class ConfigWebAdmin {
     	
         // Update
 		Element child=null;
-        Element[] children = ConfigWebFactory.getChildren(parent,"driver");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"driver");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("class");
       	    if(n.equalsIgnoreCase(cd.getClassName())) {
@@ -1758,7 +1765,7 @@ public final class ConfigWebAdmin {
         Element parent=_getRootElement("gateways");
         
         // Update
-        Element[] children = ConfigWebFactory.getChildren(parent,"gateway");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"gateway");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("id");
       	    Element el=children[i];
@@ -1787,7 +1794,7 @@ public final class ConfigWebAdmin {
     }
 	
 	static void removeSearchEngine(ConfigImpl config, boolean reload) throws IOException, SAXException, PageException, BundleException {
-		ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+		XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._removeSearchEngine();
     	admin._store();
     	if(reload)admin._reload();
@@ -1826,7 +1833,7 @@ public final class ConfigWebAdmin {
 	}
 	
 	static void removeORMEngine(ConfigImpl config, boolean reload) throws IOException, SAXException, PageException, BundleException {
-		ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+		XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._removeORMEngine();
     	admin._store();
     	if(reload)admin._reload();
@@ -1930,7 +1937,7 @@ public final class ConfigWebAdmin {
         
         // Update
         //boolean isUpdate=false;
-        Element[] children = ConfigWebFactory.getChildren(parent,"connection");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"connection");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("name");
       	    Element el=children[i];
@@ -2048,7 +2055,7 @@ public final class ConfigWebAdmin {
         Element parent=_getRootElement("resources");
         
         // remove
-        Element[] children = ConfigWebFactory.getChildren(parent,"resource-provider");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"resource-provider");
       	for(int i=0;i<children.length;i++) {
       	    String cn=children[i].getAttribute("class");
       	    if(cn.equalsIgnoreCase(className)) {
@@ -2078,7 +2085,7 @@ public final class ConfigWebAdmin {
         Element parent=_getRootElement("resources");
         
         // Update
-        Element[] children = ConfigWebFactory.getChildren(parent,"resource-provider");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"resource-provider");
       	for(int i=0;i<children.length;i++) {
       	    String cn=children[i].getAttribute("class");
       	    if(cn.equalsIgnoreCase(cd.getClassName())) {
@@ -2111,7 +2118,7 @@ public final class ConfigWebAdmin {
         Element parent=_getRootElement("resources");
         
         // Update
-        Element[] children = ConfigWebFactory.getChildren(parent,"default-resource-provider");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"default-resource-provider");
       	for(int i=0;i<children.length;i++) {
       	    Element el=children[i];
       		el.setAttribute("arguments",arguments);                
@@ -2180,8 +2187,8 @@ public final class ConfigWebAdmin {
     	checkReadAccess();
         // check parameters
         Element parent=_getRootElement("resources");
-        Element[] elProviders = ConfigWebFactory.getChildren(parent,"resource-provider");
-        Element[] elDefaultProviders = ConfigWebFactory.getChildren(parent,"default-resource-provider");
+        Element[] elProviders = XMLConfigWebFactory.getChildren(parent,"resource-provider");
+        Element[] elDefaultProviders = XMLConfigWebFactory.getChildren(parent,"default-resource-provider");
         ResourceProvider[] providers = config.getResourceProviders();
         ResourceProvider defaultProvider = config.getDefaultResourceProvider();
 		
@@ -2232,7 +2239,7 @@ public final class ConfigWebAdmin {
 
         Element parent=_getRootElement("jdbc");
 
-        Element[] children = ConfigWebFactory.getChildren(parent,"driver");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"driver");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("class"); 
   	    	if(n!=null && n.equalsIgnoreCase(className)) {
@@ -2256,7 +2263,7 @@ public final class ConfigWebAdmin {
 
         Element datasources=_getRootElement("data-sources");
 
-        Element[] children = ConfigWebFactory.getChildren(datasources,"data-source");
+        Element[] children = XMLConfigWebFactory.getChildren(datasources,"data-source");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("name"); 
   	    	if(n!=null && n.equalsIgnoreCase(name)) {
@@ -2290,7 +2297,7 @@ public final class ConfigWebAdmin {
         	parent.removeAttribute("default-resource");
         
         // remove element
-        Element[] children = ConfigWebFactory.getChildren(parent,"connection");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"connection");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("name"); 
   	    	if(n!=null && n.equalsIgnoreCase(name)) {
@@ -2319,7 +2326,7 @@ public final class ConfigWebAdmin {
 
         Element parent = _getRootElement( "cache" );
 
-        Element[] children = ConfigWebFactory.getChildren( parent, "connection" );
+        Element[] children = XMLConfigWebFactory.getChildren( parent, "connection" );
 
         for ( int i=0; i < children.length; i++ ) {
 
@@ -2346,7 +2353,7 @@ public final class ConfigWebAdmin {
         Element parent=_getRootElement("gateways");
         
         // remove element
-        Element[] children = ConfigWebFactory.getChildren(parent,"gateway");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"gateway");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("id"); 
   	    	if(n!=null && n.equalsIgnoreCase(name)) {
@@ -2381,7 +2388,7 @@ public final class ConfigWebAdmin {
 
         Element clients=_getRootElement("remote-clients");
 
-        Element[] children = ConfigWebFactory.getChildren(clients,"remote-client");
+        Element[] children = XMLConfigWebFactory.getChildren(clients,"remote-client");
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("url"); 
   	    	if(n!=null && n.equalsIgnoreCase(url)) {
@@ -3215,7 +3222,7 @@ public final class ConfigWebAdmin {
     }*/
 
     private Element _getRootElement(String name) {
-        Element el=ConfigWebFactory.getChildByName(doc.getDocumentElement(),name);
+        Element el=XMLConfigWebFactory.getChildByName(doc.getDocumentElement(),name);
         if(el==null) {
             el=doc.createElement(name);
             doc.getDocumentElement().appendChild(el);
@@ -3224,7 +3231,7 @@ public final class ConfigWebAdmin {
     }
 
     private Element _getRootElement(String name, boolean insertBefore,boolean doNotCreate) {
-        return ConfigWebFactory.getChildByName(doc.getDocumentElement(),name,insertBefore,doNotCreate);
+        return XMLConfigWebFactory.getChildByName(doc.getDocumentElement(),name,insertBefore,doNotCreate);
     }
     
     /**
@@ -3289,7 +3296,7 @@ public final class ConfigWebAdmin {
     }
     
     private void removeSecurityFileAccess(Element parent) {
-    	Element[] children = ConfigWebFactory.getChildren(parent,"file-access");
+    	Element[] children = XMLConfigWebFactory.getChildren(parent,"file-access");
       	
     	// remove existing
     	if(!ArrayUtil.isEmpty(children)){
@@ -3350,7 +3357,7 @@ public final class ConfigWebAdmin {
             throw new SecurityException("can't change security settings from this context");
         
         Element security=_getRootElement("security");
-        Element[] children = ConfigWebFactory.getChildren(security,"accessor");
+        Element[] children = XMLConfigWebFactory.getChildren(security,"accessor");
         Element accessor=null;
         for(int i=0;i<children.length;i++) {
             if(id.equals(children[i].getAttribute("id"))) {
@@ -3510,7 +3517,7 @@ public final class ConfigWebAdmin {
         Element security=_getRootElement("security");
         Element accessor=null;
         
-        Element[] children = ConfigWebFactory.getChildren(security,"accessor");
+        Element[] children = XMLConfigWebFactory.getChildren(security,"accessor");
         for(int i=0;i<children.length;i++) {
             if(id.equals(children[i].getAttribute("id"))) {
                 accessor=children[i];             
@@ -3559,7 +3566,7 @@ public final class ConfigWebAdmin {
         Element security=_getRootElement("security");
        
         
-        Element[] children = ConfigWebFactory.getChildren(security,"accessor");
+        Element[] children = XMLConfigWebFactory.getChildren(security,"accessor");
         for(int i=0;i<children.length;i++) {
             if(id.equals(children[i].getAttribute("id"))) {
                 security.removeChild(children[i]);
@@ -3829,7 +3836,7 @@ public final class ConfigWebAdmin {
         securityKey=securityKey.trim();
         adminPassword=adminPassword.trim();
         
-        Element[] children = ConfigWebFactory.getChildren(clients,"remote-client");
+        Element[] children = XMLConfigWebFactory.getChildren(clients,"remote-client");
       	
         // Update
         for(int i=0;i<children.length;i++) {
@@ -3880,7 +3887,7 @@ public final class ConfigWebAdmin {
 		Element parent=_getRootElement("monitoring");
         stopMonitor(ConfigWebUtil.toMonitorType(type,Monitor.TYPE_INTERVAL),name);
         
-        Element[] children = ConfigWebFactory.getChildren(parent,"monitor");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"monitor");
         Element monitor=null;
         // Update
         for(int i=0;i<children.length;i++) {
@@ -3921,7 +3928,7 @@ public final class ConfigWebAdmin {
 
 
 	static void removeCacheHandler(ConfigImpl config, String id, boolean reload) throws IOException, SAXException, PageException, BundleException {
-		ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+		XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._removeCacheHandler(id);
     	admin._store();
     	if(reload)admin._reload();
@@ -3929,7 +3936,7 @@ public final class ConfigWebAdmin {
 	
 	private void _removeCacheHandler(String id) {
 		Element parent=_getRootElement("cache-handlers");
-		Element[] children = ConfigWebFactory.getChildren(parent,"cache-handler");
+		Element[] children = XMLConfigWebFactory.getChildren(parent,"cache-handler");
 		for(int i=0;i<children.length;i++) {
 			Element el=children[i];
 			String _id=el.getAttribute("id");
@@ -3955,7 +3962,7 @@ public final class ConfigWebAdmin {
 	private void _updateCacheHandler(String id, ClassDefinition cd) throws PageException {
 		Element parent=_getRootElement("cache-handlers");
 
-        Element[] children = ConfigWebFactory.getChildren(parent,"cache-handler");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"cache-handler");
         Element ch=null;
         // Update
         for(int i=0;i<children.length;i++) {
@@ -4000,7 +4007,7 @@ public final class ConfigWebAdmin {
 		Element parent=_getRootElement("monitoring");
         
         
-        Element[] children = ConfigWebFactory.getChildren(parent,"monitor");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"monitor");
         // Update
         for(int i=0;i<children.length;i++) {
       	    Element el=children[i];
@@ -4017,7 +4024,7 @@ public final class ConfigWebAdmin {
         Element parent=_getRootElement("cache-handlers");
         
         
-        Element[] children = ConfigWebFactory.getChildren(parent,"cache-handler");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"cache-handler");
         // Update
         for(int i=0;i<children.length;i++) {
       	    Element el=children[i];
@@ -4036,7 +4043,7 @@ public final class ConfigWebAdmin {
 	}
 	public void updateRHExtensionProvider(String strUrl) throws MalformedURLException {
 		Element extensions=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(extensions,"rhprovider");
+		Element[] children = XMLConfigWebFactory.getChildren(extensions,"rhprovider");
       	strUrl=strUrl.trim();
         
       	URL _url = HTTPUtil.toURL(strUrl, false);
@@ -4065,7 +4072,7 @@ public final class ConfigWebAdmin {
 
 	public void updateExtensionProvider(String strUrl) {
 		Element extensions=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(extensions,"provider");
+		Element[] children = XMLConfigWebFactory.getChildren(extensions,"provider");
       	strUrl=strUrl.trim();
         
       	// Update
@@ -4092,7 +4099,7 @@ public final class ConfigWebAdmin {
 
 	public void removeExtensionProvider(String strUrl) {
 		Element parent=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(parent,"provider");
+		Element[] children = XMLConfigWebFactory.getChildren(parent,"provider");
 		strUrl=strUrl.trim();
 		Element child;
 		String url;
@@ -4108,7 +4115,7 @@ public final class ConfigWebAdmin {
 	
 	public void removeRHExtensionProvider(String strUrl) {
 		Element parent=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(parent,"rhprovider");
+		Element[] children = XMLConfigWebFactory.getChildren(parent,"rhprovider");
 		strUrl=strUrl.trim();
 		Element child;
 		String url;
@@ -4129,7 +4136,7 @@ public final class ConfigWebAdmin {
 		String uid = createUid(pc,extension.getProvider(),extension.getId());
 		
 		Element extensions=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(extensions,"extension");
+		Element[] children = XMLConfigWebFactory.getChildren(extensions,"extension");
       	
         // Update
 		Element el;
@@ -4252,7 +4259,7 @@ public final class ConfigWebAdmin {
     	if(StringUtil.isEmpty(id,true)) return;
     	
 		Element extensions=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(extensions,"rhextension");
+		Element[] children = XMLConfigWebFactory.getChildren(extensions,"rhextension");
 		
 		Element child;
 		//BundleDefinition[] bundles=null;
@@ -4278,7 +4285,7 @@ public final class ConfigWebAdmin {
 	
 	public static void updateRHExtension(ConfigImpl config, Resource ext, boolean reload) throws PageException {
 		try{
-		ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+		XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin.updateRHExtension(config,ext);
     	admin._store();
     	if(reload)admin._reload();
@@ -4516,7 +4523,7 @@ public final class ConfigWebAdmin {
 		catch(Throwable t){
 			DeployHandler.moveToFailedFolder(rhext.getExtensionFile().getParentResource(),rhext.getExtensionFile());
 			try {
-				ConfigWebAdmin.removeRHExtension((ConfigImpl)config, rhext.getId(), false);
+				XMLConfigAdmin.removeRHExtension((ConfigImpl)config, rhext.getId(), false);
 			} catch (Throwable t2) {
 				t2.printStackTrace();
 			}
@@ -4535,7 +4542,7 @@ public final class ConfigWebAdmin {
 			//boolean reload=false;
 			
 			// remove the bundles
-			ConfigWebAdmin.cleanBundles(ci, OSGiUtil.toBundleDefinitions(rhe.getBundlesFiles()));
+			XMLConfigAdmin.cleanBundles(ci, OSGiUtil.toBundleDefinitions(rhe.getBundlesFiles()));
 			
 			
 			// remove FLD
@@ -4687,7 +4694,7 @@ public final class ConfigWebAdmin {
 		checkWriteAccess();
 
 		Element extensions=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(extensions,"extension");
+		Element[] children = XMLConfigWebFactory.getChildren(extensions,"extension");
 		Element child;
 		String _provider, _id;
       	for(int i=0;i<children.length;i++) {
@@ -4954,7 +4961,7 @@ public final class ConfigWebAdmin {
         Element labels=_getRootElement("labels");
         
         // Update
-        Element[] children = ConfigWebFactory.getChildren(labels,"label");
+        Element[] children = XMLConfigWebFactory.getChildren(labels,"label");
       	for(int i=0;i<children.length;i++) {
       	    String h=children[i].getAttribute("id");
       	    if(h!=null) {
@@ -5009,7 +5016,7 @@ public final class ConfigWebAdmin {
         Element debugging=_getRootElement("debugging");
         
         // Update
-        Element[] children = ConfigWebFactory.getChildren(debugging,"debug-entry");
+        Element[] children = XMLConfigWebFactory.getChildren(debugging,"debug-entry");
         Element el=null;
       	for(int i=0;i<children.length;i++) {
       	    String _id=children[i].getAttribute("id");
@@ -5048,7 +5055,7 @@ public final class ConfigWebAdmin {
 
     	
         Element debugging=_getRootElement("debugging");
-        Element[] children = ConfigWebFactory.getChildren(debugging,"debug-entry");
+        Element[] children = XMLConfigWebFactory.getChildren(debugging,"debug-entry");
         String _id;
         if(children.length>0) {
 	      	for(int i=0;i<children.length;i++) {
@@ -5102,7 +5109,7 @@ public final class ConfigWebAdmin {
         Element parent=_getRootElement("logging");
         
         // Update
-        Element[] children = ConfigWebFactory.getChildren(parent,"logger");
+        Element[] children = XMLConfigWebFactory.getChildren(parent,"logger");
         Element el=null;
       	for(int i=0;i<children.length;i++) {
       	    String n=children[i].getAttribute("name");
@@ -5191,9 +5198,9 @@ public final class ConfigWebAdmin {
     	List<Resource> filesDeployed=new ArrayList<Resource>();
     	
     	if(config instanceof ConfigWeb) {
-    		ConfigWebAdmin._updateContextClassic(config, is, realpath, closeStream, filesDeployed);
+    		XMLConfigAdmin._updateContextClassic(config, is, realpath, closeStream, filesDeployed);
     	}
-    	else ConfigWebAdmin._updateWebContexts(config, is, realpath, closeStream, filesDeployed,store);
+    	else XMLConfigAdmin._updateWebContexts(config, is, realpath, closeStream, filesDeployed,store);
     	
     	return filesDeployed.toArray(new Resource[filesDeployed.size()]);
     }
@@ -5252,7 +5259,7 @@ public final class ConfigWebAdmin {
 	@Deprecated
 	static Resource[] updateContextClassic(ConfigImpl config,InputStream is,String realpath, boolean closeStream) throws PageException, IOException, SAXException, BundleException {
     	List<Resource> filesDeployed=new ArrayList<Resource>();
-    	ConfigWebAdmin._updateContextClassic(config, is, realpath, closeStream, filesDeployed);
+    	XMLConfigAdmin._updateContextClassic(config, is, realpath, closeStream, filesDeployed);
     	return filesDeployed.toArray(new Resource[filesDeployed.size()]);
     }
 
@@ -5303,7 +5310,7 @@ public final class ConfigWebAdmin {
     	Resource trg = context.getRealResource(realpath);
     	if(trg.exists()) {
         	trg.remove(true);
-        	if(_store) ConfigWebAdmin._storeAndReload((ConfigImpl) config);
+        	if(_store) XMLConfigAdmin._storeAndReload((ConfigImpl) config);
         	ResourceUtil.removeEmptyFolders(context,null);
         	return true;
         }
@@ -5424,7 +5431,7 @@ public final class ConfigWebAdmin {
     }
 	
 	public static void removeRHExtension(ConfigImpl config,String extensionID, boolean removePhysical) throws SAXException, IOException, PageException, BundleException {
-		ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+		XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
 		BundleDefinition[] old = admin._removeExtension(config, extensionID,removePhysical);
 		admin._storeAndReload();
 		
@@ -5444,7 +5451,7 @@ public final class ConfigWebAdmin {
 		if(!Decision.isUUId(extensionID)) throw new IOException("id ["+extensionID+"] is invalid, it has to be a UUID"); 
 		
 		Element extensions=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(extensions,"rhextension");// LuceeHandledExtensions
+		Element[] children = XMLConfigWebFactory.getChildren(extensions,"rhextension");// LuceeHandledExtensions
       	
         // Update
 		Element el;
@@ -5577,7 +5584,7 @@ public final class ConfigWebAdmin {
 	public BundleDefinition[] _updateExtension(ConfigImpl config,RHExtension ext) throws IOException, BundleException {
 		if(!Decision.isUUId(ext.getId())) throw new IOException("id ["+ext.getId()+"] is invalid, it has to be a UUID"); 
 		Element extensions=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(extensions,"rhextension");// LuceeHandledExtensions
+		Element[] children = XMLConfigWebFactory.getChildren(extensions,"rhextension");// LuceeHandledExtensions
       	
         // Update
 		Element el;
@@ -5622,7 +5629,7 @@ public final class ConfigWebAdmin {
 
 	public Query getRHExtensionsAsQuery(ConfigImpl config) throws PageException {
 		Element extensions=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(extensions,"rhextension");// LuceeHandledExtensions
+		Element[] children = XMLConfigWebFactory.getChildren(extensions,"rhextension");// LuceeHandledExtensions
       	try {
 			return RHExtension.toQuery(config,children);
 		} catch (Exception e) {
@@ -5641,14 +5648,14 @@ public final class ConfigWebAdmin {
 	 * @throws SAXException 
 	 */
 	public static String hasRHExtensions(ConfigImpl config, String id) throws PageException, SAXException, IOException {
-		ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
+		XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
 		return admin._hasRHExtensions(config, id);
 	}
 	
 	private String _hasRHExtensions(ConfigImpl config, String id) throws PageException {
 		
 		Element extensions=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(extensions,"rhextension");// LuceeHandledExtensions
+		Element[] children = XMLConfigWebFactory.getChildren(extensions,"rhextension");// LuceeHandledExtensions
 		RHExtension rhe;
 		try {
 			for(int i=0;i<children.length;i++){

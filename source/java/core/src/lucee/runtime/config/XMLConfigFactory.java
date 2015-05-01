@@ -38,7 +38,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public abstract class ConfigFactory {
+public abstract class XMLConfigFactory {
 	static boolean doNew(Resource contextDir) {
 		lucee.Info info = CFMLEngineFactory.getInstance().getInfo();
 		final boolean readonly = false;
@@ -148,15 +148,15 @@ public abstract class ConfigFactory {
 	 * @param nodeName
 	 * @return matching children
 	 */
-	public static Element getChildByName(Node parent, String nodeName) {
+	static Element getChildByName(Node parent, String nodeName) {
 		return getChildByName(parent, nodeName, false);
 	}
 
-	public static Element getChildByName(Node parent, String nodeName, boolean insertBefore) {
+	static Element getChildByName(Node parent, String nodeName, boolean insertBefore) {
 		return getChildByName(parent, nodeName, insertBefore, false);
 	}
 
-	public static Element getChildByName(Node parent, String nodeName, boolean insertBefore, boolean doNotCreate) {
+	static Element getChildByName(Node parent, String nodeName, boolean insertBefore, boolean doNotCreate) {
 		if (parent == null)
 			return null;
 		NodeList list = parent.getChildNodes();
@@ -188,7 +188,7 @@ public abstract class ConfigFactory {
 	 * @param nodeName
 	 * @return matching children
 	 */
-	public static Element[] getChildren(Node parent, String nodeName) {
+	static Element[] getChildren(Node parent, String nodeName) {
 		if (parent == null)
 			return new Element[0];
 		NodeList list = parent.getChildNodes();
@@ -254,7 +254,7 @@ public abstract class ConfigFactory {
 		
 		Resource f = dir.getRealResource(name);
 		if (!f.exists() || doNew)
-			ConfigFactory.createFileFromResourceEL(srcPath+name, f);
+			XMLConfigFactory.createFileFromResourceEL(srcPath+name, f);
 		return f;
 		
 	}

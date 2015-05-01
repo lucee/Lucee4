@@ -27,7 +27,7 @@ import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.Config;
-import lucee.runtime.config.ConfigWebAdmin;
+import lucee.runtime.config.XMLConfigAdmin;
 import lucee.runtime.config.Constants;
 import lucee.runtime.db.DataSourceManager;
 import lucee.runtime.exp.ExpressionException;
@@ -189,7 +189,7 @@ public class DataSourceServiceImpl extends ServiceSupport implements DataSourceS
 	public void removeDatasource(String name) throws SQLException, SecurityException {
 		checkWriteAccess();
 		try {
-			ConfigWebAdmin admin = ConfigWebAdmin.newInstance(config(),null);
+			XMLConfigAdmin admin = XMLConfigAdmin.newInstance(config(),null);
 			admin.removeDataSource(name);
 		} catch (Exception e) {
 			// ignoriert wenn die db nicht existiert

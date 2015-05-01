@@ -19,7 +19,7 @@
 package lucee.runtime.config.component;
 
 import lucee.commons.io.res.Resource;
-import lucee.runtime.config.ConfigFactory;
+import lucee.runtime.config.XMLConfigFactory;
 import lucee.runtime.config.Constants;
 
 public class ComponentFactory {
@@ -73,6 +73,6 @@ public class ComponentFactory {
 
 	private static void deploy(Resource dir, String path,boolean doNew, String name) {
 		Resource f = dir.getRealResource(name+".cfc");
-        if(!f.exists() || doNew)ConfigFactory.createFileFromResourceEL(path+name+".cfc",f);
+        if(!f.exists() || doNew)XMLConfigFactory.createFileFromResourceEL(path+name+".cfc",f);
 	}
 }

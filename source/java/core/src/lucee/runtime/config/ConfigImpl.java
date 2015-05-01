@@ -148,8 +148,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.osgi.framework.BundleException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 
 /**
@@ -2453,14 +2451,6 @@ public abstract class ConfigImpl implements Config {
 	protected void setVersion(double version) {
 		this.version=version;
 	}
-
-	protected double setVersion(Document doc) {
-		Element luceeConfiguration = doc.getDocumentElement();
-		String strVersion = luceeConfiguration.getAttribute("version");
-		return this.version=Caster.toDoubleValue(strVersion, 1.0d);
-	}
-	
-	
 
 	/**
 	 * @return the version
