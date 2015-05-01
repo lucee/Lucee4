@@ -22,6 +22,7 @@ import java.util.TimeZone;
 
 import lucee.commons.io.log.Log;
 import lucee.runtime.config.ConfigWebFactory;
+import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.type.Struct;
@@ -32,7 +33,7 @@ public class ApplicationDataSource extends DataSourceSupport {
 
 	private ApplicationDataSource(String name, ClassDefinition cd, String connStr, String username, String password,
 			boolean blob, boolean clob, int connectionLimit, int connectionTimeout, long metaCacheTimeout, TimeZone timezone, int allow, boolean storage, boolean readOnly,Log log) {
-		super(null,name, cd,username,ConfigWebFactory.decrypt(password),
+		super(null,name, cd,username,ConfigWebUtil.decrypt(password),
 				blob,clob,connectionLimit, connectionTimeout, metaCacheTimeout, timezone, allow<0?ALLOW_ALL:allow, storage, readOnly,log);
 		
 		this.connStr = connStr;

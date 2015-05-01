@@ -519,7 +519,7 @@ public final class ConfigWebAdmin {
       	    String smtp=el.getAttribute("smtp");
   			if(smtp!=null && smtp.equalsIgnoreCase(hostName)) {
 	      		el.setAttribute("username",username);
-	      		el.setAttribute("password",ConfigWebFactory.encrypt(password));
+	      		el.setAttribute("password",ConfigWebUtil.encrypt(password));
 	      		el.setAttribute("port",Caster.toString(port));
 	      		el.setAttribute("tls",Caster.toString(tls));
 	      		el.setAttribute("ssl",Caster.toString(ssl));
@@ -531,7 +531,7 @@ public final class ConfigWebAdmin {
       	Element server = doc.createElement("server");
       	server.setAttribute("smtp",hostName);
       	server.setAttribute("username",username);
-      	server.setAttribute("password",ConfigWebFactory.encrypt(password));
+      	server.setAttribute("password",ConfigWebUtil.encrypt(password));
       	server.setAttribute("port",Caster.toString(port));
       	server.setAttribute("tls",Caster.toString(tls));
       	server.setAttribute("ssl",Caster.toString(ssl));
@@ -1575,7 +1575,7 @@ public final class ConfigWebAdmin {
 	      		setClass(el, null, "", cd);
 	      		el.setAttribute("dsn",dsn);
 	      		el.setAttribute("username",username);
-	      		el.setAttribute("password",ConfigWebFactory.encrypt(password));
+	      		el.setAttribute("password",ConfigWebUtil.encrypt(password));
 
                 el.setAttribute("host",host);
                 if(!StringUtil.isEmpty(timezone))el.setAttribute("timezone",timezone);
@@ -1612,7 +1612,7 @@ public final class ConfigWebAdmin {
       	setClass(el, null, "", cd);
   		el.setAttribute("dsn",dsn);
   		if(username.length()>0)el.setAttribute("username",username);
-  		if(password.length()>0)el.setAttribute("password",ConfigWebFactory.encrypt(password));
+  		if(password.length()>0)el.setAttribute("password",ConfigWebUtil.encrypt(password));
         
         el.setAttribute("host",host);
         if(!StringUtil.isEmpty(timezone))el.setAttribute("timezone",timezone);
@@ -3843,10 +3843,10 @@ public final class ConfigWebAdmin {
 	      		el.setAttribute("proxy-server",proxyServer);
 	      		el.setAttribute("proxy-username",proxyUsername);
 	      		el.setAttribute("proxy-port",proxyPort);
-	      		el.setAttribute("security-key",ConfigWebFactory.encrypt(securityKey));
-	      		el.setAttribute("admin-password",ConfigWebFactory.encrypt(adminPassword));
-	      		el.setAttribute("server-password",ConfigWebFactory.encrypt(serverPassword));
-	      		el.setAttribute("proxy-password",ConfigWebFactory.encrypt(proxyPassword));
+	      		el.setAttribute("security-key",ConfigWebUtil.encrypt(securityKey));
+	      		el.setAttribute("admin-password",ConfigWebUtil.encrypt(adminPassword));
+	      		el.setAttribute("server-password",ConfigWebUtil.encrypt(serverPassword));
+	      		el.setAttribute("proxy-password",ConfigWebUtil.encrypt(proxyPassword));
 	      		return ;
   			}
       	}
@@ -3862,10 +3862,10 @@ public final class ConfigWebAdmin {
   		el.setAttribute("proxy-server",proxyServer);
   		el.setAttribute("proxy-username",proxyUsername);
   		el.setAttribute("proxy-port",proxyPort);
-  		el.setAttribute("security-key",ConfigWebFactory.encrypt(securityKey));
-  		el.setAttribute("admin-password",ConfigWebFactory.encrypt(adminPassword));
-  		el.setAttribute("server-password",ConfigWebFactory.encrypt(serverPassword));
-  		el.setAttribute("proxy-password",ConfigWebFactory.encrypt(proxyPassword));
+  		el.setAttribute("security-key",ConfigWebUtil.encrypt(securityKey));
+  		el.setAttribute("admin-password",ConfigWebUtil.encrypt(adminPassword));
+  		el.setAttribute("server-password",ConfigWebUtil.encrypt(serverPassword));
+  		el.setAttribute("proxy-password",ConfigWebUtil.encrypt(proxyPassword));
       	
       	
       	clients.appendChild(el);
