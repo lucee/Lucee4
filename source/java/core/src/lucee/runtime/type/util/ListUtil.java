@@ -970,16 +970,16 @@ public final class ListUtil {
 		return sb.toString();
 	}
 	
-	public static String toList(java.util.Collection<String> list, String delimiter) throws PageException {
+	public static String toList(java.util.Collection<String> list, String delimiter)  {
 		if(list.size()==0) return "";
 		StringBuilder sb=new StringBuilder();
-		Iterator<?> it = list.iterator();
+		Iterator<String> it = list.iterator();
 		
-		if(it.hasNext()) sb.append(Caster.toString(it.next()));
+		if(it.hasNext()) sb.append((it.next()));
 			
 		while(it.hasNext()) {
 			sb.append(delimiter);
-			sb.append(Caster.toString(it.next()));
+			sb.append((it.next()));
 		}
 		return sb.toString();
 	}
