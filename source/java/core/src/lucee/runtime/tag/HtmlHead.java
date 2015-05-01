@@ -21,6 +21,7 @@ package lucee.runtime.tag;
 
 import java.io.IOException;
 
+import lucee.print;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
@@ -39,7 +40,7 @@ public final class HtmlHead extends HtmlHeadBodyBase {
 
 	@Override
 	public void actionAppend() throws IOException, ApplicationException {
-
+		print.e("append:"+text);
 		((PageContextImpl) pageContext).getRootOut().appendHTMLHead(text);
 	}
 

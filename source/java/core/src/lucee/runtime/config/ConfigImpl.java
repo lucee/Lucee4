@@ -429,7 +429,10 @@ public abstract class ConfigImpl implements Config {
 
 	private Map<Integer,Object> cachedWithins=new HashMap<Integer, Object>();
 	
-	
+
+	private int queueMax=100;
+	private int queueTimeout=0;
+	private boolean queueEnable=false;
 	
 	/**
 	 * @return the allowURLRequestTimeout
@@ -3299,6 +3302,7 @@ public abstract class ConfigImpl implements Config {
 	private Map<String, BundleDefinition> extensionBundles;
 	private JDBCDriver[] drivers;
 	
+	
 
 	
 
@@ -3518,6 +3522,25 @@ public abstract class ConfigImpl implements Config {
 			if(d.cd.getId().equals(id)) return d;
 		}
 		return defaultValue;
+	}
+	public int getQueueMax() {
+		return queueMax;
+	}
+	protected void setQueueMax(int queueMax) {
+		this.queueMax = queueMax;
+	}
+
+	public int getQueueTimeout() {
+		return queueTimeout;
+	}
+	protected void setQueueTimeout(int queueTimeout) {
+		this.queueTimeout =  queueTimeout;
+	}
+	public boolean getQueueEnable() {
+		return queueEnable;
+	}
+	protected void setQueueEnable(boolean queueEnable) {
+		this.queueEnable =  queueEnable;
 	}
 	
 }

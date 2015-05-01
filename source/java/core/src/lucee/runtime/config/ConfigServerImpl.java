@@ -48,6 +48,7 @@ import lucee.runtime.CFMLFactoryImpl;
 import lucee.runtime.Mapping;
 import lucee.runtime.MappingImpl;
 import lucee.runtime.engine.CFMLEngineImpl;
+import lucee.runtime.engine.ThreadQueue;
 import lucee.runtime.engine.ThreadQueueImpl;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.ExpressionException;
@@ -350,14 +351,18 @@ public final class ConfigServerImpl extends ConfigImpl implements ConfigServer {
 	}
 
 	
-	private ThreadQueueImpl threadQueue;
-	protected void setThreadQueue(ThreadQueueImpl threadQueue) {
-		this.threadQueue=threadQueue;
+	private ThreadQueue threadQueue;
+	public ThreadQueue setThreadQueue(ThreadQueue threadQueue) {
+		return this.threadQueue=threadQueue;
 	}
 	@Override
-	public ThreadQueueImpl getThreadQueue() {
+	public ThreadQueue getThreadQueue() {
 		return threadQueue;
 	}
+
+	
+	
+	
 	
 	@Override
 	public RequestMonitor[] getRequestMonitors() {
