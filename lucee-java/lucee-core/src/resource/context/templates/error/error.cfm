@@ -18,7 +18,7 @@
 </style>
 <script>
 
-	var __RAILO = {
+	var __LUCEE = {
 
 		oc: 	function ( btn ) {
 
@@ -93,7 +93,7 @@
 
 							<cfset isFirst = ( idx == 1 )>
 
-							<a class="-lucee-icon-#isFirst ? 'minus' : 'plus'#" id="__btn$#idx#" onclick="__RAILO.oc( this );" style="cursor: pointer;">
+							<a class="-lucee-icon-#isFirst ? 'minus' : 'plus'#" id="__btn$#idx#" onclick="__LUCEE.oc( this );" style="cursor: pointer;">
 								#isFirst ? "<b>#tc.template#: line #tc.line#</b>" : "<b>called from</b> #tc.template#: line #tc.line#"#
 							</a>
 							<br>
