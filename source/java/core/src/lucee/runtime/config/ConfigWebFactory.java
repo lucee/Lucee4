@@ -335,7 +335,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 	 * @throws PageException
 	 * @throws BundleException 
 	 */
-	public synchronized static void load(ConfigServerImpl cs, ConfigImpl config, Document doc, boolean isReload, boolean doNew) throws ClassException, PageException, IOException,
+	synchronized static void load(ConfigServerImpl cs, ConfigImpl config, Document doc, boolean isReload, boolean doNew) throws ClassException, PageException, IOException,
 			TagLibException, FunctionLibException, BundleException {
 		ThreadLocalConfig.register(config);
 		boolean reload=false;
@@ -380,7 +380,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		loadId(cs,config,doc);
 		loadVersion(config, doc);
 		loadSecurity(cs, config, doc);
-		loadLib(cs, config);
+		ConfigWebUtil.loadLib(cs, config);
 		loadSystem(cs, config, doc);
 		loadORM(cs, config, doc,log);
 		loadResourceProvider(cs, config, doc);
@@ -755,85 +755,6 @@ public final class ConfigWebFactory extends ConfigFactory {
 		else
 			((ConfigServerImpl)config).setIdentification(new IdentificationServerImpl((ConfigServerImpl) config, securityKey, apiKey));
 		
-	}
-
-	public static void reloadLib(Config config) throws IOException {
-		if (config instanceof ConfigWeb)
-			loadLib(((ConfigWebImpl) config).getConfigServerImpl(), (ConfigImpl)config);
-		else
-			loadLib(null, (ConfigImpl)config);
-	}
-
-	private static void loadLib(ConfigServerImpl configServer, ConfigImpl config) throws IOException {
-		// get lib and classes resources
-		Resource lib = config.getLibraryDirectory();
-		//Resource lib = config.getLibraryDirectory();
-		//Resource classes = config.getClassesDirectory();
-		
-		Resource[] libs = lib.listResources(ExtensionResourceFilter.EXTENSION_JAR_NO_DIR);
-		
-		
-		/*for(int i=0;i<libs.length;i++){
-			if(BundleFile.isBundle(libs[i])) {
-				BundleFile bf=new BundleFile(libs[i]);
-				print.e(libs[i]);
-				print.e(bf.info());
-			}
-		}*/
-
-		/*/ merge resources
-		if (!ResourceUtil.isEmptyDirectory(classes, ExtensionResourceFilter.EXTENSION_CLASS_DIR)) {
-			if(ArrayUtil.isEmpty(libs)) 
-				libs=new Resource[]{classes};
-			else 
-				libs=ResourceUtil.merge(libs, classes);
-		}*/
-
-		// get resources from server config and merge
-		if (configServer != null) {
-			ResourceClassLoader rcl = configServer.getResourceClassLoader();
-			libs = ResourceUtil.merge(libs, rcl.getResources());
-		}
-
-		CFMLEngine engine = ConfigWebUtil.getEngine(config);
-    	BundleContext bc = engine.getBundleContext();
-    	Log log = config.getLog("application");
-    	BundleFile bf;
-    	for(int i=0;i<libs.length;i++){
-	    	try {
-	    		bf=BundleFile.newInstance(libs[i]);
-	    		// jar is not a bundle
-	    		if(bf==null) {
-	    			// convert to a bundle 
-	    			BundleBuilderFactory factory = new BundleBuilderFactory(libs[i]);
-	    			factory.setVersion("0.0.0.0");
-	    			Resource tmp = SystemUtil.getTempFile("jar", false);
-	    			factory.build(tmp);
-	    			IOUtil.copy(tmp, libs[i]);
-	    			bf=BundleFile.newInstance(libs[i]);
-	    		}
-	    		
-	    		OSGiUtil.installBundle( bc, libs[i],true);
-				
-			}
-			catch (Throwable t) {
-				log.log(Log.LEVEL_ERROR, "OSGi", t);
-	        }
-    	}
-    	
-    	
-    	/*BundleBuilderFactory factory;
-		try {
-			factory = new BundleBuilderFactory();
-		}
-		catch (IOException ioe) {
-			throw Caster.toPageException(ioe);
-		}*/
-
-		// set classloader
-		ClassLoader parent = new ClassLoaderHelper().getClass().getClassLoader();
-		config.setResourceClassLoader(new ResourceClassLoader(libs, parent));
-
 	}
 
 	private static boolean equal(Resource[] srcs, Resource[] trgs) {
@@ -2033,11 +1954,11 @@ public final class ConfigWebFactory extends ConfigFactory {
 					setDatasource(config, datasources, dataSource.getAttribute("name")
 						,getClassDefinition(dataSource, "", config.getIdentification())
 						, dataSource.getAttribute("host"),
-						dataSource.getAttribute("database"), toInt(dataSource.getAttribute("port"), -1), dataSource.getAttribute("dsn"), dataSource.getAttribute("username"),
-						ConfigWebUtil.decrypt(dataSource.getAttribute("password")), toInt(dataSource.getAttribute("connectionLimit"), -1),
-						toInt(dataSource.getAttribute("connectionTimeout"), -1), Caster.toLongValue(dataSource.getAttribute("metaCacheTimeout"), 60000),
+						dataSource.getAttribute("database"), Caster.toIntValue(dataSource.getAttribute("port"), -1), dataSource.getAttribute("dsn"), dataSource.getAttribute("username"),
+						ConfigWebUtil.decrypt(dataSource.getAttribute("password")), Caster.toIntValue(dataSource.getAttribute("connectionLimit"), -1),
+						Caster.toIntValue(dataSource.getAttribute("connectionTimeout"), -1), Caster.toLongValue(dataSource.getAttribute("metaCacheTimeout"), 60000),
 						toBoolean(dataSource.getAttribute("blob"), true), toBoolean(dataSource.getAttribute("clob"), true),
-						toInt(dataSource.getAttribute("allow"), DataSource.ALLOW_ALL), toBoolean(dataSource.getAttribute("validate"), false),
+						Caster.toIntValue(dataSource.getAttribute("allow"), DataSource.ALLOW_ALL), toBoolean(dataSource.getAttribute("validate"), false),
 						toBoolean(dataSource.getAttribute("storage"), false), dataSource.getAttribute("timezone"), toStruct(dataSource.getAttribute("custom")), dataSource.getAttribute("dbdriver"));
 				} catch (Exception e) {
 					log.error("Datasource", e);
@@ -3746,7 +3667,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		// Spool Interval
 		String strSpoolInterval = mail.getAttribute("spool-interval");
 		if (!StringUtil.isEmpty(strSpoolInterval) && hasAccess) {
-			config.setMailSpoolInterval(toInt(strSpoolInterval, 30));
+			config.setMailSpoolInterval(Caster.toIntValue(strSpoolInterval, 30));
 		}
 		else if (hasCS)
 			config.setMailSpoolInterval(configServer.getMailSpoolInterval());
@@ -3768,7 +3689,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		// Timeout
 		String strTimeout = mail.getAttribute("timeout");
 		if (!StringUtil.isEmpty(strTimeout) && hasAccess) {
-			config.setMailTimeout(toInt(strTimeout, 60));
+			config.setMailTimeout(Caster.toIntValue(strTimeout, 60));
 		}
 		else if (hasCS)
 			config.setMailTimeout(configServer.getMailTimeout());
@@ -3793,7 +3714,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 				if (el.getNodeName().equals("server"))
 					servers[index++] = new ServerImpl(
 							el.getAttribute("smtp"), 
-							toInt(el.getAttribute("port"), 25), 
+							Caster.toIntValue(el.getAttribute("port"), 25), 
 							el.getAttribute("username"),
 							ConfigWebUtil.decrypt(el.getAttribute("password")), 
 							toBoolean(el.getAttribute("tls"), false), 
@@ -4054,7 +3975,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		// max records logged
 		String strMax = debugging.getAttribute("max-records-logged");
 		if (hasAccess && !StringUtil.isEmpty(strMax)) {
-			config.setDebugMaxRecordsLogged(toInt(strMax, 10));
+			config.setDebugMaxRecordsLogged(Caster.toIntValue(strMax, 10));
 		}
 		else if (hasCS)
 			config.setDebugMaxRecordsLogged(configServer.getDebugMaxRecordsLogged());
@@ -4495,7 +4416,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		String server = proxy.getAttribute("server");
 		String username = proxy.getAttribute("username");
 		String password = proxy.getAttribute("password");
-		int port = toInt(proxy.getAttribute("port"), -1);
+		int port = Caster.toIntValue(proxy.getAttribute("port"), -1);
 
 		if (hasAccess && !StringUtil.isEmpty(server)) {
 			config.setProxyData(ProxyDataImpl.getInstance(server, port, username, password));
@@ -4797,25 +4718,6 @@ public final class ConfigWebFactory extends ConfigFactory {
 		}
 		else if (hasCS)
 			config.setAdminSyncClass(configServer.getAdminSyncClass());
-	}
-
-	/**
-	 * cast a string value to a int
-	 * 
-	 * @param value
-	 *            String value represent a int value
-	 * @param defaultValue
-	 *            if can't cast to a int is value will be returned
-	 * @return int value
-	 */
-	public static int toInt(String value, int defaultValue) {
-
-		if (value == null || value.trim().length() == 0)
-			return defaultValue;
-		int intValue = Caster.toIntValue(value.trim(), Integer.MIN_VALUE);
-		if (intValue == Integer.MIN_VALUE)
-			return defaultValue;
-		return intValue;
 	}
 
 	/**

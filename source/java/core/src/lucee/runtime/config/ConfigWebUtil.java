@@ -29,11 +29,17 @@ import java.util.Map.Entry;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
+import org.osgi.framework.BundleContext;
+
 import lucee.commons.digest.MD5;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
+import lucee.commons.io.log.Log;
 import lucee.commons.io.res.Resource;
+import lucee.commons.io.res.filter.ExtensionResourceFilter;
+import lucee.commons.io.res.util.ResourceClassLoader;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ClassLoaderHelper;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.SystemOut;
@@ -51,6 +57,9 @@ import lucee.runtime.listener.ModernAppListener;
 import lucee.runtime.listener.NoneAppListener;
 import lucee.runtime.monitor.Monitor;
 import lucee.runtime.net.http.ReqRspUtil;
+import lucee.runtime.osgi.BundleBuilderFactory;
+import lucee.runtime.osgi.BundleFile;
+import lucee.runtime.osgi.OSGiUtil;
 import lucee.runtime.security.SecurityManager;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.Struct;
@@ -130,6 +139,56 @@ public final class ConfigWebUtil {
 			}
 		}
 	}
+	
+	public static void reloadLib(Config config) throws IOException {
+		if (config instanceof ConfigWeb)
+			loadLib(((ConfigWebImpl) config).getConfigServerImpl(), (ConfigImpl)config);
+		else
+			loadLib(null, (ConfigImpl)config);
+	}
+
+	static void loadLib(ConfigServerImpl configServer, ConfigImpl config) throws IOException {
+		// get lib and classes resources
+		Resource lib = config.getLibraryDirectory();
+		Resource[] libs = lib.listResources(ExtensionResourceFilter.EXTENSION_JAR_NO_DIR);
+		
+		// get resources from server config and merge
+		if (configServer != null) {
+			ResourceClassLoader rcl = configServer.getResourceClassLoader();
+			libs = ResourceUtil.merge(libs, rcl.getResources());
+		}
+
+		CFMLEngine engine = ConfigWebUtil.getEngine(config);
+    	BundleContext bc = engine.getBundleContext();
+    	Log log = config.getLog("application");
+    	BundleFile bf;
+    	for(int i=0;i<libs.length;i++){
+	    	try {
+	    		bf=BundleFile.newInstance(libs[i]);
+	    		// jar is not a bundle
+	    		if(bf==null) {
+	    			// convert to a bundle 
+	    			BundleBuilderFactory factory = new BundleBuilderFactory(libs[i]);
+	    			factory.setVersion("0.0.0.0");
+	    			Resource tmp = SystemUtil.getTempFile("jar", false);
+	    			factory.build(tmp);
+	    			IOUtil.copy(tmp, libs[i]);
+	    			bf=BundleFile.newInstance(libs[i]);
+	    		}
+	    		
+	    		OSGiUtil.installBundle( bc, libs[i],true);
+				
+			}
+			catch (Throwable t) {
+				log.log(Log.LEVEL_ERROR, "OSGi", t);
+	        }
+    	}
+    	
+		// set classloader
+		ClassLoader parent = new ClassLoaderHelper().getClass().getClassLoader();
+		config.setResourceClassLoader(new ResourceClassLoader(libs, parent));
+	}
+
     
     /**
      * touch a file object by the string definition
