@@ -25,21 +25,15 @@ import java.util.List;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.lang.SerializableObject;
 import lucee.runtime.PageContext;
+import lucee.runtime.config.ConfigImpl;
+import lucee.runtime.config.ConfigServerImpl;
 
 public class ThreadQueueImpl implements ThreadQueue {
 	private final SerializableObject token=new SerializableObject();
 	
 	
 	public final List<PageContext> list=new ArrayList<PageContext>();
-	private final int max;
-	private long timeout;
 	private int waiting=0;
-	
-	public ThreadQueueImpl(int max, long timeout){
-		this.max=max;
-		this.timeout=timeout;
-	}
-	
 	
 	@Override
 	public void enter(PageContext pc) throws IOException {
@@ -53,21 +47,22 @@ public class ThreadQueueImpl implements ThreadQueue {
 	}
 	
 	private void _enter(PageContext pc) throws IOException {
+		ConfigImpl ci=(ConfigImpl) pc.getConfig();
 		//print.e("enter("+Thread.currentThread().getName()+"):"+list.size());
 		long start=System.currentTimeMillis();
 		while(true) {
 			synchronized (token) {
-				if(list.size()<max) {
+				if(list.size()<ci.getQueueMax()) {
 					//print.e("- ok("+Thread.currentThread().getName()+"):"+list.size());
 					list.add(pc);
 					return;
 				}
 			}
-			if(timeout>0) SystemUtil.wait(token,timeout);
+			if(ci.getQueueTimeout()>0) SystemUtil.wait(token,ci.getQueueTimeout());
 			else SystemUtil.wait(token);
 			
-			if(timeout>0 && (System.currentTimeMillis()-start)>=timeout)
-				throw new IOException("timeout ("+(System.currentTimeMillis()-start)+") ["+timeout+"] is occured, server is busy handling requests");
+			if(ci.getQueueTimeout()>0 && (System.currentTimeMillis()-start)>=ci.getQueueTimeout())
+				throw new IOException("timeout ("+(System.currentTimeMillis()-start)+") ["+ci.getQueueTimeout()+"] is occured, server is busy handling requests");
 		}
 	}
 	
@@ -86,9 +81,6 @@ public class ThreadQueueImpl implements ThreadQueue {
 	}
 	
 	
-	public int maximal(){
-		return max;
-	}
 
 
 	@Override

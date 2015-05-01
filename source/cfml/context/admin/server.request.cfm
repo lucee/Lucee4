@@ -14,13 +14,19 @@
 	type="#request.adminType#"
 	password="#session["password"&request.adminType]#"
 	returnVariable="appSettings">
+<cfif request.admintype =="server">
+	<cfadmin 
+		action="getQueueSetting"
+		type="#request.adminType#"
+		password="#session["password"&request.adminType]#"
+		returnVariable="queueSettings">
+</cfif>
 <cfadmin 
 	action="getApplicationListener"
 	type="#request.adminType#"
 	password="#session["password"&request.adminType]#"
 	returnVariable="listener">
 	
-
 <!--- 
 Defaults --->
 <cfparam name="url.action2" default="list">
@@ -50,6 +56,18 @@ Defaults --->
 					requestTimeout="#CreateTimeSpan(form.request_days,form.request_hours,form.request_minutes,form.request_seconds)#"
 					remoteClients="#request.getRemoteClients()#">
 				
+				<cfif request.admintype =="server">
+					<cfadmin 
+					action="updateQueueSetting"
+					type="#request.adminType#"
+					password="#session["password"&request.adminType]#"
+					
+					enable="#structKeyExists(form,'ConcurrentRequestEnable') and form.ConcurrentRequestEnable#"
+					max="#structKeyExists(form,'ConcurrentRequestMax')?form.ConcurrentRequestMax:""#"
+					timeout="#structKeyExists(form,'ConcurrentRequestTimeout')?form.ConcurrentRequestTimeout:""#"
+					remoteClients="#request.getRemoteClients()#">
+				</cfif>
+				
 			</cfcase>
 		<!--- reset to server setting --->
 			<cfcase value="#stText.Buttons.resetServerAdmin#">
@@ -64,6 +82,17 @@ Defaults --->
 					requestTimeout=""
 					
 					remoteClients="#request.getRemoteClients()#">
+				<cfif request.admintype =="server">
+					<cfadmin 
+					action="updateQueueSetting"
+					type="#request.adminType#"
+					password="#session["password"&request.adminType]#"
+					
+					max=""
+					timeout=""
+					enable=""
+					remoteClients="#request.getRemoteClients()#">
+				</cfif>
 				
 			</cfcase>
 		</cfswitch>
@@ -132,9 +161,26 @@ Error Output --->
 			$('#sp_options input.radio').bind('click change', sp_clicked);
 			sp_clicked();
 		});
+
+
+		function concurrent()
+		{
+			var isChecked = $('#ConcurrentRequestEnableSpan input.checkbox')[0].checked;
+			$('#ConcurrentRequestMax').css('opacity', (isChecked ? 1:.5));
+			$('#ConcurrentRequestTimeout').css('opacity', (isChecked ? 1:.5));
+			
+			
+			$('#ConcurrentRequestMax').prop('disabled', !isChecked);
+			$('#ConcurrentRequestTimeout').prop('disabled', !isChecked);
+		}
+		$(function(){
+			$('#ConcurrentRequestEnableSpan input.checkbox').bind('click change', concurrent);
+			concurrent();
+		});
+
 	</script>
 </cfsavecontent>
-<cfhtmlhead text="#headText#" />
+<cfhtmlhead text="#headText#">
 
 <cfoutput>
 	<cfif not hasAccess>
@@ -145,16 +191,16 @@ Error Output --->
 	</div>
 	
 	<cfform onerror="customError" action="#request.self#?action=#url.action#" method="post">
-		<!---<h3>Script-protect</h3>
-		<div class="itemintro">#stText.application.scriptProtectDescription#</div>--->
+		
+
+
+
+		<!--- script-protect --->
+		<h2>#stText.application.scriptProtect#</h2>
+		<div class="itemintro">#stText.application.scriptProtectDescription#</div>
 		<table class="maintbl">
 			<tbody>
-				<!--- script-protect --->
 				<tr>
-					<th scope="row">
-						#stText.application.scriptProtect#
-						<div class="comment">#stText.application.scriptProtectDescription#</div>
-					</th>
 					<td>
 						<cfif hasAccess>
 							<cfset isNone=appSettings.scriptProtect EQ  "none">
@@ -214,15 +260,29 @@ Error Output --->
 </cfsavecontent>
 					</td>
 				</tr>
-<!---			</tbody>
+				</tbody>
+				<cfif hasAccess>
+				<tfoot>
+					<tr>
+						<td colspan="2">
+							<input type="submit" class="bl button submit" name="mainAction1" value="#stText.Buttons.Update#">
+							<input type="reset" class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<cfif request.adminType EQ "web"><input class="br button submit" type="submit" name="mainAction1" value="#stText.Buttons.resetServerAdmin#"></cfif>
+						</td>
+					</tr>
+				</tfoot>
+			</cfif>
 		</table>
 		
-		<h3>Request timeout</h3>
-		<table class="maintbl">
-			<tbody>--->
+
 				<!--- request timeout --->
+				<h2>#stText.application.RequestTimeout#</h2>
+				<div class="itemintro">#stText.application.RequestTimeoutDesc#</div>
+		<table class="maintbl">
+				<tbody>
+				<!--- request timeout time --->
 				<tr>
-					<th scope="row">#stText.application.RequestTimeout#</th>
+					<th scope="row">#stText.application.RequestTimeoutTime#</th>
 					<td>
 						<cfset timeout=appSettings.requestTimeout>
 						<table class="maintbl" style="width:auto">
@@ -259,6 +319,7 @@ Error Output --->
 									</tr>
 								</cfif>
 							</tbody>
+
 						</table>
 						<div class="comment">#stText.application.RequestTimeoutDescription#</div>
 						
@@ -272,7 +333,6 @@ Error Output --->
 	this.requestTimeout=createTimeSpan(#appSettings.requestTimeout_day#,#appSettings.requestTimeout_hour#,#appSettings.requestTimeout_minute#,#appSettings.requestTimeout_second#);
 </cfsavecontent>
 <cfset renderCodingTip( codeSample)>
-
 
 					</td>
 				</tr>
@@ -290,9 +350,6 @@ Error Output --->
 						<div class="comment">#stText.application.AllowURLRequestTimeoutDesc#</div>
 					</td>
 				</tr>
-				<cfif hasAccess>
-					<cfmodule template="remoteclients.cfm" colspan="2">
-				</cfif>
 			</tbody>
 			<cfif hasAccess>
 				<tfoot>
@@ -306,52 +363,95 @@ Error Output --->
 				</tfoot>
 			</cfif>
 		</table>
-	</cfform>
 
-	<h1>#stText.application.listener#</h1>
-	<div class="itemintro">#stText.application.listenerDescription#</div>
 	
-	<cfform onerror="customError" action="#request.self#?action=#url.action#" method="post">
+<cfif request.admintype =="server">	
+				<!--- Maximal Concurrent Request --->
+				<h2>#stText.application.ConcurrentRequest#</h2>
+				<div class="itemintro">#stText.application.ConcurrentRequestDesc#</div>
+
+				<div class="warning nofocus">
+					This feature is experimental.
+					If you have any problems while using this Implementation,
+					please post the bugs and errors in our
+					<a href="http://issues.lucee.org" target="_blank">bugtracking system</a>. 
+				</div>
 		<table class="maintbl">
 			<tbody>
 				
-				<!--- listener mode --->
 				<tr>
-					<th>#stText.application.listenerMode#
-						<cfif hasAccess>
-							<div class="comment">#stText.application.listenerModeDescription#</div>
-						</cfif>
-					</th>
+					<th scope="row">#stText.application.ConcurrentRequestEnable#</th>
 					<td>
-						<cfif hasAccess>
-							<ul class="radiolist">
-								<cfloop index="key" list="curr2root,currorroot,root,curr">
-									<li>
-										<label>
-											<input type="radio" class="radio" name="mode" value="#key#" <cfif listener.mode EQ key>checked="checked"</cfif>>
-											<b>#stText.application['listenerMode_' & key]#</b>
-										</label>
-										<div class="comment">#stText.application['listenerModeDescription_' & key]#</div>
-									</li>
-								</cfloop>
-							</ul>
+						<span id="ConcurrentRequestEnableSpan"><cfif hasAccess>
+							<input type="checkbox" name="ConcurrentRequestEnable" value="true" class="checkbox"
+							<cfif queueSettings.enable>  checked="checked"</cfif>>
 						<cfelse>
-							<!---<input type="hidden" name="type" value="#listener.mode#">--->
-							<b>#listener.mode#</b>
-							<div class="comment">#stText.application['listenerModeDescription_' & listener.mode]#</div>
+							<b>#yesNoFormat(queueSettings.enable)#</b>
 						</cfif>
+						<div class="comment">#stText.application.ConcurrentRequestEnableDesc#</div></span>
 					</td>
 				</tr>
 
-			</tbody>
-		</table>
+				<tr>
+					<th scope="row">#stText.application.ConcurrentRequestMax#</th>
+					<td>
+						<cfif hasAccess>
+							<cfinput type="text" name="ConcurrentRequestMax" value="#queueSettings.max#" 
+									class="number" required="yes" validate="integer" id="ConcurrentRequestMax"
+									message="#stText.application.ConcurrentRequestMaxError#">
+							
+						<cfelse>
+							<b>#yesNoFormat(queueSettings.max)#</b>
+						</cfif>
+						<div class="comment">#stText.application.ConcurrentRequestMaxDesc#</div>
+					</td>
+				</tr>
 
-		<h3>#stText.general.dialect.cfml#</h3>
-		<div class="itemintro">#stText.general.dialect.cfmlDesc#</div>
+
+				<tr>
+					<th scope="row">#stText.application.ConcurrentRequestTimeout#</th>
+					<td>
+						<cfif hasAccess>
+							<cfinput type="text" name="ConcurrentRequestTimeout" value="#queueSettings.timeout#" 
+									class="number" required="yes" validate="integer"  id="ConcurrentRequestTimeout"
+									message="#stText.application.ConcurrentRequestTimeoutError#">
+							
+						<cfelse>
+							<b>#yesNoFormat(queueSettings.timeout)#</b>
+						</cfif>
+						<div class="comment">#stText.application.ConcurrentRequestTimeoutDesc#</div>
+					</td>
+				</tr>
+
+
+				<cfif hasAccess>
+					<cfmodule template="remoteclients.cfm" colspan="2">
+				</cfif>
+
+
+			</tbody>
+			<cfif hasAccess>
+				<tfoot>
+					<tr>
+						<td colspan="2">
+							<input type="submit" class="bl button submit" name="mainAction1" value="#stText.Buttons.Update#">
+							<input type="reset" class="<cfif request.adminType EQ "web">bm<cfelse>br</cfif> button reset" name="cancel" value="#stText.Buttons.Cancel#">
+							<cfif request.adminType EQ "web"><input class="br button submit" type="submit" name="mainAction1" value="#stText.Buttons.resetServerAdmin#"></cfif>
+						</td>
+					</tr>
+				</tfoot>
+			</cfif>
+		</table>
+</cfif>
+	
+	</cfform>
+
+	<h2>#stText.application.listener#</h2>
+	<div class="itemintro">#stText.application.listenerDescription#</div>
 		
+	<cfform onerror="customError" action="#request.self#?action=#url.action#" method="post">
 		<table class="maintbl">
 			<tbody>
-
 				<!--- listener type --->
 				<tr>
 					<th scope="row">
@@ -383,6 +483,33 @@ Error Output --->
 					</td>
 				</tr>
 
+				<!--- listener mode --->
+				<tr>
+					<th>#stText.application.listenerMode#
+						<cfif hasAccess>
+							<div class="comment">#stText.application.listenerModeDescription#</div>
+						</cfif>
+					</th>
+					<td>
+						<cfif hasAccess>
+							<ul class="radiolist">
+								<cfloop index="key" list="curr2root,currorroot,root,curr">
+									<li>
+										<label>
+											<input type="radio" class="radio" name="mode" value="#key#" <cfif listener.mode EQ key>checked="checked"</cfif>>
+											<b>#stText.application['listenerMode_' & key]#</b>
+										</label>
+										<div class="comment">#stText.application['listenerModeDescription_' & key]#</div>
+									</li>
+								</cfloop>
+							</ul>
+						<cfelse>
+							<!---<input type="hidden" name="type" value="#listener.mode#">--->
+							<b>#listener.mode#</b>
+							<div class="comment">#stText.application['listenerModeDescription_' & listener.mode]#</div>
+						</cfif>
+					</td>
+				</tr>
 				<cfif hasAccess>
 					<cfmodule template="remoteclients.cfm" colspan="3">
 				</cfif>

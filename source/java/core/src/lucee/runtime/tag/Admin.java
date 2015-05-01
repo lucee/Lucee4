@@ -40,6 +40,7 @@ import java.util.jar.Manifest;
 import javax.servlet.ServletConfig;
 import javax.servlet.jsp.tagext.Tag;
 
+import lucee.print;
 import lucee.commons.collection.MapFactory;
 import lucee.commons.digest.HashUtil;
 import lucee.commons.io.IOUtil;
@@ -584,12 +585,13 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     	else if(check("getORMSetting",            ACCESS_FREE) && check2(ACCESS_READ  )) doGetORMSetting();
     	else if(check("getORMEngine",            ACCESS_FREE) && check2(ACCESS_READ  )) doGetORMEngine();
     	else if(check("updateORMSetting",            ACCESS_FREE) && check2(ACCESS_READ  )) doUpdateORMSetting();
-        else if(check("getApplicationListener", ACCESS_FREE) && check2(ACCESS_READ  )) doGetApplicationListener();
-        else if(check("getProxy",            	ACCESS_FREE) && check2(ACCESS_READ  )) doGetProxy();
+    	else if(check("getApplicationListener", ACCESS_FREE) && check2(ACCESS_READ  )) doGetApplicationListener();
+    	else if(check("getProxy",            	ACCESS_FREE) && check2(ACCESS_READ  )) doGetProxy();
         else if(check("getCharset",            	ACCESS_FREE) && check2(ACCESS_READ  )) doGetCharset();
         else if(check("getComponent",           ACCESS_FREE) && check2(ACCESS_READ  )) doGetComponent();
         else if(check("getScope",               ACCESS_FREE) && check2(ACCESS_READ  )) doGetScope();
         else if(check("getApplicationSetting",	ACCESS_FREE) && check2(ACCESS_READ  )) doGetApplicationSetting();
+        else if(check("getQueueSetting",	ACCESS_FREE) && check2(ACCESS_READ  )) 		doGetQueueSetting();
         else if(check("getOutputSetting",		ACCESS_FREE) && check2(ACCESS_READ  )) doGetOutputSetting();
         else if(check("getDatasourceSetting",   ACCESS_FREE) && check2(ACCESS_READ  )) doGetDatasourceSetting();
         else if(check("getCustomTagSetting",	ACCESS_FREE) && check2(ACCESS_READ  )) doGetCustomTagSetting();
@@ -688,6 +690,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         else if(check("removeRestMapping",      ACCESS_FREE) && check2(ACCESS_WRITE  )) doRemoveRestMapping();
         else if(check("updateApplicationSetting",ACCESS_FREE) && check2(ACCESS_WRITE  ))doUpdateApplicationSettings();
         else if(check("updateOutputSetting",	ACCESS_FREE) && check2(ACCESS_WRITE  ))doUpdateOutputSettings();
+        else if(check("updateQueueSetting",ACCESS_NOT_WHEN_WEB) && check2(ACCESS_WRITE  ))        doUpdateQueueSettings();
         else if(check("updatepsq",              ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdatePSQ();
         else if(check("updatedatasource",       ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateDatasource();
         else if(check("updateJDBCDriver",       ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateJDBCDriver();
@@ -4211,6 +4214,13 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         store();
         adminSync.broadcast(attributes, config);
     }
+    
+    private void doUpdateQueueSettings() throws PageException {
+        admin.updateQueue(getInteger("admin",action,"max"), getInteger("admin",action,"timeout"), getBoolObject("admin",action,"enable"));
+        store();
+        adminSync.broadcast(attributes, config);
+    }
+
 
     private void doUpdateOutputSettings() throws PageException {
     	admin.updateCFMLWriterType(getString("admin",action, "cfmlWriter"));
@@ -4222,6 +4232,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         store();
         adminSync.broadcast(attributes, config);
     }
+    
     
     private void doUpdateCustomTagSetting() throws PageException {
     	admin.updateCustomTagDeepSearch(getBool("admin", action, "deepSearch"));
@@ -4457,7 +4468,6 @@ public final class Admin extends TagImpl implements DynamicAttributes {
      * 
      */
     private void doGetApplicationSetting() throws PageException {
-        
         Struct sct=new StructImpl();
         pageContext.setVariable(getString("admin",action,"returnVariable"),sct);
         sct.set("scriptProtect",AppListenerUtil.translateScriptProtect(config.getScriptProtect()));
@@ -4470,7 +4480,17 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         sct.set("requestTimeout_second",Caster.toInteger(config.getRequestTimeout().getSecond()));
         
         // AllowURLRequestTimeout
-        sct.set("AllowURLRequestTimeout",Caster.toBoolean(config.isAllowURLRequestTimeout()));// DIF 23
+        sct.set("AllowURLRequestTimeout",Caster.toBoolean(config.isAllowURLRequestTimeout()));
+        
+        
+    }
+
+    private void doGetQueueSetting() throws PageException {
+        Struct sct=new StructImpl();
+        pageContext.setVariable(getString("admin",action,"returnVariable"),sct);
+        sct.set(KeyConstants._max,Caster.toInteger(config.getQueueMax()));
+        sct.set(KeyConstants._timeout,Caster.toInteger(config.getQueueTimeout()));
+        sct.set("enable",Caster.toBoolean(config.getQueueEnable()));
     }
     
     private void doGetOutputSetting() throws PageException {
@@ -5353,6 +5373,15 @@ public final class Admin extends TagImpl implements DynamicAttributes {
             throw new ApplicationException("Attribute ["+attributeName+"] for tag ["+tagName+"] is required if attribute action has the value ["+actionName+"]");
         return Caster.toStruct(value);
     }
+    
+    private Integer getInteger(String tagName, String actionName, String attributeName) throws PageException {
+        Object value=attributes.get(attributeName,null);
+        if(value==null)
+            throw new ApplicationException("Attribute ["+attributeName+"] for tag ["+tagName+"] is required if attribute action has the value ["+actionName+"]");
+        if(StringUtil.isEmpty(value)) return null;
+        return Caster.toIntValue(value);
+    }
+
     
     private int getInt(String tagName, String actionName, String attributeName) throws PageException {
         Object value=attributes.get(attributeName,null);
