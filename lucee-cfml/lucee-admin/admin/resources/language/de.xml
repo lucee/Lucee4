@@ -359,6 +359,30 @@ und Optimierungen innerhalb ihrer Version einspielen.</data>
 	<data key="application.allowurlrequesttimeoutdesc">Angabe des Parameters [RequestTimeout] in der URL berücksichtigen</data>
 	<data key="application.listenermodedescription_curr2root">Sucht nach der Datei &apos;Application.cfc/Application.cfm&apos; vom aktuellen Verzeichnis aus zurück bis zum Webroot Verzeichnis.</data>
 	<data key="application.listenermodedescription_currorroot">Sucht nach der Datei &apos;Application.cfc/Application.cfm&apos; im aktuellen Verzeichnis und im Webroot Verzeichnis.</data>
+	
+
+
+	<data key="application.RequestTimeoutTime">Zeit</data>
+	<data key="application.RequestTimeoutDesc">Definiert wie Lucee lang laufende Requests umgeht.</data>
+	<data key="application.AllowURLRequestTimeout">URL</data>
+	<data key="application.ConcurrentRequest">Parallele Requests</data>
+	<data key="application.ConcurrentRequestDesc">Diese Einstellung definiert wie Lucee mit parallel laufenden Requests umgeht.</data>
+	<data key="application.ConcurrentRequestMax">Maximal</data>
+	<data key="application.ConcurrentRequestMaxError">Maximal parallele request muss eine Zahl sein</data>
+	<data key="application.ConcurrentRequestMaxDesc">Die maximale Anzahl an parallel laufenden Request die erlaubt sind, bevor Lucee beginnt die Requests in eine Warteschlange zu stellen.</data>
+	<data key="application.ConcurrentRequestTimeout">Timeout</data>
+	<data key="application.ConcurrentRequestTimeoutError">Timeout muss eine Zahl sein</data>
+	<data key="application.ConcurrentRequestTimeoutDesc">Die Zeit in Sekunden die ein Request ist in der Warteschlange verbringt. Wenn das Timeout erreicht ist, wird der request mit einer Exception abgewiesen. Die Zahl 0 beteudet kein Timeout.</data>
+
+	<data key="application.ConcurrentRequestEnable">Einschalten</data>
+	<data key="application.ConcurrentRequestEnableDesc">Die Warteschlange einschalten.</data>
+	<data key="application.requesttimeout">Request timeout</data>
+	<data key="application.requesttimeoutdescription">Legt die Zeit fest, wie lange Lucee auf die Beendigung eines Requests warten soll. Das heisst, dass die Ausführung des Requests beim Überschreiten dieser Zeit abgebrochen wird. Diese Verhaltensweise kann von dem Tag CFSetting übersteuert werden.</data>
+	<data key="request.description">Einstellungen welche die Ausführung eines Request beeinflussen.</data>
+	
+
+
+
 	<data key="application.requesttimeout">Request Timeout</data>
 	<data key="application.listenertypedescription_none">Bei einem Request wird ausschliesslich die entsprechende Datei aufgerufen</data>
 	<data key="application.scriptprotectnone">Script-Protect ist nicht aktiv</data>
@@ -367,8 +391,7 @@ und Optimierungen innerhalb ihrer Version einspielen.</data>
 	<data key="application.listenertype_none">Kein</data>
 	<data key="application.listenermode">Mode</data>
 	<data key="application.listenermode_root">Root (Wurzelverzeichnis)</data>
-	<data key="application.requesttimeoutdescription">Legt die Zeit fest, wie lange Lucee auf die Beendigung eines Requests warten soll. Das heisst, dass die Ausführung des Requests beim Überschreiten dieser Zeit abgebrochen wird. Diese Verhaltensweise kann von dem Tag CFSetting übersteuert werden.</data>
-	<data key="request.description">Einstellungen welche die Ausführung eines Request beeinflussen.</data>
+	
 	<data key="application.scriptprotectdescription">Durch die Konfiguration von Script-Protect schützen Sie ihr System vor &apos;Cross-Site Scripting&apos;</data>
 	<data key="application.listenertypedescription_mixed">Gemischtes Handling. Lucee sucht sowohl nach der Datei &apos;Application.cfm/onRequestEnd.cfm&apos; wie auch nach der Datei &apos;Application.cfc&apos;</data>
 	<data key="application.scriptprotectall">Script-Protect überprüft alle Scopes ob die Daten von ausserhalb kommen (cgi, cookie, form, url)</data>

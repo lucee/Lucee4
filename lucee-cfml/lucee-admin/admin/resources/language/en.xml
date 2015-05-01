@@ -373,7 +373,27 @@
 	<data key="application.listenermodedescription_curr2root">Looks for the file &quot;Application.cfc/Application.cfm&quot; from the current up to the webroot directory.</data>
 	<data key="application.listenermodedescription_currorroot">Looks for the file &quot;Application.cfc/Application.cfm&quot; in the current directory and in the webroot directory.</data>
 	
+
+	<data key="application.RequestTimeoutTime">Time</data>
+	<data key="application.RequestTimeoutDesc">Defines how Lucee handles long running request.</data>
+	<data key="application.AllowURLRequestTimeout">URL</data>
+	<data key="application.ConcurrentRequest">Concurrent Requests</data>
+	<data key="application.ConcurrentRequestDesc">This setting defines how the system handles concurrent requests.</data>
+	<data key="application.ConcurrentRequestMax">Maximal</data>
+	<data key="application.ConcurrentRequestMaxError">Maximal concurrent request must be an integer</data>
+	<data key="application.ConcurrentRequestMaxDesc">The maximum concurrent requests that the engine allows to run at the same time, before the engine begins to queue the requests.</data>
+	<data key="application.ConcurrentRequestTimeout">Timeout</data>
+	<data key="application.ConcurrentRequestTimeoutError">Timeout must be an integer</data>
+	<data key="application.ConcurrentRequestTimeoutDesc">The time a request is held in the queue. If the time is reached the request is rejected with an exception. The number 0 is equal to no restroction.</data>
+
+	<data key="application.ConcurrentRequestEnable">Enable</data>
+	<data key="application.ConcurrentRequestEnableDesc">Enable the queue.</data>
 	<data key="application.requesttimeout">Request timeout</data>
+	<data key="application.requesttimeoutdescription">Sets the amount of time the engine will wait for a request to finish before a request timeout will be raised. This means that the execution of the request will be stopped. This setting can be overridden using the “cfsetting" tag or script equivalent.</data>
+	<data key="request.description">Settings that affect the execution of a request.</data>
+	
+
+	
 	<data key="application.listenertypedescription_none">When a request is called no other initialization template will be invoked by Lucee</data>
 	<data key="application.scriptprotectnone">Script-protect is not active</data>
 	<data key="application.listenertypedescription_modern">Modern handling. Lucee only looks for the file &quot;Application.cfc&quot;</data>
@@ -381,8 +401,6 @@
 	<data key="application.listenertype_none">None</data>
 	<data key="application.listenermode">Mode</data>
 	<data key="application.listenermode_root">Root</data>
-	<data key="application.requesttimeoutdescription">Sets the amount of time Lucee will wait for a request to finish before a request timeout will be raised. This means that the execution of the request will be stopped. This behaviour can be overridden by the tag cfsetting.</data>
-	<data key="request.description">Settings that affect the execution of a request.</data>
 		
 
 <data key="application.scriptprotectdescription">The configuration of Script protect, secures your system from &quot;cross-site scripting&quot;</data>
