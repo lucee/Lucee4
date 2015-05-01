@@ -34,13 +34,14 @@ public class TagData extends Data {
 	
 	private SimpleExprTransformer set;
 	
-    public TagData(Factory factory,TagLib[][] tlibs, FunctionLib[] flibs,TagLibTag[] scriptTags, SourceCode cfml,TransfomerSettings settings,Root root) {
+    public TagData(Factory factory,TagLib[][] tlibs, FunctionLib[] flibs,TagLibTag[] scriptTags, SourceCode cfml,
+    		TransfomerSettings settings,Root root) {
 		super(factory,root,cfml,new EvaluatorPool(),settings,tlibs,flibs,scriptTags);
 		
 	}
-    public TagData(Factory factory,TagLib[][] tlibs, FunctionLib[] flibs,TagLibTag[] scriptTags, SourceCode sc,Root root, boolean dotNotionUpperCase) {
+    public TagData(Factory factory,TagLib[][] tlibs, FunctionLib[] flibs,TagLibTag[] scriptTags, SourceCode sc,Root root, boolean dotNotionUpperCase,boolean ignoreScopes) {
 		super(factory,root,sc,new EvaluatorPool(),new TransfomerSettings(dotNotionUpperCase,
-				sc.getDialect()==CFMLEngine.DIALECT_CFML && factory.getConfig().getHandleUnQuotedAttrValueAsString()),tlibs,flibs,scriptTags);
+				sc.getDialect()==CFMLEngine.DIALECT_CFML && factory.getConfig().getHandleUnQuotedAttrValueAsString(),ignoreScopes),tlibs,flibs,scriptTags);
 	}
         
 	

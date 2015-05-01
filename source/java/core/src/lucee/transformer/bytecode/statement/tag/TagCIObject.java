@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import lucee.print;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.ExceptionUtil;
@@ -76,7 +75,7 @@ public abstract class TagCIObject extends TagBase{
 				, CFMLEngineFactory.getInstance().getInfo().getFullVersionInfo()
 				, p.getLastModifed()
 				, p.writeLog()
-				, p.getSupressWSbeforeArg(),p.getOutput());
+				, p.getSupressWSbeforeArg(),p.getOutput(),p.returnValue(),p.ignoreScopes);
 		//page.setIsComponent(true); // MUST can be a interface as well
 		page.addStatement(this);
 		

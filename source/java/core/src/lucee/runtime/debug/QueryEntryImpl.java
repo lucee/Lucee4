@@ -20,7 +20,6 @@ package lucee.runtime.debug;
 
 import lucee.runtime.db.SQL;
 import lucee.runtime.type.Query;
-import lucee.runtime.type.QueryImpl;
 
 /**
  * 

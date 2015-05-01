@@ -28,7 +28,6 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.Cookie;
 
-import lucee.print;
 import lucee.commons.io.DevNullOutputStream;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -369,7 +368,7 @@ public class ModernAppListener extends AppListenerSupport {
 		HttpServletResponseDummy rsp = new HttpServletResponseDummy(os);
 		
 		// PageContext
-		PageContextImpl pc = (PageContextImpl) factory.getLuceePageContext(factory.getServlet(), req, rsp, null, false, -1, false,register,timeout,true);
+		PageContextImpl pc = (PageContextImpl) factory.getLuceePageContext(factory.getServlet(), req, rsp, null, false, -1, false,register,timeout,true,false);
 		// ApplicationContext
 		ClassicApplicationContext ap = new ClassicApplicationContext(factory.getConfig(),applicationName,false,app==null?null:ResourceUtil.getResource(pc,app.getPageSource(),null));
 		initApplicationContext(pc, app);

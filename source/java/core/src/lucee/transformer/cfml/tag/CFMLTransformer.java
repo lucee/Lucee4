@@ -128,11 +128,12 @@ public final class CFMLTransformer {
 	 * @param ps CFML File
 	 * @param tlibs Tag Library Deskriptoren, nach denen innerhalb der CFML Datei geprueft werden soll.
 	 * @param flibs Function Library Deskriptoren, nach denen innerhalb der Expressions der CFML Datei geprueft werden soll.
-	 * @return uebersetztes CFXD Dokument Element.
+	 * @param returnValue if true the method returns the value of the last expression executed inside when you call the method "call" 
+     * @return uebersetztes CFXD Dokument Element.
 	 * @throws TemplateException
 	 * @throws IOException
 	 */
-	public Page transform(Factory factory,ConfigImpl config,PageSource ps, TagLib[] tlibs, FunctionLib[] flibs) throws TemplateException, IOException	{
+	public Page transform(Factory factory,ConfigImpl config,PageSource ps, TagLib[] tlibs, FunctionLib[] flibs,boolean returnValue, boolean ignoreScopes) throws TemplateException, IOException	{
 		Page p;
 		SourceCode sc;
 		
@@ -145,7 +146,7 @@ public final class CFMLTransformer {
 		while(true){
 			try {
 				sc=new PageSourceCode(ps,charset,writeLog);
-				p = transform(factory,config,sc,tlibs,flibs,ps.getResource().lastModified(),dotUpper);
+				p = transform(factory,config,sc,tlibs,flibs,ps.getResource().lastModified(),dotUpper,returnValue,ignoreScopes);
 				break;
 			}
 			catch(ProcessingDirectiveException pde) {
@@ -212,7 +213,7 @@ public final class CFMLTransformer {
 						sc=new PageSourceCode(ps,text,charset,writeLog);
 					}
 					try {
-						_p= transform(factory,config,sc,tlibs,flibs,ps.getResource().lastModified(),dotUpper);
+						_p= transform(factory,config,sc,tlibs,flibs,ps.getResource().lastModified(),dotUpper,returnValue,ignoreScopes);
 						break;
 					}
 					catch(ProcessingDirectiveException pde) {
@@ -282,10 +283,12 @@ public final class CFMLTransformer {
 	 * @param tlibs Tag Library Deskriptoren, nach denen innerhalb der CFML Datei geprueft werden soll.
 	 * @param flibs Function Library Deskriptoren, nach denen innerhalb der Expressions der CFML Datei geprueft werden soll.
 	 * @param sourceLastModified 
-	 * @return uebersetztes CFXD Dokument Element.
+	 * @param dotNotationUpperCase 
+	 * @param returnValue if true the method returns the value of the last expression executed inside when you call the method "call" 
+     * @return uebersetztes CFXD Dokument Element.
 	 * @throws TemplateException
 	 */
-	public Page transform(Factory factory,ConfigImpl config,SourceCode sc,TagLib[] tlibs,FunctionLib[] flibs, long sourceLastModified, Boolean dotNotationUpperCase) throws TemplateException {
+	public Page transform(Factory factory,ConfigImpl config,SourceCode sc,TagLib[] tlibs,FunctionLib[] flibs, long sourceLastModified, Boolean dotNotationUpperCase, boolean returnValue, boolean ignoreScope) throws TemplateException {
 		boolean dnuc;
 		if(dotNotationUpperCase==null) {
 			if(sc instanceof PageSourceCode)
@@ -306,9 +309,9 @@ public final class CFMLTransformer {
 				ConfigWebUtil.getEngine(config).getInfo().getFullVersionInfo(),
 				sourceLastModified,
 				sc.getWriteLog(),
-				sc.getDialect()==CFMLEngine.DIALECT_LUCEE || config.getSuppressWSBeforeArg(),config.getDefaultFunctionOutput());
+				sc.getDialect()==CFMLEngine.DIALECT_LUCEE || config.getSuppressWSBeforeArg(),config.getDefaultFunctionOutput(),returnValue,ignoreScope);
 		
-		TagData data = new TagData(factory,_tlibs,flibs,config.getCoreTagLib(sc.getDialect()).getScriptTags(),sc,page,dnuc);
+		TagData data = new TagData(factory,_tlibs,flibs,config.getCoreTagLib(sc.getDialect()).getScriptTags(),sc,page,dnuc,ignoreScope);
 		
 		//Body body=page;
 		try {

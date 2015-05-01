@@ -57,7 +57,7 @@ public class Elvis {
 	 * @return
 	 */
 	public static boolean operate(PageContext pc , String[] varNames) {
-		int scope = VariableInterpreter.scopeString2Int(varNames[0]);
+		int scope = VariableInterpreter.scopeString2Int(pc.ignoreScopes(),varNames[0]);
 		return _operate(pc, scope, KeyImpl.toKeyArray(varNames), scope==Scope.SCOPE_UNDEFINED?0:1);
 	}
 	

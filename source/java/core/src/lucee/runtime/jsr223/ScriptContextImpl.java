@@ -24,12 +24,12 @@ import java.util.List;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
-import javax.script.SimpleBindings;
 import javax.servlet.ServletException;
 
 import lucee.aprint;
 import lucee.runtime.CFMLFactory;
 import lucee.runtime.PageContext;
+import lucee.runtime.type.scope.Variables;
 import lucee.runtime.util.PageContextUtil;
 
 public class ScriptContextImpl implements ScriptContext {
@@ -59,7 +59,12 @@ public class ScriptContextImpl implements ScriptContext {
 	
 	@Override
 	public void setBindings(Bindings bindings, int scope) {
-		throw new RuntimeException("not supported");
+		if(!(bindings instanceof Variables)) {
+			
+		}
+		if(scope==GLOBAL_SCOPE) globalScope=bindings;
+		else if(scope==ENGINE_SCOPE) engineScope=bindings;
+		else throw new IllegalArgumentException("binding scope ["+scope+"] is invalid!");
 	}
 
 	@Override
@@ -69,7 +74,7 @@ public class ScriptContextImpl implements ScriptContext {
 	}
 
 	protected static Bindings createBindings() {
-		return new SimpleBindings();
+		return new VariablesBinding();
 	}
 
 	@Override
@@ -146,7 +151,7 @@ public class ScriptContextImpl implements ScriptContext {
 	
 	private PageContext createPageContext() {
 		try {
-			return PageContextUtil.getPageContext("localhost", "/index.cfm", "", null, null, null, null, System.out, false,Long.MAX_VALUE);
+			return PageContextUtil.getPageContext("localhost", "/index.cfm", "", null, null, null, null, System.out, false,Long.MAX_VALUE,true);
 		}
 		catch (ServletException e) {
 			throw new RuntimeException(e);

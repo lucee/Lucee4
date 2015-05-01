@@ -34,10 +34,15 @@ public interface TemplateUtil {
 	 * This is used to generated server side Webservices.
 	 * @param component
      * @param isNew 
+     * @param create 
+     * @param writeLog 
+     * @param suppressWSbeforeArg 
+     * @param output 
+     * @param returnValue if true the method returns the value of the last expression executed inside when you call the method "call" 
      * @return
      * @throws PageException
      */
-	public Class<?> getComponentJavaAccess(PageContext pc,Component component, RefBoolean isNew,boolean create,boolean writeLog, boolean suppressWSbeforeArg, boolean output) throws PageException;
+	public Class<?> getComponentJavaAccess(PageContext pc,Component component, RefBoolean isNew,boolean create,boolean writeLog, boolean suppressWSbeforeArg, boolean output, boolean returnValue) throws PageException;
 	public Class<?> getComponentPropertiesClass(PageContext pc,Component component) throws PageException;
 	
 	public long getCompileTime(PageContext pc, PageSource ps,long defaultValue);

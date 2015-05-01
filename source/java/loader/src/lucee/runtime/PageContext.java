@@ -1166,4 +1166,10 @@ public abstract class PageContext extends javax.servlet.jsp.PageContext {
 	public abstract ORMSession getORMSession(boolean create) throws PageException;
 	
 	public abstract Throwable getRequestTimeoutException();
+
+	/**
+	 * if set to true Lucee ignores all scope names and handles them as regular keys for the undefined scope
+	 * @return
+	 */
+	public abstract boolean ignoreScopes();
 }

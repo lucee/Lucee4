@@ -1963,7 +1963,7 @@ public final class ComponentImpl extends StructSupport implements Externalizable
     }
     
     public Class<?> getJavaAccessClass(PageContext pc,RefBoolean isNew) throws PageException {
-    	return getJavaAccessClass(pc,isNew, false,true,true,true,false);
+    	return getJavaAccessClass(pc,isNew, false,true,true,true,false,false);
     }
 
     @Override
@@ -1971,17 +1971,17 @@ public final class ComponentImpl extends StructSupport implements Externalizable
     	isNew.setValue(false);
     	ComponentProperties props =(takeTop)?top.properties:properties;
     	if(props.javaAccessClass==null) {
-    		props.javaAccessClass=ComponentUtil.getComponentJavaAccess(pc,this,isNew,create,writeLog,suppressWSbeforeArg,true);
+    		props.javaAccessClass=ComponentUtil.getComponentJavaAccess(pc,this,isNew,create,writeLog,suppressWSbeforeArg,true,false);
 		}
     	return props.javaAccessClass;
     }
 
     @Override
-    public Class<?> getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean suppressWSbeforeArg, boolean output) throws PageException {
+    public Class<?> getJavaAccessClass(PageContext pc,RefBoolean isNew,boolean writeLog, boolean takeTop, boolean create, boolean suppressWSbeforeArg, boolean output,boolean returnValue) throws PageException {
     	isNew.setValue(false);
     	ComponentProperties props =(takeTop)?top.properties:properties;
     	if(props.javaAccessClass==null) {
-    		props.javaAccessClass=ComponentUtil.getComponentJavaAccess(pc,this,isNew,create,writeLog,suppressWSbeforeArg,output);
+    		props.javaAccessClass=ComponentUtil.getComponentJavaAccess(pc,this,isNew,create,writeLog,suppressWSbeforeArg,output,returnValue);
 		}
     	return props.javaAccessClass;
     }

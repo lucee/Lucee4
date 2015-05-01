@@ -45,7 +45,8 @@ public class IsDefined implements FunctionEvaluator{
 			if(sl!=null){
 				// scope
 				str=sl.next();
-				int scope = VariableInterpreter.scopeString2Int(str);
+				
+				int scope = VariableInterpreter.scopeString2Int(bif.ts.ignoreScopes,str);
 				if(scope==Scope.SCOPE_UNDEFINED)sl.reset();
 				
 				// keys

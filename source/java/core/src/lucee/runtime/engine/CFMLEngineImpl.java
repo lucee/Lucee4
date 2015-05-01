@@ -526,7 +526,7 @@ public final class CFMLEngineImpl implements CFMLEngine {
     public void service(HttpServlet servlet, HttpServletRequest req, HttpServletResponse rsp) throws ServletException, IOException {
     	CFMLFactory factory=getCFMLFactory(servlet.getServletConfig(), req);
     	
-        PageContext pc = factory.getLuceePageContext(servlet,req,rsp,null,false,-1,false,true,-1,true);
+        PageContext pc = factory.getLuceePageContext(servlet,req,rsp,null,false,-1,false,true,-1,true,false);
         ThreadQueue queue = factory.getConfig().getThreadQueue();
         queue.enter(pc);
         try {
@@ -546,7 +546,7 @@ public final class CFMLEngineImpl implements CFMLEngine {
     public void serviceCFML(HttpServlet servlet, HttpServletRequest req, HttpServletResponse rsp) throws ServletException, IOException {
     	CFMLFactory factory=getCFMLFactory(servlet.getServletConfig(), req);
     	
-        PageContext pc = factory.getLuceePageContext(servlet,req,rsp,null,false,-1,false,true,-1,true);
+        PageContext pc = factory.getLuceePageContext(servlet,req,rsp,null,false,-1,false,true,-1,true,false);
         ThreadQueue queue = factory.getConfig().getThreadQueue();
         queue.enter(pc);
         try {
@@ -610,7 +610,7 @@ public final class CFMLEngineImpl implements CFMLEngine {
 		req=new HTTPServletRequestWrap(req);
 		CFMLFactory factory=getCFMLFactory(servlet.getServletConfig(), req);
         
-		PageContext pc = factory.getLuceePageContext(servlet,req,rsp,null,false,-1,false,true,-1,true);
+		PageContext pc = factory.getLuceePageContext(servlet,req,rsp,null,false,-1,false,true,-1,true,false);
         ThreadQueue queue = factory.getConfig().getThreadQueue();
         queue.enter(pc);
         try {
@@ -987,7 +987,7 @@ public final class CFMLEngineImpl implements CFMLEngine {
 	public PageContext createPageContext(String host, String scriptName, String queryString
 			, Cookie[] cookies,Map<String, Object> headers,Map<String, String> parameters, 
 			Map<String, Object> attributes, OutputStream os, long timeout, boolean register) throws ServletException {
-		return PageContextUtil.getPageContext(host, scriptName, queryString, cookies, headers, parameters, attributes, os,register,timeout);
+		return PageContextUtil.getPageContext(host, scriptName, queryString, cookies, headers, parameters, attributes, os,register,timeout,false);
 	}
 	
 	@Override
@@ -995,7 +995,7 @@ public final class CFMLEngineImpl implements CFMLEngine {
 		// TODO do a mored rect approach
 		PageContext pc = null;
 		try{
-			pc = PageContextUtil.getPageContext(host,scriptName, null, null, null, null, null, null,false,-1);
+			pc = PageContextUtil.getPageContext(host,scriptName, null, null, null, null, null, null,false,-1,false);
 			return pc.getConfig();
 		}
 		finally{

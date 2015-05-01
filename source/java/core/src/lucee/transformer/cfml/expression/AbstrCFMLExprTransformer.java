@@ -219,7 +219,6 @@ public abstract class AbstrCFMLExprTransformer {
 	public class ExprData extends Data {
 		
 		private short mode=0;
-		private boolean ignoreScopes=false;
 		private boolean allowLowerThan;
 		public boolean insideFunction;
 		public String tagName;
@@ -230,7 +229,6 @@ public abstract class AbstrCFMLExprTransformer {
 		
 		public ExprData(Factory factory,Root root, EvaluatorPool ep, SourceCode cfml, TagLib[][] tlibs,FunctionLib[] flibs, TransfomerSettings settings,boolean allowLowerThan,TagLibTag[] scriptTags) {
 			super(factory,root,cfml,ep,settings,tlibs,flibs,scriptTags);
-
 			this.allowLowerThan=allowLowerThan;
 		}
 	}
@@ -1245,7 +1243,7 @@ public abstract class AbstrCFMLExprTransformer {
 		
 		Position line = data.srcCode.getPosition();
 		
-		BIF bif=new BIF(data.factory,flf.getName(),flf);
+		BIF bif=new BIF(data.settings,data.factory,flf.getName(),flf);
 		bif.setArgType(flf.getArgType());
 		try {
 			bif.setClassDefinition(flf.getFunctionClassDefinition());
@@ -1427,7 +1425,7 @@ public abstract class AbstrCFMLExprTransformer {
     		
         	
         	// now we generate a _getStaticScope function call with that path
-        	BIF bif=ASMUtil.createBif(data.factory,GET_STATIC_SCOPE);
+        	BIF bif=ASMUtil.createBif(data.settings,data.factory,GET_STATIC_SCOPE);
         	bif.addArgument(new Argument(componentPath,"string"));
 				
     		Variable var=data.factory.createVariable(old.getStart(),data.srcCode.getPosition());
@@ -1580,19 +1578,8 @@ public abstract class AbstrCFMLExprTransformer {
 	*/
 	private Variable scope(ExprData data,Identifier id, Position line) throws TemplateException {
 		String idStr=id.getUpper();
-		if(data.ignoreScopes)return null;
-		if (idStr.equals("CGI")) 				return data.factory.createVariable(Scope.SCOPE_CGI,line,data.srcCode.getPosition());
-		else if (idStr.equals("ARGUMENTS"))  	return data.factory.createVariable(Scope.SCOPE_ARGUMENTS,line,data.srcCode.getPosition());
-		else if (idStr.equals("REQUEST"))		return data.factory.createVariable(Scope.SCOPE_REQUEST,line,data.srcCode.getPosition());
-		else if (idStr.equals("SESSION"))		return data.factory.createVariable(Scope.SCOPE_SESSION,line,data.srcCode.getPosition());
-		else if (idStr.equals("APPLICATION"))	return data.factory.createVariable(Scope.SCOPE_APPLICATION,line,data.srcCode.getPosition());
-		else if (idStr.equals("VARIABLES"))		return data.factory.createVariable(Scope.SCOPE_VARIABLES,line,data.srcCode.getPosition());
-		else if (idStr.equals("FORM")) 			return data.factory.createVariable(Scope.SCOPE_FORM,line,data.srcCode.getPosition());
-		else if (idStr.equals("URL"))			return data.factory.createVariable(Scope.SCOPE_URL,line,data.srcCode.getPosition());
-		else if (idStr.equals("SERVER")) 		return data.factory.createVariable(Scope.SCOPE_SERVER,line,data.srcCode.getPosition());
-		else if (idStr.equals("CLIENT"))		return data.factory.createVariable(Scope.SCOPE_CLIENT,line,data.srcCode.getPosition());
-		else if (idStr.equals("COOKIE"))		return data.factory.createVariable(Scope.SCOPE_COOKIE,line,data.srcCode.getPosition());
-		else if (idStr.equals("CLUSTER"))		return data.factory.createVariable(Scope.SCOPE_CLUSTER,line,data.srcCode.getPosition());
+		
+		if (idStr.equals("ARGUMENTS"))  	return data.factory.createVariable(Scope.SCOPE_ARGUMENTS,line,data.srcCode.getPosition());
 		else if (idStr.equals("LOCAL"))			return data.factory.createVariable(Scope.SCOPE_LOCAL,line,data.srcCode.getPosition());
 		else if (idStr.equals("VAR")) {
 			Identifier _id = identifier(data,false,true);
@@ -1605,7 +1592,23 @@ public abstract class AbstrCFMLExprTransformer {
 				}
 				return local;
 			}
-		} 
+		}
+		
+		if(data.settings.ignoreScopes)return null;
+		
+		
+		if (idStr.equals("CGI")) 				return data.factory.createVariable(Scope.SCOPE_CGI,line,data.srcCode.getPosition());
+		else if (idStr.equals("REQUEST"))		return data.factory.createVariable(Scope.SCOPE_REQUEST,line,data.srcCode.getPosition());
+		else if (idStr.equals("SESSION"))		return data.factory.createVariable(Scope.SCOPE_SESSION,line,data.srcCode.getPosition());
+		else if (idStr.equals("APPLICATION"))	return data.factory.createVariable(Scope.SCOPE_APPLICATION,line,data.srcCode.getPosition());
+		else if (idStr.equals("VARIABLES"))		return data.factory.createVariable(Scope.SCOPE_VARIABLES,line,data.srcCode.getPosition());
+		else if (idStr.equals("FORM")) 			return data.factory.createVariable(Scope.SCOPE_FORM,line,data.srcCode.getPosition());
+		else if (idStr.equals("URL"))			return data.factory.createVariable(Scope.SCOPE_URL,line,data.srcCode.getPosition());
+		else if (idStr.equals("SERVER")) 		return data.factory.createVariable(Scope.SCOPE_SERVER,line,data.srcCode.getPosition());
+		else if (idStr.equals("CLIENT"))		return data.factory.createVariable(Scope.SCOPE_CLIENT,line,data.srcCode.getPosition());
+		else if (idStr.equals("COOKIE"))		return data.factory.createVariable(Scope.SCOPE_COOKIE,line,data.srcCode.getPosition());
+		else if (idStr.equals("CLUSTER"))		return data.factory.createVariable(Scope.SCOPE_CLUSTER,line,data.srcCode.getPosition());
+		
 		return null;
 	}
     
@@ -1707,7 +1710,7 @@ public abstract class AbstrCFMLExprTransformer {
 		// Element Function
 		FunctionMember fm;
 		if(checkLibrary) {
-			BIF bif=new BIF(name,flf);
+			BIF bif=new BIF(data.settings,name,flf);
 			bif.setArgType(flf.getArgType());
 			try {
 				bif.setClassDefinition(flf.getFunctionClassDefinition());

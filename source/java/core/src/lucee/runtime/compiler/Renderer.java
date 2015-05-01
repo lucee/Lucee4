@@ -45,7 +45,7 @@ public class Renderer {
 	private static MemoryClassLoader mcl;
 	private static Map<String,Page> pages=new HashMap<String,Page>();
 	
-	private static Class<? extends Page> loadClass(ConfigWeb config, String className, String cfml, int dialect) throws Exception{
+	private static Class<? extends Page> loadClass(ConfigWeb config, String className, String cfml, int dialect, boolean ignoreScopes) throws Exception{
 		
 		ConfigWebImpl cw = (ConfigWebImpl)config;
 		CFMLCompilerImpl compiler = cw.getCompiler();
@@ -63,7 +63,7 @@ public class Renderer {
 		
 		// compile
 		lucee.runtime.compiler.CFMLCompilerImpl.Result result = 
-				compiler.compile(cw, sc, cw.getTLDs(dialect), cw.getFLDs(dialect), null, className);
+				compiler.compile(cw, sc, cw.getTLDs(dialect), cw.getFLDs(dialect), null, className,true,ignoreScopes);
 		
 		// before we add a new class, we make sure we are still in range
 		if(mcl.getSize()+result.barr.length>MAX_SIZE) {
@@ -80,7 +80,7 @@ public class Renderer {
 		return new MemoryClassLoader(cw, cw.getClass().getClassLoader());
 	}
 
-	private static Page loadPage(ConfigWeb cw,PageSource ps, String cfml, int dialect) throws Exception{
+	private static Page loadPage(ConfigWeb cw,PageSource ps, String cfml, int dialect, boolean ignoreScopes) throws Exception{
 		String className=HashUtil.create64BitHashAsString(cfml);
 		
 		// do we already have the page?
@@ -88,35 +88,41 @@ public class Renderer {
 		if(p!=null) return p;
 		
 		// load class
-		Constructor<? extends Page> constr = loadClass(cw, className,cfml,dialect).getDeclaredConstructor(PageSource.class);
+		Constructor<? extends Page> constr = loadClass(cw, className,cfml,dialect,ignoreScopes).getDeclaredConstructor(PageSource.class);
 		p= constr.newInstance(ps);
 		pages.put(className, p);
 		return p;
 	}
 	
-	public static Result script(PageContext pc, String cfml, int dialect) throws PageException {
+	public static Result script(PageContext pc, String cfml, int dialect, boolean catchOutput, boolean ignoreScopes) throws PageException {
 		//int dialect = pc.getCurrentTemplateDialect();
 		String prefix = ((ConfigImpl)pc.getConfig()).getCoreTagLib(dialect).getNameSpaceAndSeparator();
 		String name= prefix+(dialect==CFMLEngine.DIALECT_CFML?Constants.CFML_SCRIPT_TAG_NAME:Constants.LUCEE_SCRIPT_TAG_NAME);
-		return tag(pc, "<"+name+">"+cfml+"</"+name+">",dialect);
+		return tag(pc, "<"+name+">"+cfml+"</"+name+">",dialect,catchOutput,ignoreScopes);
 	}
 	
-	public static Result tag(PageContext pc, String cfml, int dialect) throws PageException {
+	public static Result tag(PageContext pc, String cfml, int dialect, boolean catchOutput, boolean ignoreScopes) throws PageException {
 		// execute
 		Result res=new Result();
 		BodyContent bc=null;
+		//Variables before = pc.variablesScope();
 		try{
-			bc = pc.pushBody();
-			res.value=loadPage(pc.getConfig(), null, cfml,dialect).call(pc);
+			if(catchOutput)bc = pc.pushBody();
+			//if(variables!=null)pc.setVariablesScope(variables);
+			
+			res.value=loadPage(pc.getConfig(), null, cfml,dialect,ignoreScopes).call(pc);
 		}
 		catch(Throwable t){
 			throw Caster.toPageException(t);
 		}
 		finally{
-			if(bc!=null)res.output=bc.getString();
-			pc.popBody();
+			//if(variables!=null)pc.setVariablesScope(before);
+			if(catchOutput) {
+				if(bc!=null)res.output=bc.getString();
+				pc.popBody();
+			}
+			//pc.flush();
 		}
-		
 		return res;
 	}
 	
@@ -132,5 +138,8 @@ public class Renderer {
 			return value;
 		}
 		
+		public String toString(){
+			return "output:"+output+";value:"+value;
+		}
 	}
 }

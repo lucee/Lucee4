@@ -115,17 +115,18 @@ public class ScriptEngineFactoryImpl implements ScriptEngineFactory {
 	
 	@Override
 	public String getProgram(String... statements) {
-		String name=getScriptTagName();
+		//String name=getScriptTagName();
 		
-		StringBuilder sb = new StringBuilder("<")
+		StringBuilder sb = new StringBuilder()
+		/*.append("<")
 		.append(name)
-		.append(">\n");
+		.append(">\n")*/;
 		
 		int len = statements.length;
 		for (int i = 0; i < len; i++) {
 			sb.append(statements[i]).append(";\n");
 		}
-		sb.append("</").append(name).append(">");
+		//sb.append("</").append(name).append(">");
 		return sb.toString();
 	 }
 

@@ -52,6 +52,13 @@ public class BytecodeContext implements Context {
 	private final boolean suppressWSbeforeArg;
 	private final boolean output;
 	private Stack<OnFinally> insideFinallies=new Stack<OnFinally>();
+	Stack<OnFinally> tcf=new Stack<OnFinally>();
+	private int currentTag;
+	private int line;
+	private BytecodeContext root;
+	private boolean writeLog;
+	private int rtn=-1;
+	private final boolean returnValue;
 	
 	private static long _id=0;
 	private synchronized static String id() {
@@ -64,7 +71,7 @@ public class BytecodeContext implements Context {
 	protected PageSource ps;
 
 	public BytecodeContext(PageSource ps,ConstrBytecodeContext constr,Page page,List<LitString> keys,ClassWriter classWriter,String className, GeneratorAdapter adapter,
-			Method method,boolean writeLog, boolean suppressWSbeforeArg, boolean output) {
+			Method method,boolean writeLog, boolean suppressWSbeforeArg, boolean output, boolean returnValue) {
 		this.classWriter = classWriter;
 		this.className = className;
 		this.writeLog = writeLog;
@@ -75,6 +82,7 @@ public class BytecodeContext implements Context {
 		this.constr=constr;
 		this.page=page;
 		this.suppressWSbeforeArg=suppressWSbeforeArg;
+		this.returnValue=returnValue;
 		this.output=output;
 		if(ps!=null)this.ps=ps;
 		else if(constr!=null)this.ps=constr.ps;
@@ -92,6 +100,7 @@ public class BytecodeContext implements Context {
 		this.constr=constr;
 		this.page=bc.getPage();
 		this.suppressWSbeforeArg=bc.suppressWSbeforeArg;
+		this.returnValue=bc.returnValue;
 		this.output=bc.output;
 		this.ps=bc.ps;
 	}
@@ -174,12 +183,6 @@ public class BytecodeContext implements Context {
 		return keys;
 	}
 
-
-	Stack<OnFinally> tcf=new Stack<OnFinally>();
-	private int currentTag;
-	private int line;
-	private BytecodeContext root;
-	private boolean writeLog;
 	//private static BytecodeContext staticConstr;
 	
 	public void pushOnFinally(OnFinally onFinally) {
@@ -188,13 +191,6 @@ public class BytecodeContext implements Context {
 	public void popOnFinally() {
 		tcf.pop();
 	}
-	
-	/*public void pushTryCatchFinallyData(TryCatchFinallyData data) {
-		tcf.push(data);
-	}
-	public void popTryCatchFinallyData() {
-		tcf.pop();
-	}*/
 	
 	public Stack<OnFinally> getOnFinallyStack() {
 		return tcf;
@@ -302,6 +298,22 @@ public class BytecodeContext implements Context {
 			if(it.next()==onf) return true;
 		}
 		return false;
+	}
+
+	public void setReturn(int rtn) {
+		this.rtn=rtn;
+	}
+
+	public int getReturn() {
+		return rtn;
+	}
+	
+	/**
+	 * should the Page return the last expression or not
+	 * @return
+	 */
+	public boolean returnValue() {
+		return returnValue;
 	}
 
 }
