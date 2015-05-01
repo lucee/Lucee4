@@ -46,7 +46,7 @@ public class RequestCacheHandler implements CacheHandler {
 	
 	@Override
 	public void init(ConfigWeb cw,String id,int cacheType){
-		this.id=id; 
+		this.id=id;
 		this.cacheType=cacheType; 
 	}
 
