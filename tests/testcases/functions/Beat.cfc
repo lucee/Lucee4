@@ -25,7 +25,8 @@
 
 <!--- begin old test code --->
 <cfif server.ColdFusion.ProductName EQ "lucee"> 
-	<cfset valueEquals(left="#beat(createDateTime(2000,1,1,12,0,0))#", right="500")>
+	<cfset setTimeZone("CET")>
+	<cfset valueEquals(left="#beat(createDateTime(2000,1,1,12,0,0,0,"CET"))#", right="500")>
 	<cfset valueEquals(left="#beat('13:12:12')#", right="550.138")>
 	<cfset valueEquals(left="#beat() GTE 0#", right="true")>
 	<cfset valueEquals(left="#beat(parseDateTime('01/01/2001 12:00:00+0'))#", right="541.666")>

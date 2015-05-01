@@ -22,7 +22,8 @@
 	<cffunction name="setUp"></cffunction>
 	--->
 	<cffunction name="testDateDiff" localMode="modern">
-
+<cfset setTimeZone("CET")>
+	
 <!--- begin old test code --->
 <cfset d1=CreateDateTime(2001, 11, 1, 4, 10, 4)> 
 <cfset d2=CreateDateTime(2004, 03, 4, 6, 3, 1)> 
