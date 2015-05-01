@@ -238,10 +238,10 @@ because this is only about optional updates, we do this only in background from 
 		<cfscript>
 			// Jira
 			jira=stText.services.update.jira;
-			jira=replace(jira,'{a}','<a href="https://bitbucket.org/lucee/lucee/issues" target="_blank">');
+			jira=replace(jira,'{a}','<a href="https://issues.lucee.org" target="_blank">');
 			jira=replace(jira,'{/a}','</a>');
 			try	{
-				// Changelog
+				// Changelog http://issues.lucee.org/browse/LDEV-148
 				content=getAvailableVersionDoc();
 				start=1;
 				arr=array();
@@ -249,7 +249,7 @@ because this is only about optional updates, we do this only in background from 
 				for(i=arrayLen(matches);i>=1;i--){
 					match=trim(matches[i]);
 					nbr=trim(mid(match,4,len(match)-4));
-					content=replace(content,match,'<a target="_blank" href="https://bitbucket.org/lucee/lucee/issue/'&nbr&'">##'& nbr & '</a>',"all");
+					content=replace(content,match,'<a target="_blank" href="http://issues.lucee.org/browse/LDEV-'&nbr&'">##'& nbr & '</a>',"all");
 				}
 					content=replace(content,"
 Version ","
