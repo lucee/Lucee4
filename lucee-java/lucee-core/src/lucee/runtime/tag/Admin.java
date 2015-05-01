@@ -577,6 +577,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         else if(check("getComponent",           ACCESS_FREE) && check2(ACCESS_READ  )) doGetComponent();
         else if(check("getScope",               ACCESS_FREE) && check2(ACCESS_READ  )) doGetScope();
         else if(check("getApplicationSetting",	ACCESS_FREE) && check2(ACCESS_READ  )) doGetApplicationSetting();
+        else if(check("getQueueSetting",	ACCESS_FREE) && check2(ACCESS_READ  )) doGetQueueSetting();
         else if(check("getOutputSetting",		ACCESS_FREE) && check2(ACCESS_READ  )) doGetOutputSetting();
         else if(check("getDatasourceSetting",   ACCESS_FREE) && check2(ACCESS_READ  )) doGetDatasourceSetting();
         else if(check("getCustomTagSetting",	ACCESS_FREE) && check2(ACCESS_READ  )) doGetCustomTagSetting();
@@ -662,14 +663,15 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         else if(check("updateregional",         ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateRegional();
         else if(check("updateApplicationListener",ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateApplicationListener();
         else if(check("updateproxy",         	ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateProxy();
-        else if(check("updateCharset",         ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateCharset();
+        else if(check("updateCharset",         ACCESS_FREE) && check2(ACCESS_WRITE  )) 	doUpdateCharset();
         else if(check("updatecomponent",        ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateComponent();
         else if(check("updatescope",            ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateScope();
-        else if(check("updateRestSettings",      ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateRestSettings();
+        else if(check("updateRestSettings",      ACCESS_FREE) && check2(ACCESS_WRITE  ))doUpdateRestSettings();
         else if(check("updateRestMapping",      ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateRestMapping();
         else if(check("removeRestMapping",      ACCESS_FREE) && check2(ACCESS_WRITE  )) doRemoveRestMapping();
         else if(check("updateApplicationSetting",ACCESS_FREE) && check2(ACCESS_WRITE  ))doUpdateApplicationSettings();
-        else if(check("updateOutputSetting",	ACCESS_FREE) && check2(ACCESS_WRITE  ))doUpdateOutputSettings();
+        else if(check("updateQueueSetting",ACCESS_NOT_WHEN_WEB) && check2(ACCESS_WRITE  ))		doUpdateQueueSettings();
+        else if(check("updateOutputSetting",	ACCESS_FREE) && check2(ACCESS_WRITE  ))	doUpdateOutputSettings();
         else if(check("updatepsq",              ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdatePSQ();
         else if(check("updatedatasource",       ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateDatasource();
         else if(check("updateCacheDefaultConnection",ACCESS_FREE) && check2(ACCESS_WRITE  )) doUpdateCacheDefaultConnection();
@@ -3946,7 +3948,12 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     private void doUpdateApplicationSettings() throws PageException {
         admin.updateRequestTimeout(getTimespan("admin",action,"requestTimeout"));
     	admin.updateScriptProtect(getString("admin",action,"scriptProtect"));
-    	admin.updateAllowURLRequestTimeout(getBoolObject("admin",action,"allowURLRequestTimeout")); // DIFF 23
+    	admin.updateAllowURLRequestTimeout(getBoolObject("admin",action,"allowURLRequestTimeout"));
+        store();
+        adminSync.broadcast(attributes, config);
+    }
+    private void doUpdateQueueSettings() throws PageException {
+        admin.updateQueue(getInteger("admin",action,"max"), getInteger("admin",action,"timeout"), getBoolObject("admin",action,"enable"));
         store();
         adminSync.broadcast(attributes, config);
     }
@@ -4121,7 +4128,19 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         sct.set("requestTimeout_second",Caster.toInteger(config.getRequestTimeout().getSecond()));
         
         // AllowURLRequestTimeout
-        sct.set("AllowURLRequestTimeout",Caster.toBoolean(config.isAllowURLRequestTimeout()));// DIF 23
+        sct.set("AllowURLRequestTimeout",Caster.toBoolean(config.isAllowURLRequestTimeout()));
+        
+        
+    }
+    
+    private void doGetQueueSetting() throws PageException {
+        Struct sct=new StructImpl();
+        pageContext.setVariable(getString("admin",action,"returnVariable"),sct);
+
+        sct.set("max",Caster.toInteger(config.getQueueMax()));
+        sct.set("timeout",Caster.toInteger(config.getQueueTimeout()));
+        sct.set("enable",Caster.toBoolean(config.getQueueEnable()));
+        
     }
     
     private void doGetOutputSetting() throws PageException {
@@ -4802,6 +4821,14 @@ public final class Admin extends TagImpl implements DynamicAttributes {
             throw new ApplicationException("Attribute ["+attributeName+"] for tag ["+tagName+"] is required if attribute action has the value ["+actionName+"]");
         if(StringUtil.isEmpty(value)) return null;
         return Caster.toBoolean(value);
+    }
+    
+    private Integer getInteger(String tagName, String actionName, String attributeName) throws PageException {
+        Object value=attributes.get(attributeName,null);
+        if(value==null)
+            throw new ApplicationException("Attribute ["+attributeName+"] for tag ["+tagName+"] is required if attribute action has the value ["+actionName+"]");
+        if(StringUtil.isEmpty(value)) return null;
+        return Caster.toIntValue(value);
     }
     
     private Object getObject(String tagName, String actionName, String attributeName) throws PageException {

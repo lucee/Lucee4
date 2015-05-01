@@ -2519,7 +2519,23 @@ public final class ConfigWebAdmin {
         Element scope=_getRootElement("application");
         scope.setAttribute("allow-url-requesttimeout",Caster.toString(allowURLRequestTimeout,""));
     }
-    
+
+	public void updateQueue(Integer max, Integer timeout, Boolean enable) throws SecurityException {
+		checkWriteAccess();
+        boolean hasAccess=ConfigWebUtil.hasAccess(config,SecurityManager.TYPE_SETTING);
+        if(!hasAccess) throw new SecurityException("no access to update queue settings");
+        
+        Element queue=_getRootElement("queue");
+     // max
+        if(max==null) queue.removeAttribute("max");
+        else queue.setAttribute("max",Caster.toString(max,""));
+     // total
+        if(timeout==null) queue.removeAttribute("timeout");
+        else queue.setAttribute("timeout",Caster.toString(timeout,""));
+     // enable
+        if(enable==null) queue.removeAttribute("enable");
+        else queue.setAttribute("enable",Caster.toString(enable,""));
+	}
     
     public void updateScriptProtect(int scriptProtect) throws SecurityException { 
     	updateScriptProtect(AppListenerUtil.translateScriptProtect(scriptProtect));

@@ -413,7 +413,9 @@ public abstract class ConfigImpl implements Config {
 
 	private Map<Key, Map<Key, Object>> tagDefaultAttributeValues;
 
-
+	private int queueMax=100;
+	private int queueTimeout=0;
+	private boolean queueEnable=false;
 	
 	
 	/**
@@ -3439,6 +3441,29 @@ public abstract class ConfigImpl implements Config {
 		if(password==null) return Password.ORIGIN_UNKNOW;
 		return password.origin;
 	}
+
+	public int getQueueMax() {
+		return queueMax;
+	}
+	protected void setQueueMax(int queueMax) {
+		this.queueMax = queueMax;
+	}
+
+	public int getQueueTimeout() {
+		return queueTimeout;
+	}
+	protected void setQueueTimeout(int queueTimeout) {
+		this.queueTimeout =  queueTimeout;
+	}
+
+
+	public boolean getQueueEnable() {
+		return queueEnable;
+	}
+	protected void setQueueEnable(boolean queueEnable) {
+		this.queueEnable =  queueEnable;
+	}
+	
 
 	
 }

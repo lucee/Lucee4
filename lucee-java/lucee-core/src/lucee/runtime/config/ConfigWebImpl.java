@@ -45,7 +45,7 @@ import lucee.runtime.cache.tag.CacheHandlerFactoryCollection;
 import lucee.runtime.cfx.CFXTagPool;
 import lucee.runtime.compiler.CFMLCompilerImpl;
 import lucee.runtime.debug.DebuggerPool;
-import lucee.runtime.engine.ThreadQueueImpl;
+import lucee.runtime.engine.ThreadQueue;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.exp.SecurityException;
@@ -364,7 +364,7 @@ public final class ConfigWebImpl extends ConfigImpl implements ServletConfig, Co
 		}
 		
 
-		public ThreadQueueImpl getThreadQueue() {
+		public ThreadQueue getThreadQueue() {
 			return configServer.getThreadQueue();
 		}
 

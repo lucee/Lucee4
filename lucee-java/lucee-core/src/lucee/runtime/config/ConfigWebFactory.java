@@ -101,6 +101,7 @@ import lucee.runtime.engine.ExecutionLog;
 import lucee.runtime.engine.ExecutionLogFactory;
 import lucee.runtime.engine.ThreadLocalConfig;
 import lucee.runtime.engine.ThreadQueueImpl;
+import lucee.runtime.engine.ThreadQueueNone;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
@@ -3246,18 +3247,21 @@ public final class ConfigWebFactory extends ConfigFactory {
 
 	}
 
-	private static void loadThreadQueue(ConfigServer configServer, ConfigImpl config, Document doc) {
+	private static void loadThreadQueue(ConfigServerImpl configServer, ConfigImpl config, Document doc) {
 		Element queue = getChildByName(doc.getDocumentElement(), "queue");
 
 		// Server
 		if (config instanceof ConfigServerImpl) {
-			int max = Caster.toIntValue(queue.getAttribute("max"), 100);
-			int timeout = Caster.toIntValue(queue.getAttribute("timeout"), 0);
-			((ConfigServerImpl) config).setThreadQueue(new ThreadQueueImpl(max, timeout));
-
+			config.setQueueMax(Caster.toIntValue(queue.getAttribute("max"), 100));
+			config.setQueueTimeout(Caster.toIntValue(queue.getAttribute("timeout"), 0));
+			config.setQueueEnable(Caster.toBooleanValue(queue.getAttribute("enable"), false));
+			((ConfigServerImpl)config).setThreadQueue(config.getQueueEnable()?new ThreadQueueImpl():new ThreadQueueNone());
 		}
 		// Web
 		else {
+			config.setQueueMax(configServer.getQueueMax());
+			config.setQueueTimeout(configServer.getQueueTimeout());
+			config.setQueueEnable(configServer.getQueueEnable());
 		}
 	}
 
