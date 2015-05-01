@@ -3873,7 +3873,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
                 sct.setEL("dsnTranslated",d.getDsnTranslated());
                 sct.setEL("timezone",toStringTimeZone(d.getTimeZone()));
                 sct.setEL("password",d.getPassword());
-                sct.setEL("passwordEncrypted",ConfigWebFactory.encrypt(d.getPassword()));
+                sct.setEL("passwordEncrypted",ConfigWebUtil.encrypt(d.getPassword()));
                 sct.setEL("username",d.getUsername());
                 sct.setEL("readonly",Caster.toBoolean(d.isReadOnly()));
                 sct.setEL("select",Boolean.valueOf(d.hasAllow(DataSource.ALLOW_SELECT)));
@@ -4144,7 +4144,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
             qry.setAt("timezone",row,toStringTimeZone(d.getTimeZone()));
             qry.setAt(KeyConstants._password,row,d.getPassword());
 
-            qry.setAt("passwordEncrypted",row,ConfigWebFactory.encrypt(d.getPassword()));
+            qry.setAt("passwordEncrypted",row,ConfigWebUtil.encrypt(d.getPassword()));
             qry.setAt(KeyConstants._username,row,d.getUsername());
             qry.setAt(KeyConstants._readonly,row,Caster.toBoolean(d.isReadOnly()));
             qry.setAt(KeyConstants._select,row,Boolean.valueOf(d.hasAllow(DataSource.ALLOW_SELECT)));

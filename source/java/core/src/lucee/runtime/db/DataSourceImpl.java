@@ -27,6 +27,7 @@ import lucee.commons.io.log.Log;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.config.ConfigWebFactory;
+import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
@@ -78,7 +79,7 @@ public final class DataSourceImpl  extends DataSourceSupport {
             int connectionLimit, int connectionTimeout, long metaCacheTimeout, boolean blob, boolean clob, int allow, Struct custom, boolean readOnly,
             boolean validate, boolean storage, TimeZone timezone, String dbdriver,Log log) throws BundleException, ClassException, SQLException {
 
-		super(driver,name, cd,username,ConfigWebFactory.decrypt(password),blob,clob,connectionLimit, connectionTimeout, metaCacheTimeout, timezone, allow<0?ALLOW_ALL:allow, storage, readOnly,log);
+		super(driver,name, cd,username,ConfigWebUtil.decrypt(password),blob,clob,connectionLimit, connectionTimeout, metaCacheTimeout, timezone, allow<0?ALLOW_ALL:allow, storage, readOnly,log);
 			
         this.host=host;
         this.database=database;

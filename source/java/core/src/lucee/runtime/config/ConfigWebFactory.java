@@ -273,7 +273,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		return configWeb;
 	}
 
-	public static void createHtAccess(Resource htAccess) {
+	private static void createHtAccess(Resource htAccess) {
 		if (!htAccess.exists()) {
 			htAccess.createNewFile();
 
@@ -691,7 +691,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		return cssStringToMap(attributes, decode, false);
 		
 	}
-	public static Map<String, String> cssStringToMap(String attributes, boolean decode, boolean lowerKeys) {
+	private static Map<String, String> cssStringToMap(String attributes, boolean decode, boolean lowerKeys) {
 		Map<String, String> map = new HashMap<String, String>();
 		if (StringUtil.isEmpty(attributes,true))
 			return map;
@@ -1076,7 +1076,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 	 * @throws IOException
 	 * @throws IOException
 	 */
-	public static void createContextFiles(Resource configDir, ServletConfig servletConfig, boolean doNew) throws IOException {
+	private static void createContextFiles(Resource configDir, ServletConfig servletConfig, boolean doNew) throws IOException {
 		// NICE dies muss dynamisch erstellt werden, da hier der admin hinkommt
 		// und dieser sehr viele files haben wird
 		Resource contextDir = configDir.getRealResource("context");
@@ -1390,7 +1390,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 	}
 
 
-	public static void createContextFilesPost(Resource configDir, ConfigImpl config, ServletConfig servletConfig, boolean isEventGatewayContext, boolean doNew) {
+	private static void createContextFilesPost(Resource configDir, ConfigImpl config, ServletConfig servletConfig, boolean isEventGatewayContext, boolean doNew) {
 		Resource contextDir = configDir.getRealResource("context");
 		if (!contextDir.exists())
 			contextDir.mkdirs();
@@ -2074,7 +2074,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 						,getClassDefinition(dataSource, "", config.getIdentification())
 						, dataSource.getAttribute("host"),
 						dataSource.getAttribute("database"), toInt(dataSource.getAttribute("port"), -1), dataSource.getAttribute("dsn"), dataSource.getAttribute("username"),
-						decrypt(dataSource.getAttribute("password")), toInt(dataSource.getAttribute("connectionLimit"), -1),
+						ConfigWebUtil.decrypt(dataSource.getAttribute("password")), toInt(dataSource.getAttribute("connectionLimit"), -1),
 						toInt(dataSource.getAttribute("connectionTimeout"), -1), toLong(dataSource.getAttribute("metaCacheTimeout"), 60000),
 						toBoolean(dataSource.getAttribute("blob"), true), toBoolean(dataSource.getAttribute("clob"), true),
 						toInt(dataSource.getAttribute("allow"), DataSource.ALLOW_ALL), toBoolean(dataSource.getAttribute("validate"), false),
@@ -2365,21 +2365,6 @@ public final class ConfigWebFactory extends ConfigFactory {
 			names[index++] = it.next().getName();
 		}
 		return names;
-	}
-
-	public static String decrypt(String str) {
-		if (StringUtil.isEmpty(str) || !StringUtil.startsWithIgnoreCase(str, "encrypted:"))
-			return str;
-		str = str.substring(10);
-		return new BlowfishEasy("sdfsdfs").decryptString(str);
-	}
-
-	public static String encrypt(String str) {
-		if (StringUtil.isEmpty(str))
-			return "";
-		if (StringUtil.startsWithIgnoreCase(str, "encrypted:"))
-			return str;
-		return "encrypted:" + new BlowfishEasy("sdfsdfs").encryptString(str);
 	}
 
 	private static Struct toStruct(String str) {
@@ -3217,9 +3202,9 @@ public final class ConfigWebFactory extends ConfigFactory {
 			if (StringUtil.isEmpty(label))
 				label = url;
 			String sUser = client.getAttribute("server-username");
-			String sPass = ConfigWebFactory.decrypt(client.getAttribute("server-password"));
-			String aPass = ConfigWebFactory.decrypt(client.getAttribute("admin-password"));
-			String aCode = ConfigWebFactory.decrypt(client.getAttribute("security-key"));
+			String sPass = ConfigWebUtil.decrypt(client.getAttribute("server-password"));
+			String aPass = ConfigWebUtil.decrypt(client.getAttribute("admin-password"));
+			String aCode = ConfigWebUtil.decrypt(client.getAttribute("security-key"));
 			// if(aCode!=null && aCode.indexOf('-')!=-1)continue;
 			String usage = client.getAttribute("usage");
 			if (usage == null)
@@ -3228,7 +3213,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 			String pUrl = client.getAttribute("proxy-server");
 			int pPort = Caster.toIntValue(client.getAttribute("proxy-port"), -1);
 			String pUser = client.getAttribute("proxy-username");
-			String pPass = ConfigWebFactory.decrypt(client.getAttribute("proxy-password"));
+			String pPass = ConfigWebUtil.decrypt(client.getAttribute("proxy-password"));
 
 			ProxyData pd = null;
 			if (!StringUtil.isEmpty(pUrl, true)) {
@@ -3850,7 +3835,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 							el.getAttribute("smtp"), 
 							toInt(el.getAttribute("port"), 25), 
 							el.getAttribute("username"),
-							decrypt(el.getAttribute("password")), 
+							ConfigWebUtil.decrypt(el.getAttribute("password")), 
 							toBoolean(el.getAttribute("tls"), false), 
 							toBoolean(el.getAttribute("ssl"), false), 
 							toBoolean(el.getAttribute("reuse-connection"), true));

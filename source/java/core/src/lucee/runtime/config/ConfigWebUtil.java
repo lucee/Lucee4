@@ -39,6 +39,7 @@ import lucee.loader.engine.CFMLEngine;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.runtime.Mapping;
 import lucee.runtime.PageContext;
+import lucee.runtime.crypt.BlowfishEasy;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.SecurityException;
 import lucee.runtime.listener.ApplicationListener;
@@ -58,6 +59,31 @@ import lucee.runtime.type.util.ArrayUtil;
  * 
  */
 public final class ConfigWebUtil {
+	
+	/**
+	 * default encryption for configuration (not very secure)
+	 * @param str
+	 * @return
+	 */
+	public static String decrypt(String str) {
+		if (StringUtil.isEmpty(str) || !StringUtil.startsWithIgnoreCase(str, "encrypted:"))
+			return str;
+		str = str.substring(10);
+		return new BlowfishEasy("sdfsdfs").decryptString(str);
+	}
+
+	/**
+	 * default encryption for configuration (not very secure)
+	 * @param str
+	 * @return
+	 */
+	public static String encrypt(String str) {
+		if (StringUtil.isEmpty(str))
+			return "";
+		if (StringUtil.startsWithIgnoreCase(str, "encrypted:"))
+			return str;
+		return "encrypted:" + new BlowfishEasy("sdfsdfs").encryptString(str);
+	}
     
     /**
      * touch a file object by the string definition
