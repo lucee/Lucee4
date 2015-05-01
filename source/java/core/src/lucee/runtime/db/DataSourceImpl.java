@@ -26,7 +26,6 @@ import java.util.TimeZone;
 import lucee.commons.io.log.Log;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.StringUtil;
-import lucee.runtime.config.ConfigWebFactory;
 import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.Collection.Key;

@@ -29,8 +29,6 @@ import java.util.Map.Entry;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
-import org.osgi.framework.BundleContext;
-
 import lucee.commons.digest.MD5;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
@@ -64,6 +62,8 @@ import lucee.runtime.security.SecurityManager;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.ArrayUtil;
+
+import org.osgi.framework.BundleContext;
 
 
 /**

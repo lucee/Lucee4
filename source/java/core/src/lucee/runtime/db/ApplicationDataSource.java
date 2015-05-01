@@ -21,7 +21,6 @@ package lucee.runtime.db;
 import java.util.TimeZone;
 
 import lucee.commons.io.log.Log;
-import lucee.runtime.config.ConfigWebFactory;
 import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageRuntimeException;
