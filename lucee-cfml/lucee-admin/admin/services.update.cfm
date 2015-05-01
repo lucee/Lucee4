@@ -233,7 +233,14 @@ because this is only about optional updates, we do this only in background from 
 	</cfform>
 	
 	<!--- 
-	Info --->
+For testing
+	<cfsavecontent variable="txt" trim>
+[ ##331 ] cached query not disconnect from life query
+[ ##23 ] queryExecute does not support passing arguments scope as param structure
+[ ##237 ] application.cfc this.tag.function.output="false" default attribute value does not work
+[ ##319 ] mail sending is synchronized
+[ LDEV-327 ] add frontend for request Queue
+</cfsavecontent>--->
 	<cfif hasUpdate>
 		<cfscript>
 			// Jira
@@ -246,11 +253,24 @@ because this is only about optional updates, we do this only in background from 
 				start=1;
 				arr=array();
 				matches=REMatchNoCase("\[\ *(##([0-9]*)) *\]",content);
+
+				// old issue tracker
 				for(i=arrayLen(matches);i>=1;i--){
 					match=trim(matches[i]);
 					nbr=trim(mid(match,4,len(match)-4));
+					content=replace(content,match,'<a target="_blank" href="https://bitbucket.org/lucee/lucee/issue/'&nbr&'">##'& nbr & '</a>',"all");
+				}
+
+				matches=REMatchNoCase("\[\ *(LDEV\-([0-9]*)) *\]",content);
+				// new issue tracker
+				for(i=arrayLen(matches);i>=1;i--){
+					match=trim(matches[i]);
+					nbr=trim(mid(match,8,len(match)-8));
+					dump(nbr);
 					content=replace(content,match,'<a target="_blank" href="http://issues.lucee.org/browse/LDEV-'&nbr&'">##'& nbr & '</a>',"all");
 				}
+
+
 					content=replace(content,"
 Version ","
 
