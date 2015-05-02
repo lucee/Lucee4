@@ -185,7 +185,7 @@ public final class ListUtil {
 	 * @param delimiter delimter of the list
 	 * @return Array Object
 	 */
-	private static Array listToArrayRemoveEmpty(String list, String delimiter, boolean multiCharDelim) {
+	public static Array listToArrayRemoveEmpty(String list, String delimiter, boolean multiCharDelim) {
 		if(!multiCharDelim || delimiter.length()==0) return listToArrayRemoveEmpty(list, delimiter);
 		
 	    if(delimiter.length()==1)return listToArrayRemoveEmpty(list, delimiter.charAt(0));
