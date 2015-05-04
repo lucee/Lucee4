@@ -11,7 +11,7 @@
 <cfset structDelete(application, "stWebHelp")>
 --->
 
-<cfif !structKeyExists(application, "languages") || !structKeyExists(application.stText, session.lucee_admin_lang) || structKeyExists(url, "reinit")>
+<cfif structKeyExists(form, "lang") ||  !structKeyExists(application, "languages") || !structKeyExists(application.stText, session.lucee_admin_lang) || structKeyExists(url, "reinit")>
 
 	<cfinclude template="menu.cfm">
 	<cfset langData  = getAvailableLanguages()>
@@ -59,10 +59,11 @@
 	<cfset stText.menuStruct.server = createMenu(stText.menu, "server")>
     
 <cfelse>
-    <cfset languages=application.languages>
+	<cfset languages=application.languages>
 	<cfset stText = application.stText[session.lucee_admin_lang]>
 </cfif>
 
+    
 <cfif not structKeyExists(application, "stWebHelp") or structKeyExists(url, "reinit")>
 	<cftry>
 		<cfhttp url="#sHelpURL#" method="GET" timeout="1"></cfhttp>
