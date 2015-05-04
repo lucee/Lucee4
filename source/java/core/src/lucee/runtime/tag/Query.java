@@ -148,7 +148,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 	private TimeZone tmpTZ;
 	private boolean lazy;
 	private Object params;
-	private int nestingLevel=1;
+	private int nestingLevel=0;
 	
 	
 	
@@ -180,7 +180,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 		tmpTZ=null;
 		lazy=false;
 		params=null;
-		nestingLevel=1;
+		nestingLevel=0;
 	}
 	
 	
@@ -643,10 +643,11 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 	}
 
 	private PageSource getPageSource() {
-		if(nestingLevel>1) {
+		if(nestingLevel>0) {
 			PageContextImpl pci=(PageContextImpl) pageContext;
-			int index=pci.getCurrentLevel()-(nestingLevel);
-			if(index>0) return pci.getPageSource(index);
+			List<PageSource> list = pci.getPageSourceList();
+			int index=list.size()-1-nestingLevel;
+			if(index>0) return list.get(index);
 		}
 		return pageContext.getCurrentPageSource();
 	}
