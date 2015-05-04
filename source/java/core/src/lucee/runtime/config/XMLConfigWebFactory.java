@@ -3254,7 +3254,7 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 		// Server
 		if (config instanceof ConfigServerImpl) {
 			config.setQueueMax(Caster.toIntValue(queue.getAttribute("max"), 100));
-			config.setQueueTimeout(Caster.toIntValue(queue.getAttribute("timeout"), 0));
+			config.setQueueTimeout(Caster.toLongValue(queue.getAttribute("timeout"), 0L));
 			config.setQueueEnable(Caster.toBooleanValue(queue.getAttribute("enable"), false));
 			((ConfigServerImpl)config).setThreadQueue(config.getQueueEnable()?new ThreadQueueImpl():new ThreadQueueNone());
 

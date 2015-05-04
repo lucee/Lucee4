@@ -50,6 +50,8 @@ public class ThreadQueueImpl implements ThreadQueue {
 		ConfigImpl ci=(ConfigImpl) pc.getConfig();
 		//print.e("enter("+Thread.currentThread().getName()+"):"+list.size());
 		long start=System.currentTimeMillis();
+		long timeout = ci.getQueueTimeout();
+		if(timeout<=0) timeout=pc.getRequestTimeout();
 		while(true) {
 			synchronized (token) {
 				if(list.size()<ci.getQueueMax()) {
@@ -58,11 +60,11 @@ public class ThreadQueueImpl implements ThreadQueue {
 					return;
 				}
 			}
-			if(ci.getQueueTimeout()>0) SystemUtil.wait(token,ci.getQueueTimeout());
+			if(timeout>0) SystemUtil.wait(token,timeout);
 			else SystemUtil.wait(token);
 			
-			if(ci.getQueueTimeout()>0 && (System.currentTimeMillis()-start)>=ci.getQueueTimeout())
-				throw new IOException("timeout ("+(System.currentTimeMillis()-start)+") ["+ci.getQueueTimeout()+"] is occured, server is busy handling requests");
+			if(timeout>0 && (System.currentTimeMillis()-start)>=timeout)
+				throw new IOException("timeout ("+(System.currentTimeMillis()-start)+") ["+timeout+" ms] is occured, server is busy handling requests");
 		}
 	}
 	
