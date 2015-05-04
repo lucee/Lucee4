@@ -431,7 +431,7 @@ public abstract class ConfigImpl implements Config {
 	
 
 	private int queueMax=100;
-	private int queueTimeout=0;
+	private long queueTimeout=0;
 	private boolean queueEnable=false;
 	
 	/**
@@ -3530,10 +3530,10 @@ public abstract class ConfigImpl implements Config {
 		this.queueMax = queueMax;
 	}
 
-	public int getQueueTimeout() {
+	public long getQueueTimeout() {
 		return queueTimeout;
 	}
-	protected void setQueueTimeout(int queueTimeout) {
+	protected void setQueueTimeout(long queueTimeout) {
 		this.queueTimeout =  queueTimeout;
 	}
 	public boolean getQueueEnable() {
