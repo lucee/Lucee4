@@ -384,7 +384,7 @@
 	<data key="application.ConcurrentRequestMaxDesc">The maximum concurrent requests that the engine allows to run at the same time, before the engine begins to queue the requests.</data>
 	<data key="application.ConcurrentRequestTimeout">Timeout</data>
 	<data key="application.ConcurrentRequestTimeoutError">Timeout must be an integer</data>
-	<data key="application.ConcurrentRequestTimeoutDesc">The time a request is held in the queue. If the time is reached the request is rejected with an exception. The number 0 is equal to no restroction.</data>
+	<data key="application.ConcurrentRequestTimeoutDesc">The time a request is held in the queue. If the time is reached the request is rejected with an exception. If you have set 0 seconds the request timeout is used instead.</data>
 
 	<data key="application.ConcurrentRequestEnable">Enable</data>
 	<data key="application.ConcurrentRequestEnableDesc">Enable the queue.</data>
@@ -393,7 +393,7 @@
 	<data key="request.description">Settings that affect the execution of a request.</data>
 	
 
-	
+
 	<data key="application.listenertypedescription_none">When a request is called no other initialization template will be invoked by Lucee</data>
 	<data key="application.scriptprotectnone">Script-protect is not active</data>
 	<data key="application.listenertypedescription_modern">Modern handling. Lucee only looks for the file &quot;Application.cfc&quot;</data>
