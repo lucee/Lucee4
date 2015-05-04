@@ -19,6 +19,7 @@
 package lucee.runtime.tag;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
 import lucee.commons.date.TimeZoneUtil;
@@ -150,7 +151,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 	private TimeZone tmpTZ;
 	private boolean lazy;
 	private Object params;
-	private int nestingLevel=1;
+	private int nestingLevel=0;
 	
 	
 	
@@ -183,7 +184,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 		tmpTZ=null;
 		lazy=false;
 		params=null;
-		nestingLevel=1;
+		nestingLevel=0;
 	}
 	
 	
@@ -578,10 +579,11 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 				boolean debugUsage=DebuggerUtil.debugQueryUsage(pageContext,query);
 				
 				PageSource source=null;
-				if(nestingLevel>1) {
+				if(nestingLevel>0) {
 					PageContextImpl pci=(PageContextImpl) pageContext;
-					int index=pci.getCurrentLevel()-(nestingLevel);
-					if(index>0) source=pci.getPageSource(index);
+					List<PageSource> list = pci.getPageSourceList();
+					int index=list.size()-1-nestingLevel;
+					if(index>0) source=list.get(index);
 				}
 				if(source==null) source=pageContext.getCurrentPageSource();
 				
