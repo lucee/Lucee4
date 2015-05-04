@@ -40,7 +40,6 @@ public final class HtmlHead extends HtmlHeadBodyBase {
 
 	@Override
 	public void actionAppend() throws IOException, ApplicationException {
-		print.e("append:"+text);
 		((PageContextImpl) pageContext).getRootOut().appendHTMLHead(text);
 	}
 
