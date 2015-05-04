@@ -237,6 +237,14 @@ hasUpdate=structKeyExists(updateData,"available");
 			</cfif>
 		</table>
 	</cfform>
+
+	<!--- 
+For testing
+<cfset updatedata.changeLog={
+	"331":"cached query not disconnect from life query",
+	"LDEV-327":"add frontend for request Queue"
+
+	}>--->
 	
 	<!--- 
 	Info --->
@@ -244,7 +252,7 @@ hasUpdate=structKeyExists(updateData,"available");
 		<cfscript>
 			// Jira
 			jira=stText.services.update.jira;
-			jira=replace(jira,'{a}','<a href="https://bitbucket.org/lucee/lucee/issues/" target="_blank">');
+			jira=replace(jira,'{a}','<a href="https://issues.lucee.org" target="_blank">');
 			jira=replace(jira,'{/a}','</a>');
 		</cfscript>
 		<h2>#stText.services.update.infoTitle#</h2>
@@ -253,7 +261,7 @@ hasUpdate=structKeyExists(updateData,"available");
 		</div>
 		<div style="overflow:auto;height:200px;border-style:solid;border-width:1px;padding:10px">
 <pre><cfloop list="#listSort(structKeyList(updateData.changelog),'textnocase')#" item="key"><!--- 
-			---><a target="_blank" href="https://bitbucket.org/lucee/lucee/issue/#key#">###key#</a> - #updateData.changelog[key]#
+			---><cfif findNoCase("LDEV",key)><a target="_blank" href="http://issues.lucee.org/browse/#key#">###key#</a><cfelse><a target="_blank" href="https://bitbucket.org/lucee/lucee/issue/#key#">###key#</a></cfif> - #updateData.changelog[key]#
 </cfloop></pre></div>
 		#jira#
 	<cfelse>
