@@ -68,6 +68,7 @@ import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.functions.dynamicEvaluation.EvaluateComponent;
+import lucee.runtime.functions.orm.EntityNew;
 import lucee.runtime.functions.system.ContractPath;
 import lucee.runtime.interpreter.CFMLExpressionInterpreter;
 import lucee.runtime.op.Caster;
@@ -193,7 +194,6 @@ public final class ComponentImpl extends StructSupport implements Externalizable
     	//if(modifier!=0)
     	if(!StringUtil.isEmpty(style) && !"rpc".equals(style))
     		throw new ApplicationException("style ["+style+"] is not supported, only the following styles are supported: [rpc]");
-    
     	this.isExtended=isExtended;
     }
     
@@ -219,6 +219,7 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 	    	trg.pageSource=pageSource;
 	        //trg._triggerDataMember=_triggerDataMember;
 	        trg.useShadow=useShadow;
+	        trg._static=_static;
 	        trg.entity=entity;
 	        trg.hasInjectedFunctions=hasInjectedFunctions;
 	        trg.isExtended=isExtended;
@@ -387,7 +388,6 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 		    _udfs=new HashMapPro<Key,UDF>();
 		    _data=MapFactory.getConcurrentMap();
 	    }
-	    
 	    // implements
 	    if(!StringUtil.isEmpty(properties.implement)) {
 	    	if(absFin==null)absFin=new AbstractFinal();
@@ -2159,6 +2159,7 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 		this.isExtended=other.isExtended;
 		this.useShadow=other.useShadow;
 		this.entity=other.entity;
+		this._static=other._static;
 	}
 
 	private void  setOwner(Map<Key,? extends Member> data) {
