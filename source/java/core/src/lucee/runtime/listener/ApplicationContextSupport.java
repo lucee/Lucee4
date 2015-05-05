@@ -127,6 +127,8 @@ public abstract class ApplicationContextSupport implements ApplicationContext {
 	
 	@Override
 	public DataSource getDataSource(String dataSourceName, DataSource defaultValue) {
+		if(dataSourceName==null) return defaultValue;
+		
 		dataSourceName=dataSourceName.trim();
 		DataSource[] sources = getDataSources();
 		if(!ArrayUtil.isEmpty(sources)) {
