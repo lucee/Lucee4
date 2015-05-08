@@ -397,14 +397,14 @@
 	<data key="application.ConcurrentRequestMaxDesc">The maximum concurrent requests that the engine allows to run at the same time, before the engine begins to queue the requests.</data>
 	<data key="application.ConcurrentRequestTimeout">Timeout</data>
 	<data key="application.ConcurrentRequestTimeoutError">Timeout must be an integer</data>
-	<data key="application.ConcurrentRequestTimeoutDesc">The time a request is held in the queue. If the time is reached the request is rejected with an exception. The number 0 is equal to no restroction.</data>
+	<data key="application.ConcurrentRequestTimeoutDesc">The time a request is held in the queue. If the time is reached the request is rejected with an exception. If you have set 0 seconds the request timeout is used instead.</data>
 
 	<data key="application.ConcurrentRequestEnable">Enable</data>
 	<data key="application.ConcurrentRequestEnableDesc">Enable the queue.</data>
 	<data key="application.requesttimeout">Request timeout</data>
 	<data key="application.requesttimeoutdescription">Sets the amount of time the engine will wait for a request to finish before a request timeout will be raised. This means that the execution of the request will be stopped. This setting can be overridden using the “cfsetting" tag or script equivalent.</data>
 	<data key="request.description">Settings that affect the execution of a request.</data>
-		
+
 
 <data key="application.scriptprotectdescription">The configuration of Script protect, secures your system from &quot;cross-site scripting&quot;</data>
 	<data key="application.scriptprotect">Script-protect</data>
