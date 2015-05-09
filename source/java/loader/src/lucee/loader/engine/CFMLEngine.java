@@ -18,6 +18,7 @@
  */
 package lucee.loader.engine;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.instrument.Instrumentation;
@@ -321,7 +322,7 @@ public interface CFMLEngine {
 	 * @return
 	 * @throws ServletException 
 	 */
-	public PageContext createPageContext(String host, String scriptName, String queryString
+	public PageContext createPageContext(File contextRoot, String host, String scriptName, String queryString
 			, Cookie[] cookies,Map<String, Object> headers,Map<String, String> parameters, 
 			Map<String, Object> attributes, OutputStream os,long timeout,boolean register) throws ServletException;
 	
@@ -332,7 +333,7 @@ public interface CFMLEngine {
 	 */
 	public void releasePageContext(PageContext pc, boolean unregister);
 	
-	public ConfigWeb createConfig(String host, String scriptName) throws ServletException;
+	public ConfigWeb createConfig(File contextRoot, String host, String scriptName) throws ServletException;
 
 	public VideoUtil getVideoUtil();
 

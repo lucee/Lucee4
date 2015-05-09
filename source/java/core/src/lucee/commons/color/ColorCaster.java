@@ -60,6 +60,7 @@ public final class ColorCaster {
 		Map<String, Object> attributes=new HashMap();
 		
 		PageContext pc = engine.createPageContext(
+				null,
 				 "localhost" // host
 				,"/index.cfm" // script name
 				,"test=1" // query string

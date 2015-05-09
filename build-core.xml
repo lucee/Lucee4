@@ -9,6 +9,8 @@
 
   <property name="srcLoader" location="source/java/loader/src/"/>
   <property name="srcCore" location="source/java/core/src/"/>
+  <property name="binCore" location="source/java/core/bin/"/>
+  <property name="srcCFML" location="source/cfml"/>
   <property name="srcDebug" location="source/java/debug/src/"/>
   <property name="srcInst" location="source/java/instrumentation/src/"/>
   <property name="lib" location="source/java/libs/"/>
@@ -131,7 +133,58 @@
   </target>
 -->
   
-  <target name="agent" depends="init" description="create external-agent  jar used as backup when dynamic agent fails" >
+  <target name="copyDeployFiles" depends="init" description="copy files from source/cfml to source/java/core/src/resource">
+
+    <copy todir="${srcCore}/resource/context/">
+      <fileset dir="${srcCFML}/context/">
+        <include name="*.cfm"/>
+        <include name="*.cfc"/>
+        <include name="*.lucee"/>
+        <include name="*.xml"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${srcCore}/resource/context/admin/resources/language/">
+      <fileset dir="${srcCFML}/context/admin/resources/language/">
+        <include name="*.cfm"/>
+        <include name="*.cfc"/>
+        <include name="*.lucee"/>
+        <include name="*.xml"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${srcCore}/resource/context/gateway">
+      <fileset dir="${srcCFML}/context/gateway">
+        <include name="*.cfm"/>
+        <include name="*.cfc"/>
+        <include name="*.lucee"/>
+        <include name="*.xml"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${srcCore}/resource/context/templates/error">
+      <fileset dir="${srcCFML}/context/templates/error">
+        <include name="*.cfm"/>
+        <include name="*.cfc"/>
+        <include name="*.lucee"/>
+        <include name="*.xml"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${srcCore}/resource/context/admin/plugin">
+      <fileset dir="${srcCFML}/context/admin/plugin">
+        <include name="**/*.cfm"/>
+        <include name="**/*.cfc"/>
+        <include name="**/*.lucee"/>
+        <include name="**/*.xml"/>
+      </fileset>
+    </copy>
+
+
+
+  </target>
+
+  <target name="agent" depends="copyDeployFiles" description="create external-agent  jar used as backup when dynamic agent fails" >
 
 
     <!-- compie the source -->
@@ -229,7 +282,7 @@
   </target>
 
 
-  <target name="basic" depends="_core" description="generate the loader jar" >
+  <target name="buildJars" depends="_core" description="generate the loader jar" >
     
     <!-- generates a jar from the core -->
     <jar 
@@ -246,9 +299,66 @@
       jarfile="${dist}/lucee.jar" 
       manifest="${srcLoader}/META-INF/MANIFEST.MF"/>
 
+  </target>
+
+
+
+  <target name="buildArchive" depends="buildJars">
+
+    <!-- first we copy the jars in place otherwise, Lucee downloads them  -->
+    <copy todir="${temp}/archive/base/lucee-server/bundles">
+        <fileset dir="${lib}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </copy>
+    
+    <!-- build the lucee-context.lar -->
+    <java classname="org.apache.tools.ant.launch.Launcher" dir="." fork="true" failonerror="true">
+      <classpath path="${java.class.path}">
+          <fileset dir="dist">
+            <include name="**/lucee.jar" />
+          </fileset>
+          <fileset dir="source/java/libs">
+            <include name="**/javax.servlet.jar" />
+            <include name="**/org-apache-felix-main-*.jar" />
+          </fileset>
+      </classpath>
+
+      <arg value="-f"/>
+      <arg value="build-create-archive.xml"/>
+      <jvmarg value="-Dlucee.base.dir=${temp}/archive/base"/>
+      <jvmarg value="-Dlucee.web.dir=${temp}/archive/webroot"/>
+
+    </java>
+
+
+<!-- now we have to build the lucee.jar again, this time with the lucee-context.lar -->
+    <!-- copy the lucee-context.lar -->
+    <copy file="${temp}/archive/lucee-context.lar" tofile="${temp}/core/resource/context/lucee-context.lar"/> 
+
+    <!-- generates a jar from the core -->
+    <jar 
+        basedir="${temp}/core" 
+        jarfile="${temp}/loader/core/core.lco" 
+        manifest="${temp}/core/META-INF/MANIFEST.MF"/> 
+    
+    <!-- copy the core to the loader -->
+    <copy file="${temp}/loader/core/core.lco" tofile="${dist}/${version}.lco"/> 
+
+    <!-- genrates the jar from the loader -->
+    <jar 
+      basedir="${temp}/loader" 
+      jarfile="${dist}/lucee.jar" 
+      manifest="${srcLoader}/META-INF/MANIFEST.MF"/>
+
+  </target>
+
+<target name="basic" depends="buildArchive" description="generate the loader jar" >
+    
     <!-- clean up -->
     <delete dir="${temp}"/>
   </target>
+
 
 
   <target name="dummy" depends="init" description="generate the core dummy, used for the debug project to simulate a core bundle" >

@@ -20,6 +20,7 @@ package lucee.runtime.engine;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,6 +39,7 @@ import java.util.Properties;
 import java.util.TimeZone;
 
 import javax.script.ScriptEngineFactory;
+import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -332,7 +334,7 @@ public final class CFMLEngineImpl implements CFMLEngine {
     		RefBoolean isCustomSetting=new RefBooleanImpl();
             Resource configDir=getConfigDirectory(sg,configServer,countExistingContextes,isCustomSetting);
             
-            CFMLFactoryImpl factory=new CFMLFactoryImpl(this);
+            CFMLFactoryImpl factory=new CFMLFactoryImpl(this,sg);
             ConfigWebImpl config=XMLConfigWebFactory.newInstance(factory,configServer,configDir,isCustomSetting.toBooleanValue(),sg);
             factory.setConfig(config);
             return factory;
@@ -356,8 +358,10 @@ public final class CFMLEngineImpl implements CFMLEngine {
     	isCustomSetting.setValue(true);
     	ServletContext sc=sg.getServletContext();
         String strConfig=sg.getInitParameter("configuration");
-        if(strConfig==null)strConfig=sg.getInitParameter("lucee-web-directory");
-        if(strConfig==null) {
+        if(StringUtil.isEmpty(strConfig))strConfig=sg.getInitParameter("lucee-web-directory");
+        if(StringUtil.isEmpty(strConfig))strConfig=System.getProperty("lucee.web.dir");
+        
+        if(StringUtil.isEmpty(strConfig)) {
         	isCustomSetting.setValue(false);
         	strConfig="{web-root-directory}/WEB-INF/lucee/";
         }
@@ -414,17 +418,21 @@ public final class CFMLEngineImpl implements CFMLEngine {
             	try {
     				configDir.createDirectory(true);
     			} 
-            	catch (IOException e) {}
-        		
+            	catch (IOException e) {}	
         	}
-        	
         }
-        
-        
-        
-        
         return configDir;
     }
+    
+    private File getDirectoryByProp(String name) {
+		String value=System.getProperty(name);
+		if(Util.isEmpty(value,true)) return null;
+		
+		File dir=new File(value);
+		dir.mkdirs();
+		if (dir.isDirectory()) return dir;
+		return null;
+	}
     
     private static void copyRecursiveAndRename(Resource src,Resource trg) throws IOException {
 	 	if(!src.exists()) return ;
@@ -984,18 +992,18 @@ public final class CFMLEngineImpl implements CFMLEngine {
 	}
 
 	@Override
-	public PageContext createPageContext(String host, String scriptName, String queryString
+	public PageContext createPageContext(File contextRoot, String host, String scriptName, String queryString
 			, Cookie[] cookies,Map<String, Object> headers,Map<String, String> parameters, 
 			Map<String, Object> attributes, OutputStream os, long timeout, boolean register) throws ServletException {
-		return PageContextUtil.getPageContext(host, scriptName, queryString, cookies, headers, parameters, attributes, os,register,timeout,false);
+		return PageContextUtil.getPageContext(contextRoot,host, scriptName, queryString, cookies, headers, parameters, attributes, os,register,timeout,false);
 	}
 	
 	@Override
-	public ConfigWeb createConfig(String host, String scriptName) throws ServletException {
+	public ConfigWeb createConfig(File contextRoot,String host, String scriptName) throws ServletException {
 		// TODO do a mored rect approach
 		PageContext pc = null;
 		try{
-			pc = PageContextUtil.getPageContext(host,scriptName, null, null, null, null, null, null,false,-1,false);
+			pc = PageContextUtil.getPageContext(contextRoot,host,scriptName, null, null, null, null, null, null,false,-1,false);
 			return pc.getConfig();
 		}
 		finally{

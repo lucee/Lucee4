@@ -91,10 +91,11 @@ public class PageContextUtil {
 		return result;
 	}
 
-	public static PageContext getPageContext(String host, String scriptName, String queryString
+	public static PageContext getPageContext(File contextRoot, String host, String scriptName, String queryString
 			, Cookie[] cookies,Map<String, Object> headers,Map<String, String> parameters, 
 			Map<String, Object> attributes, OutputStream os, boolean register, long timeout, boolean ignoreScopes) throws ServletException {
 		
+		if(contextRoot==null)contextRoot=new File(".");
 		
 		// Engine
 		CFMLEngine engine=null;
@@ -107,7 +108,7 @@ public class PageContextUtil {
 		
 		
 		// Request
-		HttpServletRequest req = CreationImpl.getInstance(engine).createHttpServletRequest(new File("."), host, scriptName, queryString,
+		HttpServletRequest req = CreationImpl.getInstance(engine).createHttpServletRequest(contextRoot, host, scriptName, queryString,
 				cookies, new HashMap<String, Object>(),
 				new HashMap<String, String>(), new HashMap<String, Object>(),
 				null); 

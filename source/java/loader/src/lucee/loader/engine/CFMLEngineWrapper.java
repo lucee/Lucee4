@@ -18,6 +18,7 @@
  */
 package lucee.loader.engine;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.instrument.Instrumentation;
@@ -345,11 +346,11 @@ public class CFMLEngineWrapper implements CFMLEngine {
 	}
 
 	@Override
-	public PageContext createPageContext(String host, String scriptName,
+	public PageContext createPageContext(File contextRoot,String host, String scriptName,
 			String queryString, Cookie[] cookies, Map<String, Object> headers,
 			Map<String, String> parameters, Map<String, Object> attributes,
 			OutputStream os, long timeout, boolean register) throws ServletException {
-		return engine.createPageContext(host, scriptName, queryString, cookies, headers, parameters, attributes, os,timeout,register);
+		return engine.createPageContext(contextRoot,host, scriptName, queryString, cookies, headers, parameters, attributes, os,timeout,register);
 	}
 
 	@Override
@@ -358,8 +359,8 @@ public class CFMLEngineWrapper implements CFMLEngine {
 	}
 
 	@Override
-	public ConfigWeb createConfig(String host, String scriptName) throws ServletException {
-		return engine.createConfig(host, scriptName);
+	public ConfigWeb createConfig(File contextRoot, String host, String scriptName) throws ServletException {
+		return engine.createConfig(contextRoot,host, scriptName);
 	}
 
 	@Override
