@@ -21,6 +21,9 @@ lucee-java/lucee-core/.DS_Store
 lucee-java/lucee-core/src/resource/library/tag/.DS_Store
 lucee-java/lucee-core/bin/.DS_Store
 lucee-cfml/lucee-admin/admin2/
+
+tests/testcases/todo/
+
 /*.project
 /dist
 /legacy
