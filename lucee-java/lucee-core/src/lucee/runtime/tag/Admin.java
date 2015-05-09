@@ -241,13 +241,13 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     private ConfigWebAdmin admin;
     private ConfigImpl config=null;
     
-    private static final ResourceFilter FILTER_CFML_TEMPLATES=new LogResourceFilter(
+    private static final ResourceFilter FILTER_CFML_TEMPLATES=
         new OrResourceFilter(new ResourceFilter[]{
                 new DirectoryResourceFilter(),
                 new ExtensionResourceFilter("cfm"),
                 new ExtensionResourceFilter("cfc"),
                 new ExtensionResourceFilter("cfml")
-        }));
+        });
 	private AdminSync adminSync;
 	
     
