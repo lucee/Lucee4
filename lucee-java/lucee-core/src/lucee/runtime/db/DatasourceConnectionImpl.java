@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import lucee.commons.lang.StringUtil;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.exp.PageException;
@@ -121,8 +122,8 @@ public final class DatasourceConnectionImpl implements DatasourceConnection,Task
 	public static boolean equals(DatasourceConnection left,DatasourceConnection right) {
 		
 		if(!left.getDatasource().equals(right.getDatasource())) return false;
-		return left.getUsername().equals(right.getUsername()) && left.getPassword().equals(right.getPassword());
-		
+		return StringUtil.emptyIfNull(left.getUsername()).equals(StringUtil.emptyIfNull(right.getUsername())) 
+			&& StringUtil.emptyIfNull(left.getPassword()).equals(StringUtil.emptyIfNull(right.getPassword()));
 	}
 	
 	
