@@ -266,7 +266,6 @@ For testing
 				for(i=arrayLen(matches);i>=1;i--){
 					match=trim(matches[i]);
 					nbr=trim(mid(match,8,len(match)-8));
-					dump(nbr);
 					content=replace(content,match,'<a target="_blank" href="http://issues.lucee.org/browse/LDEV-'&nbr&'">##'& nbr & '</a>',"all");
 				}
 
