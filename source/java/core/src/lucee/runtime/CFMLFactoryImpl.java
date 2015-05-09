@@ -27,6 +27,7 @@ import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
 import javax.servlet.ServletRequest;
@@ -38,6 +39,7 @@ import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspEngineInfo;
 
 import lucee.aprint;
+import lucee.cli.servlet.HTTPServletImpl;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
@@ -48,6 +50,7 @@ import lucee.loader.engine.CFMLEngine;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.config.ConfigWebImpl;
+import lucee.runtime.config.Constants;
 import lucee.runtime.engine.CFMLEngineImpl;
 import lucee.runtime.engine.JspEngineInfoImpl;
 import lucee.runtime.engine.ThreadLocalPageContext;
@@ -81,15 +84,17 @@ public final class CFMLFactoryImpl extends CFMLFactory {
     private final Map<Integer,PageContextImpl> runningPcs=new ConcurrentHashMap<Integer, PageContextImpl>();
     int idCounter=1;
     private ScopeContext scopeContext=new ScopeContext(this);
-    private HttpServlet servlet;
+    private HttpServlet _servlet;
 	private URL url=null;
 	private CFMLEngineImpl engine;
 	private ArrayList<String> cfmlExtensions;
 	private ArrayList<String> luceeExtensions;
+	private ServletConfig servletConfig;
 
-	public CFMLFactoryImpl(CFMLEngineImpl engine) {
+	public CFMLFactoryImpl(CFMLEngineImpl engine, ServletConfig sg) {
 		this.engine=engine; 
 		if(engine==null)aprint.ds();
+		this.servletConfig=sg;
 	}
     
     /**
@@ -156,11 +161,11 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 				boolean autoflush,boolean register2Thread,boolean isChild,long timeout,boolean register2RunningThreads,boolean ignoreScopes) {
 		        PageContextImpl pc; 
 				synchronized (pcs) {
-		            if(pcs.isEmpty()) pc=new PageContextImpl(scopeContext,config,idCounter++,servlet);
+					if(pcs.isEmpty()) pc=new PageContextImpl(scopeContext,config,idCounter++,servlet);
 		            else pc=((PageContextImpl)pcs.pop());
 		            if(timeout>0)pc.setRequestTimeout(timeout);
 		            if(register2RunningThreads)runningPcs.put(Integer.valueOf(pc.getId()),pc);
-		            this.servlet=servlet;
+		            this._servlet=servlet;
 		            if(register2Thread)ThreadLocalPageContext.register(pc);
 		    		
 		        }
@@ -341,7 +346,8 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 	 */
 	@Override
 	public HttpServlet getServlet() {
-		return servlet;
+		if(_servlet==null)_servlet=new HTTPServletImpl(servletConfig, servletConfig.getServletContext(), servletConfig.getServletName());;
+		return _servlet;
 	}
 
 	public void setConfig(ConfigWebImpl config) {
@@ -478,21 +484,27 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 	private void _initExtensions() {
 		cfmlExtensions=new ArrayList<String>();
 		luceeExtensions=new ArrayList<String>();
-		
-		Iterator<?> it = servlet.getServletContext().getServletRegistrations().entrySet().iterator();
-		Entry<String,? extends ServletRegistration> e;
-		String cn;
-		while(it.hasNext()){
-    		e = (Entry<String, ? extends ServletRegistration>) it.next();
-    		cn=e.getValue().getClassName();
-    		
-    		if(cn!=null && cn.indexOf("LuceeServlet")!=-1) {
-    			setExtensions(luceeExtensions,e.getValue().getMappings().iterator());
-    		}
-    		else if(cn!=null && cn.indexOf("CFMLServlet")!=-1) {
-				setExtensions(cfmlExtensions,e.getValue().getMappings().iterator());
-			}
-    	}
+		try {
+			
+			Iterator<?> it = getServlet().getServletContext().getServletRegistrations().entrySet().iterator();
+			Entry<String,? extends ServletRegistration> e;
+			String cn;
+			while(it.hasNext()){
+	    		e = (Entry<String, ? extends ServletRegistration>) it.next();
+	    		cn=e.getValue().getClassName();
+	    		
+	    		if(cn!=null && cn.indexOf("LuceeServlet")!=-1) {
+	    			setExtensions(luceeExtensions,e.getValue().getMappings().iterator());
+	    		}
+	    		else if(cn!=null && cn.indexOf("CFMLServlet")!=-1) {
+					setExtensions(cfmlExtensions,e.getValue().getMappings().iterator());
+				}
+	    	}
+		}
+		catch(Throwable t){
+			ArrayUtil.addAll(cfmlExtensions,Constants.getCFMLExtensions());
+			ArrayUtil.addAll(luceeExtensions,Constants.getLuceeExtensions());
+		}
 	}
 
 	private void setExtensions(ArrayList<String> extensions, Iterator<String> it) {

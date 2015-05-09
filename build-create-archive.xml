@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="all" basedir="." name="Lucee">
+
+  <property name="srcCFML" location="source/cfml/context"/>
+  <property name="temp" location="temp/archive"/>
+
+<target name="all">
+  <script language="CFML">
+    <![CDATA[
+    echo("src:"&srcCFML);
+    // set a passwoed for the admin
+    admin 
+		action="updatePassword"
+		type="web"
+		oldPassword=""
+		newPassword="webweb";
+
+	// set a mapping
+	admin 
+		action="updateMapping"
+		type="web"
+		password="webweb"
+		virtual="/context"
+		physical="#srcCFML#"
+		toplevel="true"
+		archive=""
+		primary="physical"
+		trusted="no";
+	
+
+	// create an archive from the mapping
+	admin 
+		action="createArchive"
+		type="web"
+		password="webweb"
+		
+		file="#temp#/lucee-context.lar"
+		virtual="/context"
+		addCFMLFiles="true"
+		addNonCFMLFiles="true";
+
+
+    ]]>
+  </script>
+</target>
+</project>

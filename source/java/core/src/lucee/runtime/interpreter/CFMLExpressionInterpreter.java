@@ -233,7 +233,7 @@ public class CFMLExpressionInterpreter {
     		this.config = (ConfigImpl)ThreadLocalPageContext.getConfig();
         	if(config==null) {
         		try {
-					config=(ConfigImpl)CFMLEngineFactory.getInstance().createConfig("localhost", "/index.cfm");
+					config=(ConfigImpl)CFMLEngineFactory.getInstance().createConfig(null,"localhost", "/index.cfm");// TODO set a context root
 				} 
         		catch (Exception e){}
         	}

@@ -230,6 +230,9 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 			initParam = config.getInitParameter("lucee-server-dir");
 		if (Util.isEmpty(initParam))
 			initParam = config.getInitParameter("lucee-server");
+		if (Util.isEmpty(initParam))
+			initParam = System.getProperty("lucee.server.dir");
+		
 		initParam = parsePlaceHolder(removeQuotes(initParam, true));
 		try {
 			if (!Util.isEmpty(initParam)) {
@@ -880,8 +883,11 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 		if(luceeServerRoot==null) readInitParam(config);
 		if (luceeServerRoot != null) return luceeServerRoot;
 		
+		File root=getDirectoryByProp("lucee.base.dir"); // directory defined by the caller
+		
+		
 		// get the root directory
-		File root=getDirectoryByProp("jboss.server.home.dir"); // Jboss/Jetty|Tomcat 
+		if(root==null)root=getDirectoryByProp("jboss.server.home.dir"); // Jboss/Jetty|Tomcat 
 		if(root==null)root=getDirectoryByProp("jonas.base"); // Jonas
 		if(root==null)root=getDirectoryByProp("catalina.base"); // Tomcat
 		if(root==null)root=getDirectoryByProp("jetty.home"); // Jetty
@@ -926,11 +932,8 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	}
 	
 	private static void copyRecursiveAndRename(File src,File trg) throws IOException {
-		System.out.println("src:"+src);	
-		System.out.println("trg:"+trg);	
 		if(!src.exists()) return ;
 			
-		System.out.println("exists:");	
 		if(src.isDirectory()) {
 				if(!trg.exists())trg.mkdirs();
 				
@@ -943,7 +946,6 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 				if(trg.getName().endsWith(".rc") || trg.getName().startsWith(".")) {
 					return;
 				}
-				System.out.println("trg2:"+trg);	
 					
 				if(trg.getName().equals("railo-server.xml")) {
 					trg=new File(trg.getParentFile(),"lucee-server.xml");

@@ -17,6 +17,7 @@
  */
 package lucee.runtime.jsr223;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -172,27 +173,12 @@ public class ScriptEngineImpl implements ScriptEngine {
 	
 	private PageContext createPageContext() {
 		try {
-			return PageContextUtil.getPageContext("localhost", "/index.cfm", "", null, null, null, null, System.out, false,Long.MAX_VALUE,true);
+			File root = new File(factory.engine.getCFMLEngineFactory().getResourceRoot(),"jsr223-webroot");
+			return PageContextUtil.getPageContext(root,"localhost", "/index.cfm", "", null, null, null, null, System.out, false,Long.MAX_VALUE,true);
 		}
-		catch (ServletException e) {
+		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		
-		/*Resource dir = SystemUtil.getTempDirectory();
-		HttpServletRequest req = ThreadUtil.createHttpServletRequest(dir, "localhost", "index.cfm", "", null, null, null, null, null);
-		HttpServletResponse rsp = ThreadUtil.createHttpServletResponse(System.out);
-		if(cfmlFactory==null) {
-			ServletConfig sc = factory.engine.getServletConfigs()[0];
-			try {
-				cfmlFactory=factory.engine.getCFMLFactory(sc, req);
-			} catch (ServletException e) {
-				throw new RuntimeException(e);
-			}
-		}
-		PageContext pc = cfmlFactory.getLuceePageContext(
-				cfmlFactory.getServlet(), 
-        		req, rsp, null, false, -1, false,false);
-		return pc;*/
 	}
 	
 
