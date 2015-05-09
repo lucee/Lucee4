@@ -71,42 +71,11 @@ public class LuceeAdapter extends ServiceAdapter implements EngineChangeListener
 	 * @see flex.messaging.services.ServiceAdapter#invoke(flex.messaging.messages.Message)
 	 */
 	public Object invoke(Message message){
-		
 		try {
-			
 			if(util==null){
 				util = (BlazeDS)getEngine().getBlazeDSUtil();
 				util.init(properties);
 			}
-			
-			
-			//RemotingDestination remotingDestination = (RemotingDestination)getDestination();
-	        //FactoryInstance factoryInstance = remotingDestination.getFactoryInstance();
-
-			
-			/*
-	        System.out.println("source:"+factoryInstance.getSource());
-	        System.out.println("scope:"+factoryInstance.getScope());
-	        System.out.println("properties:");
-	        System.out.println(factoryInstance.getProperties());
-
-	        System.out.println("dest:"+remotingMessage.getDestination());
-	        System.out.println("src:"+remotingMessage.getSource());
-	        System.out.println("mid:"+remotingMessage.getMessageId());
-	        System.out.println("operation:"+remotingMessage.getOperation());
-	        System.out.println("params:");
-	        System.out.println(remotingMessage.getParameters().toArray());
-	        
-	        System.out.println("id:"+remotingDestination.getId());
-	        System.out.println("scope:"+remotingDestination.getScope());
-	        System.out.println("src:"+remotingDestination.getSource());
-	        System.out.println("channel:");
-	        System.out.println(remotingDestination.getChannels());
-	        */
-	        
-			
-			
-			
 			return util.invoke(this,message);
 		} 
 		catch (Exception e) {e.printStackTrace();
@@ -121,7 +90,6 @@ public class LuceeAdapter extends ServiceAdapter implements EngineChangeListener
     private CFMLEngine getEngine() {
     	if(engine==null){
         	try {CFMLEngineFactory.getInstance();
-				//engine=CFMLEngineFactory.getInstance(FlexContext.getServletConfig());
 				engine=CFMLEngineFactory.getInstance(FlexContext.getServletConfig(),this);
 			} 
         	catch (Throwable e) {

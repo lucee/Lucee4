@@ -60,8 +60,6 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 	public byte[] compile(ConfigImpl config,PageSource source, TagLib[] tld, FunctionLib[] fld, 
         Resource classRootDir, String className) throws TemplateException, IOException {
 		//synchronized(source){
-			//print.out("src:"+source.getDisplayPath());
-    		//print.dumpStack();
 			Resource classFile=classRootDir.getRealResource(className+".class");
 			Resource classFileDirectory=classFile.getParentResource();
 	        byte[] barr = null;
