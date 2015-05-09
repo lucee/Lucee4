@@ -145,7 +145,6 @@ public final class FeedHandler extends DefaultHandler {
 			name="dc_"+name;
 			hasDC=true;
 		}
-		//print.o("iniside("+deep+"):"+name+"->"+uri);
 		
 		
 		inside = KeyImpl.getInstance(name);

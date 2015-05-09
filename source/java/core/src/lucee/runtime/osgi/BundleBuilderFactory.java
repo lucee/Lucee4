@@ -451,7 +451,6 @@ public class BundleBuilderFactory {
 			if("META-INF/IDRSIG.DSA".equalsIgnoreCase(entry.getName()) 
 					|| "META-INF/IDRSIG.SF".equalsIgnoreCase(entry.getName())
 					|| "META-INF/INDEX.LIST".equalsIgnoreCase(entry.getName())) {
-				//print.e(zipFile+"->"+entry.getName());
 				return;
 			}
 			

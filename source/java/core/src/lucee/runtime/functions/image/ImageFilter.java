@@ -287,9 +287,8 @@ public class ImageFilter {
 			sb.append(");\n");
 			sb.append("		}\n");
 		}
-		//else print.e(className+"->"+method);
-		
 	}
+
 	private static void arg(String name, Class param, Method method, StringBuilder sb, int methodIndex) {
 		
 		

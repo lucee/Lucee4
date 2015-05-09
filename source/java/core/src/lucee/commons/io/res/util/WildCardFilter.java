@@ -73,8 +73,7 @@ public class WildCardFilter implements ResourceAndResourceNameFilter {
 
 	@Override
 	public boolean accept(Resource parent, String name) {
-		//print.out("accept:"+name);
-        return matcher.matches(ignoreCase?StringUtil.toLowerCase(name):name, pattern);
+		return matcher.matches(ignoreCase?StringUtil.toLowerCase(name):name, pattern);
 	}
 	public boolean accept(String name) {
 		return matcher.matches(ignoreCase?StringUtil.toLowerCase(name):name, pattern);
