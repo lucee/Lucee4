@@ -372,7 +372,7 @@ und Optimierungen innerhalb ihrer Version einspielen.</data>
 	<data key="application.ConcurrentRequestMaxDesc">Die maximale Anzahl an parallel laufenden Request die erlaubt sind, bevor Lucee beginnt die Requests in eine Warteschlange zu stellen.</data>
 	<data key="application.ConcurrentRequestTimeout">Timeout</data>
 	<data key="application.ConcurrentRequestTimeoutError">Timeout muss eine Zahl sein</data>
-	<data key="application.ConcurrentRequestTimeoutDesc">Die Zeit in Sekunden die ein Request ist in der Warteschlange verbringt. Wenn das Timeout erreicht ist, wird der request mit einer Exception abgewiesen. Die Zahl 0 beteudet kein Timeout.</data>
+	<data key="application.ConcurrentRequestTimeoutDesc">Die Zeit in Sekunden die ein Request ist in der Warteschlange verbringt. Wenn das Timeout erreicht ist, wird der request mit einer Exception abgewiesen. Falls 0 Sekunden gesetzt ist, wird das Request Timeout verwendet.</data>
 
 	<data key="application.ConcurrentRequestEnable">Einschalten</data>
 	<data key="application.ConcurrentRequestEnableDesc">Die Warteschlange einschalten.</data>
