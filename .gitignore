@@ -17,6 +17,8 @@ source/java/instrumentation/bin/*
 source/java/libs/bin
 source/java/loader/build
 
+tests/testcases/todo/
+
 db.log
 db.properties
 db.script
