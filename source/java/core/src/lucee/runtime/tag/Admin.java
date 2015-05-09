@@ -249,11 +249,11 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     private XMLConfigAdmin admin;
     private ConfigImpl config;
     
-    private static final ResourceFilter FILTER_CFML_TEMPLATES=new LogResourceFilter(
+    private static final ResourceFilter FILTER_CFML_TEMPLATES=
         new OrResourceFilter(new ResourceFilter[]{
                 new DirectoryResourceFilter(),
                 new ExtensionResourceFilter(Constants.getExtensions())
-        }));
+        });
 	private static final Key FRAGMENT = KeyImpl.init("fragment");
 	private static final Key HEADERS = KeyImpl.init("headers");
 	private static final Key SYMBOLIC_NAME = KeyImpl.init("symbolicName");
