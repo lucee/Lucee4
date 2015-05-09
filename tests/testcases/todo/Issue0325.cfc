@@ -20,15 +20,8 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	
 	variables.curr=getDirectoryFromPath(getCurrentTemplatePath());
 
-	public void function testCreateObjectJava(){
-		local.classFile=curr&"Issue0325/issue325/Test325.class";
-		assertTrue(fileExists(classFile)); // just to make sure the path is valid
-		createObject("java","issue325.Test325",classFile);
-	}
-	public void function testCreateObjectJavaNoPackage(){
-		local.classFile=curr&"Issue0325/issue325/Test325.class";
-		assertTrue(fileExists(classFile)); // just to make sure the path is valid
-		createObject("java","Test325",classFile);
+	public void function testCreateObjectJavaNoPackageX(){
+		createObject("java","issue325.Test325",curr&"Issue0325");
 	}
 
 } 
