@@ -353,16 +353,6 @@ public class UDFUtil {
 		func.appendRow(1,new SimpleDumpData("arguments"),atts);
 		func.appendRow(1,new SimpleDumpData("return type"),new SimpleDumpData(udf.getReturnTypeAsString()));
 		
-		//boolean hasLabel=!StringUtil.isEmpty(udf.getDisplayName());//displayName!=null && !displayName.equals("");
-		/*boolean hasHint=!StringUtil.isEmpty(hint) && !hint.equals(desc);//hint!=null && !hint.equals("");
-		//print.e(type+"->"+hasLabel+":"+hasHint);
-		if(hasHint) {
-			DumpTable box = new DumpTable("#ffffff","#cccccc","#000000");
-			box.setTitle(!StringUtil.isEmpty(label)?udf.getDisplayName():udf.getFunctionName());
-			box.appendRow(0,new SimpleDumpData(udf.getHint()));
-			box.appendRow(0,func);
-			return box;
-		}*/
 		return func;
 	}
 	
