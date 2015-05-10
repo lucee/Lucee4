@@ -34,6 +34,8 @@ import lucee.runtime.type.Collection;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.ReadOnlyStruct;
 import lucee.runtime.type.dt.DateTimeImpl;
+import lucee.runtime.type.scope.util.EnvStruct;
+import lucee.runtime.type.scope.util.SystemPropStruct;
 import lucee.runtime.type.util.KeyConstants;
 
 
@@ -195,6 +197,13 @@ public final class ServerImpl extends ScopeSupport implements Server,SharedScope
 			
 			
 			super.setEL (KeyConstants._servlet,servlet);
+			
+			
+			ReadOnlyStruct system=new ReadOnlyStruct();
+			system.setEL(KeyConstants._properties,SystemPropStruct.getInstance());
+			system.setEL(KeyConstants._environment,EnvStruct.getInstance());
+			system.setReadOnly(true);
+			super.setEL (KeyConstants._system,system);
 	    
 	}
 
