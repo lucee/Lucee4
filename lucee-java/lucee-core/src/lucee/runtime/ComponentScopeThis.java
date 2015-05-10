@@ -21,6 +21,7 @@ package lucee.runtime;
 import java.util.Iterator;
 import java.util.Set;
 
+import lucee.commons.lang.CFTypes;
 import lucee.runtime.component.Member;
 import lucee.runtime.dump.DumpData;
 import lucee.runtime.dump.DumpProperties;
@@ -32,6 +33,7 @@ import lucee.runtime.type.UDFPlus;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.util.ComponentUtil;
 import lucee.runtime.type.util.KeyConstants;
+import lucee.runtime.type.util.MemberUtil;
 import lucee.runtime.type.util.StructSupport;
 import lucee.runtime.type.util.StructUtil;
 
@@ -283,9 +285,11 @@ public final class ComponentScopeThis extends StructSupport implements Component
     	Member m = component.getMember(access, key, false,false);
 		if(m!=null) {
 			if(m instanceof UDFPlus) return ((UDFPlus)m).call(pc,key, arguments, false);
-	        throw ComponentUtil.notFunction(component, key, m.getValue(),access);
+			return MemberUtil.call(pc, this, key, arguments, CFTypes.TYPE_STRUCT, "struct");
+			//throw ComponentUtil.notFunction(component, key, m.getValue(),access);
 		}
-		throw ComponentUtil.notFunction(component, key, null,access);
+		return MemberUtil.call(pc, this, key, arguments, CFTypes.TYPE_STRUCT, "struct");
+		//throw ComponentUtil.notFunction(component, key, null,access);
 	}
 
     /*public Object callWithNamedValues(PageContext pc, String key, Struct args) throws PageException {
@@ -296,9 +300,11 @@ public final class ComponentScopeThis extends StructSupport implements Component
     	Member m = component.getMember(access, key, false,false);
 		if(m!=null) {
 			if(m instanceof UDFPlus) return ((UDFPlus)m).callWithNamedValues(pc,key, args, false);
-	        throw ComponentUtil.notFunction(component, key, m.getValue(),access);
+			return MemberUtil.callWithNamedValues(pc, this, key, args, CFTypes.TYPE_STRUCT, "struct");
+			//throw ComponentUtil.notFunction(component, key, m.getValue(),access);
 		}
-		throw ComponentUtil.notFunction(component, key, null,access);
+		return MemberUtil.callWithNamedValues(pc, this, key, args, CFTypes.TYPE_STRUCT, "struct");
+		//throw ComponentUtil.notFunction(component, key, null,access);
 	}
 
     @Override
