@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
@@ -46,6 +47,7 @@ import lucee.runtime.type.it.StringIterator;
 import lucee.runtime.type.it.ValueIterator;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.KeyConstants;
+import lucee.runtime.type.util.MemberUtil;
 import lucee.runtime.type.util.StructUtil;
 
 public class CatchBlockImpl extends StructImpl implements CatchBlock,Castable,Objects{
@@ -393,12 +395,14 @@ public class CatchBlockImpl extends StructImpl implements CatchBlock,Castable,Ob
 			return null;
 		}
 		
-		try{
+		return MemberUtil.call(pc, this, KeyImpl.init(methodName), arguments, CFTypes.TYPE_STRUCT, "struct");
+		
+		/*try{
 			return Reflector.callMethod(obj, methodName, arguments);
 		}
 		catch(PageException e){
 			return Reflector.callMethod(exception, methodName, arguments);
-		}
+		}*/
 	}
 
 	
