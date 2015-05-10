@@ -22,6 +22,7 @@ import java.util.Iterator;
 
 import lucee.commons.collection.MapFactory;
 import lucee.commons.collection.MapPro;
+import lucee.commons.lang.CFTypes;
 import lucee.runtime.component.Member;
 import lucee.runtime.config.NullSupportHelper;
 import lucee.runtime.dump.DumpData;
@@ -42,6 +43,7 @@ import lucee.runtime.type.it.StringIterator;
 import lucee.runtime.type.it.ValueIterator;
 import lucee.runtime.type.util.ComponentUtil;
 import lucee.runtime.type.util.KeyConstants;
+import lucee.runtime.type.util.MemberUtil;
 import lucee.runtime.type.util.StructSupport;
 import lucee.runtime.type.util.StructUtil;
 
@@ -304,7 +306,9 @@ public class ComponentScopeShadow extends StructSupport implements ComponentScop
 		if(m!=null) {
 			if(m instanceof UDFPlus) return ((UDFPlus)m).call(pc,key, arguments, false);
 		}
-		throw ComponentUtil.notFunction(component, key, m!=null?m.getValue():null,access);
+
+		return MemberUtil.call(pc, this, key, arguments, CFTypes.TYPE_STRUCT, "struct");
+		//throw ComponentUtil.notFunction(component, key, m!=null?m.getValue():null,access);
 	}
 
 	/*public Object callWithNamedValues(PageContext pc, String key,Struct args) throws PageException {
@@ -322,9 +326,11 @@ public class ComponentScopeShadow extends StructSupport implements ComponentScop
 		Member m = component.getMember(access, key, false,false);
 		if(m!=null) {
 			if(m instanceof UDFPlus) return ((UDFPlus)m).callWithNamedValues(pc,key, args, false);
-	        throw ComponentUtil.notFunction(component, key, m.getValue(),access);
+			return MemberUtil.callWithNamedValues(pc, this, key, args, CFTypes.TYPE_STRUCT, "struct");
+			//throw ComponentUtil.notFunction(component, key, m.getValue(),access);
 		}
-		throw ComponentUtil.notFunction(component, key, null,access);
+		return MemberUtil.callWithNamedValues(pc, this, key, args, CFTypes.TYPE_STRUCT, "struct");
+		//throw ComponentUtil.notFunction(component, key, null,access);
 	}
     
 	@Override
