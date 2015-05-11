@@ -4281,7 +4281,6 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         	admin.updateLocale(getString("admin",action,"locale"));
 	    	admin.updateTimeZone(getString("admin",action,"timezone"));
 	    	admin.updateTimeServer(getString("admin",action,"timeserver"),useTimeServer);
-	    	admin.updateTimeZone(getString("admin",action,"timezone"));
         }
         finally {
         	 store();
