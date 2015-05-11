@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 
+import lucee.print;
 import lucee.commons.date.TimeZoneUtil;
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.res.Resource;
@@ -1263,6 +1264,7 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 			if(sct!=null) {
 				setTagAttributeDefaultValues(pc,sct);
 			}
+			initDefaultAttributeValues=true;
 		}
 		return super.getTagAttributeDefaultValues(pc,tagClassName);
 	}
@@ -1291,6 +1293,7 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 					if(udf!=null) customTypes.put(e.getKey().getLowerString(), new UDFCustomType(udf));
 				}
 			}
+			initCustomTypes=true;
 		}
 		return customTypes.get(strType.trim().toLowerCase());
 	}
@@ -1300,6 +1303,7 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 		if(!initCachedWithins) {
 			Struct sct = Caster.toStruct(get(component,KeyConstants._cachedWithin,null),null);
 			if(sct!=null) {
+
 				Iterator<Entry<Key, Object>> it = sct.entryIterator();
 				Entry<Key, Object> e;
 				Object v; int k;
@@ -1310,6 +1314,7 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 					if(k!=-1 && !StringUtil.isEmpty(v)) cachedWithins.put(k, v);
 				}
 			}
+			initCachedWithins=true;
 		} 
 		return cachedWithins.get(type);
 	}

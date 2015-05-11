@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.jsp.tagext.BodyContent;
 
+import lucee.print;
 import lucee.commons.lang.CFTypes;
 import lucee.loader.engine.CFMLEngine;
 import lucee.runtime.Component;
@@ -226,7 +227,8 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 
 
     private boolean hasCachedWithin(PageContext pc) {
-		return this.properties.cachedWithin!=null || pc.getCachedWithin(Config.CACHEDWITHIN_FUNCTION)!=null;
+    	return this.properties.cachedWithin!=null || pc.getCachedWithin(Config.CACHEDWITHIN_FUNCTION)!=null;
+    	// Maybe better 	return !StringUtil.isEmpty(this.properties.cachedWithin) || !StringUtil.isEmpty(pc.getCachedWithin(Config.CACHEDWITHIN_FUNCTION));
 	}
     private Object getCachedWithin(PageContext pc) {
 		if(this.properties.cachedWithin!=null) return this.properties.cachedWithin;
@@ -262,9 +264,11 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 	    
 	    try {
 	    	Object rtn = _call(pci,calledName, args, values, doIncludePath);
-	    	String out = bc.getString();
 	    	
-	    	if(ch!=null)ch.set(pc, id,getCachedWithin(pc),new UDFCacheItem(out, rtn,getFunctionName(),getPageSource().getDisplayPath(),System.nanoTime()-start));
+	    	if(ch!=null){
+	    		String out = bc.getString();
+	    		ch.set(pc, id,getCachedWithin(pc),new UDFCacheItem(out, rtn,getFunctionName(),getPageSource().getDisplayPath(),System.nanoTime()-start));
+	    	}
 			// cache.put(id, new UDFCacheEntry(out, rtn),properties.cachedWithin,properties.cachedWithin);
 	    	return rtn;
 		}

@@ -4605,8 +4605,8 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 
 		// cachedwithin 
 		for(int i=0;i<types.length;i++){
-			Object cw = application.getAttribute("cached-within-"+strTypes[i]);
-			if (cw !=null) config.setCachedWithin(types[i], cw);
+			String cw = application.getAttribute("cached-within-"+strTypes[i]);
+			if (!StringUtil.isEmpty(cw,true)) config.setCachedWithin(types[i], cw);
 			else if(hasCS) config.setCachedWithin(types[i],configServer.getCachedWithin(types[i]));
 		}
 		
