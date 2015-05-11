@@ -30,7 +30,7 @@
 <cfset valueEquals(left="#DollarFormat("123.46")#", right="$123.46")>
 <cfset valueEquals(left="#DollarFormat("1.999999")#", right="$2.00")>
 <cfset valueEquals(left="#DollarFormat("1.774")#", right="$1.77")>
-<cfset valueEquals(left="#DollarFormat("1.775")#", right="$1.78")>
+<cfset valueEquals(left="#DollarFormat("1.776")#", right="$1.78")>
 <cftry>
 	<cfset valueEquals(left="#DollarFormat("one Dollar")#", right="$1.00")>
 	<cfset fail("must throw:invalid call of the function dollarFormat, first Argument (number) is invalid, Cant cast String [one Dollar] to a number")>
