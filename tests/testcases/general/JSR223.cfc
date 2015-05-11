@@ -8,15 +8,13 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	
 
 	public void function testGetEngineByName(){
+
 		local.engine =manager.getEngineByName("CFML");
 		assertEquals("cfml",engine.factory.languageName);
 
 		local.engine =manager.getEngineByName("Lucee");
 		assertEquals("lucee",engine.factory.languageName);
 
-		// reference
-		local.engine =manager.getEngineByName("rhino");
-		assertEquals("ECMAScript",engine.factory.languageName);
 
 	}
 
@@ -65,11 +63,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		assertEquals(testValue,engine.get('test'));
 
 		local.engine =manager.getEngineByName("Lucee");
-		engine.put('test',testValue);
-		assertEquals(testValue,engine.get('test'));
-
-		// reference
-		local.engine =manager.getEngineByName("rhino");
 		engine.put('test',testValue);
 		assertEquals(testValue,engine.get('test'));
 	}
