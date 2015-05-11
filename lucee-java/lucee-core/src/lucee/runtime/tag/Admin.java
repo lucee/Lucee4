@@ -4638,7 +4638,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         Struct sct=new StructImpl();
         pageContext.setVariable(getString("admin",action,"returnVariable"),sct);
         sct.set("locale",Caster.toString(config.getLocale()));
-        sct.set("timezone",toStringTimeZone(pageContext.getTimeZone()));
+        sct.set("timezone",toStringTimeZone(config.getTimeZone()));
         sct.set("timeserver",config.getTimeServer());
         sct.set("usetimeserver",config.getUseTimeServer());
 		// replaced with encoding outputsct.set("defaultencoding", config.get DefaultEncoding());
