@@ -33,30 +33,32 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	public void function testUpdateRegional(string timezone, string locale,string timeserver,boolean usetimeserver){
 		var org=admin.getRegional();
 		var timeserver='swisstime.ethz.ch';
-		var timezone='gmt';
+		var timezone='HST';
 		var locale='german (swiss)'
+		try{
+			admin.updateRegional(timezone,locale,timeserver,false);
+			
+			var mod=admin.getRegional();
+			assertEquals(locale,mod.locale);
+			assertEquals(timeserver,mod.timeserver);
+			assertEquals(timezone,mod.timezone);
+			assertEquals(false,mod.usetimeserver);
+			
+			// without optional arguments
+			admin.updateRegional(timezone,locale,timeserver);
+			admin.updateRegional(timezone,locale);
+			admin.updateRegional(timezone);
+			admin.updateRegional();
 		
-		admin.updateRegional(timezone,locale,timeserver,true);
-		
-		var mod=admin.getRegional();
-		assertEquals(locale,mod.locale);
-		assertEquals(timeserver,mod.timeserver);
-		assertEquals(timezone,mod.timezone);
-		assertEquals(true,mod.usetimeserver);
-		
-		// without optional arguments
-		admin.updateRegional(timezone,locale,timeserver);
-		admin.updateRegional(timezone,locale);
-		admin.updateRegional(timezone);
-		admin.updateRegional();
-		
-		// reset
-		admin.updateRegional(org.timezone,org.locale,org.timeserver,org.usetimeserver);
-		
-		
+		}
+		finally {
+			// reset
+			admin.updateRegional(org.timezone,org.locale,org.timeserver,org.usetimeserver);
+			var mod=admin.getRegional();
+		}
 	}
 	
-	public void function testResetRegional(){
+	private void function testResetRegional(){
 		var org=admin.getRegional();
 		admin.resetRegional();
 		
@@ -86,7 +88,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		assertEquals(isStruct(locales),true);
 	}
 	
-	public void function testUpdateCharset(string resourceCharset, string templateCharset,string webCharset){
+	private void function testUpdateCharset(string resourceCharset, string templateCharset,string webCharset){
 		var org=admin.getCharset();
 		var resourceCharset='utf-8';
 		var templateCharset='utf-8';
@@ -108,7 +110,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		
 	}
 	
-	public void function testResetCharset(){
+	private void function testResetCharset(){
 		var org=admin.getCharset();
 		admin.resetCharset();
 		
@@ -122,12 +124,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		assertEquals(isStruct(charset),true);
 		assertEquals(listSort(structKeyList(charset),'textnocase'),'jreCharset,resourceCharset,templateCharset,webCharset');
 
-	}
-	
-	
-	public void function testUpdateJar(){
-		//dump(getmetaData(admin));abort;
-		//admin.updateJar();
 	}
 	
 }
