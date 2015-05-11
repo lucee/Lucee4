@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import lucee.commons.lang.StringUtil;
+import lucee.loader.engine.CFMLEngine;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.exp.ExpressionException;
@@ -45,9 +46,12 @@ import lucee.transformer.library.function.FunctionLibFunctionArg;
 
 public class MemberUtil {
 	
-	private static Map<Short,Map<Collection.Key,FunctionLibFunction>> matches=new HashMap<Short, Map<Collection.Key,FunctionLibFunction>>();
+	private static Map<Short,Map<Collection.Key,FunctionLibFunction>> matchesLucee=new HashMap<Short, Map<Collection.Key,FunctionLibFunction>>();
+	private static Map<Short,Map<Collection.Key,FunctionLibFunction>> matchesCFML=new HashMap<Short, Map<Collection.Key,FunctionLibFunction>>();
 	
 	public static Map<Collection.Key,FunctionLibFunction> getMembers(PageContext pc, short type) {
+		Map<Short, Map<Key, FunctionLibFunction>> matches = 
+				pc.getCurrentTemplateDialect()==CFMLEngine.DIALECT_LUCEE?matchesLucee:matchesCFML;
 		
 		Map<Key, FunctionLibFunction> match = matches.get(type);
 		if(match!=null) return match;
@@ -75,6 +79,7 @@ public class MemberUtil {
 	
 	public static Object call(PageContext pc, Object coll,Collection.Key methodName, Object[] args, short type, String strType) throws PageException {
 		Map<Key, FunctionLibFunction> members = getMembers(pc, type);
+		
 		FunctionLibFunction member=members.get(methodName); 
 		if(member!=null){
 			List<FunctionLibFunctionArg> _args = member.getArg();
