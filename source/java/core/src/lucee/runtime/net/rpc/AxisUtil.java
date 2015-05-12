@@ -132,17 +132,19 @@ public class AxisUtil {
 	public static TypeEntry getContainedElement(TypeEntry type, String name, TypeEntry defaultValue) {
 		if(type==null) return defaultValue;
 		Vector v = type.getContainedElements();
-		Iterator it = v.iterator();
-		ElementDecl ed;
-		String tmp;
-		while(it.hasNext()){
-			ed=(ElementDecl) it.next();
-			if(ed.getQName()==null) continue;
-			tmp=lucee.runtime.type.util.ListUtil.last(ed.getQName().getLocalPart(), '>');
-        	
-			
-			if(tmp.equalsIgnoreCase(name))
-				return ed.getType();
+		if(v!=null) {
+			Iterator it = v.iterator();
+			ElementDecl ed;
+			String tmp;
+			while(it.hasNext()){
+				ed=(ElementDecl) it.next();
+				if(ed.getQName()==null) continue;
+				tmp=lucee.runtime.type.util.ListUtil.last(ed.getQName().getLocalPart(), '>');
+	        	
+				
+				if(tmp.equalsIgnoreCase(name))
+					return ed.getType();
+			}
 		}
 		return defaultValue;
 	}
