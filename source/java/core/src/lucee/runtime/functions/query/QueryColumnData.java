@@ -55,10 +55,7 @@ public class QueryColumnData extends BIF {
 			if(udf!=null)value=udf.call(pc, new Object[]{value}, true);
 			
 			// convert (if necessary)
-			try{
-				value=Caster.castTo(pc, type, column.getTypeAsString(), value);
-			}
-			catch(Throwable t){t.printStackTrace();}
+			value=Caster.castTo(pc, type, column.getTypeAsString(), value,value);
 			
 			arr.append(value);
 		}
