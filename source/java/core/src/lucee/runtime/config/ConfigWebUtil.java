@@ -29,6 +29,7 @@ import java.util.Map.Entry;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
+import lucee.print;
 import lucee.commons.digest.MD5;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
@@ -37,7 +38,6 @@ import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
 import lucee.commons.io.res.util.ResourceClassLoader;
 import lucee.commons.io.res.util.ResourceUtil;
-import lucee.commons.lang.ClassLoaderHelper;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.SystemOut;
@@ -162,6 +162,7 @@ public final class ConfigWebUtil {
     	BundleContext bc = engine.getBundleContext();
     	Log log = config.getLog("application");
     	BundleFile bf;
+    	List<Resource> list=new ArrayList<Resource>();
     	for(int i=0;i<libs.length;i++){
 	    	try {
 	    		bf=BundleFile.newInstance(libs[i]);
@@ -176,17 +177,19 @@ public final class ConfigWebUtil {
 	    			bf=BundleFile.newInstance(libs[i]);
 	    		}
 	    		
-	    		OSGiUtil.installBundle( bc, libs[i],true);
+	    		OSGiUtil.start(OSGiUtil.installBundle( bc, libs[i],true));
 				
 			}
 			catch (Throwable t) {
+				list.add(libs[i]);
 				log.log(Log.LEVEL_ERROR, "OSGi", t);
 	        }
     	}
     	
 		// set classloader
-		ClassLoader parent = new ClassLoaderHelper().getClass().getClassLoader();
-		config.setResourceClassLoader(new ResourceClassLoader(libs, parent));
+    	
+    	ClassLoader parent = SystemUtil.getCoreClassLoader();
+		config.setResourceClassLoader(new ResourceClassLoader(list.toArray(new Resource[list.size()]), parent));
 	}
 
     

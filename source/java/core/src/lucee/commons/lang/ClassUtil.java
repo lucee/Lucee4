@@ -31,10 +31,12 @@ import java.net.URLDecoder;
 import java.util.Map;
 import java.util.Set;
 
+import lucee.print;
 import lucee.commons.collection.MapFactory;
 import lucee.commons.io.FileUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
+import lucee.commons.io.res.util.ResourceClassLoader;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.Identification;
 import lucee.runtime.exp.PageException;
@@ -56,7 +58,7 @@ public final class ClassUtil {
 	 * @throws PageException
 	 */
 	public static Class toClass(String className) throws ClassException {
-		return ClassUtil.loadClass(className);
+		return loadClass(className);
 	}
 	
 	private static Class checkPrimaryTypes(String className, Class defaultValue) {
@@ -136,7 +138,19 @@ public final class ClassUtil {
 	 * @return matching Class
 	 */
 	public static Class loadClass(String className, Class defaultValue) {
-		return _loadClass(new OSGiBasedClassLoading(), className, defaultValue);
+		// OSGI env
+		Class clazz= _loadClass(new OSGiBasedClassLoading(), className, null);
+		if(clazz!=null) return clazz;
+		
+		// core classloader
+		clazz= _loadClass(new ClassLoaderBasedClassLoading(SystemUtil.getCoreClassLoader()), className, null);
+		if(clazz!=null) return clazz;
+
+		// loader classloader
+		clazz= _loadClass(new ClassLoaderBasedClassLoading(SystemUtil.getLoaderClassLoader()), className, null);
+		if(clazz!=null) return clazz;
+		
+		return defaultValue;
 	}
 
 	/**
@@ -146,15 +160,64 @@ public final class ClassUtil {
 	 * @throws ClassException 
 	 */
 	public static Class loadClass(String className) throws ClassException {
+		// OSGI env
 		Class clazz= _loadClass(new OSGiBasedClassLoading(), className, null);
 		if(clazz!=null) return clazz;
+		
+		// core classloader
+		clazz= _loadClass(new ClassLoaderBasedClassLoading(SystemUtil.getCoreClassLoader()), className, null);
+		if(clazz!=null) return clazz;
+
+		// loader classloader
+		clazz= _loadClass(new ClassLoaderBasedClassLoading(SystemUtil.getLoaderClassLoader()), className, null);
+		if(clazz!=null) return clazz;
+		
+		
 		throw new ClassException("cannot load class through its string name, because no definition for the class with the specified name ["+className+"] could be found");
 	}
 	
 
 	public static Class loadClass(ClassLoader cl,String className, Class defaultValue) {
-		if(cl!=null) return _loadClass(new ClassLoaderBasedClassLoading(cl), className, defaultValue);
-		return _loadClass(new OSGiBasedClassLoading(), className, defaultValue);
+		if(cl!=null) {
+			// TODO do not produce a resource classloader in the first place if there are no resources
+			if(cl instanceof ResourceClassLoader && ((ResourceClassLoader)cl).isEmpty()) {
+				ClassLoader p = ((ResourceClassLoader)cl).getParent();
+				if(p!=null)cl=p;
+			}
+			Class clazz= _loadClass(new ClassLoaderBasedClassLoading(cl), className, defaultValue);
+			if(clazz!=null) return clazz;
+		}
+		
+		// OSGI env
+		Class clazz= _loadClass(new OSGiBasedClassLoading(), className, null);
+		if(clazz!=null) return clazz;
+		
+		// core classloader
+		if(cl!=SystemUtil.getCoreClassLoader()) {
+			clazz= _loadClass(new ClassLoaderBasedClassLoading(SystemUtil.getCoreClassLoader()), className, null);
+			if(clazz!=null) return clazz;
+		}
+
+		// loader classloader
+		if(cl!=SystemUtil.getLoaderClassLoader()) {
+			clazz= _loadClass(new ClassLoaderBasedClassLoading(SystemUtil.getLoaderClassLoader()), className, null);
+			if(clazz!=null) return clazz;
+		}
+		return defaultValue;
+	}
+
+
+	/**
+	 * loads a class from a specified Classloader with given classname
+	 * @param className
+	 * @param cl 
+	 * @return matching Class
+	 * @throws ClassException 
+	 */
+	public static Class loadClass(ClassLoader cl,String className) throws ClassException {
+		Class clazz = loadClass(cl,className,null);
+		if(clazz!=null) return clazz;
+		throw new ClassException("cannot load class through its string name, because no definition for the class with the specified name ["+className+"] could be found");
 	}
 	
 	/**
@@ -163,13 +226,12 @@ public final class ClassUtil {
 	 * @param cl 
 	 * @return matching Class
 	 */
-	private static Class _loadClass(ClassLoading clx,String className, Class defaultValue) {
+	private static Class _loadClass(ClassLoading cl,String className, Class defaultValue) {
 		className=className.trim();
-		
 		Class clazz = checkPrimaryTypes(className, null);
 		if(clazz!=null) return clazz;
 		
-		clazz=clx.loadClass(className, null);
+		clazz=cl.loadClass(className, null);
 		if(clazz!=null) return clazz;
 		
 		// array in the format boolean[] or java.lang.String[]
@@ -182,7 +244,7 @@ public final class ClassUtil {
 			}
 			while(pureCN.lastIndexOf("[]")==pureCN.length()-2);
 			
-			clazz = _loadClass(clx, pureCN.toString(), null);
+			clazz = _loadClass(cl, pureCN.toString(), null);
 			if(clazz!=null) {
 				for(int i=0;i<dimensions;i++)clazz=toArrayClass(clazz);
 				return clazz;
@@ -199,7 +261,7 @@ public final class ClassUtil {
 			}
 			while(pureCN.charAt(0)=='[');
 			
-			clazz = _loadClass(clx,pureCN.toString(), null);
+			clazz = _loadClass(cl,pureCN.toString(), null);
 			if(clazz!=null) {
 				for(int i=0;i<dimensions;i++)clazz=toArrayClass(clazz);
 				return clazz;
@@ -209,23 +271,10 @@ public final class ClassUtil {
 		// class in format Ljava.lang.String;
 		else if(!StringUtil.isEmpty(className) && className.charAt(0)=='L' && className.endsWith(";")) {
 			className=className.substring(1,className.length()-1).replace('/', '.');
-			return _loadClass(clx,className, defaultValue);
+			return _loadClass(cl,className, defaultValue);
 		}
 
 		return defaultValue;
-	}
-
-	/**
-	 * loads a class from a specified Classloader with given classname
-	 * @param className
-	 * @param cl 
-	 * @return matching Class
-	 * @throws ClassException 
-	 */
-	public static Class loadClass(ClassLoader cl,String className) throws ClassException {
-		Class clazz = loadClass(cl,className,null);
-		if(clazz!=null) return clazz;
-		throw new ClassException("cannot load class through its string name, because no definition for the class with the specified name ["+className+"] could be found");
 	}
 
 	/**

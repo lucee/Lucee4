@@ -27,6 +27,7 @@ import lucee.runtime.PageContextImpl;
 import lucee.runtime.exp.FunctionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
+import lucee.runtime.java.JavaObject;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.type.util.ListUtil;
@@ -53,23 +54,36 @@ public class CreateDynamicProxy implements Function {
 		else
 			cfc=pc.loadComponent(Caster.toString(oCFC));
 		
-		// interfaces
-		String[] strInterfaces;
-		if(Decision.isArray(oInterfaces)) {
-			strInterfaces=ListUtil.toStringArray(Caster.toArray(oInterfaces));
-		}
-		else {
+		// string list to array
+		if(Decision.isString(oInterfaces)) {
 			String list = Caster.toString(oInterfaces);
-			strInterfaces=ListUtil.listToStringArray(list, ',');
+			oInterfaces=ListUtil.listToStringArray(list, ',');
 		}
-		strInterfaces=ListUtil.trimItems(strInterfaces);
 		
+		Class[] interfaces=null;
+		if(Decision.isArray(oInterfaces)) {
+			Object[] arr = Caster.toNativeArray(oInterfaces);
+			
+			ClassLoader cl = ((PageContextImpl)pc).getClassLoader();
+			interfaces=new Class[arr.length];
+			for(int i=0;i<arr.length;i++){
+				if(arr[i] instanceof JavaObject) 
+					interfaces[i]=((JavaObject)arr[i]).getClazz();
+				else 
+					interfaces[i]=ClassUtil.loadClass(cl, Caster.toString(arr[i]));
+			}
+			//strInterfaces=ListUtil.toStringArray(Caster.toArray(oInterfaces));
+		}
+		else if(oInterfaces instanceof JavaObject){
+			interfaces=new Class[]{((JavaObject)oInterfaces).getClazz()};
+		}
+		else
+			throw new FunctionException(pc, "CreateDynamicProxy", 2, "interfaces", "invalid type ["+Caster.toClassName(oInterfaces)+"] for class defintion");
 		
-		ClassLoader cl = ((PageContextImpl)pc).getClassLoader();
-		Class[] interfaces=new Class[strInterfaces.length];
-		for(int i=0;i<strInterfaces.length;i++){
-			interfaces[i]=ClassUtil.loadClass(cl, strInterfaces[i]);
-			if(!interfaces[i].isInterface()) throw new FunctionException(pc, "CreateDynamicProxy", 2, "interfaces", "definition ["+strInterfaces[i]+"] is a class and not a interface");
+		// check if all classes are interfaces
+		for(int i=0;i<interfaces.length;i++){
+			if(!interfaces[i].isInterface()) 
+				throw new FunctionException(pc, "CreateDynamicProxy", 2, "interfaces", "definition ["+interfaces[i].getClass()+"] is a class and not a interface");
 		}
 		
 		return JavaProxyFactory.createProxy(pc,cfc, null,interfaces);
