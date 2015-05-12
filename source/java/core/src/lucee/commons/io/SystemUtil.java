@@ -51,6 +51,7 @@ import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.ResourcesImpl;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ClassLoaderHelper;
 import lucee.commons.lang.ClassUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.loader.TP;
@@ -178,8 +179,22 @@ public final class SystemUtil {
     	else if(JAVA_VERSION_STRING.startsWith("1.1.")) JAVA_VERSION=JAVA_VERSION_1_1;
     	else JAVA_VERSION=JAVA_VERSION_1_0;
 	}
+
+
+	private static ClassLoader loaderCL;
+	private static ClassLoader coreCL;
 	
+	public static ClassLoader getLoaderClassLoader() {
+		if(loaderCL==null)
+			loaderCL=new TP().getClass().getClassLoader();
+		return loaderCL;
+	}
 	
+	public static ClassLoader getCoreClassLoader() {
+		if(coreCL==null)
+			coreCL=new ClassLoaderHelper().getClass().getClassLoader();
+		return coreCL;
+	}
 	
 	public static MemoryPoolMXBean getPermGenSpaceBean() {
 		java.util.List<MemoryPoolMXBean> manager = ManagementFactory.getMemoryPoolMXBeans();
@@ -1022,7 +1037,7 @@ public final class SystemUtil {
 		// this is done via reflection to make it work in older version, where the class lucee.loader.Version does not exist
 		if(loaderVersion==0D) {
 			loaderVersion=4D;
-			Class cVersion = ClassUtil.loadClass(TP.class.getClassLoader(),"lucee.loader.Version",null);
+			Class cVersion = ClassUtil.loadClass(getLoaderClassLoader(),"lucee.loader.Version",null);
 			if(cVersion!=null) {
 				try {
 					Field f = cVersion.getField("VERSION");

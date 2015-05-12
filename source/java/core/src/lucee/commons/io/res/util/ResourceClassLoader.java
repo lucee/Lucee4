@@ -52,7 +52,7 @@ public final class ResourceClassLoader extends URLClassLoader implements Closeab
 	public ResourceClassLoader(Resource[] resources, ClassLoader parent) throws IOException {
 		super(doURLs(resources), parent);
 		for(int i=0;i<resources.length;i++){
-			this.resources.add(resources[i]);
+			if(resources[i]!=null)this.resources.add(resources[i]);
 		}
 	}
 	
@@ -65,6 +65,9 @@ public final class ResourceClassLoader extends URLClassLoader implements Closeab
 	 */
 	public Resource[] getResources() {
 		return resources.toArray(new Resource[resources.size()]);
+	}
+	public boolean isEmpty() {
+		return resources.isEmpty();
 	}
 
 	/**
