@@ -22,17 +22,17 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public void function testWithoutAbort(){
 		http method="get" result="local.result" url="#createURL("Jira3035/XMLService.cfc?method=returnXMLWithoutAbort")#" addtoken="false";
-		assertEquals("application/xml; charset=UTF-8",result.responseheader["Content-Type"]);
+		assertEquals("application/xml;charset=UTF-8",result.responseheader["Content-Type"].replace(" ",""));
 	}
 	public void function testWithAbort(){
 		http method="get" result="local.result" url="#createURL("Jira3035/XMLService.cfc?method=returnXMLWithAbort")#" addtoken="false";
-		assertEquals("application/xml; charset=UTF-8",result.responseheader["Content-Type"]);
+		assertEquals("application/xml;charset=UTF-8",result.responseheader["Content-Type"].replace(" ",""));
 	}
 
 
 	public void function testWithReturnFormat(){
 		http method="get" result="local.result" url="#createURL("Jira3035/XMLService.cfc?method=returnXMLWithReturnFormat")#" addtoken="false";
-		assertEquals("application/xml; charset=UTF-8",result.responseheader["Content-Type"]);
+		assertEquals("application/xml;charset=UTF-8",result.responseheader["Content-Type"].replace(" ",""));
 	}
 	
 	private string function createURL(string calledName){

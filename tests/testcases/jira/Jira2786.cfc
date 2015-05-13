@@ -20,22 +20,22 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 	public void function testSuppressOnAppCFC(){
 		http method="get" result="local.result" url="#createURL("Jira2786/appcfc/Test.cfc?method=test&suppress=true")#" addtoken="false";
-		assertEquals('{}',result.filecontent);
+		assertEquals('{"supress":true}',result.filecontent);
 	}
 	
 	public void function testSuppressOffAppCFC(){
 		http method="get" result="local.result" url="#createURL("Jira2786/appcfc/Test.cfc?method=test&suppress=false")#" addtoken="false";
-		assertEquals('Body Content{}',result.filecontent);
+		assertEquals('Body Content{"supress":false}',result.filecontent);
 	}
 	
 	public void function testSuppressOnTagApp(){
 		http method="get" result="local.result" url="#createURL("Jira2786/tag/Test.cfc?method=test&suppress=true")#" addtoken="false";
-		assertEquals('{}',result.filecontent);
+		assertEquals('{"supress":true}',result.filecontent);
 	}
 	
 	public void function testSuppressOffTagApp(){
 		http method="get" result="local.result" url="#createURL("Jira2786/tag/Test.cfc?method=test&suppress=false")#" addtoken="false";
-		assertEquals('Body Content{}',result.filecontent);
+		assertEquals('Body Content{"supress":false}',result.filecontent);
 	}
 	
 	private string function createURL(string calledName){
