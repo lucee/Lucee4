@@ -45,7 +45,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },',',false,true,parallel);
 		}
-		assertEquals("{'1':'a','2':1,'3':',a,,b,','4':','}{'1':'b','2':2,'3':',a,,b,','4':','}",c);
+		assertEquals('{"1":"a","2":1,"3":",a,,b,","4":","}{"1":"b","2":2,"3":",a,,b,","4":","}',c);
 
 		savecontent variable="c" {
 			res=listEach(",a,,b,", function(value){
@@ -75,7 +75,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },',',false,true,parallel);
 		}
-		assertEquals("{'1':'a','2':1,'3':'a','4':','}",c);
+		assertEquals('{"1":"a","2":1,"3":"a","4":","}',c);
 	}
 	
 
@@ -102,7 +102,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'1':'a','2':1,'3':['a']}",c);
+		assertEquals('{"1":"a","2":1,"3":["a"]}',c);
 
 		// member function
 		arr=['a'];
@@ -113,7 +113,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'1':'a','2':1,'3':['a']}",c);
+		assertEquals('{"1":"a","2":1,"3":["a"]}',c);
 
 
 	}
@@ -140,7 +140,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'1':{'b':'b1','a':'a1'},'2':1,'3':query('a':['a1','a2'],'b':['b1','b2'])}{'1':{'b':'b2','a':'a2'},'2':2,'3':query('a':['a1','a2'],'b':['b1','b2'])}",c);
+		assertEquals('{"1":{"b":"b1","a":"a1"},"2":1,"3":query("a":["a1","a2"],"b":["b1","b2"])}{"1":{"b":"b2","a":"a2"},"2":2,"3":query("a":["a1","a2"],"b":["b1","b2"])}',c);
 
 		// member function
 		savecontent variable="c" {
@@ -150,7 +150,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'1':{'b':'b1','a':'a1'},'2':1,'3':query('a':['a1','a2'],'b':['b1','b2'])}{'1':{'b':'b2','a':'a2'},'2':2,'3':query('a':['a1','a2'],'b':['b1','b2'])}",c);
+		assertEquals('{"1":{"b":"b1","a":"a1"},"2":1,"3":query("a":["a1","a2"],"b":["b1","b2"])}{"1":{"b":"b2","a":"a2"},"2":2,"3":query("a":["a1","a2"],"b":["b1","b2"])}',c);
 
 
 	}
@@ -179,7 +179,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'1':'A','2':1,'3':{'A':1}}",c);
+		assertEquals('{"1":"A","2":1,"3":{"A":1}}',c);
 
 		// member function
 		savecontent variable="c" {
@@ -189,7 +189,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'1':'A','2':1,'3':{'A':1}}",c);
+		assertEquals('{"1":"A","2":1,"3":{"A":1}}',c);
 	}
 
 
@@ -204,7 +204,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         });
 		}
-		assertEquals("{'1':'a'}",c);
+		assertEquals('{"1":"a"}',c);
 	}
 } 
 </cfscript>

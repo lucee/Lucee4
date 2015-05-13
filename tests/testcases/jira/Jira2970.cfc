@@ -52,7 +52,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'value':1,'2':1,'3':[1]}",c);
+		assertEquals('{"value":1,"2":1,"3":[1]}',c);
 
 		// member function test
 		res=arr.map(function( value ){
@@ -90,7 +90,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },',',false,true,parallel);
 		}
-		assertEquals("{'value':'a','2':1,'3':'a,b','4':','}{'value':'b','2':2,'3':'a,b','4':','}",c);
+		assertEquals('{"value":"a","2":1,"3":"a,b","4":","}{"value":"b","2":2,"3":"a,b","4":","}',c);
 
 		// member function test
 		res=list.map( function( value ){
@@ -120,7 +120,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  							return key&":"&value;
  
                         },parallel);
-		assertEquals("{'A':'A:1','B':'B:2','C':'C:3'}",serialize(res));
+		assertEquals('{"A":"A:1","B":"B:2","C":"C:3"}',serialize(res));
 		
 		// test content produced
 		savecontent variable="c" {
@@ -130,7 +130,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'key':'A','value':1,'3':{'A':1}}",c);
+		assertEquals('{"key":"A","value":1,"3":{"A":1}}',c);
 
 		// test member name
 		res=sct.map(function(key, value ){
@@ -138,7 +138,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 
-		assertEquals("{'A':'A:1','B':'B:2','C':'C:3'}",serialize(res));
+		assertEquals('{"A":"A:1","B":"B:2","C":"C:3"}',serialize(res));
 
 	}
 
@@ -159,7 +159,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 
-		assertEquals("query('a':['a1:','a2:'],'b':['b1:','b2:'])",serialize(res));
+		assertEquals('query("a":["a1:","a2:"],"b":["b1:","b2:"])',serialize(res));
 		
 
 		// test content produced
@@ -170,7 +170,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'row':{'a':'a1'},'2':1,'3':query('a':['a1'])}",c);
+		assertEquals('{"row":{"a":"a1"},"2":1,"3":query("a":["a1"])}',c);
 
 		// test member name
 		res=qry.Map(function(row ){
@@ -178,7 +178,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 
-		assertEquals("query('a':['a1:','a2:'],'b':['b1:','b2:'])",serialize(res));
+		assertEquals('query("a":["a1:","a2:"],"b":["b1:","b2:"])',serialize(res));
 
 	}
 
@@ -204,7 +204,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 
-		assertEquals("['a']",serialize(res));
+		assertEquals('["a"]',serialize(res));
 		
 		it=arr.iterator();
 
@@ -215,7 +215,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'value':'a'}",c);
+		assertEquals('{"value":"a"}',c);
 	}
 } 
 </cfscript>

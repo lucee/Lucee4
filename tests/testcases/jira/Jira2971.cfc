@@ -42,7 +42,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'value':1,'2':1,'3':[1]}",c);
+		assertEquals('{"value":1,"2":1,"3":[1]}',c);
 	}
 
 	public void function testListFilter() localMode="true" {
@@ -70,7 +70,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },',',false,true,parallel);
 		}
-		assertEquals("{'1':'a','2':1,'3':'a,b','4':','}{'1':'b','2':2,'3':'a,b','4':','}",c);
+		assertEquals('{"1":"a","2":1,"3":"a,b","4":","}{"1":"b","2":2,"3":"a,b","4":","}',c);
 
 
 		// member functions
@@ -98,7 +98,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 
-		assertEquals("query('a':['a2'],'b':['b2'])",serialize(res));
+		assertEquals('query("a":["a2"],"b":["b2"])',serialize(res));
 		
 		qry=query(a:["a1"]);
 		savecontent variable="c" {
@@ -108,7 +108,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'1':{'a':'a1'},'2':1,'3':query('a':['a1'])}",c);
+		assertEquals('{"1":{"a":"a1"},"2":1,"3":query("a":["a1"])}',c);
 	}
 
 
@@ -131,7 +131,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 
-		assertEquals("{'B':2}",serialize(res));
+		assertEquals('{"B":2}',serialize(res));
 		savecontent variable="c" {
 			res=StructFilter({a:1}, function(key, value ){
 							echo(serialize(arguments));
@@ -139,7 +139,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'key':'A','value':1,'3':{'A':1}}",c);
+		assertEquals('{"key":"A","value":1,"3":{"A":1}}',c);
 	}
 
 
@@ -164,7 +164,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 
-		assertEquals("['a']",serialize(res));
+		assertEquals('["a"]',serialize(res));
 		
 		it=arr.iterator();
 
@@ -175,7 +175,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'value':'a'}",c);
+		assertEquals('{"value":"a"}',c);
 	}
 } 
 </cfscript>
