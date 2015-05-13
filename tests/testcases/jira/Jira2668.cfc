@@ -23,7 +23,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		http method="get" result="local.result" url="#createURL("Jira2668/index.cfm")#" addtoken="false";
 		var req=evaluate(replace(result.filecontent,'>>','','all'));
 		assertEquals("gzip",req.headers['Accept-Encoding']);
-		assertEquals("text/html; charset=utf-8",result.responseheader['Content-Type']);
+		assertEquals("text/html;charset=utf-8",result.responseheader['Content-Type'].replace(" ",""));
 	}
 	
 	public void function testCompressionNone(){
@@ -32,7 +32,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		
 		assertEquals("deflate;q=0",req.headers['Accept-Encoding']);
 		assertEquals("deflate;q=0",req.headers['TE']);
-		assertEquals("text/html; charset=utf-8",result.responseheader['Content-Type']);
+		assertEquals("text/html;charset=utf-8",result.responseheader['Content-Type'].replace(" ",""));
 	}
 	
 	
@@ -40,7 +40,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		http method="get" compression="true" result="local.result" url="#createURL("Jira2668/index.cfm")#" addtoken="false";
 		var req=evaluate(replace(result.filecontent,'>>','','all'));
 		assertEquals("gzip",req.headers['Accept-Encoding']);
-		assertEquals("text/html; charset=utf-8",result.responseheader['Content-Type']);
+		assertEquals("text/html;charset=utf-8",result.responseheader['Content-Type'].replace(" ",""));
 	}
 	
 	
@@ -50,7 +50,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		
 		assertEquals("deflate;q=0",req.headers['Accept-Encoding']);
 		assertEquals("deflate;q=0",req.headers['TE']);
-		assertEquals("text/html; charset=utf-8",result.responseheader['Content-Type']);
+		assertEquals("text/html;charset=utf-8",result.responseheader['Content-Type'].replace(" ",""));
 	}
 	
 	private string function createURL(string calledName){

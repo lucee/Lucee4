@@ -19,6 +19,6 @@
 component {
 	remote function test() returnformat="json" {
 		echo("Body Content");
-		return {};
+		return {supress:getPageContext().getSuppressContent()};
 	}
 }
