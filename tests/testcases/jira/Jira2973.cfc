@@ -47,7 +47,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'1':'a','2':1,'3':['a']}",c);
+		assertEquals('{"1":"a","2":1,"3":["a"]}',c);
 
 		// member function
 		res=arr.some(function(value ){return value =='b';},parallel);
@@ -80,7 +80,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
                         },',',false,parallel);
 		}
-		assertEquals("{'1':'a','2':1,'3':'a,c','4':','}{'1':'c','2':2,'3':'a,c','4':','}",c);
+		assertEquals('{"1":"a","2":1,"3":"a,c","4":","}{"1":"c","2":2,"3":"a,c","4":","}',c);
 
 		// member function
 		res=list.some(function(value ){return value =='b';},',',false,true,parallel);
@@ -118,7 +118,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'1':'A','2':1,'3':{'A':1}}",c);
+		assertEquals('{"1":"A","2":1,"3":{"A":1}}',c);
 
 		// member function
 		res=sct.some(function(key,value ){return key =='b';},parallel);
@@ -156,7 +156,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },parallel);
 		}
-		assertEquals("{'1':{'b':'b1','a':'a1'},'2':1,'3':query('a':['a1','a2'],'b':['b1','b2'])}{'1':{'b':'b2','a':'a2'},'2':2,'3':query('a':['a1','a2'],'b':['b1','b2'])}",c);
+		assertEquals('{"1":{"b":"b1","a":"a1"},"2":1,"3":query("a":["a1","a2"],"b":["b1","b2"])}{"1":{"b":"b2","a":"a2"},"2":2,"3":query("a":["a1","a2"],"b":["b1","b2"])}',c);
 
 		// member function
 		res=qry.some(function(row,rowNumber){return rowNumber == 1;},parallel);
@@ -184,7 +184,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         });
 		}
-		assertEquals("{'1':'a'}{'1':'b'}",c);
+		assertEquals('{"1":"a"}{"1":"b"}',c);
 	}
 } 
 </cfscript>

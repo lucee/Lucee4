@@ -45,7 +45,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },"merge:");
 		}
-		assertEquals("{'result':'merge:','value':'a','index':1,'4':['a']}",c);
+		assertEquals('{"result":"merge:","value":"a","index":1,"4":["a"]}',c);
 
 		// member function
 		res=arr.reduce(function( result,value,index){
@@ -76,7 +76,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },"merge:");
 		}
-		assertEquals("{'result':'merge:','value':'a','index':1,'4':'a,b','5':','}{'result':'','value':'b','index':2,'4':'a,b','5':','}",c);
+		assertEquals('{"result":"merge:","value":"a","index":1,"4":"a,b","5":","}{"result":"","value":"b","index":2,"4":"a,b","5":","}',c);
 
 		// member function
 		res=list.Reduce(function( result,value,index){return result&";"&index&":"&value;},"merge:");
@@ -103,7 +103,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },"merge:");
 		}
-		assertEquals("{'result':'merge:','key':'A','value':1,'4':{'A':1}}",c);
+		assertEquals('{"result":"merge:","key":"A","value":1,"4":{"A":1}}',c);
 
 		// member function
 		res=sct.reduce(function( result,key,value){
@@ -155,7 +155,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },"merge:");
 
-		assertEquals("'merge:;a;b'",serialize(res));
+		assertEquals('"merge:;a;b"',serialize(res));
 		
 		it=arr.iterator();
 
@@ -166,7 +166,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
  
                         },"merge:");
 		}
-		assertEquals("{'res':'merge:','value':'a'}{'res':'merge:;a','value':'b'}",c);
+		assertEquals('{"res":"merge:","value":"a"}{"res":"merge:;a","value":"b"}',c);
 	}
 } 
 </cfscript>
