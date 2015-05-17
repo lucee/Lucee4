@@ -175,11 +175,13 @@ public final class Throw extends TagImpl {
 				if(pe instanceof PageExceptionImpl) {
 					PageExceptionImpl pei=(PageExceptionImpl) pe;
 					sct=Caster.toStruct(sct.get("additional",null),null);
-					Iterator<Entry<Key, Object>> it = sct.entryIterator();
-					Entry<Key, Object> e;
-					while(it.hasNext()){
-						e = it.next();
-						pei.setAdditional(e.getKey(), e.getValue());
+					if(sct!=null) {
+						Iterator<Entry<Key, Object>> it = sct.entryIterator();
+						Entry<Key, Object> e;
+						while(it.hasNext()){
+							e = it.next();
+							pei.setAdditional(e.getKey(), e.getValue());
+						}
 					}
 				}
 				return pe;
