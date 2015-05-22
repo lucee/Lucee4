@@ -31,6 +31,7 @@ import lucee.runtime.type.ForEachIteratorable;
 import lucee.runtime.type.ObjectWrap;
 import lucee.runtime.type.it.EnumAsIt;
 import lucee.runtime.type.it.ForEachQueryIterator;
+import lucee.runtime.type.util.ListUtil;
 import lucee.runtime.type.wrap.MapAsStruct;
 
 import org.w3c.dom.Node;
@@ -59,7 +60,9 @@ public class ForEachUtil {
         else if(o instanceof Enumeration) {
             return new EnumAsIt((Enumeration)o);
         }
-		
+        else if(o instanceof CharSequence) {
+        	return ListUtil.listToArray(o.toString(), ',').getIterator();
+        }
         throw new CasterException(o,"collection");
 	}
 	
