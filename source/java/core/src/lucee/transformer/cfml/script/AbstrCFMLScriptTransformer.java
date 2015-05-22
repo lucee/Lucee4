@@ -692,9 +692,9 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 				if(!(left instanceof Variable))
 					throw new TemplateException(data.srcCode,"invalid syntax in for statement, left value is invalid");
 				
-				if(!(value instanceof Variable))
-					throw new TemplateException(data.srcCode,"invalid syntax in for statement, right value is invalid");
-				return new ForEach((Variable)left,(Variable)value,body,line,data.srcCode.getPosition(),id);	
+				//if(!(value instanceof Variable))
+				//	throw new TemplateException(data.srcCode,"invalid syntax in for statement, right value is invalid");
+				return new ForEach((Variable)left,value,body,line,data.srcCode.getPosition(),id);	
 			}
 			else 
 				throw new TemplateException(data.srcCode,"invalid syntax in for statement");

@@ -31,6 +31,7 @@ import lucee.runtime.type.Iteratorable;
 import lucee.runtime.type.ObjectWrap;
 import lucee.runtime.type.Resetable;
 import lucee.runtime.type.it.EnumAsIt;
+import lucee.runtime.type.util.ListUtil;
 
 public class ForEachUtil {
 	
@@ -78,6 +79,9 @@ public class ForEachUtil {
         if(o instanceof JavaObject) {
         	String[] names = ClassUtil.getFieldNames(((JavaObject)o).getClazz());
         	return new ArrayIterator(names);
+        }
+        else if(o instanceof CharSequence) {
+        	return ListUtil.listToArray(o.toString(), ',').getIterator();
         }
 		return null;
 	}
