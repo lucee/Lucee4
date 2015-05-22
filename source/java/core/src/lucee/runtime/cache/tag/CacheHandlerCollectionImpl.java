@@ -225,9 +225,9 @@ public class CacheHandlerCollectionImpl implements CacheHandlerCollection {
 	}
 
 	public static String createId(UDF udf, Object[] args, Struct values) {
-		PageSource ps = udf.getPageSource();
+		String src = udf.getSource();
 		StringBuilder sb=new StringBuilder()
-			.append(HashUtil.create64BitHash(ps==null?"":ps.getDisplayPath()))
+			.append(HashUtil.create64BitHash(src==null?"":src))
 			.append(CACHE_DEL)
 			.append(HashUtil.create64BitHash(udf.getFunctionName()))
 			.append(CACHE_DEL);

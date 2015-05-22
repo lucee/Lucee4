@@ -31,6 +31,7 @@ import lucee.print;
 import lucee.commons.lang.CFTypes;
 import lucee.loader.engine.CFMLEngine;
 import lucee.runtime.Component;
+import lucee.runtime.Page;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
@@ -103,7 +104,7 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 
 	@Override
 	public Object implementation(PageContext pageContext) throws Throwable {
-		return ComponentUtil.getPage(pageContext, properties.pageSource).udfCall(pageContext,this,properties.index);
+		return properties.getPage(pageContext).udfCall(pageContext,this,properties.index);
 	}
 
 	private final Object castToAndClone(PageContext pc,FunctionArgument arg,Object value, int index) throws PageException {
@@ -267,7 +268,7 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 	    	
 	    	if(ch!=null){
 	    		String out = bc.getString();
-	    		ch.set(pc, id,getCachedWithin(pc),new UDFCacheItem(out, rtn,getFunctionName(),getPageSource().getDisplayPath(),System.nanoTime()-start));
+	    		ch.set(pc, id,getCachedWithin(pc),new UDFCacheItem(out, rtn,getFunctionName(),getSource(),System.nanoTime()-start));
 	    	}
 			// cache.put(id, new UDFCacheEntry(out, rtn),properties.cachedWithin,properties.cachedWithin);
 	    	return rtn;
@@ -299,18 +300,18 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 				Undefined.MODE_LOCAL_OR_ARGUMENTS_ALWAYS
 		);
 		
+		PageSource ps=null;
 		PageSource psInc=null;
 		try {
-			PageSource ps = getPageSource();
+			ps = properties._pageSource;
 			if(doIncludePath)psInc = ps;
 			if(doIncludePath && getOwnerComponent()!=null) {
 				psInc=ComponentUtil.getPageSource(getOwnerComponent());
 				if(psInc==pci.getCurrentTemplatePageSource()) {
 					psInc=null;
 				}
-				
 			}
-			pci.addPageSource(ps,psInc);
+			if(ps!=null)pci.addPageSource(ps,psInc);
 			pci.addUDF(this);
 			
 //////////////////////////////////////////
@@ -363,7 +364,7 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 			
 		}
 		finally {
-			pc.removeLastPageSource(psInc!=null);
+			if(ps!=null)pc.removeLastPageSource(psInc!=null);
 			pci.removeUDF();
             pci.setFunctionScopes(oldLocal,oldArgs);
             pci.setActiveUDFCalledName(oldCalledName);
@@ -387,10 +388,15 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 	public String getHint() {
 		return properties.hint;
 	}
-    
-	@Override
+
+	/*@Override
 	public PageSource getPageSource() {
         return properties.pageSource;
+    }*/
+
+	@Override
+	public String getSource() {
+        return properties._pageSource!=null?properties._pageSource.getDisplayPath():"";
     }
 
 	public Struct getMeta() {
@@ -407,6 +413,8 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 	public Object getValue() {
 		return this;
 	}
+	
+	
 
 
 	/**
@@ -467,13 +475,14 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 	
 	@Override
 	public Object getDefaultValue(PageContext pc,int index) throws PageException {
-    	return UDFUtil.getDefaultValue(pc,properties.pageSource,properties.index,index,null);
+		return getDefaultValue(pc, index, null);
     }
     
     @Override
 	public Object getDefaultValue(PageContext pc,int index, Object defaultValue) throws PageException {
-    	return UDFUtil.getDefaultValue(pc,properties.pageSource,properties.index,index,defaultValue);
+    	return properties.getPage(pc).udfDefaultValue(pc,properties.index,index,defaultValue);
     }
+    
     // public abstract Object getDefaultValue(PageContext pc,int index) throws PageException;
 
     @Override
@@ -551,8 +560,9 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 		return equals(this,(UDF)obj);
 	}
 	public static boolean equals(UDF left, UDF right){
+		print.e(left.getFunctionName()+":"+right.getFunctionName());
 		if(
-			!left.getPageSource().equals(right.getPageSource())
+			!left.id().equals(right.id())
 			|| !_eq(left.getFunctionName(),right.getFunctionName())
 			|| left.getAccess()!=right.getAccess()
 			|| !_eq(left.getFunctionName(),right.getFunctionName())
@@ -572,9 +582,6 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 			if(!largs[i].equals(rargs[i]))return false;
 		}
 		
-		
-		
-		
 		return true;
 	}
 
@@ -582,10 +589,15 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 		if(left==null) return right==null;
 		return left.equals(right);
 	}
-	
+
 	@Override
 	public int getIndex(){
 		return properties.index;
+	}
+	
+	@Override
+	public String id(){
+		return properties.id();
 	}
 	
 }

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -37,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import lucee.commons.collection.HashMapPro;
 import lucee.commons.collection.MapFactory;
 import lucee.commons.collection.MapPro;
+import lucee.commons.digest.Hash;
 import lucee.commons.io.DevNullOutputStream;
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.ExceptionUtil;
@@ -467,9 +469,9 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 				// if this is not the same, it was overwritten
 				if(iUdf!=cUdf)
 					throw new ApplicationException("the function ["+entry.getKey()+"] from component ["+
-						cUdf.getPageSource().getDisplayPath()+
+						cUdf.getSource()+
 						"] tries to override a final method with the same name from component ["+
-						iUdf.getPageSource().getDisplayPath()+"]");
+						iUdf.getSource()+"]");
 			}
 		}
 		
@@ -481,14 +483,14 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 	private void checkFunction(PageContext pc, ComponentPageImpl componentPage,UDFPlus iUdf, UDFPlus cUdf) throws ApplicationException {
 		FunctionArgument[] iFA,cFA;
 		
-		boolean isComponent=iUdf.getPageSource() instanceof ComponentPage;
 		
 		// UDF does not exist
 		if(cUdf==null ) {
 			throw new ApplicationException(
-  					 "component ["+componentPage.getPageSource().getComponentName()+
-  					 "] does not implement the function ["+iUdf.toString().toLowerCase()+"] of the "+(isComponent?"abstract component":"interface")+" ["+
-  					 iUdf.getPageSource().getDisplayPath()+"]");
+  					 "component ["+componentPage.getComponentName()+
+  					 "] does not implement the function ["+iUdf.toString().toLowerCase()+"] of the "+
+  					("abstract component/interface")+" ["+
+  					 iUdf.getSource()+"]");
 		}
 		
 		iFA=iUdf.getFunctionArguments();
@@ -502,17 +504,17 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 // return type
 		if(iUdf.getReturnType()!=cUdf.getReturnType()){
 			throw new ApplicationException( _getErrorMessage(cUdf,iUdf),
-				"return type ["+cUdf.getReturnTypeAsString()+"] does not match the "+(isComponent?"abstract component":"interface")+" function return type ["+iUdf.getReturnTypeAsString()+"]");
+				"return type ["+cUdf.getReturnTypeAsString()+"] does not match the "+("abstract component/interface")+" function return type ["+iUdf.getReturnTypeAsString()+"]");
 		}
 		// none base types
 		if(iUdf.getReturnType()==CFTypes.TYPE_UNKNOW && !iUdf.getReturnTypeAsString().equalsIgnoreCase(cUdf.getReturnTypeAsString())) {
 			throw new ApplicationException( _getErrorMessage(cUdf,iUdf),
-				"return type ["+cUdf.getReturnTypeAsString()+"] does not match the "+(isComponent?"abstract component":"interface")+" function return type ["+iUdf.getReturnTypeAsString()+"]");
+				"return type ["+cUdf.getReturnTypeAsString()+"] does not match the "+("abstract component/interface")+" function return type ["+iUdf.getReturnTypeAsString()+"]");
 		}
 // output
 		if(iUdf.getOutput()!=cUdf.getOutput()){
 			throw new ApplicationException( _getErrorMessage(cUdf,iUdf),
-				"output does not match the "+(isComponent?"abstract component":"interface")+" function output definition");
+				"output does not match the "+("abstract component/interface")+" function output definition");
 		}
 		
 // arguments
@@ -524,17 +526,17 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 			// type
 			if(iFA[i].getType()!=cFA[i].getType()){
 				throw new ApplicationException( _getErrorMessage(cUdf,iUdf),
-					"argument type ["+cFA[i].getTypeAsString()+"] does not match the "+(isComponent?"abstract component":"interface")+" function argument type ["+iFA[i].getTypeAsString()+"]");
+					"argument type ["+cFA[i].getTypeAsString()+"] does not match the "+("abstract component/interface")+" function argument type ["+iFA[i].getTypeAsString()+"]");
 			}
 			// none base types
 			if(iFA[i].getType()==CFTypes.TYPE_UNKNOW && !iFA[i].getTypeAsString().equalsIgnoreCase(cFA[i].getTypeAsString())) {
 				throw new ApplicationException( _getErrorMessage(cUdf,iUdf),
-    					"argument type ["+cFA[i].getTypeAsString()+"] does not match the "+(isComponent?"abstract component":"interface")+" function argument type ["+iFA[i].getTypeAsString()+"]");
+    					"argument type ["+cFA[i].getTypeAsString()+"] does not match the "+("abstract component/interface")+" function argument type ["+iFA[i].getTypeAsString()+"]");
     		}
 			// name
 			if(!iFA[i].getName().equalsIgnoreCase(cFA[i].getName())){
 				throw new ApplicationException( _getErrorMessage(cUdf,iUdf),
-					"argument name ["+cFA[i].getName()+"] does not match the "+(isComponent?"abstract component":"interface")+" function argument name ["+iFA[i].getName()+"]");
+					"argument name ["+cFA[i].getName()+"] does not match the "+("abstract component/interface")+" function argument name ["+iFA[i].getName()+"]");
 			}
 			// required
 			if(iFA[i].isRequired()!=cFA[i].isRequired()){
@@ -545,11 +547,10 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 	}
 
 	private String _getErrorMessage(UDFPlus cUdf,UDFPlus iUdf) {
-		boolean isComponent=iUdf.getPageSource() instanceof ComponentPage;
 		return "function ["+cUdf.toString().toLowerCase()+"] of component " +
 			 "["+pageSource.getDisplayPath()+"]" +
-			 " does not match the function declaration ["+iUdf.toString().toLowerCase()+"] of the "+(isComponent?"abstract component":"interface")+" " +
-			 "["+iUdf.getPageSource().getDisplayPath()+"]";
+			 " does not match the function declaration ["+iUdf.toString().toLowerCase()+"] of the "+("abstract component/interface")+" " +
+			 "["+iUdf.getSource()+"]";
 	}
 
 
@@ -2266,5 +2267,15 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 	public Interface[] getInterfaces() {
 		if(top.absFin==null) return EMPTY;
 		return top.absFin.getInterfaces();
+	}
+
+	@Override
+	public String id() {
+		try {
+			return Hash.md5(getPageSource().getDisplayPath());
+		}
+		catch (NoSuchAlgorithmException e) {
+			return getPageSource().getDisplayPath();
+		}
 	}
 }

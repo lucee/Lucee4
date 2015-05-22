@@ -509,6 +509,11 @@ public final class ComponentSpecificAccess extends StructSupport implements Comp
 	}
 
 	@Override
+	public String id() {
+		return component.id();
+	}
+
+	@Override
 	public Scope staticScope() {
 		return component.staticScope();
 	}

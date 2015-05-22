@@ -28,6 +28,7 @@ import lucee.runtime.type.Collection;
 import lucee.runtime.type.FunctionArgument;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.UDF;
+import lucee.runtime.type.UDFImpl;
 import lucee.runtime.type.UDFPlus;
 import lucee.runtime.type.util.ComponentUtil;
 import lucee.runtime.type.util.UDFUtil;
@@ -90,7 +91,7 @@ public class TOUDF extends TOObjects implements UDF {
 	@Override
 	public Object getDefaultValue(PageContext pc, int index, Object defaultValue) throws PageException {
 		log(null);
-		return UDFUtil.getDefaultValue(pc, udf, index, defaultValue);
+		return udf.getDefaultValue(pc, index, defaultValue);
 	}
 
 
@@ -100,18 +101,22 @@ public class TOUDF extends TOObjects implements UDF {
 		return udf.getFunctionName();
 	}
 
-
 	@Override
 	public boolean getOutput() {
 		log(null);
 		return udf.getOutput();
 	}
 
-
 	@Override
 	public int getReturnType() {
 		log(null);
 		return udf.getReturnType();
+	}
+
+	@Override
+	public String id() {
+		log(null);
+		return udf.id();
 	}
 
 	@Override
@@ -198,10 +203,22 @@ public class TOUDF extends TOObjects implements UDF {
 		return udf.getHint();
 	}
 
-	@Override
+	/*@Override
 	public PageSource getPageSource() {
 		log(null);
 		return udf.getPageSource();
+	}*/
+	
+
+	@Override
+	public boolean equals(Object other) {
+		return udf.equals(other);
+    }
+
+	@Override
+	public String getSource() {
+		log(null);
+		return udf.getSource();
 	}
 	
 	@Override

@@ -45,6 +45,7 @@ import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.UDF;
 import lucee.runtime.type.UDFGSProperty;
+import lucee.runtime.type.UDFImpl;
 import lucee.runtime.type.UDFPlus;
 import lucee.runtime.type.scope.Argument;
 import lucee.runtime.type.scope.ArgumentIntKey;
@@ -123,17 +124,6 @@ public class UDFUtil {
 		
 		pe.setAdditional(KeyImpl.init("Documentation"), doc);
 		
-	}
-
-	public static Object getDefaultValue(PageContext pc, PageSource ps, int udfIndex, int index, Object defaultValue) throws PageException {
-		Page p=ComponentUtil.getPage(pc,ps);
-		return p.udfDefaultValue(pc,udfIndex,index,defaultValue);
-	}
-	
-
-	public static Object getDefaultValue(PageContext pc, UDF udf, int index, Object defaultValue) throws PageException {
-		Page p=ComponentUtil.getPage(pc,udf.getPageSource());
-		return p.udfDefaultValue(pc,udf.getIndex(),index,defaultValue);
 	}
 
 	public static void argumentCollection(Struct values) {
@@ -290,15 +280,11 @@ public class UDFUtil {
 			FunctionArgument arg=args[i];
 			DumpData def;
 			try {
-				Object oa=null;
-                try {
-                    oa = UDFUtil.getDefaultValue(pageContext, udf, i, null);//udf.getDefaultValue(pageContext,i,null);
-                } catch (Throwable t) {
-
-                }
+				Object oa = udf.getDefaultValue(pageContext, i,null);
                 if(oa==null)oa="null";
 				def=new SimpleDumpData(Caster.toString(oa));
-			} catch (PageException e) {
+			}
+			catch (PageException e) {
 				def=new SimpleDumpData("");
 			}
 			atts.appendRow(new DumpRow(0,new DumpData[]{
@@ -338,11 +324,10 @@ public class UDFUtil {
 			func.setTitle(StringUtil.isEmpty(label)?"Lambda":"Lambda "+label);
 		}
 
-		if(udf instanceof UDFPlus) {
-			PageSource ps = ((UDFPlus)udf).getPageSource();
-			if(ps!=null)
-				func.setComment("source:"+ps.getDisplayPath());
-		}
+		// Source
+		String src = udf.getSource();
+		if(!StringUtil.isEmpty(src)) func.setComment("source:"+src);
+		
 
 		String hint=udf.getHint();
 		String desc=udf.getDescription();

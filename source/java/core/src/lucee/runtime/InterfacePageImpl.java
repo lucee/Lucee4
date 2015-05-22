@@ -36,7 +36,7 @@ public abstract class InterfacePageImpl extends InterfacePage {
             pc.setSilent();
             InterfaceImpl interf = null;
             try {
-                interf = newInstance(pc,getPageSource().getComponentName(),false);
+                interf = newInstance(pc,getComponentName(),false);
             }
             finally {
                 pc.unsetSilent();
@@ -51,19 +51,19 @@ public abstract class InterfacePageImpl extends InterfacePage {
             if(isPost) {
             	// Soap
             	if(ComponentPageImpl.isSoap(pc)) 
-            		throw new ApplicationException("can not instantiate interface ["+this.getPageSource().getComponentName()+"] as a component");
+            		throw new ApplicationException("can not instantiate interface ["+this.getComponentName()+"] as a component");
             }
             // GET
             else if(qs!=null && qs.trim().equalsIgnoreCase("wsdl")) 
-                	throw new ApplicationException("can not instantiate interface ["+this.getPageSource().getComponentName()+"] as a component");	
+                	throw new ApplicationException("can not instantiate interface ["+this.getComponentName()+"] as a component");	
             
             // WDDX
             if(pc.urlFormScope().containsKey(KeyConstants._method)) 
-            	throw new ApplicationException("can not instantiate interface ["+this.getPageSource().getComponentName()+"] as a component");
+            	throw new ApplicationException("can not instantiate interface ["+this.getComponentName()+"] as a component");
             
             // invoking via include
             if(pc.getTemplatePath().size()>1) {
-            	throw new ApplicationException("can not invoke interface ["+this.getPageSource().getComponentName()+"] as a page");
+            	throw new ApplicationException("can not invoke interface ["+this.getComponentName()+"] as a page");
             }
             
 			// DUMP

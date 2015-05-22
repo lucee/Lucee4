@@ -24,18 +24,24 @@ import java.io.ObjectOutput;
 import java.util.HashSet;
 import java.util.Set;
 
+import lucee.print;
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.ExternalizableUtil;
 import lucee.runtime.Component;
+import lucee.runtime.Page;
+import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
 import lucee.runtime.PageSourceImpl;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.engine.ThreadLocalPageSource;
+import lucee.runtime.exp.ApplicationException;
+import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.dt.TimeSpanImpl;
+import lucee.runtime.type.util.ComponentUtil;
 import lucee.runtime.type.util.UDFUtil;
 
 public final class UDFPropertiesImpl implements UDFProperties {
@@ -50,7 +56,7 @@ public final class UDFPropertiesImpl implements UDFProperties {
 	public String hint;
 	public String displayName;
 	//public Page page;
-	public PageSource pageSource;
+	public PageSource _pageSource;
 	public int index;
 	public FunctionArgument[] arguments;
 	public Struct meta;
@@ -65,6 +71,12 @@ public final class UDFPropertiesImpl implements UDFProperties {
 	public Integer localMode;
 	public int modifier;
 
+
+	private String id;
+
+
+	private Page page;
+
 	/**
 	 * NEVER USE THIS CONSTRUCTOR, this constructor is only for deserialize this object from stream
 	 */
@@ -73,7 +85,8 @@ public final class UDFPropertiesImpl implements UDFProperties {
 	}
 
 	public UDFPropertiesImpl(
-	        PageSource pageSource,
+			Page page,
+			PageSource pageSource,
 	        FunctionArgument[] arguments,
 			int index,
 	        String functionName, 
@@ -91,13 +104,14 @@ public final class UDFPropertiesImpl implements UDFProperties {
 	        Integer localMode,
 	        int modifier,
 	        StructImpl meta) {
-		this(pageSource,arguments,index,functionName,CFTypes.toShortStrict(strReturnType,CFTypes.TYPE_UNKNOW),strReturnType,strReturnFormat,output,access
+		this(page,pageSource,arguments,index,functionName,CFTypes.toShortStrict(strReturnType,CFTypes.TYPE_UNKNOW),strReturnType,strReturnFormat,output,access
 				,bufferOutput,displayName,description,hint,secureJson,verifyClient,cachedWithin,localMode,modifier,meta);
 		
 	}
 	
 	public UDFPropertiesImpl(
-	        PageSource pageSource,
+			Page page,
+			PageSource pageSource,
 	        FunctionArgument[] arguments,
 			int index,
 	        String functionName, 
@@ -115,12 +129,13 @@ public final class UDFPropertiesImpl implements UDFProperties {
 	        Integer localMode,
 	        int modifier,
 	        StructImpl meta) {
-		this(pageSource,arguments,index,functionName,returnType,CFTypes.toString(returnType,"any"),strReturnFormat,output,access
+		this(page,pageSource,arguments,index,functionName,returnType,CFTypes.toString(returnType,"any"),strReturnFormat,output,access
 				,bufferOutput,displayName,description,hint,secureJson,verifyClient,cachedWithin,localMode,modifier,meta);
 	}
 
 	public UDFPropertiesImpl(
-	        PageSource pageSource,
+			Page page,
+			PageSource pageSource,
 	        FunctionArgument[] arguments,
 			int index,
 	        String functionName, 
@@ -128,13 +143,14 @@ public final class UDFPropertiesImpl implements UDFProperties {
 	        String strReturnFormat, 
 	        boolean output, 
 	        int access) {
-		this(pageSource, arguments, index, functionName, returnType,strReturnFormat, output, access, null,
+		this(page,pageSource, arguments, index, functionName, returnType,strReturnFormat, output, access, null,
 				"","", "", null, null, null, null,Component.MODIFIER_NONE, null);
 	}
 	
 
 	private UDFPropertiesImpl(
-	        PageSource pageSource,
+	        Page page,
+			PageSource pageSource,
 	        FunctionArgument[] arguments,
 			int index,
 	        String functionName, 
@@ -153,12 +169,16 @@ public final class UDFPropertiesImpl implements UDFProperties {
 	        Integer localMode,
 	        int modifier,
 	        StructImpl meta) {
+		if(pageSource==null)print.ds(page);
 		
-		// this happens when a arcive is based on older source code
+		// this happens when an active is based on older source code
 		if(pageSource==null){
 			pageSource = ThreadLocalPageSource.get();
+			if(pageSource==null && page!=null){
+				pageSource=page.getPageSource();
+			}
 		}
-		
+		this.page=page;
 		
 		if(arguments.length>0){
 			this.argumentsSet=new HashSet<Collection.Key>();
@@ -177,7 +197,7 @@ public final class UDFPropertiesImpl implements UDFProperties {
 		this.meta = meta;
 		this.output = output;
 		this.bufferOutput = bufferOutput;
-		this.pageSource = pageSource;
+		this._pageSource = pageSource;
 		
 		this.strReturnType=strReturnType;
 		this.returnType=returnType;
@@ -209,7 +229,7 @@ public final class UDFPropertiesImpl implements UDFProperties {
 			PageContextImpl pc = (PageContextImpl) ThreadLocalPageContext.get();
 			ConfigWebImpl cw = (ConfigWebImpl) ThreadLocalPageContext.getConfig(pc);
 			String path=ExternalizableUtil.readString(in);
-			pageSource=PageSourceImpl.best(cw.getPageSources(pc,null, path, false,true,true));
+			_pageSource=PageSourceImpl.best(cw.getPageSources(pc,null, path, false,true,true));
 			
 		} 
 		catch (Throwable e) {
@@ -250,7 +270,7 @@ public final class UDFPropertiesImpl implements UDFProperties {
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
 
-		out.writeObject(pageSource.getRealpathWithVirtual());
+		out.writeObject(_pageSource.getRealpathWithVirtual());
 		out.writeObject(arguments);
 		out.writeInt(access);
 		out.writeInt(index);
@@ -269,6 +289,28 @@ public final class UDFPropertiesImpl implements UDFProperties {
 		ExternalizableUtil.writeBoolean(out,verifyClient);
 		ExternalizableUtil.writeString(out,Caster.toString(cachedWithin,null));
 		out.writeInt(localMode==null?-1:localMode.intValue());
+	}
+
+	public Page getPage(PageContext pc) throws PageException {
+		
+		// MUST no page source
+		if(_pageSource!=null)return ComponentUtil.getPage(pc,_pageSource);
+		if(page!=null)return page;
+		throw new ApplicationException("missing Page Source");
+	}
+
+	public String id() {
+		if(id==null) {
+			// MUST no page source
+			if(_pageSource!=null) {
+				id=_pageSource.getDisplayPath()+":"+index;
+			}
+			else if(page!=null) {
+				// MUST id for Page
+				id=page.hashCode()+":"+index;
+			}
+		}
+		return id;
 	}
 
 

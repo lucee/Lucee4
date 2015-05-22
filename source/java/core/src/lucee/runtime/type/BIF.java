@@ -18,10 +18,12 @@
  **/
 package lucee.runtime.type;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lucee.commons.digest.Hash;
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
@@ -57,6 +59,7 @@ public class BIF extends MemberSupport implements UDFPlus {
 	private Component owner;
 	private final ConfigImpl ci;
 	private FunctionArgument[] args;
+	private String id;
 
 	public BIF(PageContext pc,String name) throws ApplicationException{
 		super(Component.ACCESS_PUBLIC);
@@ -68,6 +71,12 @@ public class BIF extends MemberSupport implements UDFPlus {
 		if(flf==null) {
 			Key[] keys = CollectionUtil.toKeys(fl.getFunctions().keySet());
 			throw new ApplicationException(ExceptionUtil.similarKeyMessage(keys, name, "build in function", "build in functions",null, false));
+		}
+		try {
+			this.id=Hash.md5(name);
+		}
+		catch (NoSuchAlgorithmException e) {
+			this.id=name;
 		}
 	}
 	
@@ -275,9 +284,25 @@ public class BIF extends MemberSupport implements UDFPlus {
 		return null;
 	}
 
-	@Override
+	/*@Override
 	public PageSource getPageSource() {
 		return null;
+	}*/
+
+	@Override
+	public boolean equals(Object other) {
+		if(!(other instanceof UDF)) return false;
+		return UDFImpl.equals(this, (UDF) other);
+    }
+	
+	@Override
+	public String id() {
+		return id;
+	}
+	
+	@Override
+	public String getSource() {
+		return "";
 	}
 
 	@Override

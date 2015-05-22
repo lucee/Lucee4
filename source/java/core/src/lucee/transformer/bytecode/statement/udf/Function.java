@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lucee.print;
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
@@ -130,6 +131,7 @@ public abstract class Function extends StatementBaseNoFinal implements Opcodes, 
 			"<init>",
 			Types.VOID,
 			new Type[]{
+					Types.PAGE,
 					Types.PAGE_SOURCE,
 					FUNCTION_ARGUMENT_ARRAY,
 					Types.INT_VALUE,
@@ -154,6 +156,7 @@ public abstract class Function extends StatementBaseNoFinal implements Opcodes, 
 			"<init>",
 			Types.VOID,
 			new Type[]{
+					Types.PAGE,
 					Types.PAGE_SOURCE,
 					FUNCTION_ARGUMENT_ARRAY,
 					Types.INT_VALUE,
@@ -178,6 +181,7 @@ public abstract class Function extends StatementBaseNoFinal implements Opcodes, 
 			"<init>",
 			Types.VOID,
 			new Type[]{
+					Types.PAGE,
 					Types.PAGE_SOURCE,
 					FUNCTION_ARGUMENT_ARRAY,
 					Types.INT_VALUE,
@@ -406,6 +410,11 @@ public abstract class Function extends StatementBaseNoFinal implements Opcodes, 
 		GeneratorAdapter adapter=bc.getAdapter();
 		adapter.newInstance(Types.UDF_PROPERTIES_IMPL);
 		adapter.dup();
+		
+		// Page
+		adapter.loadThis();
+		
+		// PageSource
 		if(type!=TYPE_UDF){
 			adapter.loadThis();
 			adapter.invokeVirtual(Types.PAGE, GET_PAGESOURCE);

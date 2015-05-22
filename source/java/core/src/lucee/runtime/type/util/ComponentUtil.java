@@ -764,7 +764,8 @@ public final class ComponentUtil {
         func.set(KeyConstants._description, udf.description);
         if(udf.localMode!=null)func.set("localMode", AppListenerUtil.toLocalMode(udf.localMode.intValue(), ""));
         
-        func.set(KeyConstants._owner, udf.pageSource.getDisplayPath());
+        if(udf._pageSource!=null)
+        	func.set(KeyConstants._owner, udf._pageSource.getDisplayPath());
         
 	    	   
 	    int format = udf.returnFormat;
@@ -792,8 +793,8 @@ public final class ComponentUtil {
             	param.set(KeyConstants._default, "[runtime expression]");
             }
             else if(defType==FunctionArgument.DEFAULT_TYPE_LITERAL){
-            	param.set(KeyConstants._default, 
-            			UDFUtil.getDefaultValue(pc, udf.pageSource, udf.index, y, null));
+            	Page p=udf.getPage(pc);
+        		param.set(KeyConstants._default, p.udfDefaultValue(pc,udf.index,y,null));
             }
             
             hint=args[y].getHint();

@@ -156,7 +156,7 @@ public final class GetFunctionData implements Function {
         sct.set(KeyConstants._description,StringUtil.emptyIfNull(udf.getHint()));
         sct.set(RETURN_TYPE,StringUtil.emptyIfNull(udf.getReturnTypeAsString()));
         sct.set(KeyConstants._type,"cfml");
-        sct.set(SOURCE,udf.getPageSource().getDisplayPath());
+        sct.set(SOURCE,udf.getSource());
 		sct.set(KeyConstants._status,"implemeted");
 		
 		

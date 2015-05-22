@@ -132,7 +132,7 @@ public abstract class ComponentPageImpl extends ComponentPage {
 	            	component=engine.getPersistentRemoteCFC(strRemotePersisId);
 	            	
 	            	if(component==null) {
-	            		component=newInstance(pc,getPageSource().getComponentName(),false,false,true);
+	            		component=newInstance(pc,getComponentName(),false,false,true);
 	            		if(!fromGateway)component=ComponentSpecificAccess.toComponentSpecificAccess(Component.ACCESS_REMOTE,component);
 	            		
 	            		engine.setPersistentRemoteCFC(strRemotePersisId,component);
@@ -140,7 +140,7 @@ public abstract class ComponentPageImpl extends ComponentPage {
 	            	
 	            }
 	            else {
-	            	component=newInstance(pc,getPageSource().getComponentName(),false,false,true);
+	            	component=newInstance(pc,getComponentName(),false,false,true);
             		if(!fromGateway)component=ComponentSpecificAccess.toComponentSpecificAccess(Component.ACCESS_REMOTE,component);
 	            }
             }
@@ -1020,6 +1020,10 @@ public abstract class ComponentPageImpl extends ComponentPage {
 
 	public long lastCheck() {
 		return lastCheck;
+	}
+
+	public String getComponentName() {
+		return getPageSource().getComponentName();
 	}
 	
 }

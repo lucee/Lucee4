@@ -286,4 +286,6 @@ public interface Component extends Struct, Objects, CIObject {
 	public Scope staticScope(); 
 
 	public Interface[] getInterfaces();
+
+	public String id();
 }

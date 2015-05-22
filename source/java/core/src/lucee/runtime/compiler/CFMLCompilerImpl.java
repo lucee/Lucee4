@@ -71,9 +71,7 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 		Resource classRootDir, String className, boolean returnValue,boolean ignoreScopes) throws TemplateException, IOException {
 		
 		// just to be sure
-		PageSource ps=null;
-		if(sc instanceof PageSourceCode) 
-			ps=((PageSourceCode)sc).getPageSource();
+		PageSource ps=(sc instanceof PageSourceCode)?((PageSourceCode)sc).getPageSource():null;
 		
 		return _compile(config, ps, sc,className, tld, fld, classRootDir,returnValue,ignoreScopes);
 	}
@@ -172,7 +170,7 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 	        		String displayPath=ps!=null?"["+ps.getDisplayPath()+"] ":"";
 	        		String srcName = ASMUtil.getClassName(result.barr);
 	        		// source is cfm and target cfc
-	        		if(ps.getDialect()==CFMLEngine.DIALECT_CFML &&
+	        		if(sc.getDialect()==CFMLEngine.DIALECT_CFML &&
 	        				endsWith(srcName,Constants.getCFMLTemplateExtensions(),sc.getDialect())
 	        				&& 
 	        				className.endsWith("_"+Constants.getCFMLComponentExtension()+
@@ -180,7 +178,7 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 	        				throw new TemplateException("source file "+displayPath+"contains the bytecode for a regular cfm template not for a component");
 	        		}
 	        		// source is cfc and target cfm
-	        		if(ps.getDialect()==CFMLEngine.DIALECT_CFML &&
+	        		if(sc.getDialect()==CFMLEngine.DIALECT_CFML &&
 	        				srcName.endsWith("_"+Constants.getCFMLComponentExtension()+(sc.getDialect()==CFMLEngine.DIALECT_CFML?Constants.CFML_CLASS_SUFFIX:Constants.LUCEE_CLASS_SUFFIX)) && 
 	        				endsWith(className,Constants.getCFMLTemplateExtensions(),sc.getDialect())
 	        				)

@@ -370,7 +370,7 @@ public final class JSONConverter extends ConverterSupport {
 		sct.setEL("Output", Caster.toBoolean(udf.getOutput()));
 		sct.setEL("ReturnType", udf.getReturnTypeAsString());
 		try{
-			sct.setEL("PagePath", udf.getPageSource().getResource().getAbsolutePath());
+			sct.setEL("PagePath", udf.getSource());
 		}catch(Throwable t){}
 		
 		_serializeStruct(pc,test,sct, sb, serializeQueryByColumns, true,done);

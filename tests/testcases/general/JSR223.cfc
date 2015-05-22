@@ -112,6 +112,8 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		assertEquals("udf",engine.eval('function test(){return "udf";}; x=test();'));
 		// closure
 		assertEquals("closure",engine.eval('test=function (){return "closure";}; x=test();'));
+		// lambda
+		assertEquals("lambda",engine.eval('test=()->"lambda"; x=test();'));
 	}
 
 } 

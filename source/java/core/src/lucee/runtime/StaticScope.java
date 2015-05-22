@@ -73,10 +73,10 @@ public class StaticScope extends StructSupport implements Variables,Objects {
 		Member m = cp._static.get(key);
 		if(m!=null) {
 			if(m.getModifier()==Member.MODIFIER_FINAL)
-				throw new ExpressionException("Cannot remove key ["+key+"] in static scope from component ["+cp.getPageSource().getComponentName()+"], that member is set to final");
+				throw new ExpressionException("Cannot remove key ["+key+"] in static scope from component ["+cp.getComponentName()+"], that member is set to final");
 			
 			if(!c.isAccessible(ThreadLocalPageContext.get(pc), m.getAccess()))
-				throw new ExpressionException("Component from type ["+cp.getPageSource().getComponentName()+"] has no accessible static Member with name ["+key+"]");
+				throw new ExpressionException("Component from type ["+cp.getComponentName()+"] has no accessible static Member with name ["+key+"]");
 			return cp._static.remove(key);	
 		}
 		// if not the parent
@@ -136,7 +136,7 @@ public class StaticScope extends StructSupport implements Variables,Objects {
 		Member m = _get(ThreadLocalPageContext.get(pc),key, null);
 		if(m!=null) return m.getValue();
 		
-		throw new ExpressionException("Component from type ["+cp.getPageSource().getComponentName()+"] has no accessible static Member with name ["+key+"]");
+		throw new ExpressionException("Component from type ["+cp.getComponentName()+"] has no accessible static Member with name ["+key+"]");
 	}
 	
 
@@ -159,7 +159,7 @@ public class StaticScope extends StructSupport implements Variables,Objects {
 		Member m = cp._static.get(key);
 		if(m!=null) {
 			if(m.getModifier()==Member.MODIFIER_FINAL) 
-				throw new ExpressionException("Cannot update key ["+key+"] in static scope from component ["+cp.getPageSource().getComponentName()+"], that member is set to final");
+				throw new ExpressionException("Cannot update key ["+key+"] in static scope from component ["+cp.getComponentName()+"], that member is set to final");
 			
 			return _set(pc, key, value);
 		}
@@ -175,7 +175,7 @@ public class StaticScope extends StructSupport implements Variables,Objects {
 		
 		// todo update existing data member
 		if(!c.isAccessible(ThreadLocalPageContext.get(pc), pc.getAccess()>-1?pc.getAccess():dataMemberDefaultAccess))
-			throw new ExpressionException("Component from type ["+cp.getPageSource().getComponentName()+"] has no accessible static Member with name ["+key+"]");
+			throw new ExpressionException("Component from type ["+cp.getComponentName()+"] has no accessible static Member with name ["+key+"]");
 		
 		return cp._static.put(key,new DataMember(pc.getAccess()>-1?pc.getAccess():dataMemberDefaultAccess,pc.getModifier(),value));
 	}
@@ -280,7 +280,7 @@ public class StaticScope extends StructSupport implements Variables,Objects {
 			return _call(pc,key,((UDFPlus)m),null,args);
 		}
 		
-		throw new ExpressionException("Component from type ["+cp.getPageSource().getComponentName()+"] has no accessible static Member with name ["+key+"]");
+		throw new ExpressionException("Component from type ["+cp.getComponentName()+"] has no accessible static Member with name ["+key+"]");
 	}
 
 	@Override
@@ -290,7 +290,7 @@ public class StaticScope extends StructSupport implements Variables,Objects {
 			return _call(pc,key,((UDFPlus)m),args,null);
 		}
 		
-		throw new ExpressionException("Component from type ["+cp.getPageSource().getComponentName()+"] has no accessible static Member with name ["+key+"]");
+		throw new ExpressionException("Component from type ["+cp.getComponentName()+"] has no accessible static Member with name ["+key+"]");
 	}
 	
 	Object _call(PageContext pc, Collection.Key calledName,UDFPlus udf, Struct namedArgs, Object[] args) throws PageException {
@@ -411,7 +411,7 @@ public class StaticScope extends StructSupport implements Variables,Objects {
     public DumpData toDumpData(PageContext pageContext, int maxlevel, DumpProperties dp) {
 	    int access=c.getAccess(pageContext);
     	DumpTable table = new DumpTable("component","#99cc99","#ccffcc","#000000");
-        table.setTitle("Static Scope from Component "+cp.getPageSource().getComponentName());
+        table.setTitle("Static Scope from Component "+cp.getComponentName());
         table.setComment("Only the functions and data members that are accessible from your location are displayed");
         
         DumpTable content = _toDumpData(c.top,pageContext,maxlevel,dp,access);

@@ -615,4 +615,9 @@ public class SuperComponent extends MemberSupport implements Component, Member {
 	public Interface[] getInterfaces() {
 		return comp.getInterfaces();
 	}
+
+	@Override
+	public String id() {
+		return comp.id();
+	}
 }

@@ -18,6 +18,9 @@
  */
 package lucee.runtime.type;
 
+import java.security.NoSuchAlgorithmException;
+
+import lucee.commons.digest.Hash;
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
@@ -50,10 +53,11 @@ public abstract class UDFGSProperty extends MemberSupport implements UDFPlus {
 	protected final String name;
 	protected Component component;
 	private UDFPropertiesImpl properties;
+	private String id;
 
 	public UDFGSProperty(Component component,String name,FunctionArgument[] arguments,short rtnType,String rtnFormat) {
 		super(Component.ACCESS_PUBLIC);
-		properties=UDFProperties(
+		properties=UDFProperties(null,
 				component.getPageSource(),
 				arguments,
 				-1,
@@ -79,7 +83,7 @@ public abstract class UDFGSProperty extends MemberSupport implements UDFPlus {
 		this.component=component;
 	}
 
-	private static UDFPropertiesImpl UDFProperties(PageSource pageSource,
+	private static UDFPropertiesImpl UDFProperties(Page page,PageSource pageSource,
 	        FunctionArgument[] arguments,
 			int index,
 	        String functionName, 
@@ -96,7 +100,7 @@ public abstract class UDFGSProperty extends MemberSupport implements UDFPlus {
 	        long cachedWithin,
 	        Integer localMode,
 	        StructImpl meta) {
-			return new UDFPropertiesImpl( pageSource,
+			return new UDFPropertiesImpl(page, pageSource,
 			        arguments,
 					 index,
 			         functionName, 
@@ -126,9 +130,36 @@ public abstract class UDFGSProperty extends MemberSupport implements UDFPlus {
 		return name;
 	}
 
-	@Override
+	/*@Override
 	public PageSource getPageSource() {
 		return component.getPageSource();
+	}*/
+
+	@Override
+	public boolean equals(Object other) {
+		if(!(other instanceof UDF)) return false;
+		return UDFImpl.equals(this, (UDF) other);
+    }
+	
+	@Override
+	public String getSource() {
+		PageSource ps = component.getPageSource();
+		if(ps!=null) return ps.getDisplayPath();
+		return "";
+	}
+	
+
+	@Override
+	public String id() {
+		if(id==null) {
+			try {
+				id=Hash.md5(component.id()+":"+getFunctionName());
+			}
+			catch (NoSuchAlgorithmException e) {
+				id=component.id()+":"+getFunctionName();
+			}
+		}
+		return id;
 	}
 
 	@Override

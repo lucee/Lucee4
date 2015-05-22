@@ -688,10 +688,7 @@ public final class Operator {
 			if(left==right) return true;
 			return false;
 		}
-		if(!left.getPageSource().equals(right.getPageSource())) return false;
-		if(left.getIndex()!=right.getIndex()) return false;
-		
-		return true;
+		return left.equals(right);
 	}
 	
 	private static boolean __equalsComplexEL(Set<Object> done,Component left, Component right,boolean caseSensitive, boolean checkOnlyPublicAppearance) {
