@@ -41,7 +41,9 @@ import lucee.loader.util.Util;
 import org.apache.felix.framework.Felix;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.BundleListener;
 
 public class BundleLoader {
 
@@ -184,12 +186,11 @@ public class BundleLoader {
 			Map<String, File> availableBundles = loadAvailableBundles(jarDirectory);
 	
 			// Add Required Bundles
-			Iterator<Entry<String, String>> it = requiredBundles.entrySet()
-					.iterator();
 			Entry<String, String> e;
 			File f;
 			String id;
 			List<Bundle> bundles = new ArrayList<Bundle>();
+			Iterator<Entry<String, String>> it = requiredBundles.entrySet().iterator();
 			while (it.hasNext()) {
 				e = it.next();
 				id = e.getKey() + "|" + e.getValue();
@@ -199,9 +200,10 @@ public class BundleLoader {
 					f = engFac.downloadBundle(e.getKey(), e.getValue(),null);
 				bundles.add(BundleUtil.addBundle(engFac, bc, f,null));
 			}
+
 			// Add Required Bundle Fragments
-			it = requiredBundleFragments.entrySet().iterator();
 			List<Bundle> fragments = new ArrayList<Bundle>();
+			it = requiredBundleFragments.entrySet().iterator();
 			while (it.hasNext()) {
 				e = it.next();
 				id = e.getKey() + "|" + e.getValue();
