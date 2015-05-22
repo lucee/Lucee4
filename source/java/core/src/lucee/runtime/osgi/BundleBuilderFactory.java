@@ -91,6 +91,8 @@ public class BundleBuilderFactory {
 
 	private Version version;
 
+	private String bundleActivationPolicy;
+
 
 	/**
 	 * 
@@ -191,12 +193,16 @@ public class BundleBuilderFactory {
 	public List<String> getFragmentHost() {
 		return fragmentHost;
 	}
-	
+
 	public void addFragmentHost(String strExportPackage) {
 		if(StringUtil.isEmpty(strExportPackage)) return;
 		if(fragmentHost==null)fragmentHost=new ArrayList<String>();
 		addPackages(fragmentHost,strExportPackage);
 		
+	}
+	
+	public void setBundleActivationPolicy(String bundleActivationPolicy) {
+		this.bundleActivationPolicy=bundleActivationPolicy;
 	}
 	
 	private static void addPackages(List<String> packages, String str) {
@@ -257,6 +263,7 @@ public class BundleBuilderFactory {
 		if(!StringUtil.isEmpty(name)) attrs.putValue("Bundle-Name",name);
 		attrs.putValue("Bundle-SymbolicName",symbolicName);	
 		if(!StringUtil.isEmpty(description))attrs.putValue("Bundle-Description",description);
+		if(!StringUtil.isEmpty(bundleActivationPolicy)) attrs.putValue("Bundle-ActivationPolicy",bundleActivationPolicy);
 		if(version!=null) attrs.putValue("Bundle-Version",version.toString());
 		
 		if(!StringUtil.isEmpty(activator)) {

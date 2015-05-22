@@ -1073,12 +1073,12 @@ public final class Admin extends TagImpl implements DynamicAttributes {
                 }
             }
             else if(file.isFile()) {
-                PageSourceImpl ps=(PageSourceImpl) mapping.getPageSource(path);
+                PageSource ps = mapping.getPageSource(path);
                 
                 
                 try {
                 	
-                    ps.clear();
+                    ((PageSourceImpl)ps).clear();
                     ps.loadPage(pageContext,false); 
                     //pageContext.compile(ps);
                 } catch (PageException pe) {
@@ -4933,7 +4933,6 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     	}
     	if(!StringUtil.isEmpty(dynamicImportPackage,true))factory.addDynamicImportPackage(dynamicImportPackage.trim());
     	
-    	
     	// Import Package
     	String importPackage=getString("importpackage",null);
     	// add importPackage to set
@@ -4961,15 +4960,14 @@ public final class Admin extends TagImpl implements DynamicAttributes {
 		
     	if(!StringUtil.isEmpty(importPackage,true))factory.addImportPackage(importPackage.trim());
     	
-    	
+    	String bundleActivationPolicy=getString("bundleActivationPolicy",null);
+    	if(!StringUtil.isEmpty(bundleActivationPolicy,true))factory.setBundleActivationPolicy(bundleActivationPolicy.trim());
     	
     	String exportPackage=getString("exportpackage",null);
     	if(!StringUtil.isEmpty(exportPackage,true))factory.addExportPackage(exportPackage.trim());
     	
     	String requireBundle=getString("requireBundle",null);
     	if(!StringUtil.isEmpty(requireBundle,true))factory.addRequireBundle(requireBundle.trim());
-    	
-    	
     	
     	String fragmentHost=getString("fragmentHost",null);
     	if(!StringUtil.isEmpty(fragmentHost,true))factory.addFragmentHost(fragmentHost.trim());
