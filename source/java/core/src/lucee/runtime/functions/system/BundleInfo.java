@@ -23,6 +23,7 @@ import lucee.runtime.exp.FunctionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
 import lucee.runtime.java.JavaObject;
+import lucee.runtime.osgi.OSGiUtil;
 import lucee.runtime.type.ObjectWrap;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
@@ -52,6 +53,7 @@ public class BundleInfo implements Function {
 			sct.setEL(KeyConstants._name, b.getSymbolicName());
 			sct.setEL("location", b.getLocation());
 			sct.setEL(KeyConstants._version, b.getVersion().toString());
+			sct.setEL(KeyConstants._state, OSGiUtil.toState(b.getState(), null));
 			return sct;
 		}
 		throw new ApplicationException(obj+"given object is not from a OSGi bundle");
