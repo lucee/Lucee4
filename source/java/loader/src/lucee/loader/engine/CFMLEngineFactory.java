@@ -837,14 +837,20 @@ public class CFMLEngineFactory extends CFMLEngineFactorySupport {
 	}
 
 	public File getPatchDirectory() throws IOException {
-		File pd = new File(getResourceRoot(), "patches");
+		File pd=getDirectoryByProp("lucee.patches.dir"); 
+		if(pd!=null) return pd;
+		
+		pd = new File(getResourceRoot(), "patches");
 		if (!pd.exists())
 			pd.mkdirs();
 		return pd;
 	}
 
 	public File getBundleDirectory() throws IOException {
-		File bd = new File(getResourceRoot(), "bundles");
+		File bd=getDirectoryByProp("lucee.bundles.dir"); 
+		if(bd!=null) return bd;
+		
+		bd = new File(getResourceRoot(), "bundles");
 		if (!bd.exists())
 			bd.mkdirs();
 		return bd;
