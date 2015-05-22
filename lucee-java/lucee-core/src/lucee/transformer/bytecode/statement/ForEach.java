@@ -42,7 +42,7 @@ public final class ForEach extends StatementBase implements FlowControlBreak,Flo
 	
 	private Body body;
 	private VariableRef key;
-	private Variable value;
+	private Expression value;
 
 	private final static Method HAS_NEXT = 		new Method("hasNext",Types.BOOLEAN_VALUE,new Type[]{});
 	private final static Method NEXT = 			new Method("next",Types.OBJECT,new Type[]{});
@@ -65,7 +65,7 @@ public final class ForEach extends StatementBase implements FlowControlBreak,Flo
 	 * @param body
 	 * @param line
 	 */
-	public ForEach(Variable key,Variable value,Body body,Position start, Position end,String label) {
+	public ForEach(Variable key,Expression value,Body body,Position start, Position end,String label) {
 		super(start,end);
 		this.key=new VariableRef(key);
 		this.value=value;

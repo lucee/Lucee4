@@ -639,9 +639,9 @@ int pos=data.cfml.getPos();
 				if(!(left instanceof Variable))
 					throw new TemplateException(data.cfml,"invalid syntax in for statement, left value is invalid");
 				
-				if(!(value instanceof Variable))
-					throw new TemplateException(data.cfml,"invalid syntax in for statement, right value is invalid");
-				return new ForEach((Variable)left,(Variable)value,body,line,data.cfml.getPosition(),id);	
+				//if(!(value instanceof Variable || value instanceof LitString))
+				//	throw new TemplateException(data.cfml,"invalid syntax in for statement, right value is invalid");
+				return new ForEach((Variable)left,value,body,line,data.cfml.getPosition(),id);	
 			}
 			else 
 				throw new TemplateException(data.cfml,"invalid syntax in for statement");
