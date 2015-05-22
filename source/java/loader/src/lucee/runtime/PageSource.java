@@ -177,4 +177,9 @@ public interface PageSource extends Serializable {
 
 	public int getDialect();
 	
+	/**
+	 * returns true if the page source can be executed, means the source exists or is trusted and loaded
+	 */
+	public boolean executable();
+	
 }

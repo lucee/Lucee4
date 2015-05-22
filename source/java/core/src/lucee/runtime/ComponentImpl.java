@@ -1563,8 +1563,8 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 	private static void metaUDFs(PageContext pc,ComponentImpl comp,Struct sct, int access) throws PageException {
     	ArrayImpl arr=new ArrayImpl();
     	//Collection.Key name;
-        
-    	Page page = ((PageSourceImpl)comp._getPageSource()).getPage();
+    	Page page = comp._getPageSource().loadPage(pc, false);
+    	// Page page = ((PageSourceImpl)comp._getPageSource()).getPage();
     	if(page!=null && page.udfs!=null){
     		for(int i=0;i<page.udfs.length;i++){
     			if(page.udfs[i].getAccess()>access) continue;

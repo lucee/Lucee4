@@ -899,4 +899,10 @@ public final class PageSourceImpl implements PageSource {
 			return defaultValue;
 		}
 	}
+
+
+	@Override
+	public boolean executable() {
+		return (getMapping().getInspectTemplate()==Config.INSPECT_NEVER && isLoad()) || exists();
+	}
 }

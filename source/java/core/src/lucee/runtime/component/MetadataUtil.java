@@ -91,10 +91,12 @@ public class MetadataUtil {
 	}
 	
 	private static Page getPage(PageContext pc,PageSource ps) throws PageException {
-		Page page = ((PageSourceImpl)ps).getPage();
+		/* assuming this code is not necessary, because loadPage also returns the existing page if ok
+		Page page = (( PageSourceImpl )ps).getPage();
     	if(page==null) {
     		page = ps.loadPage(pc,false);
     	}
-		return page;
+    	return page;*/
+		return ps.loadPage(pc,false);
 	}
 }

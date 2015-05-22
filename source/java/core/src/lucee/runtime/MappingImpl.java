@@ -453,7 +453,7 @@ public final class MappingImpl implements Mapping {
 
 	public static boolean isOK(PageSource ps) {
 		if(ps==null) return false;
-		return (ps.getMapping().isTrusted() && ((PageSourceImpl)ps).isLoad()) || ps.exists();
+		return ps.executable();
 	}
 
 	public static PageSource isOK(PageSource[] arr) {
