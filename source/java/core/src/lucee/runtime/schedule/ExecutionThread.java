@@ -149,14 +149,12 @@ class ExecutionThread extends Thread {
                 }
 	        }
 	        else {
-	        	//print.out("1111111111111111111111111111111");
-	            try {
+	        	try {
                     IOUtil.copy(
                             rsp.getContentAsStream(),
                             file,
                             true
                     );
-                    //new File(file.getAbsolutePath()).write(method.getResponseBodyAsStream());
                 } 
                 catch (IOException e) {
                     LogUtil.log(log,Log.LEVEL_ERROR,logName,e);
