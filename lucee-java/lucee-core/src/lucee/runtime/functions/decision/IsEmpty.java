@@ -31,8 +31,7 @@ public class IsEmpty implements Function {
 
 	public static boolean call(PageContext pc , Object value) throws PageException {
 		if(value==null) return true;
-		if(value instanceof Boolean) return !Caster.toBoolean(value);
-		if(value instanceof Number) return Caster.toDoubleValue(value)==0D;
+		if(value instanceof Boolean || value instanceof Number) return false;
 
 
 		double len=Len.invoke(value, -1);
