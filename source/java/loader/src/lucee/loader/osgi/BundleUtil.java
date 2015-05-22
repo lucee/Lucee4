@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -98,7 +97,6 @@ public class BundleUtil {
 	}
 
 	public static void start(CFMLEngineFactory factory, Bundle bundle) throws BundleException {
-		// if possible use that feature from core, it is smarter (can also load relations)
 		ClassUtil cu=null;
 		try{
 			cu = CFMLEngineFactory.getInstance().getClassUtil();
@@ -106,7 +104,6 @@ public class BundleUtil {
 		catch(Throwable t){}
 		if(cu!=null) {
 			cu.start(bundle);
-			System.out.println(">x>"+bundle.getBundleContext());
 			return;
 		}
 		
