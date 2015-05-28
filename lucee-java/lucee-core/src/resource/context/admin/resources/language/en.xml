@@ -667,6 +667,14 @@ you can see the log result at the end of every request, if a debug template is d
 	<data key="scopes.standard">standard (CFML Default)</data>
 	<data key="scopes.domaincookiesdescription">Enable or disable domain cookies. This behaviour can be overridden by the tag cfapplication.</data>
 	<data key="scopes.applicationtimeout">Application timeout</data>
+	<data key="Scopes.cgiReadOnly">CGI read only</data>
+	<data key="Scopes.cgiReadOnlyDesc">Defines whether the CGI Scope is read only or not.</data>
+	<data key="Scopes.cgiReadOnlyTrue">Read Only (CFML Default)</data>
+	<data key="Scopes.cgiReadOnlyTrueDesc">The CGI Scope cannot be manipulated.</data>
+	<data key="Scopes.cgiReadOnlyFalse">Writable</data>
+	<data key="Scopes.cgiReadOnlyFalseDesc">The CGI Scope can be changed like other scopes.</data>
+
+
 
 	<data key="compiler.nullSupport">Null Support</data>
 	<data key="compiler.nullSupportOnlyServer">This setting is only possible in the Lucee Server Administrator.</data>
