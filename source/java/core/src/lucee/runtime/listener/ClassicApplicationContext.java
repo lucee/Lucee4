@@ -104,6 +104,8 @@ public class ClassicApplicationContext extends ApplicationContextSupport {
 	private boolean suppressRemoteComponentContent;
 
 	private short wstype;
+	private boolean cgiScopeReadonly;
+
     
     /**
      * constructor of the class
@@ -146,6 +148,8 @@ public class ClassicApplicationContext extends ApplicationContextSupport {
         this.restSettings=config.getRestSetting();
         this.javaSettings=new JavaSettingsImpl();
         this.wstype=WS_TYPE_AXIS1;
+    	cgiScopeReadonly = ((ConfigImpl)config).getCGIScopeReadonly();
+
     }
     
     /**
@@ -208,6 +212,7 @@ public class ClassicApplicationContext extends ApplicationContextSupport {
 		dbl.sessionCluster=sessionCluster;
 		dbl.clientCluster=clientCluster;
 		dbl.source=source;
+		dbl.cgiScopeReadonly=cgiScopeReadonly;
 		
 		return dbl;
 	}
@@ -775,4 +780,15 @@ public class ClassicApplicationContext extends ApplicationContextSupport {
 	public void setWSType(short wstype) {
 		this.wstype=wstype;
 	}
+	
+	@Override
+	public boolean getCGIScopeReadonly() {
+		return cgiScopeReadonly;
+	}
+
+	@Override
+	public void setCGIScopeReadonly(boolean cgiScopeReadonly) {
+		this.cgiScopeReadonly=cgiScopeReadonly;
+	}
+
 }

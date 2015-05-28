@@ -3543,4 +3543,11 @@ public abstract class ConfigImpl implements Config {
 		this.queueEnable =  queueEnable;
 	}
 	
+	private boolean cgiScopeReadonly=true;
+	public boolean getCGIScopeReadonly() {
+		return cgiScopeReadonly;
+	}
+	protected void setCGIScopeReadonly(boolean cgiScopeReadonly) {
+		this.cgiScopeReadonly = cgiScopeReadonly;
+	}
 }

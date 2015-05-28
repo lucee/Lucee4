@@ -159,6 +159,7 @@ import lucee.runtime.type.scope.Argument;
 import lucee.runtime.type.scope.ArgumentImpl;
 import lucee.runtime.type.scope.CGI;
 import lucee.runtime.type.scope.CGIImpl;
+import lucee.runtime.type.scope.CGIImplReadOnly;
 import lucee.runtime.type.scope.Client;
 import lucee.runtime.type.scope.ClosureScope;
 import lucee.runtime.type.scope.Cluster;
@@ -254,7 +255,8 @@ public final class PageContextImpl extends PageContext {
 	
 	
 	private RequestImpl request=new RequestImpl();
-	private CGIImpl cgi=new CGIImpl();	
+	private CGIImplReadOnly cgiR=new CGIImplReadOnly();
+	private CGIImpl cgiRW=new CGIImpl();
 	private Argument argument=new ArgumentImpl();
 	private static LocalNotSupportedScope localUnsupportedScope=LocalNotSupportedScope.getInstance();
 	private Local local=localUnsupportedScope;
@@ -589,6 +591,7 @@ public final class PageContextImpl extends PageContext {
 			urlForm.release(this);
 			request.release(this);
 		}
+		CGI cgi=applicationContext.getCGIScopeReadonly()?cgiR:cgiRW;
 		cgi.release(this);
 		argument.release(this);
 		local=localUnsupportedScope;
@@ -1144,6 +1147,7 @@ public final class PageContextImpl extends PageContext {
 	
 	@Override
 	public CGI cgiScope() {
+		CGI cgi=applicationContext.getCGIScopeReadonly()?cgiR:cgiRW;
 		if(!cgi.isInitalized())cgi.initialize(this);
 		return cgi;
 	}
@@ -2784,7 +2788,11 @@ public final class PageContextImpl extends PageContext {
 			url.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_URL)>0);
 		}
 		cookie.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_COOKIE)>0);
-		cgi.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_CGI)>0);
+		// CGI
+		if(this.applicationContext.getCGIScopeReadonly())
+			cgiR.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_CGI)>0);
+		else
+			cgiRW.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_CGI)>0);
 		undefined.reinitialize(this);
 	}
 	

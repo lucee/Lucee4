@@ -5860,5 +5860,15 @@ public final class XMLConfigAdmin {
         if(enable==null) queue.removeAttribute("enable");
         else queue.setAttribute("enable",Caster.toString(enable,""));
 	}
+	
+    public void updateCGIReadonly(Boolean cgiReadonly) throws SecurityException {
+    	checkWriteAccess();
+        boolean hasAccess=ConfigWebUtil.hasAccess(config,SecurityManager.TYPE_SETTING);
+        if(!hasAccess)
+            throw new SecurityException("no access to update scope setting");
+        
+        Element scope=_getRootElement("scope");
+        scope.setAttribute("cgi-readonly",Caster.toString(cgiReadonly,""));
+    }
 
 }

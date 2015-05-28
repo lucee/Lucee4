@@ -107,8 +107,8 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 	private static final Collection.Key JAVA_SETTING = KeyImpl.intern("javasettings");
 	private static final Collection.Key SCOPE_CASCADING = KeyImpl.intern("scopeCascading");
 	private static final Collection.Key TYPE_CHECKING = KeyImpl.intern("typeChecking");
-	
-	private static final Key SUPPRESS_CONTENT = KeyImpl.intern("suppressRemoteComponentContent");
+	private static final Collection.Key CGI_READONLY = KeyImpl.intern("CGIReadOnly");;
+	private static final Collection.Key SUPPRESS_CONTENT = KeyImpl.intern("suppressRemoteComponentContent");
 
 
 	
@@ -152,7 +152,8 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 	private Map<Integer,String> defaultCaches;
 	private boolean sameFormFieldAsArray;
 	private boolean sameURLFieldAsArray;
-	private Map<String,CustomType> customTypes;
+	private Map<String,CustomType> customTypes;	
+	private boolean cgiScopeReadonly;
 	
 	private boolean initCustomTypes;
 	private boolean initCachedWithins;
@@ -205,7 +206,7 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 	private boolean initWebCharset;
 	private Charset resourceCharset;
 	private boolean initResourceCharset;
-	
+	private boolean initCGIScopeReadonly;
 	
 	
 	private Resource[] restCFCLocations;
@@ -236,6 +237,9 @@ public class ModernApplicationContext extends ApplicationContextSupport {
         suppressContent=ci.isSuppressContent();
         this.sessionType=config.getSessionType();
         this.wstype=WS_TYPE_AXIS1;
+		this.cgiScopeReadonly=ci.getCGIScopeReadonly();
+
+        
         this.sessionCluster=config.getSessionCluster();
         this.clientCluster=config.getClientCluster();
         this.sessionStorage=ci.getSessionStorage();
@@ -1318,4 +1322,21 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 		} 
 		return cachedWithins.get(type);
 	}
+	
+	@Override
+	public boolean getCGIScopeReadonly() {
+		if(!initCGIScopeReadonly) {
+			Object o = get(component,CGI_READONLY,null);
+			if(o!=null)cgiScopeReadonly=Caster.toBooleanValue(o,cgiScopeReadonly);
+			initCGIScopeReadonly=true;
+		}
+		return cgiScopeReadonly;
+	}
+	
+
+	public void setCGIScopeReadonly(boolean cgiScopeReadonly) {
+		initCGIScopeReadonly=true;
+		this.cgiScopeReadonly=cgiScopeReadonly;
+	}
+
 }

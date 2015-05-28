@@ -326,5 +326,9 @@ public interface ApplicationContext extends Serializable {
 	public Object getCachedWithin(int type);
 	
 	public void setCachedWithin(int type, Object value);
+	
+	public abstract boolean getCGIScopeReadonly();
+	public void setCGIScopeReadonly(boolean cgiScopeReadonly);
+
 
 }
