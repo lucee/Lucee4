@@ -878,9 +878,12 @@ public final class CFMLEngineImpl implements CFMLEngine {
 			cookies=new Cookie[mapCookies.size()];
 			Entry<String, String> entry;
 			Iterator<Entry<String, String>> it = mapCookies.entrySet().iterator();
+			Cookie c;
 			while(it.hasNext()){
 				entry = it.next();
-				cookies[index++]=new Cookie(entry.getKey(),entry.getValue());
+				c=ReqRspUtil.toCookie(entry.getKey(),entry.getValue(),null);
+				if(c!=null)cookies[index++]=c;
+				else throw new IOException("cookie name ["+entry.getKey()+"] is invalid");
 			}
 		}
 		

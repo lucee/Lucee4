@@ -148,10 +148,12 @@ public final class ReqRspUtil {
 				try{
 					String[] arr = lucee.runtime.type.util.ListUtil.listToStringArray(str, ';'),tmp;
 					java.util.List<Cookie> list=new ArrayList<Cookie>();
+					Cookie c;
 					for(int i=0;i<arr.length;i++){
 						tmp=lucee.runtime.type.util.ListUtil.listToStringArray(arr[i], '=');
 						if(tmp.length>0) {
-							list.add(new Cookie(dec(tmp[0],charset.name(),false), tmp.length>1?dec(tmp[1],charset.name(),false):""));
+							c=ReqRspUtil.toCookie(dec(tmp[0],charset.name(),false), tmp.length>1?dec(tmp[1],charset.name(),false):"",null);
+							if(c!=null)list.add(c);
 						}
 					}
 					cookies=list.toArray(new Cookie[list.size()]);
@@ -604,5 +606,14 @@ public final class ReqRspUtil {
 		sb.append(req.getServerPort());
 		if(!StringUtil.isEmpty(req.getContextPath()))sb.append(req.getContextPath());
 		return sb.toString();
+	}
+
+	public static Cookie toCookie(String name, String value, Cookie defaultValue) {
+		try{
+			return new Cookie(name,value);
+		}
+		catch(Throwable t){
+			return defaultValue;
+		}
 	}
 }
