@@ -116,6 +116,7 @@ public final class Application extends TagImpl {
 	private UDF onmissingtemplate;
 	private short scopeCascading=-1;
 	private Boolean suppress;
+	private boolean cgiReadOnly=true;
 	
      
     @Override
@@ -164,6 +165,7 @@ public final class Application extends TagImpl {
         //appContext=null;
         
         triggerDataMember=null;
+        cgiReadOnly=true;
 
     	cacheFunction=null;
     	cacheQuery=null;
@@ -193,7 +195,10 @@ public final class Application extends TagImpl {
 	**/
 	public void setSetdomaincookies(boolean setDomainCookies)	{
 		this.setDomainCookies=setDomainCookies?Boolean.TRUE:Boolean.FALSE;
-	    //getAppContext().setSetDomainCookies(setDomainCookies);
+	}
+	
+	public void setCgireadonly(boolean cgiReadOnly)	{
+		this.cgiReadOnly=cgiReadOnly;
 	}
 
 	/** set the value sessionmanagement
@@ -545,6 +550,7 @@ public final class Application extends TagImpl {
 		if(tag!=null) ac.setTagAttributeDefaultValues(tag);
 		ac.setClientCluster(clientCluster);
 		ac.setSessionCluster(sessionCluster);
+		ac.setCGIScopeReadonly(cgiReadOnly);
 		if(s3!=null) 							ac.setS3(AppListenerUtil.toS3(s3));
 		
 		// Scope cascading

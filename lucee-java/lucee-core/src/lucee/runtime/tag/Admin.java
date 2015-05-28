@@ -3932,6 +3932,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         admin.updateApplicationTimeout(getTimespan("admin",action,"applicationTimeout"));
         admin.updateSessionType(getString("admin",action,"sessionType"));
         admin.updateLocalMode(getString("admin",action,"localMode"));
+        admin.updateCGIReadonly(getBoolObject("admin",action,"cgiReadonly"));
         store();
         adminSync.broadcast(attributes, config);
     }
@@ -4183,7 +4184,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         sct.set("clientCookies",Caster.toBoolean(config.isClientCookies()));
         sct.set("clientStorage",config.getClientStorage());
         sct.set("sessionStorage",config.getSessionStorage());
-
+        sct.set("cgiReadonly", config.getCGIScopeReadonly());
         
         TimeSpan ts=config.getSessionTimeout();
         sct.set("sessionTimeout",ts);

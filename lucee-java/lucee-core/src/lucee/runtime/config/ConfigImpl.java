@@ -3264,6 +3264,8 @@ public abstract class ConfigImpl implements Config {
 	private String salt;
 
 
+
+
 	
 
 
@@ -3462,6 +3464,15 @@ public abstract class ConfigImpl implements Config {
 	}
 	protected void setQueueEnable(boolean queueEnable) {
 		this.queueEnable =  queueEnable;
+	}
+
+
+	private boolean cgiScopeReadonly=true;
+	public boolean getCGIScopeReadonly() {
+		return cgiScopeReadonly;
+	}
+	protected void setCGIScopeReadonly(boolean cgiScopeReadonly) {
+		this.cgiScopeReadonly = cgiScopeReadonly;
 	}
 	
 

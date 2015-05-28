@@ -160,6 +160,7 @@ import lucee.runtime.type.scope.Argument;
 import lucee.runtime.type.scope.ArgumentImpl;
 import lucee.runtime.type.scope.CGI;
 import lucee.runtime.type.scope.CGIImpl;
+import lucee.runtime.type.scope.CGIImplReadOnly;
 import lucee.runtime.type.scope.Client;
 import lucee.runtime.type.scope.ClosureScope;
 import lucee.runtime.type.scope.Cluster;
@@ -255,7 +256,8 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	
 	
 	private RequestImpl request=new RequestImpl();
-	private CGIImpl cgi=new CGIImpl();	
+	private CGIImplReadOnly cgiR=new CGIImplReadOnly();
+	private CGIImpl cgiRW=new CGIImpl();	
 	private Argument argument=new ArgumentImpl();
     private static LocalNotSupportedScope localUnsupportedScope=LocalNotSupportedScope.getInstance();
 	private Local local=localUnsupportedScope;
@@ -298,8 +300,8 @@ public final class PageContextImpl extends PageContext implements Sizeable {
     private PageException exception;
     private PageSource base;
 
-    ApplicationContext applicationContext;
-    ApplicationContext defaultApplicationContext;
+    ApplicationContextPro applicationContext;
+    ApplicationContextPro defaultApplicationContext;
 
     private ScopeFactory scopeFactory=new ScopeFactory();
 
@@ -634,7 +636,8 @@ public final class PageContextImpl extends PageContext implements Sizeable {
             urlForm.release(this);
         	request.release();
         }
-        cgi.release();
+        CGI cgi=applicationContext.getCGIScopeReadonly()?cgiR:cgiRW;
+    	cgi.release(this);
         argument.release(this);
         local=localUnsupportedScope;
         
@@ -1182,7 +1185,8 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	
     @Override
     public CGI cgiScope() {
-		if(!cgi.isInitalized())cgi.initialize(this);
+    	CGI cgi=applicationContext.getCGIScopeReadonly()?cgiR:cgiRW;
+    	if(!cgi.isInitalized())cgi.initialize(this);
 		return cgi;
 	}
 	
@@ -2345,7 +2349,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
     public long getRequestTimeout() {
 		if(requestTimeout==-1) {
 			if(applicationContext!=null) {
-				return ((ApplicationContextPro)applicationContext).getRequestTimeout().getMillis();
+				return (applicationContext).getRequestTimeout().getMillis();
 			}
 			requestTimeout=config.getRequestTimeout().getMillis();
 		}
@@ -2557,7 +2561,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
         currentTag.setPageContext(this);
         currentTag.setParent(parentTag);
         if(attrType>=0 && fullname!=null) {
-	        Map<Collection.Key, Object> attrs = ((ApplicationContextPro)applicationContext).getTagAttributeDefaultValues(fullname);
+	        Map<Collection.Key, Object> attrs = (applicationContext).getTagAttributeDefaultValues(fullname);
 	        if(attrs!=null) {
 	        	TagUtil.setAttributes(this,currentTag, attrs, attrType);
 	        }
@@ -2782,7 +2786,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
         session=null;
         application=null;
         client=null;
-        this.applicationContext = applicationContext;
+        this.applicationContext = (ApplicationContextPro) applicationContext;
         
         int scriptProtect = applicationContext.getScriptProtect();
         
@@ -2798,7 +2802,12 @@ public final class PageContextImpl extends PageContext implements Sizeable {
             url.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_URL)>0);
         }
         cookie.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_COOKIE)>0);
-        cgi.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_CGI)>0);
+        
+        // CGI
+        if(this.applicationContext.getCGIScopeReadonly())
+    		cgiR.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_CGI)>0);
+    	else
+    		cgiRW.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_CGI)>0);
         undefined.reinitialize(this);
     }
     
