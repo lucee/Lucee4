@@ -733,6 +733,15 @@ When checked, any requested files will be inspected only once for potential upda
 	<data key="scopes.standard">standard (CFML Default)</data>
 	<data key="scopes.domaincookiesdescription">Domain Cookies ein oder ausschalten. Diese Verhaltensweise kann von dem Tag CFApplication übersteuert werden.</data>
 	<data key="scopes.applicationtimeout">Application Timeout</data>
+
+
+	<data key="Scopes.cgiReadOnly">CGI schreibgeschützt</data>
+	<data key="Scopes.cgiReadOnlyDesc">Definiert ob der CGI Scope schreibgeschützt ist oder nicht.</data>
+	<data key="Scopes.cgiReadOnlyTrue">Schreibgeschützt (CFML Default)</data>
+	<data key="Scopes.cgiReadOnlyTrueDesc">Der CGI Scope is schreibgeschützt und kann nicht geändert werden.</data>
+	<data key="Scopes.cgiReadOnlyFalse">Beschreibbar</data>
+	<data key="Scopes.cgiReadOnlyFalseDesc">Der CGI Scope kann beschrieben werden, wie jeder andere Scope auch.</data>
+
 	<data key="locale">german (standard)</data>
 	<data key="proxy.portdescription">Port für den Proxy Server (Vorgabe:80)</data>
 	<data key="proxy.port">Port</data>
