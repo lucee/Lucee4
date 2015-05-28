@@ -31,8 +31,10 @@ import javax.servlet.http.Cookie;
 import lucee.commons.io.DevNullOutputStream;
 import lucee.commons.lang.Pair;
 import lucee.runtime.PageContext;
+import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.function.Function;
+import lucee.runtime.net.http.ReqRspUtil;
 import lucee.runtime.op.Caster;
 import lucee.runtime.thread.ThreadUtil;
 import lucee.runtime.type.Collection.Key;
@@ -103,9 +105,12 @@ public final class CreatePageContext implements Function {
 		Iterator<Entry<Key, Object>> it = sct.entryIterator();
 		Entry<Key, Object> e;
 		List<Cookie> cookies=new ArrayList<Cookie>();
+		Cookie c;
 		while(it.hasNext()){
 			e = it.next();
-			cookies.add(new Cookie(e.getKey().getString(), Caster.toString(e.getValue())));
+			c=ReqRspUtil.toCookie(e.getKey().getString(), Caster.toString(e.getValue()),null);
+			if(c!=null)cookies.add(c);
+			else throw new ApplicationException("Cookie name ["+e.getKey().getString()+"] is invalid");
 		}
 		return cookies.toArray(new Cookie[cookies.size()]);
 	}
