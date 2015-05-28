@@ -587,4 +587,14 @@ public final class ReqRspUtil {
 			return url;
 		}
 	}
+	
+	public static String getDomain(HttpServletRequest req) { // DIFF 23
+		StringBuilder sb=new StringBuilder();
+		sb.append(req.isSecure()?"https://":"http://");
+		sb.append(req.getServerName());
+		sb.append(':');
+		sb.append(req.getServerPort());
+		if(!StringUtil.isEmpty(req.getContextPath()))sb.append(req.getContextPath());
+		return sb.toString();
+	}
 }
