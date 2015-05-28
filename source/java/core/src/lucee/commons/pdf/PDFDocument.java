@@ -366,7 +366,7 @@ public final class PDFDocument {
 	    				String abs = srcfile.getAbsolutePath();
 	    				String contract = ContractPath.call(pc, abs);
 	    				if(!abs.equals(contract)) {
-	    					base=HTTPUtil.toURL(CGIImpl.getDomain(pc.getHttpServletRequest())+contract,true);
+	    					base=HTTPUtil.toURL(ReqRspUtil.getDomain(pc.getHttpServletRequest())+contract,true);
 	    				}
 
     			}
