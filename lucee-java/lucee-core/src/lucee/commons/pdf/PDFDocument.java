@@ -55,7 +55,6 @@ import lucee.runtime.net.proxy.ProxyDataImpl;
 import lucee.runtime.op.Caster;
 import lucee.runtime.text.xml.XMLCaster;
 import lucee.runtime.text.xml.XMLUtil;
-import lucee.runtime.type.scope.CGIImpl;
 import lucee.runtime.type.util.ListUtil;
 import lucee.runtime.util.URLResolver;
 
@@ -366,7 +365,7 @@ public final class PDFDocument {
 	    				String abs = srcfile.getAbsolutePath();
 	    				String contract = ContractPath.call(pc, abs);
 	    				if(!abs.equals(contract)) {
-	    					base=HTTPUtil.toURL(CGIImpl.getDomain(pc.getHttpServletRequest())+contract,true);
+	    					base=HTTPUtil.toURL(ReqRspUtil.getDomain(pc.getHttpServletRequest())+contract,true);
 	    				}
 
     			}
