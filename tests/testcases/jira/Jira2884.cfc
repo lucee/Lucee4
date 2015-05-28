@@ -27,7 +27,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		
 		variables.service = CreateObject("http", serviceURL);
 		json=variables.service.getJson();
-		assertEquals("{'S':'#chr(223)#','U':'#chr(252)#','A':'#chr(228)#','O':'#chr(246)#'}",serialize(json));
+		assertEquals('{"S":"#chr(223)#","U":"#chr(252)#","A":"#chr(228)#","O":"#chr(246)#"}',serialize(json));
 		
 
 	}
@@ -36,7 +36,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 		
 		variables.service = CreateObject("webservice", serviceURL&"?wsdl");
 		json=variables.service.getJson();
-		assertEquals("{'S':'#chr(223)#','U':'#chr(252)#','A':'#chr(228)#','O':'#chr(246)#'}",serialize(json));
+		assertEquals('{"S":"#chr(223)#","U":"#chr(252)#","A":"#chr(228)#","O":"#chr(246)#"}',serialize(json));
 		
 
 	}
