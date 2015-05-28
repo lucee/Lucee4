@@ -223,13 +223,7 @@ Error Output --->
 				</tr>		
 			
 			<!--- CGI readonly --->
-<cfset stText.Scopes.cgiReadOnly="CGI read only">
-<cfset stText.Scopes.cgiReadOnlyDesc="Defines whether the CGI Scope is read only or not.">
-<cfset stText.Scopes.cgiReadOnlyTrue="Read Only (CFML Default)">
-<cfset stText.Scopes.cgiReadOnlyTrueDesc="The CGI Scope cannot be manipulated.">
-<cfset stText.Scopes.cgiReadOnlyFalse="Writable">
-<cfset stText.Scopes.cgiReadOnlyFalseDesc="The CGI Scope can be changed like other scopes.">
-					<tr>
+				<tr>
 					<th scope="row">#stText.Scopes.cgiReadOnly#</th>
 					<td>
 						
