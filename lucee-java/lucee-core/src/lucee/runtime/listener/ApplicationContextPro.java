@@ -101,5 +101,9 @@ public interface ApplicationContextPro extends ApplicationContext {
 
 	public short getWSType();
 	public void setWSType(short wstype);
+
+
+	public abstract boolean getCGIScopeReadonly();
+	public void setCGIScopeReadonly(boolean cgiScopeReadonly);
 	
 }

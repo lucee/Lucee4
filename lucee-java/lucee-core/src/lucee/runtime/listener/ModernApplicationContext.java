@@ -109,6 +109,8 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 	
 	private static final Key SUPPRESS_CONTENT = KeyImpl.intern("suppressRemoteComponentContent");
 
+	private static final Key CGI_READONLY = KeyImpl.intern("CGIReadOnly");;
+
 
 	
 	
@@ -135,6 +137,7 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 	private short wstype;
 	private boolean sessionCluster;
 	private boolean clientCluster;
+	private boolean cgiScopeReadonly;
 	
 
 	private String clientStorage;
@@ -172,6 +175,7 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 	private boolean initSessionStorage;
 	private boolean initSessionCluster;
 	private boolean initClientCluster;
+	private boolean initCGIScopeReadonly;
 	private boolean initLoginStorage;
 	private boolean initSessionType;
 	private boolean initWSType;
@@ -208,11 +212,14 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 	private Resource[] restCFCLocations;
 
 	private short scopeCascading=-1;
+
 		
 	public ModernApplicationContext(PageContext pc, ComponentPro cfc, RefBoolean throwsErrorWhileInit) {
 		super(pc.getConfig());
 		ConfigImpl ci = ((ConfigImpl)config);
-    	setClientCookies=config.isClientCookies();
+		setClientCookies=config.isClientCookies();
+		cgiScopeReadonly=ci.getCGIScopeReadonly();
+    	
         setDomainCookies=config.isDomainCookies();
         setSessionManagement=config.isSessionManagement();
         setClientManagement=config.isClientManagement();
@@ -1249,4 +1256,21 @@ public class ModernApplicationContext extends ApplicationContextSupport {
 		}
 		return customTypes.get(strType.trim().toLowerCase());
 	}
+
+	@Override
+	public boolean getCGIScopeReadonly() {
+		if(!initCGIScopeReadonly) {
+			Object o = get(component,CGI_READONLY,null);
+			if(o!=null)cgiScopeReadonly=Caster.toBooleanValue(o,cgiScopeReadonly);
+			initCGIScopeReadonly=true;
+		}
+		return cgiScopeReadonly;
+	}
+	
+
+	public void setCGIScopeReadonly(boolean cgiScopeReadonly) {
+		initCGIScopeReadonly=true;
+		this.cgiScopeReadonly=cgiScopeReadonly;
+	}
+
 }

@@ -2461,6 +2461,16 @@ public final class ConfigWebAdmin {
         scope.setAttribute("setclientcookies",Caster.toString(clientCookies,""));
     }
     
+    public void updateCGIReadonly(Boolean cgiReadonly) throws SecurityException {
+    	checkWriteAccess();
+        boolean hasAccess=ConfigWebUtil.hasAccess(config,SecurityManager.TYPE_SETTING);
+        if(!hasAccess)
+            throw new SecurityException("no access to update scope setting");
+        
+        Element scope=_getRootElement("scope");
+        scope.setAttribute("cgi-readonly",Caster.toString(cgiReadonly,""));
+    }
+    
     /**
      * set if domain cookies are enabled or not
      * @param domainCookies

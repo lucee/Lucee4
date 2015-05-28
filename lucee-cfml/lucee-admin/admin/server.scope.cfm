@@ -48,6 +48,7 @@ Defaults --->
 					domaincookies="#isDefined("form.domaincookies") and form.domaincookies#"
 					sessionStorage="#form.sessionStorage#"
 					clientStorage="#form.clientStorage#"
+					cgiReadonly="#isDefined("form.cgiReadonly") and form.cgiReadonly#"
 					remoteClients="#request.getRemoteClients()#">
 				
 			</cfcase>
@@ -72,6 +73,7 @@ Defaults --->
 					clientTimeout=""
 					sessionStorage=""
 					clientStorage=""
+					cgiReadonly=""
 					remoteClients="#request.getRemoteClients()#">
 				
 			</cfcase>
@@ -288,6 +290,56 @@ Error Output --->
 							this.localMode = "#scope.LocalMode#"; // or "#scope.localMode=="modern"?"classic":"modern"#"
 // or as part of a function declaration
 function test() localMode="#scope.LocalMode#" {}
+						</cfsavecontent>
+						<cfset renderCodingTip( codeSample )>
+					</td>
+				</tr>
+				
+				<!--- CGI readonly --->
+<cfset stText.Scopes.cgiReadOnly="CGI read only">
+<cfset stText.Scopes.cgiReadOnlyDesc="Defines whether the CGI Scope is read only or not.">
+<cfset stText.Scopes.cgiReadOnlyTrue="Read Only (CFML Default)">
+<cfset stText.Scopes.cgiReadOnlyTrueDesc="The CGI Scope cannot be manipulated.">
+<cfset stText.Scopes.cgiReadOnlyFalse="Writable">
+<cfset stText.Scopes.cgiReadOnlyFalseDesc="The CGI Scope can be changed like other scopes.">
+					<tr>
+					<th scope="row">#stText.Scopes.cgiReadOnly#</th>
+					<td>
+						
+						<div class="warning nofocus">
+					This feature is experimental (set to "writable").
+					If you have any problems while using this functionality,
+					please post the bugs and errors in our
+					<a href="http://issues.lucee.org" target="_blank">bugtracking system</a>. 
+				</div><div class="comment">#stText.scopes.cgiReadOnlyDesc#</div>
+						<cfif hasAccess>
+							<ul class="radiolist">
+								<li>
+									<!--- readonly --->
+									<label>
+										<input class="radio" type="radio" name="cgiReadonly" value="true"<cfif scope.cgiReadonly> checked="checked"</cfif>>
+										<b>#stText.Scopes.cgiReadOnlyTrue#</b>
+									</label>
+									<div class="comment">#stText.scopes.cgiReadOnlyTrueDesc#</div>
+								</li>
+								<li>
+									<!--- writable --->
+									<label>
+										<input class="radio" type="radio" name="cgiReadonly" value="false"<cfif !scope.cgiReadonly> checked="checked"</cfif>>
+										<b>#stText.Scopes.cgiReadOnlyFalse#</b>
+									</label>
+									<div class="comment">#stText.scopes.cgiReadOnlyFalseDesc#
+									</div>
+								</li>
+							</ul>
+						<cfelse>
+							<input type="hidden" name="cgiReadonly" value="#scope.cgiReadonly#">
+							<b>#stText.Scopes["cgiReadOnly"& scope.LocalMode]#</b><br />
+							<div class="comment">#stText.Scopes["cgiReadOnly"& scope.LocalMode&"desc"]#</div>
+						</cfif>
+						
+						<cfsavecontent variable="codeSample">
+							this.cgiReadOnly = #scope.cgiReadOnly#;
 						</cfsavecontent>
 						<cfset renderCodingTip( codeSample )>
 					</td>

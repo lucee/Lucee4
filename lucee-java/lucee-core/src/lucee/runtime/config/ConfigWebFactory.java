@@ -3404,6 +3404,15 @@ public final class ConfigWebFactory extends ConfigFactory {
 			else if (hasCS)
 				config.setLocalMode(configServer.getLocalMode());
 		}
+		
+
+		// CGI readonly
+		String strCGIReadonly = scope.getAttribute("cgi-readonly");
+		if (hasAccess && !StringUtil.isEmpty(strCGIReadonly)) {
+			config.setCGIScopeReadonly(Caster.toBooleanValue(strCGIReadonly,true));
+		}
+		else if (hasCS)
+			config.setCGIScopeReadonly(configServer.getCGIScopeReadonly());
 
 		// Session-Type
 		String strSessionType = scope.getAttribute("session-type");

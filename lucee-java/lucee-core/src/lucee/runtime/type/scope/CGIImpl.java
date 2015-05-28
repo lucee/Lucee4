@@ -22,8 +22,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,19 +35,19 @@ import lucee.runtime.config.NullSupportHelper;
 import lucee.runtime.dump.DumpData;
 import lucee.runtime.dump.DumpProperties;
 import lucee.runtime.engine.ThreadLocalPageContext;
+import lucee.runtime.exp.PageException;
 import lucee.runtime.listener.ApplicationContext;
 import lucee.runtime.net.http.ReqRspUtil;
 import lucee.runtime.op.Caster;
 import lucee.runtime.security.ScriptProtect;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.KeyImpl;
-import lucee.runtime.type.ReadOnlyStruct;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.it.EntryIterator;
 import lucee.runtime.type.it.KeyIterator;
-import lucee.runtime.type.it.StringIterator;
 import lucee.runtime.type.util.KeyConstants;
+import lucee.runtime.type.util.StructSupport;
 import lucee.runtime.type.util.StructUtil;
 
 /**
@@ -54,11 +56,11 @@ import lucee.runtime.type.util.StructUtil;
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptProtected {
+public final class CGIImpl extends StructSupport implements CGI,ScriptProtected {
 	
 	private static final long serialVersionUID = 5219795840777155232L;
 
-	private static final Collection.Key[] keys={
+	private static final Collection.Key[] STATIC_KEYS={
 		KeyConstants._auth_password, KeyConstants._auth_type, KeyConstants._auth_user, KeyConstants._cert_cookie, KeyConstants._cert_flags, 
 		KeyConstants._cert_issuer, KeyConstants._cert_keysize, KeyConstants._cert_secretkeysize, KeyConstants._cert_serialnumber, 
 		KeyConstants._cert_server_issuer, KeyConstants._cert_server_subject, KeyConstants._cert_subject,KeyConstants._cf_template_path, 
@@ -73,8 +75,8 @@ public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptP
 	};
 	private static Struct staticKeys=new StructImpl();
 	static{
-		for(int i=0;i<keys.length;i++){
-			staticKeys.setEL(keys[i],"");
+		for(int i=0;i<STATIC_KEYS.length;i++){
+			staticKeys.setEL(STATIC_KEYS[i],"");
 		}
 	}
 	
@@ -92,108 +94,166 @@ public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptP
 	
 	private HttpServletRequest req;
 	private boolean isInit;
-	//private PageContext pc;
-	private Struct https;
-	private Struct headers;
+	private Struct internal;
+	private Map<Collection.Key,Collection.Key> aliases;
 	private int scriptProtected;
-
-	private boolean disconnected;
-	private Map<Key, Object> disconnectedData;
 	
-	public CGIImplReadOnly(){
-		this.setReadOnly(true);
+	
+	public CGIImpl(){
+		//this.setReadOnly(true);
+	}
+
+	@Override
+	public boolean isInitalized() {
+		return isInit;
 	}
 	
-
-	public void disconnect() {
-		if(disconnected) return;
+	@Override
+	public void initialize(PageContext pc) {
+		isInit=true;
+		req=pc.getHttpServletRequest();
 		
-		disconnectedData=new HashMap<Key, Object>();
-		for(int i=0;i<keys.length;i++){
-			disconnectedData.put(keys[i], get(keys[i], "")); 
+		
+        if(scriptProtected==ScriptProtected.UNDEFINED) {
+			scriptProtected=((pc.getApplicationContext().getScriptProtect()&ApplicationContext.SCRIPT_PROTECT_CGI)>0)?
+					ScriptProtected.YES:ScriptProtected.NO;
 		}
-		req=null;
+        
+        //if(internal==null) {
+		internal=new StructImpl();
+		aliases=new HashMap<Collection.Key,Collection.Key>();
+		String k,v;
+		Collection.Key key,alias,httpKey;
+		try {
+			Enumeration e = req.getHeaderNames();
+			while(e.hasMoreElements()) {
+				
+				// keys
+				k = (String)e.nextElement();
+	    		key=KeyImpl.init(k);
+	    		if(k.contains("-")) alias=KeyImpl.init(k.replace('-','_'));
+	    		else alias=null;
+	    		httpKey=KeyImpl.init("http_"+(alias==null?key:alias).getString());
+	    		
+	    		// value
+	    		v = doScriptProtect(req.getHeader(k));
+	    		
+	    		// set value
+	    		internal.setEL(httpKey,v);
+	    		
+	    		// set alias keys
+	    		aliases.put(key, httpKey);
+	    		if(alias!=null)aliases.put(alias, httpKey);
+	    	}
+		}
+		catch(Throwable t){t.printStackTrace();}
+		//}
 	}
 	
+	@Override
+	public void release() {
+		isInit=false;
+		scriptProtected=ScriptProtected.UNDEFINED; 
+		req=null;
+		internal=null;
+		aliases=null;
+	}
+	
+	@Override
+	public void release(PageContext pc) {
+		release();
+	}
 
 	@Override
 	public boolean containsKey(Key key) {
-		return staticKeys.containsKey(key);
+		return internal.containsKey(key) || staticKeys.containsKey(key) || aliases.containsKey(key);
 	}
 	
 	@Override
 	public boolean containsValue(Object value) {
-		// TODO Auto-generated method stub
-		return super.containsValue(value);
+		Iterator<Object> it = internal.valueIterator();
+		while(it.hasNext()){
+			if(it.next().equals(value)) return true;
+		}
+		return false;
 	}
+	
 	@Override
 	public Collection duplicate(boolean deepCopy) {
 		Struct sct=new StructImpl();
-		copy(this,sct,deepCopy);
+		StructImpl.copy(this,sct,deepCopy);
 		return sct;
 	}
 	
 	
 	@Override
 	public int size() {
-		return keys.length;
+		return keys().length;
 	}
 
+	@Override
 	public Collection.Key[] keys() {
-		return keys;
+		Set<Collection.Key> set=new HashSet<Collection.Key>();
+		Iterator<Key> it = internal.keyIterator();
+		while(it.hasNext())set.add(it.next());
+		it = staticKeys.keyIterator();
+		while(it.hasNext())set.add(it.next());
+		return set.toArray(new Collection.Key[set.size()]);
 	}
 	
 	@Override
 	public Object get(Collection.Key key, Object defaultValue) {
 		
-		if(https==null) {
-			https=new StructImpl();
-			headers=new StructImpl();
-			String k,v;
-			try {
-				Enumeration e = req.getHeaderNames();
-			
-				while(e.hasMoreElements()) {
-		    		k = (String)e.nextElement();
-		    		v = req.getHeader(k);
-		    		//print.err(k.length()+":"+k);
-		    		headers.setEL(KeyImpl.init(k),v);
-		    		headers.setEL(KeyImpl.init(k=k.replace('-','_')),v);
-		    		https.setEL(KeyImpl.init("http_"+k),v);	
-		    	}
+		// do we have internal?
+		Object res = internal.get(key, NullSupportHelper.NULL());
+		if(res!=NullSupportHelper.NULL()) return res;
+		
+		// do we have an alias
+		{
+			Key k = aliases.get(key);
+			if(k!=null) {
+				res = internal.get(k, NullSupportHelper.NULL());
+				if(res!=NullSupportHelper.NULL()) return res;
 			}
-			catch(Throwable t){t.printStackTrace();}
 		}
 		
-		String lkey=key.getLowerString();
-        
-	    
-        if(lkey.length()>7) {
-            char first=lkey.charAt(0);
+		
+		if(key.length()>7) {
+			char first=key.lowerCharAt(0);
+			try{
             if(first=='a') {
-            	if(key.equals(KeyConstants._auth_type)) return toString(req.getAuthType());
+            	if(key.equals(KeyConstants._auth_type)) 
+            		return store(key,toString(req.getAuthType()));
             }
             else if(first=='c')	{
-            	if(key.equals(KeyConstants._context_path))return toString(req.getContextPath());
-            	if(key.equals(KeyConstants._cf_template_path)) return getPathTranslated();
+            	if(key.equals(KeyConstants._context_path))
+            		return store(key,toString(req.getContextPath()));
+            	if(key.equals(KeyConstants._cf_template_path)) 
+            		return store(key,getPathTranslated());
             }
             else if(first=='h')	{
-            	if(lkey.startsWith("http_")){
-        	    	Object o = https.get(key,NullSupportHelper.NULL());
-                    if(o==NullSupportHelper.NULL() && key.equals(KeyConstants._http_if_modified_since))
-                    	o = https.get(KeyConstants._last_modified,NullSupportHelper.NULL());
-                    if(o!=NullSupportHelper.NULL())return doScriptProtect((String)o);
-            }
+            	if(StringUtil.startsWithIgnoreCase(key.getString(), "http_")) {
+            		// _http_if_modified_since
+            		if(key.equals(KeyConstants._http_if_modified_since)) {
+                    	Object o = internal.get(KeyConstants._last_modified,NullSupportHelper.NULL());
+                    	if(o!=NullSupportHelper.NULL()) return store(key,(String)o);
+            		}
+            	}
             }
             else if(first=='r') {
-                if(key.equals(KeyConstants._remote_user))		return toString(req.getRemoteUser());
-                if(key.equals(KeyConstants._remote_addr))		{
-                	return toString(req.getRemoteAddr());
-                }
-                if(key.equals(KeyConstants._remote_host))		return toString(req.getRemoteHost());
-                if(key.equals(KeyConstants._request_method))		return req.getMethod();
-                if(key.equals(KeyConstants._request_url))		return ReqRspUtil.getRequestURL( req, true );
-                if(key.equals(KeyConstants._request_uri))		return toString(req.getAttribute("javax.servlet.include.request_uri"));
+                if(key.equals(KeyConstants._remote_user))		
+                	return store(key,toString(req.getRemoteUser()));
+                if(key.equals(KeyConstants._remote_addr))		
+                	return store(key,toString(req.getRemoteAddr()));
+                if(key.equals(KeyConstants._remote_host))		
+                	return store(key,toString(req.getRemoteHost()));
+                if(key.equals(KeyConstants._request_method))		
+                	return store(key,req.getMethod());
+                if(key.equals(KeyConstants._request_url))
+                	return store(key,ReqRspUtil.getRequestURL( req, true ));
+                if(key.equals(KeyConstants._request_uri))		
+                	return store(key,toString(req.getAttribute("javax.servlet.include.request_uri")));
+                // we do not store this, to be as backward compatible as possible.
                 if(key.getUpperString().startsWith("REDIRECT_")){
                 	// from attributes (key sensitive)
                 	Object value = req.getAttribute(key.getString());
@@ -210,21 +270,23 @@ public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptP
             		}
                 }
             }
-            
-            
             else if(first=='l') {
-                if(key.equals(KeyConstants._local_addr))		return toString(localAddress);
-                if(key.equals(KeyConstants._local_host))		return toString(localHost);
+                if(key.equals(KeyConstants._local_addr))
+                	return store(key,toString(localAddress));
+                if(key.equals(KeyConstants._local_host))		
+                	return store(key,toString(localHost));
             }
             else if(first=='s') {
-            	if(key.equals(KeyConstants._script_name)) 
-            		return ReqRspUtil.getScriptName(req);
-        			//return StringUtil.emptyIfNull(req.getContextPath())+StringUtil.emptyIfNull(req.getServletPath());
-        		if(key.equals(KeyConstants._server_name))		return toString(req.getServerName());
-                if(key.equals(KeyConstants._server_protocol))	return toString(req.getProtocol());
-                if(key.equals(KeyConstants._server_port))		return Caster.toString(req.getServerPort());
-                if(key.equals(KeyConstants._server_port_secure))return req.isSecure()?"1":"0";
-                
+            	if(key.equals(KeyConstants._script_name)) 		
+            		return store(key,ReqRspUtil.getScriptName(req));
+        		if(key.equals(KeyConstants._server_name))		
+        			return store(key,toString(req.getServerName()));
+                if(key.equals(KeyConstants._server_protocol))	
+                	return store(key,toString(req.getProtocol()));
+                if(key.equals(KeyConstants._server_port))		
+                	return store(key,Caster.toString(req.getServerPort()));
+                if(key.equals(KeyConstants._server_port_secure))
+                	return store(key,req.isSecure()?"1":"0");
             }
             else if(first=='p') {
             	if(key.equals(KeyConstants._path_info)) {
@@ -240,24 +302,33 @@ public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptP
             			}
             		}
             	    
-            		if(!StringUtil.isEmpty(pathInfo,true)) return pathInfo;
+            		if(!StringUtil.isEmpty(pathInfo,true)) 
+            			return store(key,pathInfo);
             	    return "";
             	}
-                if(key.equals(KeyConstants._path_translated)) return getPathTranslated();
+                if(key.equals(KeyConstants._path_translated)) 
+                	return store(key,getPathTranslated());
             }
             else if(first=='q') {
-            	if(key.equals(KeyConstants._query_string))return doScriptProtect(toString(ReqRspUtil.getQueryString(req)));
+            	if(key.equals(KeyConstants._query_string))
+            		return store(key,doScriptProtect(toString(ReqRspUtil.getQueryString(req))));
             }
+			}
+			catch(Throwable t){}
         }
-        
-        // check header
-        String headerValue = (String) headers.get(key,null);//req.getHeader(key.getString());
-	    if(headerValue != null) return doScriptProtect(headerValue);
-	    
         return other(key,defaultValue);
 	}
+	private Object store(Key key, String value) {
+		internal.setEL(key, value);
+		return value;
+	}
 	
-	private Object getPathTranslated() {
+	private Object other(Collection.Key key, Object defaultValue) {
+		if(staticKeys.containsKey(key)) return "";
+		return defaultValue;
+	}
+
+	private String getPathTranslated() {
 		try{
 			PageContext pc = ThreadLocalPageContext.get();
 			return pc.getBasePageSource().getResourceTranslated(pc).toString();
@@ -266,12 +337,6 @@ public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptP
 		return "";
 	}
 
-
-	private Object other(Collection.Key key, Object defaultValue) {
-		if(staticKeys.containsKey(key)) return "";
-		return defaultValue;
-	}
-	
 	private String doScriptProtect(String value) {
 		if(isScriptProtected()) return ScriptProtect.translate(value);
 		return value;
@@ -292,52 +357,16 @@ public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptP
 	public Iterator<Collection.Key> keyIterator() {
 		return new KeyIterator(keys());
 	}
-    
-    @Override
-	public Iterator<String> keysAsStringIterator() {
-    	return new StringIterator(keys());
-    }
 	
 	@Override
 	public Iterator<Entry<Key, Object>> entryIterator() {
 		return new EntryIterator(this, keys());
 	}
 	
-	@Override
-	public boolean isInitalized() {
-		return isInit;
-	}
-	
-	@Override
-	public void initialize(PageContext pc) {
-		isInit=true;
-		req=pc.getHttpServletRequest();
-		
-		
-        if(scriptProtected==ScriptProtected.UNDEFINED) {
-			scriptProtected=((pc.getApplicationContext().getScriptProtect()&ApplicationContext.SCRIPT_PROTECT_CGI)>0)?
-					ScriptProtected.YES:ScriptProtected.NO;
-		}
-	}
-	
-	@Override
-	public void release() {
-		isInit=false;
-		scriptProtected=ScriptProtected.UNDEFINED; 
-		req=null;
-		https=null;
-		headers=null;
-		
-	}
-	
-	@Override
-	public void release(PageContext pc) {
-		release();
-	}
 	
 	@Override
 	public DumpData toDumpData(PageContext pageContext, int maxlevel, DumpProperties dp) {
-		return StructUtil.toDumpTable(this, "CGI Scope", pageContext, maxlevel, dp);
+		return StructUtil.toDumpTable(this, "CGI Scope (writable)", pageContext, maxlevel, dp);
 	}
     
     @Override
@@ -350,6 +379,7 @@ public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptP
         return "cgi";
     }
     
+	@Override
 	public boolean isScriptProtected() {
 		return scriptProtected==ScriptProtected.YES;
 	}
@@ -359,15 +389,56 @@ public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptP
 		scriptProtected=scriptProtecting?ScriptProtected.YES:ScriptProtected.NO;
 	}
 
-	
-	public static String getDomain(HttpServletRequest req) { // DIFF 23
-		StringBuffer sb=new StringBuffer();
-		sb.append(req.isSecure()?"https://":"http://");
-		sb.append(req.getServerName());
-		sb.append(':');
-		sb.append(req.getServerPort());
-		if(!StringUtil.isEmpty(req.getContextPath()))sb.append(req.getContextPath());
-		return sb.toString();
+	@Override
+	public Object remove(Key key) throws PageException {
+		Key k = aliases.remove(key);
+		if(k!=null) key=k;
+		
+		Object rtn=internal.remove(key);
+		if(staticKeys.containsKey(key))internal.set(key, ""); // we do this to avoid to this get reinit again
+		return rtn;
+	}
+
+
+	@Override
+	public Object removeEL(Key key) {
+		Key k = aliases.remove(key);
+		if(k!=null) key=k;
+		
+		Object rtn=internal.removeEL(key);
+		if(staticKeys.containsKey(key))internal.setEL(key, ""); // we do this to avoid to this get reinit again
+		return rtn;
+	}
+
+
+	@Override
+	public void clear() {
+		Key[] keys = keys();
+		for(int i=0;i<keys.length;i++){
+			removeEL(keys[i]);
+		}
+	}
+
+
+	@Override
+	public Object set(Key key, Object value) throws PageException {
+		Key k = aliases.get(key);
+		if(k!=null) key=k;
+		return internal.set(key, value);
+	}
+
+
+	@Override
+	public Object setEL(Key key, Object value) {
+		Key k = aliases.get(key);
+		if(k!=null) key=k;
+		return internal.setEL(key, value);
+	}
+
+
+	@Override
+	public Iterator<Object> valueIterator() {
+		return internal.valueIterator();
 	}
 
 }
