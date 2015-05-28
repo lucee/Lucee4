@@ -19,7 +19,7 @@
 component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	
 	public function beforeTests(){
-		variables.ds="test_ms";
+		variables.ds="mssql";
 		
 		try{
 			query datasource="#ds#" {
