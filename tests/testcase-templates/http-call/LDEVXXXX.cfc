@@ -21,7 +21,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	//public function setUp(){}
 
 	public void function test(){
-		http method="get" result="local.result" url="#createURL("IssueXXXX/index.cfm")#" addtoken="false";
+		http method="get" result="local.result" url="#createURL("LDEVXXXX/index.cfm")#" addtoken="false";
 		/*
 		assertEquals("",result.filecontent);
 		
