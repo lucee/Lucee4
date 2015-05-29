@@ -591,8 +591,8 @@ public final class PageContextImpl extends PageContext {
 			urlForm.release(this);
 			request.release(this);
 		}
-		CGI cgi=applicationContext.getCGIScopeReadonly()?cgiR:cgiRW;
-		cgi.release(this);
+        cgiR.release(this);
+    	cgiRW.release(this);
 		argument.release(this);
 		local=localUnsupportedScope;
 		
@@ -2789,10 +2789,8 @@ public final class PageContextImpl extends PageContext {
 		}
 		cookie.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_COOKIE)>0);
 		// CGI
-		if(this.applicationContext.getCGIScopeReadonly())
-			cgiR.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_CGI)>0);
-		else
-			cgiRW.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_CGI)>0);
+		cgiR.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_CGI)>0);
+		cgiRW.setScriptProtecting(applicationContext,(scriptProtect&ApplicationContext.SCRIPT_PROTECT_CGI)>0);
 		undefined.reinitialize(this);
 	}
 	
