@@ -111,7 +111,7 @@ import org.apache.http.protocol.HttpContext;
 *
 * 
 **/
-public final class Http4 extends BodyTagImpl implements Http {
+final class Http4 extends BodyTagImpl implements Http {
 
 	public static final String MULTIPART_RELATED = "multipart/related";
 	public static final String MULTIPART_FORM_DATA = "multipart/form-data";
@@ -652,9 +652,9 @@ public final class Http4 extends BodyTagImpl implements Http {
     		// URL
     			if(type.equals("url")) {
     				if(sbQS.length()>0)sbQS.append('&');
-    				sbQS.append(param.getEncoded()?urlenc(param.getName(),charset):param.getName());
+    				sbQS.append(param.getEncoded()?HttpImpl.urlenc(param.getName(),charset):param.getName());
     				sbQS.append('=');
-    				sbQS.append(param.getEncoded()?urlenc(param.getValueAsString(), charset):param.getValueAsString());
+    				sbQS.append(param.getEncoded()?HttpImpl.urlenc(param.getValueAsString(), charset):param.getValueAsString());
     			}
     		}
     		String host=null;
@@ -766,8 +766,8 @@ public final class Http4 extends BodyTagImpl implements Http {
     			else if(type.equals("cgi")) {
     				if(param.getEncoded())
     					req.addHeader(
-    							urlenc(param.getName(),charset),
-    							urlenc(param.getValueAsString(),charset));
+    							HttpImpl.urlenc(param.getName(),charset),
+    							HttpImpl.urlenc(param.getValueAsString(),charset));
                     else
                         req.addHeader(param.getName(),param.getValueAsString());
     			}
@@ -777,10 +777,10 @@ public final class Http4 extends BodyTagImpl implements Http {
                 	
                 	if(param.getName().equalsIgnoreCase("Content-Length")) {}
                 	else if(param.getName().equalsIgnoreCase("Accept-Encoding")) {
-                		acceptEncoding.append(headerValue(param.getValueAsString()));
+                		acceptEncoding.append(HttpImpl.headerValue(param.getValueAsString()));
                 		acceptEncoding.append(", ");
                 	}
-                	else req.addHeader(param.getName(),headerValue(param.getValueAsString()));
+                	else req.addHeader(param.getName(),HttpImpl.headerValue(param.getValueAsString()));
                 }
     		// Cookie
     			else if(type.equals("cookie")) {
@@ -790,7 +790,7 @@ public final class Http4 extends BodyTagImpl implements Http {
     			else if(type.equals("file")) {
     				hasForm=true;
     				if(this.method==METHOD_GET) throw new ApplicationException("httpparam type file can't only be used, when method of the tag http equal post");
-    				String strCT = getContentType(param);
+    				String strCT = HttpImpl.getContentType(param);
     				ContentType ct = HTTPUtil.toContentType(strCT,null);
         			
     				String mt="text/xml";
@@ -917,7 +917,7 @@ public final class Http4 extends BodyTagImpl implements Http {
     		
     		
     		// set User Agent
-    			if(!hasHeaderIgnoreCase(req,"User-Agent"))
+    			if(!HttpImpl.hasHeaderIgnoreCase(req,"User-Agent"))
     				req.setHeader("User-Agent",this.useragent);
     		
     	// set timeout
@@ -1121,7 +1121,7 @@ public final class Http4 extends BodyTagImpl implements Http {
                 	// read content
                 	if(method!=METHOD_HEAD) {
                 		is = rsp.getContentAsStream();
-	                    if(is!=null &&isGzipEncoded(contentEncoding))
+	                    if(is!=null && HttpImpl.isGzipEncoded(contentEncoding))
 	                    	is = rsp.getStatusCode()!=200? new CachingGZIPInputStream(is):new GZIPInputStream(is);
                 	}  	
                     try {
@@ -1167,7 +1167,7 @@ public final class Http4 extends BodyTagImpl implements Http {
 		    // Binary
 		    else {
 		    	byte[] barr=null;
-		        if(isGzipEncoded(contentEncoding)){
+		        if(HttpImpl.isGzipEncoded(contentEncoding)){
 		        	if(method!=METHOD_HEAD) {
 			        	is=rsp.getContentAsStream();
 			        	is = rsp.getStatusCode()!=200?new CachingGZIPInputStream(is) :new GZIPInputStream(is);
@@ -1223,7 +1223,7 @@ public final class Http4 extends BodyTagImpl implements Http {
 	        
 	    // header		
 	        cfhttp.set(KeyConstants._header,raw.toString());
-	        if(!isStatusOK(rsp.getStatusCode())){
+	        if(!HttpImpl.isStatusOK(rsp.getStatusCode())){
 	        	String msg=rsp.getStatusCode()+" "+rsp.getStatusText();
 	            cfhttp.setEL(ERROR_DETAIL,msg);
 	            if(throwonerror){
@@ -1283,10 +1283,6 @@ public final class Http4 extends BodyTagImpl implements Http {
 	
 	public String dec(String str) {
     	return ReqRspUtil.decode(str, charset, false);
-	}
-
-	public static boolean isStatusOK(int statusCode) {
-		return statusCode>=200 && statusCode<=299;
 	}
 
 	private PageException toPageException(Throwable t) {
@@ -1646,46 +1642,6 @@ public final class Http4 extends BodyTagImpl implements Http {
 		return req;
 	}*/
 
-	private static boolean hasHeaderIgnoreCase(HttpRequestBase req,String name) {
-		org.apache.http.Header[] headers = req.getAllHeaders();
-		if(headers==null) return false;
-		for(int i=0;i<headers.length;i++){
-			if(name.equalsIgnoreCase(headers[i].getName())) return true;
-		}
-		return false;
-	}
-
-	private static String headerValue(String value) {
-		if(value==null) return null;
-		value=value.trim();
-		value=value.replace('\n', ' ');
-		value=value.replace('\r', ' ');
-		/*int len=value.length();
-		char c;
-		for(int i=0;i<len;i++){
-			c=value.charAt(i);
-			if(c=='\n' || c=='\r') return value.substring(0,i);
-		}*/
-		return value;
-	}
-
-	private static String toQueryString(NameValuePair[] qsPairs) {
-		StringBuffer sb=new StringBuffer();
-        for(int i=0;i<qsPairs.length;i++) {
-            if(sb.length()>0)sb.append('&');
-            sb.append(qsPairs[i].getName());
-            if(qsPairs[i].getValue()!=null){
-            	sb.append('=');
-            	sb.append(qsPairs[i].getValue());
-            }
-        }
-        return sb.toString();
-    }
-
-    private static String urlenc(String str, String charset) throws UnsupportedEncodingException {
-    	if(!ReqRspUtil.needEncoding(str,false)) return str;
-    	return URLEncoder.encode(str,charset);
-    }
 
     @Override
 	public void doInitBody()	{
@@ -1761,137 +1717,6 @@ public final class Http4 extends BodyTagImpl implements Http {
 	public void setAddtoken(boolean addtoken) {
 		this.addtoken = addtoken;
 	}
-	
-	/**
-     * checks if status code is a redirect
-     * @param status
-     * @return is redirect
-     */
-    
-	static boolean isRedirect(int status) {
-    	return 
-        	status==STATUS_REDIRECT_FOUND || 
-        	status==STATUS_REDIRECT_MOVED_PERMANENTLY ||
-        	status==STATUS_REDIRECT_SEE_OTHER ||
-        	status==STATUS_REDIRECT_TEMPORARY_REDIRECT;
-    	
-    	
-    }
-    
-    /**
-     * merge to pathes to one
-     * @param current
-     * @param relPath
-     * @return
-     * @throws MalformedURLException
-     */
-    public static String mergePath(String current, String relPath) throws MalformedURLException {
-        
-        // get current directory
-        String currDir;
-        if(current==null || current.indexOf('/')==-1)currDir="/";
-        else if(current.endsWith("/"))currDir=current;
-        else currDir=current.substring(0,current.lastIndexOf('/')+1);
-        
-        // merge together
-        String path;
-        if(relPath.startsWith("./"))path=currDir+relPath.substring(2);
-        else if(relPath.startsWith("/"))path=relPath;
-        else if(!relPath.startsWith("../"))path=currDir+relPath;
-        else {
-            while(relPath.startsWith("../") || currDir.length()==0) {
-                relPath=relPath.substring(3);
-                currDir=currDir.substring(0,currDir.length()-1);
-                int index = currDir.lastIndexOf('/');
-                if(index==-1)throw new MalformedURLException("invalid relpath definition for URL");
-                currDir=currDir.substring(0,index+1);
-            }
-            path=currDir+relPath;
-        }
-        
-        return path;
-    }
-    
-	private static String getContentType(HttpParamBean param) {
-		String mimeType=param.getMimeType();
-		if(StringUtil.isEmpty(mimeType,true)) {
-			mimeType=ResourceUtil.getMimeType(param.getFile(), ResourceUtil.MIMETYPE_CHECK_EXTENSION+ResourceUtil.MIMETYPE_CHECK_HEADER, null);
-		}
-		return mimeType;
-	}
-
-	public static boolean isGzipEncoded(String contentEncoding) {
-		return !StringUtil.isEmpty(contentEncoding) && StringUtil.indexOfIgnoreCase(contentEncoding, "gzip")!=-1;
-	}
-
-	public static Object getOutput(InputStream is, String contentType, String contentEncoding, boolean closeIS) {
-		if(StringUtil.isEmpty(contentType))contentType="text/html";
-		
-		// Gzip
-		if(Http4.isGzipEncoded(contentEncoding)){
-			try {
-				is=new GZIPInputStream(is);
-			} 
-			catch (IOException e) {}
-		}
-		
-		try {
-			// text
-			if(HTTPUtil.isTextMimeType(contentType)) {
-				String[] tmp = HTTPUtil.splitMimeTypeAndCharset(contentType,null);
-				Charset cs=Http4.getCharset(tmp[1]);
-				
-				try {
-					return IOUtil.toString(is, cs);
-				} catch (IOException e) {}
-			}
-			// Binary
-			else {
-				try {
-					return IOUtil.toBytes(is);
-				} 
-				catch (IOException e) {}
-			}
-		}
-		finally{
-			if(closeIS)IOUtil.closeEL(is);
-		}
-
-		return "";
-	}
-	
-	public static URL locationURL(HttpUriRequest req, HttpResponse rsp) {
-		URL url=null;
-		try {
-			url = req.getURI().toURL();
-		} catch (MalformedURLException e1) {
-			return null;
-		}
-		
-		Header h = HTTPResponse4Impl.getLastHeaderIgnoreCase(rsp, "location");
-		if(h!=null) {
-			String str = h.getValue();
-			try {
-				return new URL(str);
-			} catch (MalformedURLException e) {
-				try {
-					return new URL(url.getProtocol(), url.getHost(), url.getPort(), mergePath(url.getFile(), str));
-					
-				} catch (MalformedURLException e1) {
-					return null;
-				}
-			}
-		}
-		return null;
-	}
-
-	public static Charset getCharset(String strCharset) {
-		if(!StringUtil.isEmpty(strCharset,true)) 
-			return CharsetUtil.toCharset(strCharset);
-		return CharsetUtil.getWebCharset();
-	}
-	
-	
 }
 
 class Executor4 extends Thread {
