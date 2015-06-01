@@ -3770,7 +3770,7 @@ To use cached data, the tag must be called with the exact same arguments. Only u
 	<!-- Http -->
 	<tag>
 		<name>http</name>
-		<tag-class>lucee.runtime.tag.Http4</tag-class>
+		<tag-class>lucee.runtime.tag.Http</tag-class>
 		<body-content>free</body-content>
 		<body-rtexprvalue>false</body-rtexprvalue>
 		<script>
