@@ -40,15 +40,12 @@ public final class QueryAddColumn extends BIF {
 	}
 	
 	public static double call(PageContext pc , Query query, String string, Object array) throws PageException {
-		print.e(query.getClass().getName());
 		query.addColumn(KeyImpl.init(string),Caster.toArray(array));
 		return query.size();
 	}
 	
 	public static double call(PageContext pc , Query query, String string, Object datatype, Object array) throws PageException {
 		if(datatype==null) return call(pc, query, string, array);
-		
-		print.e(query.getClass().getName());
 		query.addColumn(KeyImpl.init(string),Caster.toArray(array),SQLCaster.toSQLType(Caster.toString(datatype)));
 		return query.size();
 	}
