@@ -63,7 +63,7 @@ public class HTTPResource extends ReadOnlyResourceSupport {
 			// TODO Support for proxy
 			ProxyData pd=data.hasProxyData()?data.proxyData:ProxyDataImpl.NO_PROXY;
 				
-			http = HTTPEngine.get(url, data.username, data.password, _getTimeout(),HTTPEngine.MAX_REDIRECT,null, data.userAgent, 
+			http = HTTPEngine.get(url, data.username, data.password, _getTimeout(),true,null, data.userAgent, 
 					pd,
 					null);
 		}
@@ -74,7 +74,7 @@ public class HTTPResource extends ReadOnlyResourceSupport {
 		if(http==null) {
 			URL url = new URL(provider.getProtocol(),data.host,data.port,data.path);
 			ProxyData pd=data.hasProxyData()?data.proxyData:ProxyDataImpl.NO_PROXY;
-			return HTTPEngine.head(url, data.username, data.password, _getTimeout(),HTTPEngine.MAX_REDIRECT, 
+			return HTTPEngine.head(url, data.username, data.password, _getTimeout(),true, 
 					null, data.userAgent, 
 					pd,
 					null).getStatusCode();
@@ -86,7 +86,7 @@ public class HTTPResource extends ReadOnlyResourceSupport {
 		if(http==null) {
 			URL url = new URL(provider.getProtocol(),data.host,data.port,data.path);
 			ProxyData pd=data.hasProxyData()?data.proxyData:ProxyDataImpl.NO_PROXY;
-			return HTTPEngine.head(url, data.username, data.password, _getTimeout(),HTTPEngine.MAX_REDIRECT, 
+			return HTTPEngine.head(url, data.username, data.password, _getTimeout(),true, 
 					null, data.userAgent, 
 					pd,
 					null).getContentType();

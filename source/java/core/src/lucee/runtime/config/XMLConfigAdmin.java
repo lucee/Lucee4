@@ -4711,7 +4711,7 @@ public final class XMLConfigAdmin {
 		HTTPResponse method=null;
 		try {
 			URL url = HTTPUtil.toURL(strUrl+"?wsdl",true);
-			method = HTTPEngine.get(url, null, null, 2000,HTTPEngine.MAX_REDIRECT, null, null, null, null);
+			method = HTTPEngine.get(url, null, null, 2000,true, null, null, null, null);
 		} 
 		catch (MalformedURLException e) {
 			throw new ApplicationException("url defintion ["+strUrl+"] is invalid");

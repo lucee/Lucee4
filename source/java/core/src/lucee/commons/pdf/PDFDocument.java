@@ -393,7 +393,7 @@ public final class PDFDocument {
 				proxypassword=pd==null?null:pd.getPassword();
 			}
 			
-			HTTPResponse method = HTTPEngine.get(url, authUser, authPassword, -1,HTTPEngine.MAX_REDIRECT, null, userAgent,
+			HTTPResponse method = HTTPEngine.get(url, authUser, authPassword, -1,true, null, userAgent,
 					ProxyDataImpl.getInstance(proxyserver, proxyport, proxyuser, proxypassword),null);
 			
 			// mimetype

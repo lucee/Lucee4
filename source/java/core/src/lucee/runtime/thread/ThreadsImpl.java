@@ -35,7 +35,7 @@ import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Duplicator;
 import lucee.runtime.op.ThreadLocalDuplication;
-import lucee.runtime.tag.Http3;
+import lucee.runtime.tag.Http;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.StructImpl;
@@ -166,7 +166,7 @@ public class ThreadsImpl extends StructSupport implements lucee.runtime.type.sco
 		if(ct.output==null)return "";
 
 		InputStream is = new ByteArrayInputStream(ct.output.toByteArray());
-		return Http3.getOutput(is, ct.contentType, ct.contentEncoding,true);
+		return Http.getOutput(is, ct.contentType, ct.contentEncoding,true);
 		
 	}
 

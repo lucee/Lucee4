@@ -251,7 +251,7 @@ public class DeployHandler {
 			try{
 				url=providers[i].getURL();
 				url=new URL(url,"/rest/extension/provider/full/"+id+(apiKey==null?"":"ioid="+apiKey));
-				HTTPResponse rsp = HTTPEngine.get(url, null, null, -1, 0, "UTF-8", "", null, new Header[]{new HeaderImpl("accept","application/cfml")});
+				HTTPResponse rsp = HTTPEngine.get(url, null, null, -1, false, "UTF-8", "", null, new Header[]{new HeaderImpl("accept","application/cfml")});
 				if(rsp.getStatusCode()!=200)
 					throw new IOException("failed to load extension with id "+id);
 				

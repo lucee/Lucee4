@@ -72,43 +72,43 @@ public class HTTPEngine {
 
 	
 	public static HTTPResponse get(URL url) throws IOException { 
-        if(use4) return HTTPEngine4Impl.get(url, null, null, -1,MAX_REDIRECT, null, null, null, null);
+        if(use4) return HTTPEngine4Impl.get(url, null, null, -1,true, null, null, null, null);
 		return HTTPEngine3Impl.get(url, null, null, -1,MAX_REDIRECT, null, null, null, null);
     }
     
     public static HTTPResponse post(URL url) throws IOException {
-    	if(use4) return HTTPEngine4Impl.post(url, null, null, -1,MAX_REDIRECT, null, null, null, null);
+    	if(use4) return HTTPEngine4Impl.post(url, null, null, -1,true, null, null, null, null);
     	return HTTPEngine3Impl.post(url, null, null, -1,MAX_REDIRECT, null, null, null, null,null);
     }
 	
-	public static HTTPResponse get(URL url, String username, String password, long timeout, int maxRedirect,
+	public static HTTPResponse get(URL url, String username, String password, long timeout, boolean followRedirect,
 	        String charset, String useragent,ProxyData proxy, Header[] headers) throws IOException { 
-		if(use4) return HTTPEngine4Impl.get(url, username, password, timeout, maxRedirect, charset, useragent, proxy, headers);
-		return HTTPEngine3Impl.get(url, username, password, timeout, maxRedirect, charset, useragent, proxy, headers);
+		if(use4) return HTTPEngine4Impl.get(url, username, password, timeout, followRedirect, charset, useragent, proxy, headers);
+		return HTTPEngine3Impl.get(url, username, password, timeout, followRedirect?MAX_REDIRECT:0, charset, useragent, proxy, headers);
     }
 
-	public static HTTPResponse post(URL url, String username, String password, long timeout, int maxRedirect,
+	public static HTTPResponse post(URL url, String username, String password, long timeout, boolean followRedirect,
             String charset, String useragent, ProxyData proxy, Map<String,String> headers, Map<String,String> params) throws IOException {
-        	if(use4) return HTTPEngine4Impl.post(url, username, password, timeout, maxRedirect, charset, useragent, proxy, toHeaders(headers),params);
-        	return HTTPEngine3Impl.post(url, username, password, timeout, maxRedirect, charset, useragent, proxy, toHeaders(headers),params);
+        	if(use4) return HTTPEngine4Impl.post(url, username, password, timeout, followRedirect, charset, useragent, proxy, toHeaders(headers),params);
+        	return HTTPEngine3Impl.post(url, username, password, timeout, followRedirect?MAX_REDIRECT:0, charset, useragent, proxy, toHeaders(headers),params);
         }
     
-    public static HTTPResponse head(URL url, String username, String password, int timeout, int maxRedirect,
+    public static HTTPResponse head(URL url, String username, String password, int timeout, boolean followRedirect,
         String charset, String useragent,ProxyData proxy, Header[] headers) throws IOException {
-    	if(use4) return HTTPEngine4Impl.head(url, username, password, timeout, maxRedirect, charset, useragent, proxy, headers);
-    	return HTTPEngine3Impl.head(url, username, password, timeout, maxRedirect, charset, useragent, proxy, headers);
+    	if(use4) return HTTPEngine4Impl.head(url, username, password, timeout, followRedirect, charset, useragent, proxy, headers);
+    	return HTTPEngine3Impl.head(url, username, password, timeout, followRedirect?MAX_REDIRECT:0, charset, useragent, proxy, headers);
 	}
     
-	public static HTTPResponse put(URL url, String username, String password, int timeout, int maxRedirect,
+	public static HTTPResponse put(URL url, String username, String password, int timeout, boolean followRedirect,
 		String mimetype,String charset, String useragent,ProxyData proxy, Header[] headers, Object body) throws IOException {
-		if(use4) return HTTPEngine4Impl.put(url, username, password, timeout, maxRedirect, mimetype,charset, useragent, proxy, headers,body);     
-		return HTTPEngine3Impl.put(url, username, password, timeout, maxRedirect, charset, useragent, proxy, headers,body);     
+		if(use4) return HTTPEngine4Impl.put(url, username, password, timeout, followRedirect, mimetype,charset, useragent, proxy, headers,body);     
+		return HTTPEngine3Impl.put(url, username, password, timeout, followRedirect?MAX_REDIRECT:0, charset, useragent, proxy, headers,body);     
 	}
     
-    public static HTTPResponse delete(URL url, String username, String password, int timeout, int maxRedirect,
+    public static HTTPResponse delete(URL url, String username, String password, int timeout, boolean followRedirect,
         String charset, String useragent,ProxyData proxy, Header[] headers) throws IOException {
-    	if(use4) return HTTPEngine4Impl.delete(url, username, password, timeout, maxRedirect, charset, useragent, proxy, headers);
-    	return HTTPEngine3Impl.delete(url, username, password, timeout, maxRedirect, charset, useragent, proxy, headers);
+    	if(use4) return HTTPEngine4Impl.delete(url, username, password, timeout, followRedirect, charset, useragent, proxy, headers);
+    	return HTTPEngine3Impl.delete(url, username, password, timeout, followRedirect?MAX_REDIRECT:0, charset, useragent, proxy, headers);
 	}
 
 	public static Header header(String name, String value) {

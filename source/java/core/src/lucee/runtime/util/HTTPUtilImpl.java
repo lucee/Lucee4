@@ -60,7 +60,7 @@ public class HTTPUtilImpl implements HTTPUtil {
 			int timeout, String charset, String useragent, String proxyserver,
 			int proxyport, String proxyuser, String proxypassword,
 			Header[] headers) throws IOException {
-		return HTTPEngine.delete(url, username, password, timeout,HTTPEngine.MAX_REDIRECT, charset, useragent, ProxyDataImpl.getInstance(proxyserver, proxyport, proxyuser, proxypassword), headers);
+		return HTTPEngine.delete(url, username, password, timeout,true, charset, useragent, ProxyDataImpl.getInstance(proxyserver, proxyport, proxyuser, proxypassword), headers);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class HTTPUtilImpl implements HTTPUtil {
 			int timeout, String charset, String useragent, String proxyserver,
 			int proxyport, String proxyuser, String proxypassword,
 			Header[] headers) throws IOException {
-		return HTTPEngine.head(url, username, password, timeout,HTTPEngine.MAX_REDIRECT, charset, useragent, ProxyDataImpl.getInstance(proxyserver, proxyport, proxyuser, proxypassword), headers);
+		return HTTPEngine.head(url, username, password, timeout,true, charset, useragent, ProxyDataImpl.getInstance(proxyserver, proxyport, proxyuser, proxypassword), headers);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class HTTPUtilImpl implements HTTPUtil {
 			int timeout, String charset, String useragent, String proxyserver,
 			int proxyport, String proxyuser, String proxypassword,
 			Header[] headers) throws IOException {
-		return HTTPEngine.get(url, username, password, timeout,HTTPEngine.MAX_REDIRECT, charset, useragent, ProxyDataImpl.getInstance(proxyserver, proxyport, proxyuser, proxypassword), headers);
+		return HTTPEngine.get(url, username, password, timeout,true, charset, useragent, ProxyDataImpl.getInstance(proxyserver, proxyport, proxyuser, proxypassword), headers);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class HTTPUtilImpl implements HTTPUtil {
 			int timeout, String mimetype, String charset, String useragent, String proxyserver,
 			int proxyport, String proxyuser, String proxypassword,
 			Header[] headers, Object body) throws IOException {
-		return HTTPEngine.put(url, username, password, timeout,HTTPEngine.MAX_REDIRECT, mimetype, charset, useragent, ProxyDataImpl.getInstance(proxyserver, proxyport, proxyuser, proxypassword), headers, body);
+		return HTTPEngine.put(url, username, password, timeout,true, mimetype, charset, useragent, ProxyDataImpl.getInstance(proxyserver, proxyport, proxyuser, proxypassword), headers, body);
 	}
 
 	@Override

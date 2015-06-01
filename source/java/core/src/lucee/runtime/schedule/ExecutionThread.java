@@ -106,7 +106,7 @@ class ExecutionThread extends Thread {
         
         // execute
         try {
-        	rsp = HTTPEngine.get(new URL(url), user, pass, task.getTimeout(),HTTPEngine.MAX_REDIRECT, charset, null, proxy, headers);
+        	rsp = HTTPEngine.get(new URL(url), user, pass, task.getTimeout(),true, charset, null, proxy, headers);
         } catch (Exception e) {
         	
             LogUtil.log(log,Log.LEVEL_ERROR,logName,e);

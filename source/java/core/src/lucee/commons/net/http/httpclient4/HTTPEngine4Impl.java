@@ -22,10 +22,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.TemporaryStream;
@@ -53,12 +55,17 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpMessage;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.ProtocolException;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
@@ -68,16 +75,20 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
@@ -99,11 +110,11 @@ public class HTTPEngine4Impl {
 	 * @return
 	 * @throws IOException
 	 */
-	public static HTTPResponse get(URL url, String username,String password, long timeout,  int maxRedirect,
+	public static HTTPResponse get(URL url, String username,String password, long timeout,  boolean redirect,
             String charset, String useragent,
             ProxyData proxy, lucee.commons.net.http.Header[] headers) throws IOException {
 		HttpGet get = new HttpGet(url.toExternalForm());
-		return _invoke(url,get, username, password, timeout,maxRedirect, charset, useragent, proxy, headers,null);
+		return _invoke(url,get, username, password, timeout, redirect, charset, useragent, proxy, headers,null);
 	}
 
     /**
@@ -122,22 +133,22 @@ public class HTTPEngine4Impl {
      * @return
      * @throws IOException
      */
-    public static HTTPResponse post(URL url, String username,String password, long timeout,  int maxRedirect,
+    public static HTTPResponse post(URL url, String username,String password, long timeout,  boolean redirect,
             String charset, String useragent,
             ProxyData proxy, lucee.commons.net.http.Header[] headers) throws IOException {
     	HttpPost post = new HttpPost(url.toExternalForm());
-    	return _invoke(url,post, username, password, timeout,maxRedirect, charset, useragent, proxy, headers,null);
+    	return _invoke(url,post, username, password, timeout, redirect, charset, useragent, proxy, headers,null);
     }
     
 
     
 
-    public static HTTPResponse post(URL url, String username,String password, long timeout, int maxRedirect,
+    public static HTTPResponse post(URL url, String username,String password, long timeout, boolean redirect,
             String charset, String useragent,
             ProxyData proxy, lucee.commons.net.http.Header[] headers,Map<String,String> formfields) throws IOException {
     	HttpPost post = new HttpPost(url.toExternalForm());
     	
-    	return _invoke(url,post, username, password, timeout,maxRedirect, charset, useragent, proxy, headers,formfields);
+    	return _invoke(url,post, username, password, timeout, redirect, charset, useragent, proxy, headers,formfields);
     }
     
     
@@ -159,12 +170,12 @@ public class HTTPEngine4Impl {
      * @throws IOException
      * @throws PageException 
      */
-    public static HTTPResponse put(URL url, String username,String password, long timeout,  int maxRedirect,
+    public static HTTPResponse put(URL url, String username,String password, long timeout, boolean redirect,
     		String mimetype,String charset, String useragent,
             ProxyData proxy, lucee.commons.net.http.Header[] headers, Object body) throws IOException {
 		HttpPut put= new HttpPut(url.toExternalForm());
 		setBody(put,body,mimetype,charset);
-        return _invoke(url,put, username, password, timeout, maxRedirect, charset, useragent, proxy, headers,null);
+        return _invoke(url,put, username, password, timeout, redirect, charset, useragent, proxy, headers,null);
 		 
 	}
     
@@ -184,11 +195,11 @@ public class HTTPEngine4Impl {
      * @return
      * @throws IOException
      */
-    public static HTTPResponse delete(URL url, String username,String password, long timeout,  int maxRedirect,
+    public static HTTPResponse delete(URL url, String username,String password, long timeout, boolean redirect,
             String charset, String useragent,
             ProxyData proxy, lucee.commons.net.http.Header[] headers) throws IOException {
     	HttpDelete delete= new HttpDelete(url.toExternalForm());
-		return _invoke(url,delete, username, password, timeout, maxRedirect, charset, useragent, proxy, headers,null);    
+		return _invoke(url,delete, username, password, timeout, redirect, charset, useragent, proxy, headers,null);    
 	}
 
     /**
@@ -207,11 +218,11 @@ public class HTTPEngine4Impl {
      * @return
      * @throws IOException
      */
-    public static HTTPResponse head(URL url, String username,String password, long timeout, int maxRedirect,
+    public static HTTPResponse head(URL url, String username,String password, long timeout, boolean redirect,
             String charset, String useragent,
             ProxyData proxy, lucee.commons.net.http.Header[] headers) throws IOException {
     	HttpHead head= new HttpHead(url.toExternalForm());
-		return _invoke(url,head, username, password, timeout, maxRedirect, charset, useragent, proxy, headers,null);    
+		return _invoke(url,head, username, password, timeout, redirect, charset, useragent, proxy, headers,null);    
 	}
     
 	
@@ -227,21 +238,25 @@ public class HTTPEngine4Impl {
 		return new HeaderImpl(header.getName(), header.getValue());
 	}
 	
-	private static HTTPResponse _invoke(URL url,HttpUriRequest request,String username,String password, long timeout, int maxRedirect,
+	private static HTTPResponse _invoke(URL url,HttpUriRequest request,String username,String password, long timeout, boolean redirect,
             String charset, String useragent,
             ProxyData proxy, lucee.commons.net.http.Header[] headers, Map<String,String> formfields) throws IOException {
     	
-    	// TODO HttpConnectionManager manager=new SimpleHttpConnectionManager();//MultiThreadedHttpConnectionManager();
-		BasicHttpParams params = new BasicHttpParams();
-    	DefaultHttpClient client = createClient(params,maxRedirect);
+		HttpClientBuilder builder = HttpClients.custom();
+    	
+    	// redirect
+    	if(redirect)  builder.setRedirectStrategy(new DefaultRedirectStrategy());
+    	else builder.disableRedirectHandling();
+    	
     	HttpHost hh=new HttpHost(url.getHost(),url.getPort());
     	setHeader(request,headers);
     	if(CollectionUtil.isEmpty(formfields))setContentType(request,charset);
     	setFormFields(request,formfields,charset);
     	setUserAgent(request,useragent);
-    	setTimeout(params,timeout);
-    	HttpContext context=setCredentials(client,hh, username, password,false);  
-    	setProxy(client,request,proxy);
+    	if(timeout>0)builder.setConnectionTimeToLive(timeout, TimeUnit.MILLISECONDS);
+    	HttpContext context=setCredentials(builder,hh, username, password,false);  
+    	setProxy(builder,request,proxy);
+    	CloseableHttpClient client = builder.build();
         if(context==null)context = new BasicHttpContext();
         return new HTTPResponse4Impl(url,context,request,client.execute(request,context));
     }
@@ -263,13 +278,6 @@ public class HTTPEngine4Impl {
     	}
 	}
 
-	public static DefaultHttpClient createClient(BasicHttpParams params, int maxRedirect) {
-    	params.setParameter(ClientPNames.HANDLE_REDIRECTS, maxRedirect==0?Boolean.FALSE:Boolean.TRUE);
-    	if(maxRedirect>0)params.setParameter(ClientPNames.MAX_REDIRECTS, new Integer(maxRedirect));
-    	params.setParameter(ClientPNames.REJECT_RELATIVE_REDIRECT, Boolean.FALSE);
-    	return new DefaultHttpClient(params);
-	}
-
 	private static void setUserAgent(HttpMessage hm, String useragent) {
         if(useragent!=null)hm.setHeader("User-Agent",useragent);
 	}
@@ -289,18 +297,20 @@ public class HTTPEngine4Impl {
         }
 	}
 
-	public static void setTimeout(HttpParams params, long timeout) {
+	/*public static void setTimeout(HttpParams params, long timeout) {
         if(timeout>0){
         	HttpConnectionParams.setConnectionTimeout(params, (int)timeout);
         	HttpConnectionParams.setSoTimeout(params, (int)timeout);
         }
-	}
+	}*/
 
-	public static BasicHttpContext setCredentials(DefaultHttpClient client, HttpHost httpHost, String username,String password, boolean preAuth) {
+	public static BasicHttpContext setCredentials(HttpClientBuilder builder, HttpHost httpHost, String username,String password, boolean preAuth) {
         // set Username and Password
         if(!StringUtil.isEmpty(username,true)) {
             if(password==null)password="";
-            CredentialsProvider cp = client.getCredentialsProvider();
+            CredentialsProvider cp = new BasicCredentialsProvider();
+            builder.setDefaultCredentialsProvider(cp);
+            
             cp.setCredentials(
                 new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT), 
                 new UsernamePasswordCredentials(username,password));
@@ -318,15 +328,16 @@ public class HTTPEngine4Impl {
         return null;
 	}
 	
-	public static void setNTCredentials(DefaultHttpClient client, String username,String password, String workStation, String domain) {
+	public static void setNTCredentials(HttpClientBuilder builder, String username,String password, String workStation, String domain) {
         // set Username and Password
         if(!StringUtil.isEmpty(username,true)) {
             if(password==null)password="";
-            CredentialsProvider cp = client.getCredentialsProvider();
+            CredentialsProvider cp = new BasicCredentialsProvider();
+            builder.setDefaultCredentialsProvider(cp);
+            
             cp.setCredentials(
                 new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT), 
                 new NTCredentials(username,password,workStation,domain));
-            //httpMethod.setDoAuthentication( true );
         }
 	}
 
@@ -334,28 +345,30 @@ public class HTTPEngine4Impl {
     	if(body!=null)req.setEntity(toHttpEntity(body,mimetype,charset));
 	}
 
-	public static void setProxy(DefaultHttpClient client, HttpUriRequest request, ProxyData proxy) {
+	public static void setProxy(HttpClientBuilder builder, HttpUriRequest request, ProxyData proxy) {
 		// set Proxy
         if(ProxyDataImpl.isValid(proxy)) {
         	HttpHost host = new HttpHost(proxy.getServer(), proxy.getPort()==-1?80:proxy.getPort());
-        	client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, host);
+        	builder.setProxy(host);
+        	
+        	// username/password
             if(!StringUtil.isEmpty(proxy.getUsername())) {
-                
-                client.getCredentialsProvider().setCredentials(
+        		CredentialsProvider cp = new BasicCredentialsProvider();
+                builder.setDefaultCredentialsProvider(cp);
+                cp.setCredentials(
                         new AuthScope(proxy.getServer(), proxy.getPort()),
                         new UsernamePasswordCredentials(proxy.getUsername(),proxy.getPassword()));
             }
         } 
 	}
 	
-	public static void addCookie(DefaultHttpClient client, String domain, String name, String value, String path, String charset) {
+	public static void addCookie(CookieStore cookieStore, String domain, String name, String value, String path, String charset) {
 		if(ReqRspUtil.needEncoding(name,false)) name=ReqRspUtil.encode(name, charset);
 		if(ReqRspUtil.needEncoding(value,false)) value=ReqRspUtil.encode(value, charset);
 		BasicClientCookie cookie = new BasicClientCookie(name, value);
 		if(!StringUtil.isEmpty(domain,true))cookie.setDomain(domain);
 		if(!StringUtil.isEmpty(path,true))cookie.setPath(path);
-		
-		client.getCookieStore().addCookie(cookie);
+		cookieStore.addCookie(cookie);
 	}
 
 	/**
