@@ -35,10 +35,10 @@ public class HttpImpl implements Http,BodyTag {
 
 	public HttpImpl(){
 		try{
-			instance = new Http41();
+			instance = new Http41(); // try to use the implemenation based on the newer apache library
 		}
 		catch(Throwable t){
-			instance = new Http4();
+			instance = new Http4(); // if it fails we have a fallback to the old implementation
 		}
 	}
 
