@@ -20,6 +20,8 @@ package lucee.commons.net.http.httpclient4;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -53,17 +55,21 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpMessage;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.ClientContext;
@@ -243,7 +249,7 @@ public class HTTPEngine4Impl {
     	HttpContext context=setCredentials(client,hh, username, password,false);  
     	setProxy(client,request,proxy);
         if(context==null)context = new BasicHttpContext();
-        return new HTTPResponse4Impl(url,context,request,client.execute(request,context));
+        return new HTTPResponse4Impl(url,context,request,execute(client,request,context));
     }
 	
 	private static void setFormFields(HttpUriRequest request, Map<String, String> formfields, String charset) throws IOException {
@@ -399,6 +405,25 @@ public class HTTPEngine4Impl {
 
 	public static Entity getResourceEntity(Resource res, String contentType) {
 		return new ResourceHttpEntity(res,contentType);
+	}
+
+	/*
+	 * this method exist because the method execute is returning a different type depending on the version of the library
+	 */
+	public static HttpResponse execute(HttpClient client, HttpUriRequest req, HttpContext context) throws ClientProtocolException, IOException {
+		try {
+			Method exe = client.getClass().getMethod("execute", new Class[]{HttpUriRequest.class,HttpContext.class});
+			return (HttpResponse)exe.invoke(client, new Object[]{req,context});
+		}
+		catch (InvocationTargetException ite) {
+			Throwable t = ite.getTargetException();
+			if(t instanceof IOException)throw (IOException)t;
+			if(t instanceof ClientProtocolException)throw (ClientProtocolException)t;
+			throw new RuntimeException(t);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	
