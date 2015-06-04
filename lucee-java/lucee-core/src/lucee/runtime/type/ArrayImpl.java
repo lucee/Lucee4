@@ -53,10 +53,13 @@ import lucee.runtime.type.util.ListIteratorImpl;
 public class ArrayImpl extends ArraySupport implements Sizeable {
 	
 	private static final long serialVersionUID = -6187994169003839005L;
+	private static final int DEFAULT_CAPACITY=32;
 	
 	private Object[] arr;
 	private int dimension=1;
-	private final int cap=32;
+
+	
+	private final int cap=DEFAULT_CAPACITY;
 	private int size=0;
 	private int offset=0;
 	private int offCount=0;
@@ -67,10 +70,19 @@ public class ArrayImpl extends ArraySupport implements Sizeable {
 	 * @throws ExpressionException
 	 */
 	public ArrayImpl(int dimension) throws ExpressionException {
+		this(dimension,DEFAULT_CAPACITY);
+	}
+
+	public ArrayImpl(int dimension, int initalCapacity) throws ExpressionException {
 		if(dimension>3 || dimension<1)
 			throw new ExpressionException("Array Dimension must be between 1 and 3");
 		this.dimension=dimension;
-		arr=new Object[offset+cap];
+		arr=new Object[offset+initalCapacity];
+	}
+	
+	protected ArrayImpl(int dimension, int initalCapacity, int noFunctionality) {
+		this.dimension=dimension;
+		arr=new Object[offset+initalCapacity];
 	}
 	
 	/**
@@ -232,7 +244,15 @@ public class ArrayImpl extends ArraySupport implements Sizeable {
 		if(key>size)size=key;
 		arr[(offset+key)-1]=checkValue(value);
 		return value;		
-	}	
+	}
+	// same as "setE" bit not synchronized
+	private synchronized Object _setE(int key, Object value) throws ExpressionException {
+		if(key<1)throw new ExpressionException("Invalid index ["+key+"] for array. Index must be a positive integer (1, 2, 3, ...)");
+		if(offset+key>arr.length)enlargeCapacity(key);
+		if(key>size)size=key;
+		arr[(offset+key)-1]=checkValue(value);
+		return value;		
+	}
 	
 	public synchronized int ensureCapacity(int cap) {
 		if (cap > arr.length)
@@ -551,14 +571,16 @@ public class ArrayImpl extends ArraySupport implements Sizeable {
 		}
 		return sb.toString();
 	}
-	
+
 	@Override
 	public synchronized Collection duplicate(boolean deepCopy) {
-		return duplicate(new ArrayImpl(),deepCopy);
+		return duplicate(new ArrayImpl(dimension,size(),0),deepCopy);
 	}
 
 	protected Collection duplicate(ArrayImpl arr,boolean deepCopy) {
 		arr.dimension=dimension;
+
+		//arr.dimension=dimension;
 		Iterator<Entry<Key, Object>> it = entryIterator();
 		boolean inside=deepCopy?ThreadLocalDuplication.set(this, arr):true;
 		Entry<Key, Object> e;
@@ -566,14 +588,13 @@ public class ArrayImpl extends ArraySupport implements Sizeable {
 			while(it.hasNext()){
 				e = it.next();
 				if(deepCopy)arr.set(e.getKey(),Duplicator.duplicate(e.getValue(),deepCopy));
-				else arr.set(e.getKey(),e.getValue());
+				else arr._setE(Caster.toIntValue(e.getKey().getString()),e.getValue());
 			}
 		}
 		catch (ExpressionException ee) {}
 		finally{
 			if(!inside)ThreadLocalDuplication.reset();
 		}
-		
 		return arr;
 	}
 

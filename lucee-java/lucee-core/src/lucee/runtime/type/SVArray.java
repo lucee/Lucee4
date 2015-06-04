@@ -55,6 +55,15 @@ public final class SVArray extends ArrayImpl implements Reference {
         super(dimension);
     }
 
+    
+    public SVArray(int dimension,int initalCapacity) throws ExpressionException {
+        super(dimension,initalCapacity);
+    }
+    
+    private SVArray(int dimension,int initalCapacity, int noFunctionality) {
+        super(dimension,initalCapacity,0);
+    }
+
     /**
      * Constructor of the class
      * @param objects
@@ -219,7 +228,7 @@ public final class SVArray extends ArrayImpl implements Reference {
 
 	@Override
 	public synchronized Collection duplicate(boolean deepCopy) {
-		SVArray sva = new SVArray();
+		SVArray sva = new SVArray(getDimension(),size(),0);
 		duplicate(sva,deepCopy);
 		sva.position=position;
 		return sva;

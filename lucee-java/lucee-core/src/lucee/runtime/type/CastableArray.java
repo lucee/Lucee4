@@ -40,14 +40,19 @@ public final class CastableArray extends ArrayImpl {
 	 * generates as string list of the array
 	 */
 	public CastableArray(){value=null;}
-	
+
 	public CastableArray(Object value){
+		this.value=value;
+	}
+	
+	public CastableArray(Object value, int initalCapacity){
+		super(1,initalCapacity,0);
 		this.value=value;
 	}
 
 	@Override
 	public synchronized Collection duplicate(boolean deepCopy) {
-		return duplicate(new CastableArray(value),deepCopy);
+		return duplicate(new CastableArray(value,size()),deepCopy);
 	}
 
 
