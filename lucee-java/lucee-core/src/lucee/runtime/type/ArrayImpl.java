@@ -37,7 +37,6 @@ import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Duplicator;
 import lucee.runtime.op.ThreadLocalDuplication;
-import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.it.EntryIterator;
 import lucee.runtime.type.it.KeyIterator;
 import lucee.runtime.type.it.StringIterator;
@@ -246,7 +245,7 @@ public class ArrayImpl extends ArraySupport implements Sizeable {
 		return value;		
 	}
 	// same as "setE" bit not synchronized
-	private synchronized Object _setE(int key, Object value) throws ExpressionException {
+	private Object _setE(int key, Object value) throws ExpressionException {
 		if(key<1)throw new ExpressionException("Invalid index ["+key+"] for array. Index must be a positive integer (1, 2, 3, ...)");
 		if(offset+key>arr.length)enlargeCapacity(key);
 		if(key>size)size=key;
@@ -512,17 +511,6 @@ public class ArrayImpl extends ArraySupport implements Sizeable {
 		return rtn;
 	}
 
-	/**
-	 * @return return array as ArrayList
-	 */
-	/*public synchronized ArrayList toArrayList() {
-		ArrayList al=new ArrayList();
-		for(int i=offset;i<offset+size;i++) {
-			al.add(arr[i]);
-		}
-		return al;
-	}*/
-	
 	@Override
 	public DumpData toDumpData(PageContext pageContext, int maxlevel, DumpProperties dp) {
 		DumpTable table = new DumpTable("array","#99cc33","#ccff33","#000000");
@@ -580,7 +568,6 @@ public class ArrayImpl extends ArraySupport implements Sizeable {
 	protected Collection duplicate(ArrayImpl arr,boolean deepCopy) {
 		arr.dimension=dimension;
 
-		//arr.dimension=dimension;
 		Iterator<Entry<Key, Object>> it = entryIterator();
 		boolean inside=deepCopy?ThreadLocalDuplication.set(this, arr):true;
 		Entry<Key, Object> e;
