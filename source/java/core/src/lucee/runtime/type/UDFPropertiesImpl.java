@@ -169,7 +169,6 @@ public final class UDFPropertiesImpl implements UDFProperties {
 	        Integer localMode,
 	        int modifier,
 	        StructImpl meta) {
-		if(pageSource==null)print.ds(page);
 		
 		// this happens when an active is based on older source code
 		if(pageSource==null){

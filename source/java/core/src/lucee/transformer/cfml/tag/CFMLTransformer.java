@@ -227,10 +227,6 @@ public final class CFMLTransformer {
 			catch (ComponentTemplateException e) {
 				throw e.getTemplateException();
 			}
-			/*catch (TemplateException e) {
-				e.printStackTrace();
-				_p=null;
-			}*/
 			// we only use that result if it is a component now 
 			if(_p!=null && !_p.isPage()) return _p;
 		}
@@ -242,24 +238,6 @@ public final class CFMLTransformer {
 		return p;
 	}
 	
-	/*private boolean isPossibleRawScript(SourceCode sc, Identification id) throws TemplateException {
-		String text = sc.getText().trim();
-		boolean isCFML=sc.getDialect()==CFMLEngine.DIALECT_CFML;
-		TagLibTag scriptTag = CFMLTransformer.getTLT(sc,isCFML?Constants.CFML_SCRIPT_TAG_NAME:Constants.LUCEE_SCRIPT_TAG_NAME,id);
-		TagLibTag compTag = CFMLTransformer.getTLT(sc,"component",id);
-		
-		// end with script tag
-		String end="</"+scriptTag.getFullName()+">";
-		if(StringUtil.endsWithIgnoreCase(text, end)) return false;
-		
-		// end with component tag
-		end="</"+compTag.getFullName()+">";
-		if(StringUtil.endsWithIgnoreCase(text, end)) return false;
-			
-		return true;
-	}*/
-
-
 	public static TagLibTag getTLT(SourceCode cfml,String name, Identification id) throws TemplateException {
 		TagLib tl;
 		try {
