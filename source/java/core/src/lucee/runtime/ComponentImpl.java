@@ -1002,8 +1002,9 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 
     @Override
     public DumpData toDumpData(PageContext pageContext, int maxlevel, DumpProperties dp, int access) {
-	    DumpTable table = new DumpTable("component","#99cc99","#ccffcc","#000000");
-        table.setTitle("Component "+getCallPath()+""+(" "+StringUtil.escapeHTML(top.properties.dspName)));
+    	boolean isCFML=getPageSource().getDialect()==CFMLEngine.DIALECT_CFML;
+	    DumpTable table = isCFML?new DumpTable("component","#ff4542","#ff9aad","#000000"):new DumpTable("component","#ca6b50","#e9bcac","#000000");
+        table.setTitle((isCFML?"Component":"Class")+" "+getCallPath()+""+(" "+StringUtil.escapeHTML(top.properties.dspName)));
         table.setComment("Only the functions and data members that are accessible from your location are displayed");
         
         // Extends
@@ -1082,7 +1083,7 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 				DumpData dd;
 				if(child instanceof Component) {
 					DumpTable t = new DumpTable("component","#99cc99","#ffffff","#000000");
-					t.appendRow(1,new SimpleDumpData("Component"),new SimpleDumpData(((Component)child).getCallName()));
+					t.appendRow(1,new SimpleDumpData(((Component)child).getPageSource().getDialect()==CFMLEngine.DIALECT_CFML?"Component":"Class"),new SimpleDumpData(((Component)child).getCallName()));
 					dd=t;
 					
 				}

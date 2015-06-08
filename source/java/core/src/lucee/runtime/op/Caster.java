@@ -3259,7 +3259,7 @@ public final class Caster {
                     if(lcType.equals("creditcard")) {
                         return String.class;
                     }
-                    else if(lcType.equals("component")) {
+                    else if(lcType.equals("component") || lcType.equals("class")) {
                         return Component.class;
                     }
                     break;

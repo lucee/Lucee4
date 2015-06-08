@@ -441,8 +441,11 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 		if (defaultProviders != null && defaultProviders.length > 0) {
 			Element defaultProvider = defaultProviders[defaultProviders.length - 1];
 			ClassDefinition defProv=getClassDefinition(defaultProvider,"",config.getIdentification());
+			
 			String strDefaultProviderComponent = defaultProvider.getAttribute("component");
-
+			if (StringUtil.isEmpty(strDefaultProviderComponent))
+				strDefaultProviderComponent = defaultProvider.getAttribute("class");
+			
 			// class
 			if (defProv.hasClass()) {
 				config.setDefaultResourceProvider(defProv.getClazz(), toArguments(defaultProvider.getAttribute("arguments"), true));
@@ -471,7 +474,9 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 			for (int i = 0; i < providers.length; i++) {
 				prov=getClassDefinition(providers[i], "",config.getIdentification());
 				strProviderCFC = providers[i].getAttribute("component");
-
+				if(StringUtil.isEmpty(strProviderCFC))
+					strProviderCFC = providers[i].getAttribute("class");
+				
 				// ignore S3 extension
 				if ("lucee.extension.io.resource.type.s3.S3ResourceProvider".equals(prov.getClassName()))
 					prov=new ClassDefinitionImpl(S3ResourceProvider.class);
@@ -1043,7 +1048,7 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 		// Component.lucee
 		f = contextDir.getRealResource("Component."+COMPONENT_EXTENSION_LUCEE);
 		if (!f.exists() || doNew)
-			createFileFromResourceEL("/resource/context/Component."+COMPONENT_EXTENSION, f);
+			createFileFromResourceEL("/resource/context/Component."+COMPONENT_EXTENSION_LUCEE, f);
 
 		f = contextDir.getRealResource(Constants.CFML_APPLICATION_EVENT_HANDLER);
 		if (!f.exists())

@@ -30,6 +30,7 @@ import lucee.commons.lang.types.RefBooleanImpl;
 import lucee.loader.engine.CFMLEngine;
 import lucee.runtime.Component;
 import lucee.runtime.component.Member;
+import lucee.runtime.config.Constants;
 import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.exp.TemplateException;
 import lucee.runtime.functions.system.CFFunction;
@@ -462,15 +463,18 @@ public abstract class AbstrCFMLScriptTransformer extends AbstrCFMLExprTransforme
 		}
 
 		comments(data);
-		
+
 		// do we have a starting component?
-		if(!data.srcCode.isCurrent("component")) {
+		String compPath=data.srcCode.getDialect()==CFMLEngine.DIALECT_CFML?
+				Constants.CFML_COMPONENT_TAG_NAME:Constants.LUCEE_COMPONENT_TAG_NAME;
+		
+		if(!data.srcCode.isCurrent(compPath)) {
 			data.srcCode.setPos(pos);
 			return null;
 		}
 		
 		// parse the component
-		TagLibTag tlt = CFMLTransformer.getTLT(data.srcCode,"component",data.config.getIdentification());
+		TagLibTag tlt = CFMLTransformer.getTLT(data.srcCode,compPath,data.config.getIdentification());
 		TagComponent comp =(TagComponent) _multiAttrStatement(parent, data, tlt);
 		comp.addAttribute(new Attribute(false,"modifier",data.factory.createLitString(id),"string"));
 		return comp;

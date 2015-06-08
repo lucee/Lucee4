@@ -44,8 +44,9 @@ public final class Static extends EvaluatorSupport {
 	
 	// check parent
 		Body body=null;
-		String ns=libTag.getTagLib().getNameSpaceAndSeparator();
-		String compName=ns+"component";
+		
+		String compName=Property.getComponentName(tag);
+		
 		boolean isCompChild=false;
 		Tag p = ASMUtil.getParentTag(tag);
 

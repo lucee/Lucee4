@@ -65,6 +65,8 @@ public class CFMLResourceProvider implements ResourceProviderPro {
 		componentPath=Caster.toString(args.get("cfc"),null);
 		if(StringUtil.isEmpty(componentPath,true))
 			componentPath=Caster.toString(args.get("component"),null);
+		if(StringUtil.isEmpty(componentPath,true))
+			componentPath=Caster.toString(args.get("class"),null);
 		
 		// use Streams for data
 		Boolean _useStreams = Caster.toBoolean(args.get("use-streams"),null);

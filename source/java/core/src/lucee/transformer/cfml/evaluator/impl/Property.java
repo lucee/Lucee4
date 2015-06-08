@@ -18,6 +18,10 @@
  **/
 package lucee.transformer.cfml.evaluator.impl;
 
+import lucee.loader.engine.CFMLEngine;
+import lucee.runtime.config.Constants;
+import lucee.transformer.TransformerException;
+import lucee.transformer.bytecode.Page;
 import lucee.transformer.bytecode.statement.tag.Tag;
 import lucee.transformer.bytecode.util.ASMUtil;
 import lucee.transformer.cfml.evaluator.EvaluatorException;
@@ -34,12 +38,25 @@ public final class Property extends EvaluatorSupport {
 
 	@Override
 	public void evaluate(Tag tag,TagLibTag libTag) throws EvaluatorException { 
-	
-	// check parent
-		String ns=libTag.getTagLib().getNameSpaceAndSeparator();
-		String compName=ns+"component";
+		// get component name
+		String compName=getComponentName(tag);
 		
 		if(!ASMUtil.isParentTag(tag,compName))
 			throw new EvaluatorException("Wrong Context, tag "+libTag.getFullName()+" must be inside "+compName+" tag");
+	}
+
+	public static String getComponentName(Tag tag) throws EvaluatorException {
+		Page page;
+		try {
+			page = ASMUtil.getAncestorPage(tag);
+		} catch (TransformerException e) {
+			throw new EvaluatorException(e.getMessage());
+		}
+		
+		String ns=tag.getTagLibTag().getTagLib().getNameSpaceAndSeparator();
+		String compName=ns+(page.getSourceCode().getDialect()==CFMLEngine.DIALECT_CFML?
+				Constants.CFML_COMPONENT_TAG_NAME:Constants.LUCEE_COMPONENT_TAG_NAME);
+		
+		return compName;
 	}
 }

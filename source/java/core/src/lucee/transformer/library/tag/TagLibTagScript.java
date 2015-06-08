@@ -137,6 +137,7 @@ public final class TagLibTagScript {
 			else if("dowhile".equals(str)) this.context=CTX_DO_WHILE;
 			else if("cfc".equals(str)) this.context=CTX_CFC;
 			else if("component".equals(str)) this.context=CTX_CFC;
+			else if("class".equals(str)) this.context=CTX_CFC;
 			else if("interface".equals(str)) this.context=CTX_INTERFACE;
 			else if("function".equals(str)) this.context=CTX_FUNCTION;
 			else if("block".equals(str)) this.context=CTX_BLOCK;

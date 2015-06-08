@@ -535,6 +535,157 @@ Depending on this setting Lucee scans certain scopes to find a variable called f
 		</attribute>
 	</tag>
 	
+	
+	<!-- Class -->
+	<tag>
+		<name>class</name>
+		<tag-class>lucee.runtime.tag.Component</tag-class>
+		<tte-class>lucee.transformer.cfml.evaluator.impl.Component</tte-class>
+		<ttt-class>lucee.transformer.bytecode.statement.tag.TagComponent</ttt-class>
+		<att-default-value></att-default-value>
+		<body-content>must</body-content>
+		<body-rtexprvalue>false</body-rtexprvalue>
+		<script>
+			<type>multiple</type>
+			<rtexprvalue>false</rtexprvalue>
+			<context>component</context>
+		</script>
+		<description>Creates and defines a component object; encloses functionality that you build in CFML and enclose within cffunction tags. This tag contains one or more cffunction tags that define methods. Code within the body of this tag, other than cffunction tags, is executed when the component is instantiated. </description>
+		<att-class>lucee.transformer.cfml.attributes.impl.Component</att-class>
+		<attribute-type>mixed</attribute-type>
+		<attribute>
+			<type>boolean</type>
+			<name>synchronized</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>If set to true all calls to an instance of a component are synchronized. This setting allows a method to be executed only by one single thread at a time.</description>
+		</attribute>
+		<attribute>
+			<type>boolean</type>
+			<name>persistent</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>Specifies CFC is persistent or not</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>extends</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>Name of parent component from which to inherit methods and properties.</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>displayname</name>
+			<alias>display</alias>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>A string to be displayed when using introspection to show
+            information about the CFC. The information appears on the
+            heading, following the component name.
+            If the style attribute is set to document, the displayname
+            attribute is used as the name of the service element in the WSDL.</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>hint</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>Text that displays when you use introspection to show information about the CFC. The hint attribute value appears below the component name heading. Use this attribute to describe the purpose of the component.</description>
+		</attribute>
+		<attribute>
+			<type>boolean</type>
+			<name>output</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+				- true: permits component method output
+				- false: suppresses component method output
+			</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>style</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<status>unimplemented</status>
+			<description>Specifies whether a CFC used for web services uses RPC-encoded style or document-literal style</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>namespace</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		    <status>unimplemented</status>
+			<description>Specifies the namespace used in the WSDL when
+            using the CFC as a document-literal style web service.
+            If you don't specify this attribute, Lucee
+            derives the namespace from the CFC class name.
+            This attribute applies only when style="document".</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>serviceportname</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<status>unimplemented</status>
+			<description>Specifies the name of the port element in the WSDL.
+            This attribute applies only when style="document".</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>serviceaddress</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<status>unimplemented</status>
+			<description>Specifies the SOAP URL of the web service. If you don't specify this attribute, Lucee uses the URL of the CFC in the WSDL service description.
+			Use this attribute to specify the protocol, for example, by specifying a URL that starts with https://. This attribute applies only for web services.</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>porttypename</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<status>unimplemented</status>
+			<description>Specifies the name of the porttype element in the WSDL.
+            This attribute applies only when style="document".</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>bindingname</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>Specifies the name of the binding element in the WSDL.
+            This attribute applies only when style="document".</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>wsdlfile</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		    <status>unimplemented</status>
+			<description>A properly formatted WSDL file to be used instead of
+            WSDL generated by Lucee.
+            This attribute applies only when style="document".</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>alias</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		    <status>unimplemented</status>
+			<description></description>
+		</attribute>
+		<attribute>
+			<type>boolean</type>
+			<name>mappedSuperClass</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		    <status>unimplemented</status>
+			<description></description>
+		</attribute>
+	</tag>
+	
 	<!-- Function -->
 	<tag>
 		<name>function</name>

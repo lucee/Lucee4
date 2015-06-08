@@ -592,7 +592,7 @@ public final class WDDXConverter extends ConverterSupport {
 			return _deserializeArray(element);
 		}
 		// Component
-		else if(nodeName.equals("component")) {
+		else if(nodeName.equals("component") || nodeName.equals("class")) {
 			return  _deserializeComponent(element);
 		}
 		// Struct

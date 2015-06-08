@@ -103,7 +103,7 @@ public class ComponentLoader {
     		obj= _search(pc, loadingLocation, rawPath, searchLocal, searchRoot, executeConstr, returnType,currP, currPS.getDialect()==CFMLEngine.DIALECT_CFML?CFMLEngine.DIALECT_LUCEE:CFMLEngine.DIALECT_CFML, isExtendedComponent);
     	}
 
-    	if(obj==null)throw new ExpressionException("invalid "+toStringType(returnType)+" definition, can't find "+toStringType(returnType)+" ["+rawPath+"]");
+    	if(obj==null)throw new ExpressionException("invalid "+toStringType(returnType,currPS.getDialect())+" definition, can't find "+toStringType(returnType,currPS.getDialect())+" ["+rawPath+"]");
     	return obj;
     }
     
@@ -346,65 +346,16 @@ public class ComponentLoader {
     	// throw new ExpressionException("invalid "+toStringType(returnType)+" definition, can't find "+toStringType(returnType)+" ["+rawPath+"]");
 	}
 
-    private static String toStringType(short returnType) {
-    	if(RETURN_TYPE_COMPONENT==returnType) return "component";
+    private static String toStringType(short returnType, int dialect) {
+    	if(RETURN_TYPE_COMPONENT==returnType) return dialect==CFMLEngine.DIALECT_LUCEE?"class":"component";
     	if(RETURN_TYPE_INTERFACE==returnType) return "interface";
 		return "component/interface";
 	}
-	/*private static String getPagePath(PageContext pc, Resource res, String dir,String name, ResourceFilter filter) {
-		if(res.isFile()) {
-			if(res.getName().equalsIgnoreCase(name)) {
-				return dir+res.getName();
-			}
-		}
-		else if(res.isDirectory()) {
-			Resource[] _dir = res.listResources(filter);
-			if(_dir!=null){
-				if(dir==null) dir="/";
-				else dir=dir+res.getName()+"/";
-				String path;
-				for(int i=0;i<_dir.length;i++){
-					path=getPagePath(pc, _dir[i],dir, name,DIR_OR_EXT);
-					if(path!=null) return path;
-				}
-			}
-		}
-		
-		return null;
-	}*/
-
+	
 	private static String trim(String str) {
     	if(StringUtil.startsWith(str, '.'))str=str.substring(1);
 		return str;
 	}
-
-	/*private static Page getPage(PageContext pc,String path, RefBoolean isRealPath, boolean searchLocal) throws PageException  {
-    	Page page=null;
-	    isRealPath.setValue(!StringUtil.startsWith(path,'/'));
-	    // search from local
-	    PageSource[] arr;
-	    
-	    if(searchLocal && isRealPath.toBooleanValue()){
-	    	arr = ((PageContextImpl)pc).getRelativePageSources(path);
-		    page=PageSourceImpl.loadPage(pc, arr, null);
-	    }
-	    // search from root
-	    if(page==null) {
-	    	if(isRealPath.toBooleanValue()){
-	    		isRealPath.setValue(false);
-	    		arr=((PageContextImpl)pc).getPageSources('/'+path);
-	    	}
-	    	else {
-	    		arr=((PageContextImpl)pc).getPageSources(path);
-	    	}
-    	    page=PageSourceImpl.loadPage(pc,arr,null);
-        }
-    	return page;
-	}*/
-
-
-	//if(page==null)
-	
 
 	public static ComponentImpl loadComponent(PageContext pc, PageSource ps,String callPath, boolean isRealPath, boolean silent) throws PageException  {
 		return _loadComponent(pc, toCIPage(ps.loadPage(pc,false),callPath), callPath, isRealPath,false,true);

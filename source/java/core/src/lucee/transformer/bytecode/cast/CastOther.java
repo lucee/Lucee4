@@ -203,7 +203,7 @@ public final class CastOther extends ExpressionBase implements Cast {
                 	adapter.invokeStatic(Types.CASTER,Methods_Caster.TO_COLLECTION);
                 return Types.COLLECTION;
             }
-            if("component".equals(lcType)) {
+            if("component".equals(lcType) || "class".equals(lcType)) {
                 rtn=expr.writeOut(bc,MODE_REF);
                 if(!rtn.equals(Types.COMPONENT)) 
                 	adapter.invokeStatic(Types.CASTER,Methods_Caster.TO_COMPONENT);
@@ -500,6 +500,7 @@ public final class CastOther extends ExpressionBase implements Cast {
             if("character".equals(lcType))						return Types.CHARACTER;
             if("collection".equals(lcType))						return Types.COLLECTION;
             if("component".equals(lcType))						return Types.COMPONENT;
+            if("class".equals(lcType))							return Types.COMPONENT;
     	break;
     	
         case 'd':

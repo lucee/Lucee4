@@ -294,6 +294,7 @@ public final class Types {
             if("character".equals(lcType))							return CHARACTER;
             if("collection".equals(lcType))							return BYTE_VALUE_ARRAY;
             if("component".equals(lcType))							return COMPONENT;
+            if("class".equals(lcType))							return COMPONENT;
         break;
         case 'd':
             if("date".equals(lcType) || "datetime".equals(lcType))	return DATE_TIME;

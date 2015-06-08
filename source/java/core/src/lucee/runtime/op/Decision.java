@@ -1006,6 +1006,7 @@ public final class Decision {
         	if("creditcard".equals(type))	return isCreditCard(value);
         	if("component".equals(type))	return isComponent(value);
         	if("cfc".equals(type))			return isComponent(value);
+        	if("class".equals(type))		return isComponent(value);
         	if("closure".equals(type))		return isClosure(value);
         break;
     	case 'd':

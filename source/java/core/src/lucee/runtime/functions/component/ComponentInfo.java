@@ -41,7 +41,7 @@ public final class ComponentInfo implements Function {
 	    sct.setEL(KeyConstants._name,component.getName());
 	    sct.setEL(KeyConstants._fullname,component.getCallName());
 	    String extend = component.getExtends();
-	    if(extend==null || extend.length()==0)extend="Component";
+	    if(extend==null || extend.length()==0)extend="Component"; // TODO Object instead?
 	    sct.setEL(KeyConstants._extends,extend);
 	    sct.setEL(KeyConstants._hint,component.getHint());
 		

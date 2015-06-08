@@ -55,7 +55,7 @@ public final class SystemCacheClear implements Function {
 		else if("template".equals(cacheName) || "page".equals(cacheName)) {
 			PagePoolClear.call(pc);
 		}
-		else if("component".equals(cacheName) || "cfc".equals(cacheName)) {
+		else if("component".equals(cacheName) || "cfc".equals(cacheName) || "class".equals(cacheName)) {
 			ComponentCacheClear.call(pc);
 		}
 		else if("customtag".equals(cacheName) || "ct".equals(cacheName)) {
