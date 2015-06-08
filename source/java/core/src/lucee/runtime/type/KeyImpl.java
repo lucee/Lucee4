@@ -387,6 +387,10 @@ public class KeyImpl implements Collection.Key,Castable,Comparable,Externalizabl
 		if(str==null) throw new CasterException(obj,Collection.Key.class);
 		return init(str);
 	}
+	
+	public static Collection.Key toKey(int i) {
+		return init(Caster.toString(i));
+	}
 
 	@Override
 	public int length() {
