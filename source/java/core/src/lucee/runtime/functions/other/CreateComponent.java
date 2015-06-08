@@ -23,6 +23,7 @@ import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.type.Struct;
+import lucee.runtime.type.UDF;
 import lucee.runtime.type.util.KeyConstants;
 
 public class CreateComponent {
@@ -37,22 +38,24 @@ public class CreateComponent {
 		// first argument is the component itself
 		Component c = CreateObject.doComponent(pc, path);
 		
-		// no arguments
-		if(args==null) {
-			c.call(pc, KeyConstants._init, EMPTY);
-		}
-		// named arguments
-		else if(Decision.isStruct(args)) {
-			Struct sct=Caster.toStruct(args);
-			c.callWithNamedValues(pc, KeyConstants._init, sct);
-		}
-		// not named arguments
-		else if(Decision.isArray(args)) {
-			Object[] arr=Caster.toNativeArray(args);
-			c.call(pc, KeyConstants._init, arr);
-		}
-		else {
-			c.call(pc, KeyConstants._init, new Object[]{args});
+		if(c.get(KeyConstants._init,null) instanceof UDF) {
+			// no arguments
+			if(args==null) {
+				c.call(pc, KeyConstants._init, EMPTY);
+			}
+			// named arguments
+			else if(Decision.isStruct(args)) {
+				Struct sct=Caster.toStruct(args);
+				c.callWithNamedValues(pc, KeyConstants._init, sct);
+			}
+			// not named arguments
+			else if(Decision.isArray(args)) {
+				Object[] arr=Caster.toNativeArray(args);
+				c.call(pc, KeyConstants._init, arr);
+			}
+			else {
+				c.call(pc, KeyConstants._init, new Object[]{args});
+			}
 		}
 		
 		return c;
