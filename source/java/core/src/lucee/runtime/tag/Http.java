@@ -42,7 +42,6 @@ import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.mimetype.ContentType;
 import lucee.commons.net.HTTPUtil;
 import lucee.commons.net.URLEncoder;
-import lucee.commons.net.http.HTTPEngine;
 import lucee.commons.net.http.Header;
 import lucee.commons.net.http.httpclient4.CachingGZIPInputStream;
 import lucee.commons.net.http.httpclient4.HTTPEngine4Impl;

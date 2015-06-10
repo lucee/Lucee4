@@ -24,7 +24,6 @@ import java.io.ObjectOutput;
 import java.util.HashSet;
 import java.util.Set;
 
-import lucee.print;
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.ExternalizableUtil;

@@ -27,7 +27,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 import javax.script.SimpleScriptContext;
-import javax.servlet.ServletException;
 
 import lucee.commons.io.IOUtil;
 import lucee.runtime.PageContext;

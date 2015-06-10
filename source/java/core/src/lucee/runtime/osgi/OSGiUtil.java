@@ -339,7 +339,6 @@ public class OSGiUtil {
 		name=name.trim();
 		
 		CFMLEngine engine = CFMLEngineFactory.getInstance();
-    	//CFMLEngine engine = ConfigWebUtil.getEngine(pc.getConfig());
     	CFMLEngineFactory factory = engine.getCFMLEngineFactory();
     	
     	
@@ -372,7 +371,6 @@ public class OSGiUtil {
 				return b;
 			}
     	}
-    	
     	
     	// if not found try to download
     	if(version!=null) {
@@ -473,7 +471,8 @@ public class OSGiUtil {
 	private static BundleFile _getBundleFile(CFMLEngineFactory factory, String name, Version version, StringBuilder versionsFound) {
 		try{
     		File dir=factory.getBundleDirectory();
-			// first we check if there is a file match (fastest solution)
+			
+    		// first we check if there is a file match (fastest solution)
 			if(version!=null){
 				File jar = new File(dir, name + "-"
 					+ version.toString().replace('.', '-') + (".jar"));
@@ -487,7 +486,7 @@ public class OSGiUtil {
 				}
 			}
 			
-			
+			// now we check by Manifest comparsion
 			File[] children = dir.listFiles(JAR_EXT_FILTER);
 	    	BundleFile bf;
 	    	for(int i=0;i<children.length;i++){

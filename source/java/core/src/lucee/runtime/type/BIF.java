@@ -29,7 +29,6 @@ import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
-import lucee.runtime.PageSource;
 import lucee.runtime.component.MemberSupport;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;

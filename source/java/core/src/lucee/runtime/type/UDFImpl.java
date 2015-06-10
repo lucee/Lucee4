@@ -27,11 +27,9 @@ import java.util.Map.Entry;
 
 import javax.servlet.jsp.tagext.BodyContent;
 
-import lucee.print;
 import lucee.commons.lang.CFTypes;
 import lucee.loader.engine.CFMLEngine;
 import lucee.runtime.Component;
-import lucee.runtime.Page;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
@@ -560,7 +558,7 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Externalizable {
 		return equals(this,(UDF)obj);
 	}
 	public static boolean equals(UDF left, UDF right){
-		print.e(left.getFunctionName()+":"+right.getFunctionName());
+		//print.e(left.getFunctionName()+":"+right.getFunctionName());
 		if(
 			!left.id().equals(right.id())
 			|| !_eq(left.getFunctionName(),right.getFunctionName())

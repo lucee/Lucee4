@@ -60,7 +60,6 @@ import lucee.commons.io.log.LoggerAndSourceData;
 import lucee.commons.io.log.log4j.Log4jUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourcesImpl;
-import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.type.cfml.CFMLResourceProvider;
 import lucee.commons.io.res.type.s3.S3ResourceProvider;
 import lucee.commons.io.res.util.ResourceUtil;

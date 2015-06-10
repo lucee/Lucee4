@@ -26,7 +26,6 @@ import lucee.commons.io.SystemUtil;
 import lucee.commons.lang.SerializableObject;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.ConfigImpl;
-import lucee.runtime.config.ConfigServerImpl;
 
 public class ThreadQueueImpl implements ThreadQueue {
 	private final SerializableObject token=new SerializableObject();

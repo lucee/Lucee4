@@ -29,7 +29,6 @@ import java.util.Map.Entry;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
-import lucee.print;
 import lucee.commons.digest.MD5;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;

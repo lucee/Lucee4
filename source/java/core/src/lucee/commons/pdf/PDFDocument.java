@@ -57,7 +57,6 @@ import lucee.runtime.net.proxy.ProxyDataImpl;
 import lucee.runtime.op.Caster;
 import lucee.runtime.text.xml.XMLCaster;
 import lucee.runtime.text.xml.XMLUtil;
-import lucee.runtime.type.scope.CGIImpl;
 import lucee.runtime.type.util.ListUtil;
 import lucee.runtime.util.URLResolver;
 

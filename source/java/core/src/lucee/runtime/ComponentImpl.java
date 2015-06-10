@@ -70,7 +70,6 @@ import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.functions.dynamicEvaluation.EvaluateComponent;
-import lucee.runtime.functions.orm.EntityNew;
 import lucee.runtime.functions.system.ContractPath;
 import lucee.runtime.interpreter.CFMLExpressionInterpreter;
 import lucee.runtime.op.Caster;

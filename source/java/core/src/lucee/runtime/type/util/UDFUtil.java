@@ -25,9 +25,7 @@ import java.util.Map.Entry;
 
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
-import lucee.runtime.Page;
 import lucee.runtime.PageContext;
-import lucee.runtime.PageSource;
 import lucee.runtime.dump.DumpData;
 import lucee.runtime.dump.DumpProperties;
 import lucee.runtime.dump.DumpRow;
@@ -45,8 +43,6 @@ import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.UDF;
 import lucee.runtime.type.UDFGSProperty;
-import lucee.runtime.type.UDFImpl;
-import lucee.runtime.type.UDFPlus;
 import lucee.runtime.type.scope.Argument;
 import lucee.runtime.type.scope.ArgumentIntKey;
 import lucee.transformer.library.function.FunctionLibFunction;

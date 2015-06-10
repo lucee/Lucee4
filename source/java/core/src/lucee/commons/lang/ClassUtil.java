@@ -31,7 +31,6 @@ import java.net.URLDecoder;
 import java.util.Map;
 import java.util.Set;
 
-import lucee.print;
 import lucee.commons.collection.MapFactory;
 import lucee.commons.io.FileUtil;
 import lucee.commons.io.IOUtil;

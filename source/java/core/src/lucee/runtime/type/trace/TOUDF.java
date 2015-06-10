@@ -21,17 +21,14 @@ package lucee.runtime.type.trace;
 import lucee.runtime.Component;
 import lucee.runtime.ComponentImpl;
 import lucee.runtime.PageContext;
-import lucee.runtime.PageSource;
 import lucee.runtime.debug.Debugger;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.FunctionArgument;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.UDF;
-import lucee.runtime.type.UDFImpl;
 import lucee.runtime.type.UDFPlus;
 import lucee.runtime.type.util.ComponentUtil;
-import lucee.runtime.type.util.UDFUtil;
 
 public class TOUDF extends TOObjects implements UDF {
 

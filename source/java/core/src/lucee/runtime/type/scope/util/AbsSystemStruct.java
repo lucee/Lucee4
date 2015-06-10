@@ -1,13 +1,11 @@
 package lucee.runtime.type.scope.util;
 
 import java.util.Iterator;
-import java.util.Map.Entry;
 
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
-import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.it.EntryIterator;
 import lucee.runtime.type.it.KeyIterator;
 import lucee.runtime.type.it.ValueIterator;

@@ -40,7 +40,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import lucee.print;
 import lucee.commons.digest.MD5;
 import lucee.commons.io.FileUtil;
 import lucee.commons.io.IOUtil;
@@ -69,7 +68,6 @@ import lucee.commons.net.http.HTTPResponse;
 import lucee.loader.engine.CFMLEngine;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.loader.osgi.BundleCollection;
-import lucee.loader.util.ExtensionFilter;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.CacheConnection;
 import lucee.runtime.cache.eh.EHCache;
@@ -92,7 +90,6 @@ import lucee.runtime.functions.other.CreateObject;
 import lucee.runtime.functions.other.CreateUUID;
 import lucee.runtime.functions.other.URLEncodedFormat;
 import lucee.runtime.functions.string.Hash;
-import lucee.runtime.functions.system.GetException;
 import lucee.runtime.functions.system.IsZipFile;
 import lucee.runtime.gateway.GatewayEntry;
 import lucee.runtime.gateway.GatewayEntryImpl;
@@ -778,8 +775,7 @@ public final class XMLConfigAdmin {
      * @throws SecurityException 
      */
     public void removeMapping(String virtual) throws ExpressionException, SecurityException {
-    	print.ds("rem.map"+virtual);
-		checkWriteAccess();
+    	checkWriteAccess();
     	// check parameters
         if(virtual==null || virtual.length()==0)
             throw new ExpressionException("virtual path cannot be a empty value");
@@ -805,7 +801,6 @@ public final class XMLConfigAdmin {
 	  			}
       	    }
       	}
-      	print.e(mappings);
     }
     
 
@@ -4921,7 +4916,6 @@ public final class XMLConfigAdmin {
 	
 	
 	public void removeArchive(Resource archive) throws IOException, PageException {
-		print.e("rem.arch+"+archive);
 		Log logger = ((ConfigImpl)config).getLog("deploy");
 		String virtual=null,type=null;
 		InputStream is = null;
@@ -4939,7 +4933,6 @@ public final class XMLConfigAdmin {
 			virtual = DeployHandler.unwrap(attr.getValue("mapping-virtual-path"));
 			type = DeployHandler.unwrap(attr.getValue("mapping-type"));
 			logger.info("archive", "remove "+type+" mapping ["+virtual+"]");
-			print.e("rem.arch.type"+type);
 			
 			if("regular".equalsIgnoreCase(type))	removeMapping(virtual);
 			else if("cfc".equalsIgnoreCase(type))	removeComponentMapping(virtual);

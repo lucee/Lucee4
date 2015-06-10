@@ -19,8 +19,8 @@
 package lucee.runtime.config.component;
 
 import lucee.commons.io.res.Resource;
-import lucee.runtime.config.XMLConfigFactory;
 import lucee.runtime.config.Constants;
+import lucee.runtime.config.XMLConfigFactory;
 
 public class ComponentFactory {
 

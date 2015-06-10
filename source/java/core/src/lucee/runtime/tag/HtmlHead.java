@@ -21,7 +21,6 @@ package lucee.runtime.tag;
 
 import java.io.IOException;
 
-import lucee.print;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;

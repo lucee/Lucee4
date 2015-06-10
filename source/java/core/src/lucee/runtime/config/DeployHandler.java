@@ -19,47 +19,30 @@
 package lucee.runtime.config;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-import org.osgi.framework.BundleException;
-
-import lucee.print;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
-import lucee.commons.io.compress.ZipUtil;
 import lucee.commons.io.log.Log;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
 import lucee.commons.io.res.filter.ResourceFilter;
-import lucee.commons.io.res.util.FileWrapper;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.net.http.HTTPEngine;
 import lucee.commons.net.http.HTTPResponse;
 import lucee.commons.net.http.Header;
 import lucee.commons.net.http.httpclient3.HeaderImpl;
-import lucee.loader.engine.CFMLEngineFactory;
-import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.extension.RHExtension;
 import lucee.runtime.extension.RHExtensionProvider;
 import lucee.runtime.functions.conversion.DeserializeJSON;
-import lucee.runtime.functions.dynamicEvaluation.Evaluate;
-import lucee.runtime.interpreter.CFMLExpressionInterpreter;
 import lucee.runtime.net.http.ReqRspUtil;
 import lucee.runtime.op.Caster;
-import lucee.runtime.osgi.BundleFile;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.KeyConstants;
-import lucee.runtime.type.util.ListUtil;
 
 public class DeployHandler {
 
