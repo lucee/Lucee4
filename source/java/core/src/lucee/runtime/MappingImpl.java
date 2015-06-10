@@ -284,7 +284,7 @@ public final class MappingImpl implements Mapping {
 					getPhysical().getAbsolutePath():
 					getArchive().getAbsolutePath();
 			
-			classRootDirectory=config.getDeployDirectory().getRealResource(
+			classRootDirectory=config.getClassDirectory().getRealResource(
 										StringUtil.toIdentityVariableName(
 												path)
 								);

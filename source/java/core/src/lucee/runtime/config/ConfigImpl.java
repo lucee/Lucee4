@@ -49,6 +49,7 @@ import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.Resources;
 import lucee.commons.io.res.ResourcesImpl;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
+import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.type.compress.Compress;
 import lucee.commons.io.res.type.compress.CompressResource;
 import lucee.commons.io.res.type.compress.CompressResourceProvider;
@@ -63,6 +64,7 @@ import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.SystemOut;
 import lucee.commons.net.IPRange;
 import lucee.loader.engine.CFMLEngine;
+import lucee.loader.util.ExtensionFilter;
 import lucee.runtime.CIPage;
 import lucee.runtime.Component;
 import lucee.runtime.Mapping;
@@ -1868,7 +1870,7 @@ public abstract class ConfigImpl implements Config {
     public abstract URL getUpdateLocation();
 
     @Override
-    public Resource getDeployDirectory() {
+    public Resource getClassDirectory() {
     	return deployDirectory;
     }
 
@@ -2255,7 +2257,7 @@ public abstract class ConfigImpl implements Config {
 		
 		if(rpcClassLoader!=null && !reload) return rpcClassLoader;
         
-		Resource dir = getDeployDirectory().getRealResource("RPC");
+		Resource dir = getClassDirectory().getRealResource("RPC");
 		if(!dir.exists())dir.createDirectory(true);
 		rpcClassLoader = new PhysicalClassLoader(this,dir,getClassLoader());
 		return rpcClassLoader;
@@ -2602,8 +2604,9 @@ public abstract class ConfigImpl implements Config {
 
 	public Resource getExtensionDirectory() {
 		// TODO take from tag <extensions>
-		Resource dir = getConfigDir().getRealResource("extensions");
-	    if(!dir.exists())dir.mkdirs();
+		Resource dir = getConfigDir().getRealResource("extensions/installed");
+		if(!dir.exists())dir.mkdirs();
+	    
 	    return dir;
 	}
 	
@@ -3549,5 +3552,11 @@ public abstract class ConfigImpl implements Config {
 	}
 	protected void setCGIScopeReadonly(boolean cgiScopeReadonly) {
 		this.cgiScopeReadonly = cgiScopeReadonly;
+	}
+
+	public Resource getDeployDirectory() {
+		Resource dir = getConfigDir().getRealResource("deploy");
+		if(!dir.exists())dir.mkdirs();
+		return dir;
 	}
 }

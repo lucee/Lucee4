@@ -34,21 +34,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import lucee.print;
 import lucee.commons.digest.MD5;
 import lucee.commons.io.FileUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.cache.Cache;
+import lucee.commons.io.compress.ZipUtil;
 import lucee.commons.io.log.Log;
 import lucee.commons.io.log.log4j.Log4jUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
+import lucee.commons.io.res.filter.ExtensionResourceFilter;
 import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.type.s3.S3ResourceProvider;
+import lucee.commons.io.res.util.FileWrapper;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.ClassUtil;
@@ -62,6 +69,7 @@ import lucee.commons.net.http.HTTPResponse;
 import lucee.loader.engine.CFMLEngine;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.loader.osgi.BundleCollection;
+import lucee.loader.util.ExtensionFilter;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.CacheConnection;
 import lucee.runtime.cache.eh.EHCache;
@@ -84,6 +92,7 @@ import lucee.runtime.functions.other.CreateObject;
 import lucee.runtime.functions.other.CreateUUID;
 import lucee.runtime.functions.other.URLEncodedFormat;
 import lucee.runtime.functions.string.Hash;
+import lucee.runtime.functions.system.GetException;
 import lucee.runtime.functions.system.IsZipFile;
 import lucee.runtime.gateway.GatewayEntry;
 import lucee.runtime.gateway.GatewayEntryImpl;
@@ -307,12 +316,6 @@ public final class XMLConfigAdmin {
     	admin._reload();
     }
     
-    /*public static synchronized void _reload(ConfigImpl config) throws PageException, SAXException, ClassException, IOException, TagLibException, FunctionLibException, BundleException  {
-    	ConfigWebAdmin admin = new ConfigWebAdmin(config, null);
-    	admin._store();
-    	admin._reload();
-    }*/
-
     private synchronized void _storeAndReload() throws PageException, SAXException, ClassException, IOException, TagLibException, FunctionLibException, BundleException  {
     	_store();
     	_reload();
@@ -578,24 +581,27 @@ public final class XMLConfigAdmin {
         }
 	}
     
-    static void updateMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect, boolean toplevel) throws SAXException, IOException, PageException, BundleException {
+    static void updateMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect, boolean toplevel, boolean reload) throws SAXException, IOException, PageException, BundleException {
     	XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._updateMapping(virtual, physical, archive, primary, inspect, toplevel);
-    	admin._storeAndReload();
+    	admin._store();
+    	if(reload)admin._reload();
     }
     
 
-    static void updateComponentMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect) throws SAXException, IOException, PageException, BundleException {
+    static void updateComponentMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect, boolean reload) throws SAXException, IOException, PageException, BundleException {
     	XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._updateComponentMapping(virtual, physical, archive, primary, inspect);
-    	admin._storeAndReload();
+    	admin._store();
+    	if(reload)admin._reload();
     }
     
 
-    static void updateCustomTagMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect) throws SAXException, IOException, PageException, BundleException {
+    static void updateCustomTagMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect, boolean reload) throws SAXException, IOException, PageException, BundleException {
     	XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
     	admin._updateCustomTag(virtual, physical, archive, primary, inspect);
-    	admin._storeAndReload();
+    	admin._store();
+    	if(reload)admin._reload();
     }
 
     /**
@@ -772,7 +778,8 @@ public final class XMLConfigAdmin {
      * @throws SecurityException 
      */
     public void removeMapping(String virtual) throws ExpressionException, SecurityException {
-    	checkWriteAccess();
+    	print.ds("rem.map"+virtual);
+		checkWriteAccess();
     	// check parameters
         if(virtual==null || virtual.length()==0)
             throw new ExpressionException("virtual path cannot be a empty value");
@@ -798,6 +805,7 @@ public final class XMLConfigAdmin {
 	  			}
       	    }
       	}
+      	print.e(mappings);
     }
     
 
@@ -4262,7 +4270,6 @@ public final class XMLConfigAdmin {
 		Element[] children = XMLConfigWebFactory.getChildren(extensions,"rhextension");
 		
 		Element child;
-		//BundleDefinition[] bundles=null;
 		RHExtension rhe;
 		for(int i=0;i<children.length;i++) {
 			child=children[i];
@@ -4282,6 +4289,93 @@ public final class XMLConfigAdmin {
 		}
 	}
 	
+	public static void updateArchive(ConfigImpl config, Resource arc, boolean reload) throws PageException {
+		try{
+		XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
+    	admin.updateArchive(config,arc);
+    	admin._store();
+    	if(reload)admin._reload();
+		}
+		catch(Throwable t){
+			throw Caster.toPageException(t);
+		}
+	}
+	
+	public void updateArchive(Config config,Resource archive) throws PageException {
+		Log logger = ((ConfigImpl)config).getLog("deploy");
+		String type=null,virtual=null,name=null;
+		boolean readOnly,topLevel,hidden,physicalFirst;
+		short inspect;
+		InputStream is = null;
+		ZipFile file=null;
+		try {
+			file=new ZipFile(FileWrapper.toFile(archive));
+			ZipEntry entry = file.getEntry("META-INF/MANIFEST.MF");
+			
+			// no manifest
+			if(entry==null) {
+				DeployHandler.moveToFailedFolder(config.getDeployDirectory(),archive);
+				throw new ApplicationException("cannot deploy "+Constants.NAME+" Archive ["+archive+"], file is to old, the file does not have a MANIFEST.");
+			}
+		
+			is = file.getInputStream(entry);
+			Manifest manifest = new Manifest(is);
+			Attributes attr = manifest.getMainAttributes();
+			
+			//id = unwrap(attr.getValue("mapping-id"));
+			type = DeployHandler.unwrap(attr.getValue("mapping-type"));
+			virtual = DeployHandler.unwrap(attr.getValue("mapping-virtual-path"));
+			name = ListUtil.trim(virtual, "/");
+			readOnly = Caster.toBooleanValue(DeployHandler.unwrap(attr.getValue("mapping-readonly")),false);
+			topLevel = Caster.toBooleanValue(DeployHandler.unwrap(attr.getValue("mapping-top-level")),false);
+			inspect = ConfigWebUtil.inspectTemplate(DeployHandler.unwrap(attr.getValue("mapping-inspect")), Config.INSPECT_UNDEFINED);
+			if(inspect==Config.INSPECT_UNDEFINED) {
+				Boolean trusted = Caster.toBoolean(DeployHandler.unwrap(attr.getValue("mapping-trusted")),null);
+				if(trusted!=null) {
+					if(trusted.booleanValue()) inspect=Config.INSPECT_NEVER;
+					else inspect=Config.INSPECT_ALWAYS;
+				}	
+			}
+			hidden = Caster.toBooleanValue(DeployHandler.unwrap(attr.getValue("mapping-hidden")),false);
+			physicalFirst = Caster.toBooleanValue(DeployHandler.unwrap(attr.getValue("mapping-physical-first")),false);
+		} 
+		catch (Throwable t) {
+			DeployHandler.moveToFailedFolder(config.getDeployDirectory(),archive);
+			throw Caster.toPageException(t);
+		}
+		
+		finally{
+			IOUtil.closeEL(is);
+			ZipUtil.close(file);
+		}
+		try {
+		Resource trgDir = config.getConfigDir().getRealResource("archives").getRealResource(type).getRealResource(name);
+		Resource trgFile = trgDir.getRealResource(archive.getName());
+		trgDir.mkdirs();
+		
+		// delete existing files
+		
+		
+			ResourceUtil.deleteContent(trgDir, null);
+			ResourceUtil.moveTo(archive, trgFile,true);
+			logger.log(Log.LEVEL_INFO,"archive","add "+type+" mapping ["+virtual+"] with archive ["+trgFile.getAbsolutePath()+"]");
+			if("regular".equalsIgnoreCase(type))
+				_updateMapping(virtual, null, trgFile.getAbsolutePath(), "archive", inspect, topLevel);
+			else if("cfc".equalsIgnoreCase(type))
+				_updateComponentMapping(virtual, null, trgFile.getAbsolutePath(), "archive", inspect);
+			else if("ct".equalsIgnoreCase(type))
+				_updateCustomTag(virtual, null, trgFile.getAbsolutePath(), "archive", inspect);
+		}
+		catch (Throwable t) {
+			DeployHandler.moveToFailedFolder(config.getDeployDirectory(),archive);
+			throw Caster.toPageException(t);
+		}
+	}
+	
+	
+	
+	
+	
 	
 	public static void updateRHExtension(ConfigImpl config, Resource ext, boolean reload) throws PageException {
 		try{
@@ -4294,6 +4388,8 @@ public final class XMLConfigAdmin {
 			throw Caster.toPageException(t);
 		}
 	}
+	
+	
 	
 	public void updateRHExtension(Config config, Resource ext) throws PageException{
 		RHExtension rhext;
@@ -4322,7 +4418,7 @@ public final class XMLConfigAdmin {
 		try{
 			
 			boolean clearTags=false,clearFunction=false;
-
+			boolean reload=false;
 			
 			// store to xml
 			BundleDefinition[] existing = _updateExtension(ci, rhext);
@@ -4361,9 +4457,18 @@ public final class XMLConfigAdmin {
 				// functions
 				if(!entry.isDirectory() && startsWith(path,type,"functions")) {
 					String sub = subFolder(entry);
-					logger.log(Log.LEVEL_INFO,"extension","deploy tag "+sub);
+					logger.log(Log.LEVEL_INFO,"extension","deploy function "+sub);
         			updateFunction(zis, sub,false); 
         			clearFunction=true;
+				}
+				
+				// mappings
+				if(!entry.isDirectory() && (startsWith(path,type,"archives") || startsWith(path,type,"mappings"))) {
+					String sub = subFolder(entry);
+					logger.log(Log.LEVEL_INFO,"extension","deploy mapping "+sub);
+					updateArchive(zis, sub,false);
+					reload=true;
+        			//clearFunction=true;
 				}
 				
 				// event-gateway
@@ -4407,32 +4512,12 @@ public final class XMLConfigAdmin {
 			}
 			////////////////////////////////////////////
 			
-			/*if(clearTags) {
-				if(config instanceof ConfigWeb) {
-					ConfigWebImpl cw=(ConfigWeb) config;
-				PagePoolClear.clear(cw.getServerTagMapping());
-				PagePoolClear.clear(ci.getTagMapping());
-				}
-			}
-			
-			if(clearFunctions) {
-				ConfigWebImpl config=(ConfigWebImpl) pc.getConfig();
-				config.clearFunctionCache();
-				PagePoolClear.clear(config.getServerFunctionMapping());
-				PagePoolClear.clear(config.getFunctionMapping());
-				
-			}*/
-			
-			
-			
 			
 			// load the bundles
 			BundleFile[] bfs = rhext.getBundlesFiles();
 			for(BundleFile bf:bfs){
 				OSGiUtil.loadBundleFromLocal(bf.getSymbolicName(), bf.getVersion(),null);
 			}
-			boolean reload=false;//clearFunction || clearTags;
-			
 			
 			// update cache handler
 			if(!ArrayUtil.isEmpty(rhext.getCacheHandlers())) {
@@ -4537,26 +4622,24 @@ public final class XMLConfigAdmin {
 		Log logger = ci.getLog("deploy");
 		
 		
-		try{
-
-			//boolean reload=false;
-			
+		try {
 			// remove the bundles
 			XMLConfigAdmin.cleanBundles(ci, OSGiUtil.toBundleDefinitions(rhe.getBundlesFiles()));
 			
-			
-			// remove FLD
+			// FLD
 			removeFLDs(rhe.getFlds()); // MUST check if others use one of this fld
-			// remove TLD
+			
+			// TLD
 			removeTLDs(rhe.getTlds()); // MUST check if others use one of this tld
 			
-			// remove Tag
-			removeTags(rhe.getTags()); 
-			// remove functions
-			removeFunctions(rhe.getFunctions()); 
-						
-			removeEventGateways(rhe.getEventGateways()); 
+			// Tag
+			removeTags(rhe.getTags());
 			
+			// Functions
+			removeFunctions(rhe.getFunctions());
+			
+			// Event Gateway
+			removeEventGateways(rhe.getEventGateways()); 
 			
 			// context
 			removeContext(config, false, rhe.getContexts()); // MUST check if others use one of this
@@ -4569,7 +4652,6 @@ public final class XMLConfigAdmin {
 			
 			// plugins
 			removePlugins(config, rhe.getWebContexts()); // MUST check if others use one of this
-			
 			
 			// remove cache handler
 			if(!ArrayUtil.isEmpty(rhe.getCacheHandlers())) {
@@ -4651,7 +4733,35 @@ public final class XMLConfigAdmin {
 					logger.info("extension", "remove JDBC Driver ["+cd+"] from extension ["+rhe.getName()+":"+rhe.getVersion()+"]");
 				}
 			}
-			//if(reload)ConfigWebAdmin._reload(ci);
+			
+			// Loop Files
+			ZipInputStream zis = new ZipInputStream( IOUtil.toBufferedInputStream(rhe.getExtensionFile().getInputStream()) ) ;	
+			String type=ci instanceof ConfigWeb?"web":"server";
+			try{
+				ZipEntry entry;
+				String path;
+				String fileName;
+				Resource tmp;
+				while ( ( entry = zis.getNextEntry()) != null ) {
+					path=entry.getName();
+					fileName=fileName(entry);
+					
+					// archives
+					if(!entry.isDirectory() && (startsWith(path,type,"archives") || startsWith(path,type,"mappings"))) {
+						String sub = subFolder(entry);
+						logger.log(Log.LEVEL_INFO,"extension","remove archive "+sub+" registered as a mapping");
+						tmp = SystemUtil.getTempFile(".lar", false);
+						IOUtil.copy(zis, tmp, false);
+						removeArchive(tmp);
+					}
+					zis.closeEntry();
+				}
+			}
+			finally {
+				IOUtil.closeEL(zis);
+			}
+			
+			
 			
 			// now we can delete the extension
 			rhe.getExtensionFile().delete();
@@ -4764,20 +4874,20 @@ public final class XMLConfigAdmin {
 	void updateEventGateway(InputStream is,String name, boolean closeStream) throws IOException {
 		write(config.getEventGatewayDirectory(),is,name,closeStream);
 	}
-
-	/*static void updateTLD(Config config,InputStream is,String name, boolean closeStream) throws IOException {
-		updateLD(config.getTldFile(),is,name,closeStream);
-	}
-	static void updateFLD(Config config,InputStream is,String name, boolean closeStream) throws IOException {
-		updateLD(config.getFldFile(),is,name,closeStream);
-	}*/
 	
-	private static void write(Resource dir,InputStream is,String name, boolean closeStream) throws IOException {
+	void updateArchive(InputStream is,String name, boolean closeStream) throws IOException, PageException {
+		Resource res = write(SystemUtil.getTempDirectory(),is,name,closeStream);
+		//Resource res = write(DeployHandler.getDeployDirectory(config),is,name,closeStream);
+		updateArchive(config, res);
+	}
+
+	private static Resource write(Resource dir,InputStream is,String name, boolean closeStream) throws IOException {
 		if(!dir.exists())dir.createDirectory(true);
     	Resource file = dir.getRealResource(name);
     	Resource p = file.getParentResource();
     	if(!p.exists())p.createDirectory(true);
     	IOUtil.copy(is, file.getOutputStream(), closeStream, true);
+    	return file;
 	}
 
 	public void removeTLD(String name) throws IOException {
@@ -4807,6 +4917,42 @@ public final class XMLConfigAdmin {
 		for(int i=0;i<relpath.length;i++){
 			removeFromDirectory(file,relpath[i]);
 		}
+	}
+	
+	
+	public void removeArchive(Resource archive) throws IOException, PageException {
+		print.e("rem.arch+"+archive);
+		Log logger = ((ConfigImpl)config).getLog("deploy");
+		String virtual=null,type=null;
+		InputStream is = null;
+		ZipFile file=null;
+		try {
+			file=new ZipFile(FileWrapper.toFile(archive));
+			ZipEntry entry = file.getEntry("META-INF/MANIFEST.MF");
+			
+			// no manifest
+			if(entry==null) throw new ApplicationException("cannot remove "+Constants.NAME+" Archive ["+archive+"], file is to old, the file does not have a MANIFEST.");
+			
+			is = file.getInputStream(entry);
+			Manifest manifest = new Manifest(is);
+			Attributes attr = manifest.getMainAttributes();
+			virtual = DeployHandler.unwrap(attr.getValue("mapping-virtual-path"));
+			type = DeployHandler.unwrap(attr.getValue("mapping-type"));
+			logger.info("archive", "remove "+type+" mapping ["+virtual+"]");
+			print.e("rem.arch.type"+type);
+			
+			if("regular".equalsIgnoreCase(type))	removeMapping(virtual);
+			else if("cfc".equalsIgnoreCase(type))	removeComponentMapping(virtual);
+			else if("ct".equalsIgnoreCase(type))	removeCustomTag(virtual);
+			else throw new ApplicationException("invalid type ["+type+"], valid types are [regular, cfc, ct]");
+		} 
+		catch (Throwable t) {
+			throw Caster.toPageException(t);
+		}
+		finally {
+			IOUtil.closeEL(is);
+			ZipUtil.close(file);
+		}	
 	}
 	
 
@@ -5674,27 +5820,6 @@ public final class XMLConfigAdmin {
 		}
 	}
 	
-	/*public RHExtension[] getRHExtensions(ConfigImpl config) throws PageException {
-		Element extensions=_getRootElement("extensions");
-		Element[] children = ConfigWebFactory.getChildren(extensions,"rhextension");// LuceeHandledExtensions
-		RHExtension[] rtn=new RHExtension[children.length];
-		try {
-			for(int i=0;i<children.length;i++){
-				rtn[i]=new RHExtension(config,children[i]);
-			}
-			return rtn;
-		}
-		catch (Exception e) {
-			throw Caster.toPageException(e);
-		}
-	}*/
-
-
-	
-
-
-
-
 	public void updateAuthKey(String key) throws PageException {
 		checkWriteAccess();
 		key=key.trim();
@@ -5871,4 +5996,18 @@ public final class XMLConfigAdmin {
         scope.setAttribute("cgi-readonly",Caster.toString(cgiReadonly,""));
     }
 
+
+	public static void fixOldExtensionLocation(ConfigImpl config) {
+		Resource dir = config.getExtensionDirectory();
+		// move old to new location
+		Resource[] children = dir.getParentResource().listResources(new ExtensionResourceFilter(".lex"));
+		if(children!=null) {
+			for(int i=0;i<children.length;i++){
+				try {
+					children[i].moveTo(dir.getRealResource(children[i].getName()));
+				}
+				catch (IOException e) {}
+			}
+		}
+	}
 }

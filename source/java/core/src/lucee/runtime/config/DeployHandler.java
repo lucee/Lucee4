@@ -21,11 +21,17 @@ package lucee.runtime.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.osgi.framework.BundleException;
+
+import lucee.print;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.compress.ZipUtil;
@@ -40,11 +46,19 @@ import lucee.commons.net.http.HTTPEngine;
 import lucee.commons.net.http.HTTPResponse;
 import lucee.commons.net.http.Header;
 import lucee.commons.net.http.httpclient3.HeaderImpl;
+import lucee.loader.engine.CFMLEngineFactory;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.extension.RHExtension;
 import lucee.runtime.extension.RHExtensionProvider;
+import lucee.runtime.functions.conversion.DeserializeJSON;
+import lucee.runtime.functions.dynamicEvaluation.Evaluate;
+import lucee.runtime.interpreter.CFMLExpressionInterpreter;
 import lucee.runtime.net.http.ReqRspUtil;
 import lucee.runtime.op.Caster;
+import lucee.runtime.osgi.BundleFile;
+import lucee.runtime.type.Struct;
+import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
 
 public class DeployHandler {
@@ -60,7 +74,7 @@ public class DeployHandler {
 		if(!contextIsValid(config)) return;
 
 		synchronized (config) {
-			Resource dir = getDeployDirectory(config);
+			Resource dir = config.getDeployDirectory();
 			if(!dir.exists()) dir.mkdirs();
 			
 			Resource[] children = dir.listResources(ALL_EXT);
@@ -72,7 +86,8 @@ public class DeployHandler {
 					// Lucee archives
 					ext=ResourceUtil.getExtension(child, null);
 					if("lar".equalsIgnoreCase(ext)) {
-						deployArchive(config,child);
+						//deployArchive(config,child,true);
+						XMLConfigAdmin.updateArchive((ConfigImpl) config, child,true);
 					}
 					
 					// Lucee Extensions
@@ -105,91 +120,7 @@ public class DeployHandler {
 		}
 		return true;
 	}
-
-	public static Resource getDeployDirectory(Config config) {
-		return config.getConfigDir().getRealResource("deploy");
-	}
 	
-	/**
-	 * deploys a physical resource to the system
-	 * @param config
-	 * @param archive
-	 * @throws PageException
-	 */
-	public static void deployArchive(Config config,Resource archive) throws PageException {
-		Log logger = ((ConfigImpl)config).getLog("deploy");
-		String type=null,virtual=null,name=null;
-		boolean readOnly,topLevel,hidden,physicalFirst;
-		short inspect;
-		InputStream is = null;
-		ZipFile file=null;
-		try {
-			file=new ZipFile(FileWrapper.toFile(archive));
-			ZipEntry entry = file.getEntry("META-INF/MANIFEST.MF");
-			
-			// no manifest
-			if(entry==null) {
-				moveToFailedFolder(getDeployDirectory(config),archive);
-				throw new ApplicationException("cannot deploy "+Constants.NAME+" Archive ["+archive+"], file is to old, the file does not have a MANIFEST.");
-			}
-		
-			is = file.getInputStream(entry);
-			Manifest manifest = new Manifest(is);
-			Attributes attr = manifest.getMainAttributes();
-			
-			//id = unwrap(attr.getValue("mapping-id"));
-			type = unwrap(attr.getValue("mapping-type"));
-			virtual = unwrap(attr.getValue("mapping-virtual-path"));
-			name = ListUtil.trim(virtual, "/");
-			readOnly = Caster.toBooleanValue(unwrap(attr.getValue("mapping-readonly")),false);
-			topLevel = Caster.toBooleanValue(unwrap(attr.getValue("mapping-top-level")),false);
-			inspect = ConfigWebUtil.inspectTemplate(unwrap(attr.getValue("mapping-inspect")), Config.INSPECT_UNDEFINED);
-			if(inspect==Config.INSPECT_UNDEFINED) {
-				Boolean trusted = Caster.toBoolean(unwrap(attr.getValue("mapping-trusted")),null);
-				if(trusted!=null) {
-					if(trusted.booleanValue()) inspect=Config.INSPECT_NEVER;
-					else inspect=Config.INSPECT_ALWAYS;
-				}	
-			}
-			hidden = Caster.toBooleanValue(unwrap(attr.getValue("mapping-hidden")),false);
-			physicalFirst = Caster.toBooleanValue(unwrap(attr.getValue("mapping-physical-first")),false);
-		} 
-		catch (Throwable t) {
-			moveToFailedFolder(getDeployDirectory(config),archive);
-			throw Caster.toPageException(t);
-		}
-		
-		finally{
-			IOUtil.closeEL(is);
-			ZipUtil.close(file);
-		}
-		try {
-		Resource trgDir = config.getConfigDir().getRealResource("archives").getRealResource(type).getRealResource(name);
-		Resource trgFile = trgDir.getRealResource(archive.getName());
-		trgDir.mkdirs();
-		
-		// delete existing files
-		
-		
-			ResourceUtil.deleteContent(trgDir, null);
-			ResourceUtil.moveTo(archive, trgFile,true);
-			
-			logger.log(Log.LEVEL_INFO,"archive","add "+type+" mapping ["+virtual+"] with archive ["+trgFile.getAbsolutePath()+"]");
-			if("regular".equalsIgnoreCase(type))
-				XMLConfigAdmin.updateMapping((ConfigImpl)config,virtual, null, trgFile.getAbsolutePath(), "archive", inspect, topLevel);
-			else if("cfc".equalsIgnoreCase(type))
-				XMLConfigAdmin.updateComponentMapping((ConfigImpl)config,virtual, null, trgFile.getAbsolutePath(), "archive", inspect);
-			else if("ct".equalsIgnoreCase(type))
-				XMLConfigAdmin.updateCustomTagMapping((ConfigImpl)config,virtual, null, trgFile.getAbsolutePath(), "archive", inspect);
-			
-			
-		}
-		catch (Throwable t) {
-			moveToFailedFolder(getDeployDirectory(config),archive);
-			throw Caster.toPageException(t);
-		}
-	}
-
 	public static void moveToFailedFolder(Resource deployDirectory,Resource res) {
 		Resource dir = deployDirectory.getRealResource("failed-to-deploy");
 		Resource dst = dir.getRealResource(res.getName());
@@ -205,7 +136,7 @@ public class DeployHandler {
 		
 	}
 
-	private static String unwrap(String value) {
+	public static String unwrap(String value) {
 		if(value==null) return "";
 		String res = unwrap(value,'"');
 		if(res!=null) return res; // was double quote
@@ -238,19 +169,66 @@ public class DeployHandler {
 		} 
 		catch (Throwable t) {}
 		
-		log.info("extension", "installing the extension "+id);
 		
-		//if we have that extension locally, we take it from there
-		// MUST
+		// check if a local extension is matching our id
+		Resource[] locReses = config.getLocalExtensionProviderDirectory().listResources(new ExtensionResourceFilter(".lex"));
+		List<RHExtension> list=new ArrayList<RHExtension>();
+		RHExtension ext=null,tmp;
+		for(int i=0;i<locReses.length;i++){
+			try {
+				tmp=new RHExtension(config,locReses[i],false);
+				if(tmp.getId().equals(id) && (ext==null || ext.getVersion().compareTo(tmp.getVersion())<0)) {
+					ext=tmp;
+				}
+			} 
+			catch(Exception e) {}
+		}
 		
-		// if not we try to download it
+		
 		String apiKey = config.getIdentification().getApiKey();
 		RHExtensionProvider[] providers = ci.getRHExtensionProviders();
 		URL url;
+		
+		// if we have a local version, we look if there is a newer remote version
+		if(ext!=null) {
+			String content;
+			for(int i=0;i<providers.length;i++){
+				try{
+					url=providers[i].getURL();
+					url=new URL(url,"/rest/extension/provider/info/"+id+"?withLogo=false"+(apiKey==null?"":"&ioid="+apiKey));
+					HTTPResponse rsp = HTTPEngine.get(url, null, null, -1, false, "UTF-8", "", null, new Header[]{new HeaderImpl("accept","application/json")});
+					
+					if(rsp.getStatusCode()!=200) continue;
+					
+					content=rsp.getContentAsString();
+					Struct sct = Caster.toStruct(DeserializeJSON.call(null, content));
+					String remoteVersion=Caster.toString(sct.get(KeyConstants._version));
+					
+					// the local version is as good as the remote
+					if(remoteVersion!=null && remoteVersion.compareTo(ext.getVersion())<=0) {
+						log.info("extension", "installing the extension "+id+" from local provider");
+						
+						// avoid that the exzension from provider get removed
+						Resource res = SystemUtil.getTempFile("lex", true);
+						IOUtil.copy(ext.getExtensionFile(), res);
+						XMLConfigAdmin.updateRHExtension((ConfigImpl) config, res, true);
+						return;
+					}
+				}
+				catch(Throwable t){}
+				
+			}
+		}
+		
+		
+		
+		// if not we try to download it
+
+		log.info("extension", "installing the extension "+id+" from remote extension provider");
 		for(int i=0;i<providers.length;i++){
 			try{
 				url=providers[i].getURL();
-				url=new URL(url,"/rest/extension/provider/full/"+id+(apiKey==null?"":"ioid="+apiKey));
+				url=new URL(url,"/rest/extension/provider/full/"+id+(apiKey==null?"":"?ioid="+apiKey));
 				HTTPResponse rsp = HTTPEngine.get(url, null, null, -1, false, "UTF-8", "", null, new Header[]{new HeaderImpl("accept","application/cfml")});
 				if(rsp.getStatusCode()!=200)
 					throw new IOException("failed to load extension with id "+id);
@@ -265,12 +243,7 @@ public class DeployHandler {
 			catch(Throwable t){
 				log.error("extension", t);
 			}
-			
 		}
-		
-		
-		//var uri=provider&"/rest/extension/provider/"&type&"/"&id;
-		
 	}
 	
 }

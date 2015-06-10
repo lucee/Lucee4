@@ -603,4 +603,9 @@ public final class ConfigWebImpl extends ConfigImpl implements ServletConfig, Co
 		public ActionMonitor getActionMonitor(String name) {
 			return configServer.getActionMonitor(name);
 		}
+
+		@Override
+		public Resource getLocalExtensionProviderDirectory() {
+			return configServer.getLocalExtensionProviderDirectory();
+		}
 }

@@ -86,7 +86,8 @@ public class RHExtension implements Serializable {
 	private static final Key FLDS = KeyImpl.init("flds");
 	private static final Key EVENT_GATEWAYS = KeyImpl.init("eventGateways");
 	private static final Key TAGS = KeyImpl.init("tags");
-	private static final Key FUNCTIONS = KeyImpl.init("functions");
+	private static final Key FUNCTIONS = KeyConstants._functions;
+	private static final Key ARCHIVES = KeyImpl.init("archives");
 	private static final Key CONTEXTS = KeyImpl.init("contexts");
 	private static final Key WEBCONTEXTS = KeyImpl.init("webcontexts");
 	private static final Key APPLICATIONS = KeyImpl.init("applications");
@@ -114,6 +115,7 @@ public class RHExtension implements Serializable {
 	private final String[] tlds;
 	private final String[] tags;
 	private final String[] functions;
+	private final String[] archives;
 	private final String[] applications;
 	private final String[] plugins;
 	private final String[] contexts;
@@ -292,6 +294,7 @@ public class RHExtension implements Serializable {
 		List<String> applications=new ArrayList<String>();
 		List<String> plugins=new ArrayList<String>();
 		List<String> gateways=new ArrayList<String>();
+		List<String> archives=new ArrayList<String>();
 		try {
 			while ( ( entry = zis.getNextEntry()) != null ) {
 				path=entry.getName();
@@ -314,6 +317,10 @@ public class RHExtension implements Serializable {
 				// tlds
 				if(!entry.isDirectory() && startsWith(path,type,"tlds") && StringUtil.endsWithIgnoreCase(path, ".tld")) 
 					tlds.add(fileName);
+				
+				// mapping
+				if(!entry.isDirectory() && (startsWith(path,type,"archives") || startsWith(path,type,"mappings")) && StringUtil.endsWithIgnoreCase(path, ".lar")) 
+					archives.add(fileName);
 				
 				// event-gateway
 				if(!entry.isDirectory() && 
@@ -362,6 +369,7 @@ public class RHExtension implements Serializable {
 		this.tags=tags.toArray(new String[tags.size()]);
 		this.gateways=gateways.toArray(new String[gateways.size()]);
 		this.functions=functions.toArray(new String[functions.size()]);
+		this.archives=archives.toArray(new String[archives.size()]);
 		
 		this.contexts=contexts.toArray(new String[contexts.size()]);
 		this.webContexts=webContexts.toArray(new String[webContexts.size()]);
@@ -393,170 +401,6 @@ public class RHExtension implements Serializable {
 		}
 		else this.extensionFile=ext;
 	}
-	
-	/*public static void install(Config config, Resource ext) throws PageException{
-		ConfigImpl ci=(ConfigImpl) config;
-		Log logger =ci.getLog("deploy");
-		
-		String type=ci instanceof ConfigWeb?"web":"server";
-		
-		
-		
-		// load the extension
-		RHExtension rhext;
-		try{
-			rhext = new RHExtension(config, ext,true);
-		}
-		catch(Throwable t){
-			moveToFailedFolder(ext.getParentResource(),ext);
-			throw Caster.toPageException(t);
-		}
-		// INSTALL
-		try{
-			
-			
-
-			
-			// add the extension
-			ConfigWebAdmin.updateRHExtension(ci,rhext);
-			
-			
-			ZipInputStream zis = new ZipInputStream( IOUtil.toBufferedInputStream(rhext.extensionFile.getInputStream()) ) ;	 
-			ZipEntry entry;
-			String path;
-			String fileName;
-			while ( ( entry = zis.getNextEntry()) != null ) {
-				path=entry.getName();
-				fileName=fileName(entry);
-				// flds
-				if(!entry.isDirectory() && startsWith(path,type,"flds") && StringUtil.endsWithIgnoreCase(path, ".fld")) {
-					logger.log(Log.LEVEL_INFO,"extension","deploy fld "+fileName);
-        			ConfigWebAdmin.updateFLD(config, zis, fileName,false);
-				}
-				// tlds
-				if(!entry.isDirectory() && startsWith(path,type,"tlds") && StringUtil.endsWithIgnoreCase(path, ".tld")) {
-					logger.log(Log.LEVEL_INFO,"extension","deploy tld "+fileName);
-        			ConfigWebAdmin.updateTLD(config, zis, fileName,false); 
-				}
-				// context
-				String realpath;
-				if(!entry.isDirectory() && startsWith(path,type,"context") && !StringUtil.startsWith(fileName(entry), '.')) {
-					realpath=path.substring(8);
-	        		logger.log(Log.LEVEL_INFO,"extension","deploy context "+realpath);
-	        		ConfigWebAdmin.updateContext(ci, zis, realpath,false,false);
-				}
-				// web contextS
-				if(!entry.isDirectory() && startsWith(path,type,"webcontexts") && !StringUtil.startsWith(fileName(entry), '.')) {
-					realpath=path.substring(12);
-	        		logger.log(Log.LEVEL_INFO,"extension","deploy webcontext "+realpath);
-	        		ConfigWebAdmin.updateWebContexts(ci, zis, realpath,false,false);
-				}
-				// applications
-				if(!entry.isDirectory() && (startsWith(path,type,"applications")) && !StringUtil.startsWith(fileName(entry), '.')) {
-					realpath=path.substring(13);
-	        		logger.log(Log.LEVEL_INFO,"extension","deploy application "+realpath);
-	        		ConfigWebAdmin.updateApplication(ci, zis, realpath,false);
-				}
-				// plugins
-				if(!entry.isDirectory() && (startsWith(path,type,"plugins")) && !StringUtil.startsWith(fileName(entry), '.')) {
-					realpath=path.substring(8);
-	        		logger.log(Log.LEVEL_INFO,"extension","deploy plugin "+realpath);
-	        		ConfigWebAdmin.updatePlugin(ci, zis, realpath,false);
-				}
-				
-				zis.closeEntry() ;
-			}
-			////////////////////////////////////////////
-			
-			
-			
-			
-			
-			// load the bundles
-			BundleFile[] bfs = rhext.getBundlesFiles();
-			for(BundleFile bf:bfs){
-				OSGiUtil.loadBundleFromLocal(bf.getSymbolicName(), bf.getVersion(),null);
-			}
-			boolean reload=false;
-			
-			
-			// update cache handler
-			if(!ArrayUtil.isEmpty(rhext.cacheHandlers)) {
-				Iterator<Map<String, String>> itl = rhext.cacheHandlers.iterator();
-				Map<String, String> map;
-				while(itl.hasNext()){
-					map = itl.next();
-					ClassDefinition cd = toClassDefinition(config,map);
-					String _id=map.get("id");
-					
-					if(!StringUtil.isEmpty(_id) && cd.hasClass()) {
-						ConfigWebAdmin.updateCacheHandler((ConfigImpl)config,_id,cd,false);
-						reload=true;
-					}
-					logger.info("extension", "update cache handler ["+cd+"] from extension ["+rhext.name+":"+rhext.version+"]");
-				}
-			}
-			// update Search
-			if(!ArrayUtil.isEmpty(rhext.searchs)) {
-				Iterator<Map<String, String>> itl = rhext.searchs.iterator();
-				Map<String, String> map;
-				while(itl.hasNext()){
-					map = itl.next();
-					ClassDefinition cd = toClassDefinition(config,map);
-					if(cd.hasClass()) {
-						ConfigWebAdmin.updateSearchEngine((ConfigImpl)config,cd,false);
-						reload=true;
-					}
-					logger.info("extension", "update search engine ["+cd+"] from extension ["+rhext.name+":"+rhext.version+"]");
-				}
-			}
-			
-			// update orm
-			if(!ArrayUtil.isEmpty(rhext.orms)) {
-				Iterator<Map<String, String>> itl = rhext.orms.iterator();
-				Map<String, String> map;
-				while(itl.hasNext()){
-					map = itl.next();
-					ClassDefinition cd = toClassDefinition(config,map);
-					
-					if(cd.hasClass()) {
-						ConfigWebAdmin.updateORMEngine((ConfigImpl)config,cd,false);
-						reload=true;
-					}
-					logger.info("extension", "update orm engine ["+cd+"] from extension ["+rhext.name+":"+rhext.version+"]");
-				}
-			}
-
-			// update jdbc
-			if(!ArrayUtil.isEmpty(rhext.jdbcs)) {
-				Iterator<Map<String, String>> itl = rhext.jdbcs.iterator();
-				Map<String, String> map;
-				while(itl.hasNext()){
-					map = itl.next();
-					ClassDefinition cd = toClassDefinition(config,map);
-					String _label=map.get("label");
-					if(cd.isBundle()) {
-						ConfigWebAdmin.updateJDBCDriver((ConfigImpl)config,_label,cd,false);
-						reload=true;
-					}
-					logger.info("extension", "update JDBC Driver ["+_label+":"+cd+"] from extension ["+rhext.name+":"+rhext.version+"]");
-				}
-			}
-			if(reload)ConfigWebAdmin._reload(ci);
-			
-			
-		}
-		catch(Throwable t){
-			moveToFailedFolder(rhext.extensionFile.getParentResource(),rhext.extensionFile);
-			try {
-				ConfigWebAdmin.removeRHExtension((ConfigImpl)config, rhext.id, false);
-			} catch (Throwable t2) {
-				t2.printStackTrace();
-			}
-			throw Caster.toPageException(t);
-		}
-	}*/
-
 
 	public RHExtension(Config config,Element el) throws PageException, IOException, BundleException {
 		this(config,toResource(config,el),false);
@@ -577,7 +421,7 @@ public class RHExtension implements Serializable {
 	}
 	
 	private static Resource getExtensionDir(Config config) {
-		return config.getConfigDir().getRealResource("extensions");
+		return config.getConfigDir().getRealResource("extensions/installed");
 	}
 
 	public static BundleDefinition[] toBundleDefinitions(String strBundles) {
@@ -610,37 +454,8 @@ public class RHExtension implements Serializable {
 		el.setAttribute("id", getId());
 		el.setAttribute("name", getName());
 		el.setAttribute("version", getVersion());
-		/*
-		setAttr(el,"description", getDescription());
-		setAttr(el,"image", getImage());
-		setAttr(el,"flds",arrayToList(getFlds()));
-		setAttr(el,"tlds",arrayToList(getTlds()));
-		setAttr(el,"contexts",arrayToList(getContexts()));
-		setAttr(el,"webcontexts",arrayToList(getWebContexts()));
-		setAttr(el,"applications",arrayToList(getApplications()));
-		setAttr(el,"categories",arrayToList(getCategories()));
-		setAttr(el,"plugins",arrayToList(getPlugins()));
-		setAttr(el,"start-bundles",Caster.toString(getStartBundles()));
-		
-		// bundles
-		BundleDefinition[] _bundles = getBundles();
-		if(!ArrayUtil.isEmpty(_bundles)) {
-			StringBuilder sb=new StringBuilder();
-			for(int i=0;i<_bundles.length;i++){
-				if(i>0)sb.append(',');
-				sb.append(_bundles[i].getName());
-				if(_bundles[i].getVersion()!=null)
-					sb.append(':').append(_bundles[i].getVersion().toString());
-			}
-			if(sb.length()>0)setAttr(el,"bundles",sb.toString());
-		}*/
 	}
 	
-	/*private String arrayToList(String[] arr) {
-		if(ArrayUtil.isEmpty(arr)) return "";
-		return ListUtil.arrayToList(arr, ",");
-	}*/
-
 	private static String[] toArray(String str) {
 		if(StringUtil.isEmpty(str,true)) return new String[0];
 		return ListUtil.listToStringArray(str.trim(), ',');
@@ -667,6 +482,7 @@ public class RHExtension implements Serializable {
       			,APPLICATIONS
       			,PLUGINS
       			,EVENT_GATEWAYS
+      			,ARCHIVES
       	}, 0, "Extensions");
 		
 
@@ -696,6 +512,7 @@ public class RHExtension implements Serializable {
   	  qry.setAt(FLDS, row, Caster.toArray(getFlds()));
 	    qry.setAt(TLDS, row, Caster.toArray(getTlds()));
 	    qry.setAt(FUNCTIONS, row, Caster.toArray(getFunctions()));
+	    qry.setAt(ARCHIVES, row, Caster.toArray(getArchives()));
   	    qry.setAt(TAGS, row, Caster.toArray(getTags()));
   	    qry.setAt(CONTEXTS, row, Caster.toArray(getContexts()));
   	  	qry.setAt(WEBCONTEXTS, row, Caster.toArray(getWebContexts()));
@@ -738,7 +555,7 @@ public class RHExtension implements Serializable {
 
 
 	
-	private static void moveToFailedFolder(Resource deployDirectory,Resource res) {
+	/*private static void moveToFailedFolder(Resource deployDirectory,Resource res) {
 		Resource dir = deployDirectory.getRealResource("failed-to-deploy");
 		Resource dst = dir.getRealResource(res.getName());
 		dir.mkdirs();
@@ -751,7 +568,7 @@ public class RHExtension implements Serializable {
 		
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 	
 	private static Manifest toManifest(Config config,InputStream is, Manifest defaultValue) {
 		try {
@@ -908,6 +725,10 @@ public class RHExtension implements Serializable {
 
 	public String[] getFunctions() {
 		return functions==null?EMPTY:functions;
+	}
+	
+	public String[] getArchives() {
+		return archives==null?EMPTY:archives;
 	}
 
 	public String[] getTags() {

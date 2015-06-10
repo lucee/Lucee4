@@ -60,6 +60,7 @@ import lucee.commons.io.log.LoggerAndSourceData;
 import lucee.commons.io.log.log4j.Log4jUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourcesImpl;
+import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.type.cfml.CFMLResourceProvider;
 import lucee.commons.io.res.type.s3.S3ResourceProvider;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -352,6 +353,10 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 		if(XMLConfigAdmin.fixS3(doc)) reload=true;
 		if(XMLConfigAdmin.fixPSQ(doc)) reload=true;
 		if(XMLConfigAdmin.fixLogging(cs,config,doc)) reload=true;
+		XMLConfigAdmin.fixOldExtensionLocation(config);
+		
+		
+		
 		
 		if (reload) {
 			XMLCaster.writeTo(doc, config.getConfigFile());
@@ -1398,7 +1403,7 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 			// change Compile type
 			if (hasChanged) {
 				try {
-					config.getDeployDirectory().remove(true);
+					config.getClassDirectory().remove(true);
 				}
 				catch (IOException e) {
 					e.printStackTrace(config.getErrWriter());
@@ -1760,8 +1765,8 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 
 		if (hasChanged) {
 			try {
-				if (config.getDeployDirectory().exists())
-					config.getDeployDirectory().remove(true);
+				if (config.getClassDirectory().exists())
+					config.getClassDirectory().remove(true);
 			}
 			catch (IOException e) {
 				e.printStackTrace(config.getErrWriter());

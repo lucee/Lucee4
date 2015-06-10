@@ -781,4 +781,11 @@ public final class ConfigServerImpl extends ConfigImpl implements ConfigServer {
 	protected String getLibHash() {
 		return libHash;
 	}
+
+	@Override
+	public Resource getLocalExtensionProviderDirectory() {
+		Resource dir = getConfigDir().getRealResource("extensions/available");
+		if(!dir.exists())dir.mkdirs();
+		return dir;   
+	}
 }

@@ -395,7 +395,7 @@ public interface Config {
 	 * 
 	 * @return deploy directory
 	 */
-	public abstract Resource getDeployDirectory();
+	public abstract Resource getClassDirectory();
 
 	/**
 	 * @return Returns the rootDir.
@@ -821,6 +821,10 @@ public interface Config {
 
     public boolean getFullNullSupport();
 
-	public ORMEngine getORMEngine(PageContext pc) throws PageException; 
+	public ORMEngine getORMEngine(PageContext pc) throws PageException;
+
+	public Resource getLocalExtensionProviderDirectory();
+
+	public Resource getDeployDirectory(); 
 	
 }
