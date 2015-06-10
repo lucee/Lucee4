@@ -618,7 +618,6 @@ public final class XMLConfigAdmin {
     }
     private void _updateMapping(String virtual, String physical,String archive,String primary, short inspect, boolean toplevel) throws ExpressionException, SecurityException {
     	boolean hasAccess=ConfigWebUtil.hasAccess(config,SecurityManager.TYPE_MAPPING);
-        
         virtual=virtual.trim(); 
         if(physical==null) physical="";
         else physical=physical.trim();
@@ -776,6 +775,10 @@ public final class XMLConfigAdmin {
      */
     public void removeMapping(String virtual) throws ExpressionException, SecurityException {
     	checkWriteAccess();
+    	_removeMapping(virtual);
+    }
+    
+    public void _removeMapping(String virtual) throws ExpressionException {
     	// check parameters
         if(virtual==null || virtual.length()==0)
             throw new ExpressionException("virtual path cannot be a empty value");
@@ -4560,8 +4563,6 @@ public final class XMLConfigAdmin {
 				}
 			}
 			
-
-			
 			// update monitor
 			if(!ArrayUtil.isEmpty(rhext.getMonitors())) {
 				Iterator<Map<String, String>> itl = rhext.getMonitors().iterator();
@@ -4594,6 +4595,33 @@ public final class XMLConfigAdmin {
 					logger.info("extension", "update JDBC Driver ["+_label+":"+cd+"] from extension ["+rhext.getName()+":"+rhext.getVersion()+"]");
 				}
 			}
+
+			// update mapping
+			if(!ArrayUtil.isEmpty(rhext.getMappings())) {
+				Iterator<Map<String, String>> itl = rhext.getMappings().iterator();
+				Map<String, String> map;
+				
+				String virtual,physical,archive,primary;
+				short inspect;
+				boolean toplevel;
+				while(itl.hasNext()){
+					map = itl.next();
+					virtual=map.get("virtual");
+					physical=map.get("physical");
+					archive=map.get("archive");
+					primary=map.get("primary");
+					inspect = ConfigWebUtil.inspectTemplate(map.get("inspect"), Config.INSPECT_UNDEFINED);
+					toplevel=Caster.toBooleanValue(map.get("toplevel"),false);
+					
+					
+					_updateMapping(virtual, physical, archive, primary, inspect, toplevel);
+					reload=true;
+					
+					logger.info("extension", "update Mapping ["+virtual+"]");
+				}
+			}
+			
+			// reload
 			if(reload){
 				_storeAndReload();
 			}
@@ -4723,11 +4751,25 @@ public final class XMLConfigAdmin {
 					ClassDefinition cd = RHExtension.toClassDefinition(config,map);
 					if(cd.isBundle()) {
 						_removeJDBCDriver(cd);
-						//reload=true;
 					}
 					logger.info("extension", "remove JDBC Driver ["+cd+"] from extension ["+rhe.getName()+":"+rhe.getVersion()+"]");
 				}
 			}
+			
+
+			// remove mapping
+			if(!ArrayUtil.isEmpty(rhe.getMappings())) {
+				Iterator<Map<String, String>> itl = rhe.getMappings().iterator();
+				Map<String, String> map;
+				String virtual;
+				while(itl.hasNext()){
+					map = itl.next();
+					virtual=map.get("virtual");
+					_removeMapping(virtual);
+					logger.info("extension", "remove Mapping ["+virtual+"]");
+				}
+			}
+			
 			
 			// Loop Files
 			ZipInputStream zis = new ZipInputStream( IOUtil.toBufferedInputStream(rhe.getExtensionFile().getInputStream()) ) ;	

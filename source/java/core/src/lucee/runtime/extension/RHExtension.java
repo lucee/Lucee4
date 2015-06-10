@@ -128,6 +128,7 @@ public class RHExtension implements Serializable {
 	private final List<Map<String, String>> monitors;
 	private final List<Map<String, String>> searchs;
 	private final List<Map<String, String>> jdbcs;
+	private final List<Map<String, String>> mappings;
 	
 	private final Resource extensionFile;
 	
@@ -183,6 +184,7 @@ public class RHExtension implements Serializable {
 		List<Map<String,String>> searchs=null;
 		List<Map<String,String>> jdbcs=null;
 		List<Map<String,String>> eventGateways=null;
+		List<Map<String,String>> mappings=null;
 		
 		Attributes attr = manifest.getMainAttributes();
 		// version
@@ -277,6 +279,12 @@ public class RHExtension implements Serializable {
 		if(!StringUtil.isEmpty(str,true)) {
 			eventGateways = toSettings(logger,str);
 		}
+
+		// mappings
+		str=unwrap(attr.getValue("mapping"));
+		if(!StringUtil.isEmpty(str,true)) {
+			mappings = toSettings(logger,str);
+		}
 		
 		// no we read the content of the zip
 		zis = new ZipInputStream( IOUtil.toBufferedInputStream(ext.getInputStream()) ) ;	 
@@ -318,7 +326,7 @@ public class RHExtension implements Serializable {
 				if(!entry.isDirectory() && startsWith(path,type,"tlds") && StringUtil.endsWithIgnoreCase(path, ".tld")) 
 					tlds.add(fileName);
 				
-				// mapping
+				// archives
 				if(!entry.isDirectory() && (startsWith(path,type,"archives") || startsWith(path,type,"mappings")) && StringUtil.endsWithIgnoreCase(path, ".lar")) 
 					archives.add(fileName);
 				
@@ -381,6 +389,7 @@ public class RHExtension implements Serializable {
 		this.monitors=monitors==null?new ArrayList<Map<String, String>>():monitors;
 		this.searchs=searchs==null?new ArrayList<Map<String, String>>():searchs;
 		this.jdbcs=jdbcs==null?new ArrayList<Map<String, String>>():jdbcs;
+		this.mappings=mappings==null?new ArrayList<Map<String, String>>():mappings;
 		
 		// copy the file to extension dir if it is not already there
 		if(moveIfNecessary){
@@ -777,6 +786,9 @@ public class RHExtension implements Serializable {
 
 	public List<Map<String, String>> getJdbcs() {
 		return jdbcs;
+	}
+	public List<Map<String, String>> getMappings() {
+		return mappings;
 	}
 
 	public Resource getExtensionFile() {
