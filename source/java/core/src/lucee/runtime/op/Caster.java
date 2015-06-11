@@ -2551,6 +2551,16 @@ public final class Caster {
         throw new CasterException(o,"Map");
     }
     
+
+    public static Struct toStruct(Query qry, int row) {
+    	Key[] names = qry.getColumnNames();
+    	Struct sct=new StructImpl();
+    	for(int i=0;i<names.length;i++){
+    		sct.setEL(names[i],qry.getAt(names[i], row,null));
+    	}
+    	return sct;
+    }
+    
     /**
      * cast a Object to a Struct Object
      * @param o Object to cast

@@ -345,7 +345,7 @@ public interface Creation {
 
 	public abstract Mapping createMapping(Config config, String virtual, String strPhysical,String strArchive, short inspect, 
 			boolean physicalFirst, boolean hidden, boolean readonly,boolean topLevel, boolean appMapping,
-			boolean ignoreVirtual,ApplicationListener appListener);
+			boolean ignoreVirtual,ApplicationListener appListener, int listenerMode, int listenerType);
 
 	public abstract DateTime now();
 

@@ -167,7 +167,7 @@
 		<cfargument name="width" required="yes" type="number" default="80">
 		<cfargument name="height" required="yes" type="number" default="40">
 
-		<cfset id=hash(src&"x"&width&":"&height,"quick")>
+		<cfset local.id=hash(src&":"&width&"x"&height)>
 		<cfset mimetypes={png:'png',gif:'gif',jpg:'jpeg'}>
 	
 		<cfif len(src) ==0>
@@ -182,8 +182,9 @@
 	
 	
 	<!--- copy and shrink to local dir --->
-	<cfset tmpfile=expandPath("{temp-directory}/admin-ext-thumbnails/__"&id&"."&ext)>	
+	<cfset tmpfile=expandPath("{temp-directory}/admin-ext-thumbnails/__"&id&"."&ext)>
 	<cfif fileExists(tmpfile)>
+
 		<cffile action="read" file="#tmpfile#" variable="b64">
 	<cfelseif len(src) ==0>
 		<cfset local.b64=("R0lGODlhMQApAIAAAGZmZgAAACH5BAEAAAAALAAAAAAxACkAAAIshI+py+0Po5y02ouz3rz7D4biSJbmiabqyrbuC8fyTNf2jef6zvf+DwwKeQUAOw==")>
@@ -221,16 +222,6 @@
 
 <cfscript>
 
-	/*function getExternalDataAsStruct(required string[] providers) {
-		var qry=getExternalData(providers);
-		var sct={};
-		loop query="#qry#" {
-			sct[qry.id]=queryRowData(qry,qry.currentrow);
-		}
-		return sct;
-	}*/
-
-
 	/**
 	* get information from all available ExtensionProvider defined
 	*/
@@ -246,13 +237,37 @@
 	/**
 	* get information from specific ExtensionProvider, if a extension is provided by multiple providers only the for the newest (version) is returned
 	*/
-	function getExternalData(required string[] providers, boolean forceReload=false, numeric timeSpan=60) {
+	function getExternalData(required string[] providers, boolean forceReload=false, numeric timeSpan=60, boolean useLocalProvider=true) {
 		var datas={};
 		providers.each(parallel:true,closure:function(value){
 				var data=getProviderInfo(arguments.value,forceReload,timespan);
 				datas[arguments.value]=data;
 			});
 		var qry=queryNew("id,name,provider,lastModified");
+
+		if(useLocalProvider) {
+			admin 
+			    action="getLocalExtensions"
+			    type="#request.adminType#"
+			    password="#session["password"&request.adminType]#"
+			    returnVariable="local.locals";
+
+			// add column if necessary
+			loop list="#locals.columnlist()#" item="local.k" {
+                if(!qry.columnExists(k)) qry.addColumn(k,[]);
+            }
+
+			loop query="#locals#" {
+				row=qry.addrow();
+				qry.setCell("provider","local",row);
+				loop list="#locals.columnlist()#" item="local.k" {
+            		qry.setCell(k,locals[k],row);
+            	}
+			}
+		}
+
+
+
 		loop struct="#datas#" index="local.provider" item="local.data" {
 			if(structKeyExists(data,"error")) continue;
 			// add missing columns
@@ -298,6 +313,16 @@
     
 	function getProviderInfo(required string provider, boolean forceReload=false, numeric timeSpan=60){
     	
+		if(provider=="local" || provider=="") {
+			local.provider={};
+			provider.meta.title="Local Extension Provider";
+			provider.meta.description="Extensions located at: ";
+			provider.meta.mode="develop";
+			provider.lastModified=now();
+			return provider;
+		}
+
+
     	// request (within request we only try once to load the data)
         if(!forceReload and
 			StructKeyExists(request,"rhproviders") and 
@@ -381,30 +406,40 @@
 	}
 
 	function _download(String type,required string provider,required string id){
-    	
-		
-			var start=getTickCount();
+    		
 
-			// get info from remote
-			var uri=provider&"/rest/extension/provider/"&type&"/"&id;
-			
+		var start=getTickCount();
+
+		// get info from remote
+		admin 
+			action="getAPIKey"
+			type="#request.adminType#"
+			password="#session["password"&request.adminType]#"
+			returnVariable="apiKey";
+		
+		var uri=provider&"/rest/extension/provider/"&type&"/"&id;
+
+		if(provider=="local") {
 			admin 
-				action="getAPIKey"
+				action="getLocalExtension"
 				type="#request.adminType#"
 				password="#session["password"&request.adminType]#"
-				returnVariable="apiKey";
-
-
+				id="#id#"
+				asBinary=true
+				returnVariable="local.ext";
+			return local.ext;
+		}
+		else {
 			http url="#uri#" result="local.http" {
 				httpparam type="header" name="accept" value="application/cfml";
 				if(!isNull(apiKey))httpparam type="url" name="ioid" value="#apikey#";
-	
+
 			}
-			// sucessfull
 			if(!isNull(http.status_code) && http.status_code==200) { 
 				return http.fileContent;
 			}
 			throw http.fileContent;
+		}
 	}
 
 </cfscript>

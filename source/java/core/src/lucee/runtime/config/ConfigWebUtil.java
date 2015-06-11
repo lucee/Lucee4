@@ -493,24 +493,58 @@ public final class ConfigWebUtil {
 		
 		return defaultValue;
 	}
+	
+	public static String toListenerMode(int listenerMode, String defaultValue) {
+		if(ApplicationListener.MODE_CURRENT==listenerMode)				return "current";
+		else if(ApplicationListener.MODE_CURRENT2ROOT==listenerMode)	return "curr2root";
+		else if(ApplicationListener.MODE_CURRENT_OR_ROOT==listenerMode)	return "currorroot";
+        else if(ApplicationListener.MODE_ROOT==listenerMode)			return "root";
+		return defaultValue;
+	}
 
+	public static int toListenerType(String strListenerType, int defaultValue) {
+		if(StringUtil.isEmpty(strListenerType,true)) return defaultValue;
+		strListenerType=strListenerType.trim();
+		
+		if("none".equalsIgnoreCase(strListenerType))		
+        	return ApplicationListener.TYPE_NONE;
+		else if("classic".equalsIgnoreCase(strListenerType))		
+        	return ApplicationListener.TYPE_CLASSIC;
+		else if("modern".equalsIgnoreCase(strListenerType))		
+        	return ApplicationListener.TYPE_MODERN;
+        else if("mixed".equalsIgnoreCase(strListenerType))		
+        	return ApplicationListener.TYPE_MIXED;
+
+		return defaultValue;
+	}
+	
+	public static String toListenerType(int listenerType, String defaultValue) {
+		if(ApplicationListener.TYPE_NONE==listenerType)			return "none";
+		else if(ApplicationListener.TYPE_CLASSIC==listenerType)	return "classic";
+		else if(ApplicationListener.TYPE_MODERN==listenerType)	return "modern";
+        else if(ApplicationListener.TYPE_MIXED==listenerType)	return "mixed";
+
+		return defaultValue;
+	}
+	
 	public static ApplicationListener loadListener(String type, ApplicationListener defaultValue) {
-		 if(StringUtil.isEmpty(type,true)) return defaultValue;
-		 type=type.trim();
-		 
+		 return loadListener(toListenerType(type, -1), defaultValue);
+	}
+	
+	public static ApplicationListener loadListener(int type, ApplicationListener defaultValue) {
 		 // none
-		 if("none".equalsIgnoreCase(type))	
+		 if(ApplicationListener.TYPE_NONE==type)	
 			 return new NoneAppListener();
 		 // classic
-		 if("classic".equalsIgnoreCase(type))
+		 if(ApplicationListener.TYPE_CLASSIC==type)
 			 return new ClassicAppListener();
 		 // modern
-		 if("modern".equalsIgnoreCase(type))	
+		 if(ApplicationListener.TYPE_MODERN==type)	
 			 return new ModernAppListener();
 		 // mixed
-		 if("mixed".equalsIgnoreCase(type))	
+		 if(ApplicationListener.TYPE_MIXED==type)	
 			 return new MixedAppListener();
-        
+       
 		return defaultValue;
 	}
 

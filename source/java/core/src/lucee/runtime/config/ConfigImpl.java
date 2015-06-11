@@ -1158,7 +1158,7 @@ public abstract class ConfigImpl implements Config {
     
     protected void setTagDirectory(Resource tagDirectory) {
     	//this.tagDirectory=tagDirectory;
-    	this.tagMapping= new MappingImpl(this,"/mapping-tag/",tagDirectory.getAbsolutePath(),null,ConfigImpl.INSPECT_NEVER,true,true,true,true,false,true,null);
+    	this.tagMapping= new MappingImpl(this,"/mapping-tag/",tagDirectory.getAbsolutePath(),null,ConfigImpl.INSPECT_NEVER,true,true,true,true,false,true,null,-1,-1);
 
     	TagLib tlc=getCoreTagLib(CFMLEngine.DIALECT_CFML);
     	TagLib tll=getCoreTagLib(CFMLEngine.DIALECT_LUCEE);
@@ -1221,7 +1221,7 @@ public abstract class ConfigImpl implements Config {
     
     protected void setFunctionDirectory(Resource functionDirectory) {
     	//this.functionDirectory=functionDirectory;
-    	this.functionMapping= new MappingImpl(this,"/mapping-function/",functionDirectory.getAbsolutePath(),null,ConfigImpl.INSPECT_NEVER,true,true,true,true,false,true,null);
+    	this.functionMapping= new MappingImpl(this,"/mapping-function/",functionDirectory.getAbsolutePath(),null,ConfigImpl.INSPECT_NEVER,true,true,true,true,false,true,null,-1,-1);
     	FunctionLib flc=cfmlFlds[cfmlFlds.length-1];
     	FunctionLib fll=luceeFlds[luceeFlds.length-1];
         
@@ -2737,7 +2737,7 @@ public abstract class ConfigImpl implements Config {
 			Resource physical=getConfigDir().getRealResource("jsr223");
 			if(!physical.exists()) physical.mkdirs();
 			
-			this.scriptMapping= new MappingImpl(this,"/mapping-script/",physical.getAbsolutePath(),null,ConfigImpl.INSPECT_NEVER,true,true,true,true,false,true,null);
+			this.scriptMapping= new MappingImpl(this,"/mapping-script/",physical.getAbsolutePath(),null,ConfigImpl.INSPECT_NEVER,true,true,true,true,false,true,null,-1,-1);
 		}
 		return scriptMapping;
 	}

@@ -52,6 +52,7 @@ import lucee.runtime.db.ClassDefinition;
 import lucee.runtime.engine.ThreadLocalConfig;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
+import lucee.runtime.exp.DatabaseException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.functions.conversion.DeserializeJSON;
@@ -60,10 +61,13 @@ import lucee.runtime.op.Decision;
 import lucee.runtime.osgi.BundleFile;
 import lucee.runtime.osgi.OSGiUtil;
 import lucee.runtime.osgi.OSGiUtil.BundleDefinition;
+import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Query;
 import lucee.runtime.type.QueryImpl;
+import lucee.runtime.type.Struct;
+import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
@@ -469,10 +473,37 @@ public class RHExtension implements Serializable {
 		if(StringUtil.isEmpty(str,true)) return new String[0];
 		return ListUtil.listToStringArray(str.trim(), ',');
 	}
+	
+	public static Query toQuery(Config config,RHExtension[] children) throws PageException {
+		Log log = config.getLog("deploy");
+		Query qry = createQuery();
+		for(int i=0;i<children.length;i++) {
+			try{
+				children[i].populate(qry); // ,i+1
+			}
+			catch(Throwable t){
+				log.error("extension", t);
+			}
+      	}
+		return qry;
+	}
 
 	public static Query toQuery(Config config,Element[] children) throws PageException {
 		Log log = config.getLog("deploy");
-		Query qry = new QueryImpl(new Key[]{
+		Query qry = createQuery();
+		for(int i=0;i<children.length;i++) {
+			try{
+				new RHExtension(config,children[i]).populate(qry); // ,i+1
+			}
+			catch(Throwable t){
+				log.error("extension", t);
+			}
+      	}
+		return qry;
+	}
+
+	private static Query createQuery() throws DatabaseException {
+		return new QueryImpl(new Key[]{
       			KeyConstants._id
       			,KeyConstants._version
       			,KeyConstants._name
@@ -493,20 +524,6 @@ public class RHExtension implements Serializable {
       			,EVENT_GATEWAYS
       			,ARCHIVES
       	}, 0, "Extensions");
-		
-
-      	RHExtension ext;
-		for(int i=0;i<children.length;i++) {
-			try{
-				ext=new RHExtension(config,children[i]);
-				ext.populate(qry); // ,i+1
-			}
-			catch(Throwable t){
-				log.error("extension", t);
-			}
-      	}
-		
-		return qry;
 	}
 
 	private void populate(Query qry) throws PageException {
@@ -540,6 +557,8 @@ public class RHExtension implements Serializable {
   	    }
   	    qry.setAt(BUNDLES, row,qryBundles);
 	}
+	
+
 
 	public String getId() {
 		return id;

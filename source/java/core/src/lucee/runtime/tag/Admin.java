@@ -82,6 +82,7 @@ import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.config.Constants;
 import lucee.runtime.config.DebugEntry;
+import lucee.runtime.config.DeployHandler;
 import lucee.runtime.config.Password;
 import lucee.runtime.config.PasswordImpl;
 import lucee.runtime.config.RemoteClient;
@@ -108,6 +109,7 @@ import lucee.runtime.ext.tag.TagImpl;
 import lucee.runtime.extension.Extension;
 import lucee.runtime.extension.ExtensionImpl;
 import lucee.runtime.extension.ExtensionProvider;
+import lucee.runtime.extension.RHExtension;
 import lucee.runtime.extension.RHExtensionProvider;
 import lucee.runtime.functions.cache.Util;
 import lucee.runtime.functions.query.QuerySort;
@@ -176,6 +178,8 @@ import org.apache.log4j.Level;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Version;
+
+import coldfusion.sql.QueryTable;
 
 /**
  * 
@@ -640,6 +644,8 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         else if(check("getFlds",                ACCESS_FREE) && check2(ACCESS_READ  )) doGetFLDs();
         else if(check("getTlds",                ACCESS_FREE) && check2(ACCESS_READ  )) doGetTLDs();
         else if(check("getRHExtensions",        ACCESS_FREE) && check2(ACCESS_READ  )) doGetRHExtensions();
+        else if(check("getLocalExtension",        ACCESS_FREE) && check2(ACCESS_READ  )) doGetLocalExtension();
+        else if(check("getLocalExtensions",        ACCESS_FREE) && check2(ACCESS_READ  )) doGetLocalExtensions();
         else if(check("getMailSetting",         ACCESS_FREE) && check2(ACCESS_READ  )) doGetMailSetting();
         else if(check("getTaskSetting",         ACCESS_FREE) && check2(ACCESS_READ  )) doGetTaskSetting();
         else if(check("getMailServers",         ACCESS_FREE) && check2(ACCESS_READ  )) doGetMailServers();
@@ -955,6 +961,8 @@ public final class Admin extends TagImpl implements DynamicAttributes {
     		attrs.putValue("mapping-readonly",Caster.toString(mapping.isReadonly()));
     		attrs.putValue("mapping-top-level",Caster.toString(mapping.isTopLevel()));
     		attrs.putValue("mapping-inspect",ConfigWebUtil.inspectTemplate(mapping.getInspectTemplateRaw(), ""));
+    		attrs.putValue("mapping-listener-type",ConfigWebUtil.toListenerType(mapping.getListenerType(), ""));
+    		attrs.putValue("mapping-listener-mode",ConfigWebUtil.toListenerMode(mapping.getListenerMode(), ""));
 			    		
     		mani.createFile(true);
     		IOUtil.write(mani, ManifestUtil.toString(mf, 100, null, null), "UTF-8", false);
@@ -995,7 +1003,10 @@ public final class Admin extends TagImpl implements DynamicAttributes {
 		                strFile,
 		                mapping.isPhysicalFirst()?"physical":"archive",
 		                mapping.getInspectTemplateRaw(),
-		                mapping.isTopLevel()
+		                mapping.isTopLevel(),
+		                mapping.getListenerMode(),
+		                mapping.getListenerType(),
+		                mapping.isReadonly()
 		        );
 		        store();
 			}
@@ -2147,7 +2158,11 @@ public final class Admin extends TagImpl implements DynamicAttributes {
                 getString("admin",action,"archive"),
                 getString("admin",action,"primary"),
                 ConfigWebUtil.inspectTemplate(getString("inspect",""), ConfigImpl.INSPECT_UNDEFINED),
-                Caster.toBooleanValue(getString("toplevel","true"))
+                Caster.toBooleanValue(getString("toplevel","true")),
+                ConfigWebUtil.toListenerMode(getString("listenerMode",""), -1),
+                ConfigWebUtil.toListenerType(getString("listenerType",""), -1),
+                Caster.toBooleanValue(getString("readonly","false"))
+                
         );
         store();
         adminSync.broadcast(attributes, config);
@@ -2627,6 +2642,52 @@ public final class Admin extends TagImpl implements DynamicAttributes {
 
 	private void doGetRHExtensions() throws PageException {
         pageContext.setVariable(getString("admin",action,"returnVariable"),admin.getRHExtensionsAsQuery(config));
+	}
+	
+	private void doGetLocalExtension() throws PageException {
+		String id=getString("admin",action,"id");
+		boolean asBinary=getBoolV("asBinary", false);
+		
+		if(asBinary) {
+			Iterator<RHExtension> it = DeployHandler.getLocalExtensions(config).iterator();
+			RHExtension ext;
+			while(it.hasNext()){
+				ext=it.next();
+				if(id.equalsIgnoreCase(ext.getId())) {
+					try {
+						pageContext.setVariable(getString("admin",action,"returnVariable"),IOUtil.toBytes(ext.getExtensionFile()));
+						return;
+					} catch (IOException e) {
+						throw Caster.toPageException(e);
+					}
+				}
+					
+			}
+			throw new ApplicationException("there is no local extension with id "+id);
+			
+		}
+		else {
+			List<RHExtension> locals = DeployHandler.getLocalExtensions(config);
+			Query qry = RHExtension.toQuery(config, locals.toArray(new RHExtension[locals.size()]));
+			int rows=qry.getRecordcount();
+			String _id;
+			int row=0;
+			for(int r=1;r<=rows;r++){
+				_id=Caster.toString(qry.getAt(KeyConstants._id, r),null);
+				if(id.equalsIgnoreCase(_id)) {
+					row=r;
+					break;
+				}
+			}
+			if(row==0) throw new ApplicationException("there is no local extension with id "+id);
+			pageContext.setVariable(getString("admin",action,"returnVariable"),Caster.toStruct(qry,row));
+		}
+	}
+	
+	private void doGetLocalExtensions() throws PageException {
+		List<RHExtension> locals = DeployHandler.getLocalExtensions(config);
+		Query qry = RHExtension.toQuery(config, locals.toArray(new RHExtension[locals.size()]));
+		pageContext.setVariable(getString("admin",action,"returnVariable"),qry);
 	}
 
     /**

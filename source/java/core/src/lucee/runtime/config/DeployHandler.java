@@ -21,7 +21,10 @@ package lucee.runtime.config;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
@@ -154,17 +157,13 @@ public class DeployHandler {
 		
 		
 		// check if a local extension is matching our id
-		Resource[] locReses = config.getLocalExtensionProviderDirectory().listResources(new ExtensionResourceFilter(".lex"));
-		List<RHExtension> list=new ArrayList<RHExtension>();
+		Iterator<RHExtension> it = getLocalExtensions(config).iterator();
 		RHExtension ext=null,tmp;
-		for(int i=0;i<locReses.length;i++){
-			try {
-				tmp=new RHExtension(config,locReses[i],false);
-				if(tmp.getId().equals(id) && (ext==null || ext.getVersion().compareTo(tmp.getVersion())<0)) {
-					ext=tmp;
-				}
-			} 
-			catch(Exception e) {}
+		while(it.hasNext()){
+			tmp=it.next();
+			if(tmp.getId().equals(id) && (ext==null || ext.getVersion().compareTo(tmp.getVersion())<0)) {
+				ext=tmp;
+			}
 		}
 		
 		
@@ -227,6 +226,27 @@ public class DeployHandler {
 				log.error("extension", t);
 			}
 		}
+	}
+
+	public static List<RHExtension> getLocalExtensions(Config config) {
+		Resource[] locReses = config.getLocalExtensionProviderDirectory().listResources(new ExtensionResourceFilter(".lex"));
+		List<RHExtension> loc=new ArrayList<RHExtension>();
+		Map<String,String> map=new HashMap<String,String>();
+		RHExtension ext;
+		String v;
+		for(int i=0;i<locReses.length;i++) {
+			try {
+				ext=new RHExtension(config,locReses[i],false);
+				// check if we already have an extension with the same id to avoid having more than once
+				v=map.get(ext.getId());
+				if(v!=null && v.compareToIgnoreCase(ext.getId())>0) continue;
+				
+				map.put(ext.getId(), ext.getVersion());
+				loc.add(ext);
+			} 
+			catch(Exception e) {}
+		}
+		return loc;
 	}
 	
 }

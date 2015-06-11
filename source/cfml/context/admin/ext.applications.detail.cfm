@@ -31,6 +31,9 @@
 		#replace(replace(trim(app.description),'<','&lt;',"all"), chr(10),"<br />","all")#
 		<br /><br />
 	</div>
+
+	
+					
 	<table class="contentlayout">
 		<tbody>
 			<tr>
@@ -38,7 +41,9 @@
 				<td valign="top" style="width:200px;">
 					<cfif !isNull(app.image)>
 						<cfset dn=getDumpNail(app.image,400,400)>
-						<div style="width:100%;overflow:auto;"><img src="#dn#" alt="#stText.ext.extThumbnail#" /></div>
+						<div style="width:100%;overflow:auto;">
+							<img src="#dn#" alt="#stText.ext.extThumbnail#" />
+						</div>
 					</cfif>
 				</td>
 				<td valign="top">
@@ -101,7 +106,7 @@
 							<cfif !isNull(provider.title) && len(trim(provider.title))>
 								<tr>
 									<th scope="row">#stText.ext.provider#</th>
-									<td><a href="#provider.url#" target="_blank">#provider.title#</a></td>
+									<td><cfif !isNull(provider.url)><a href="#provider.url#" target="_blank"></cfif>#provider.title#<cfif !isNull(provider.url)></a></cfif></td>
 								</tr>
 							</cfif>
 							<!--- bundles --->

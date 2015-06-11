@@ -387,8 +387,8 @@ public final class CreationImpl implements Creation,Serializable {
 	@Override
 	public Mapping createMapping(Config config, String virtual, String strPhysical,String strArchive, short inspect, 
 			boolean physicalFirst, boolean hidden, boolean readonly,boolean topLevel, boolean appMapping,
-			boolean ignoreVirtual,ApplicationListener appListener) {
-		return new MappingImpl(config, virtual, strPhysical, strArchive, inspect, physicalFirst, hidden, readonly, topLevel, appMapping, ignoreVirtual, appListener);
+			boolean ignoreVirtual,ApplicationListener appListener,int listenerMode,int listenerType) {
+		return new MappingImpl(config, virtual, strPhysical, strArchive, inspect, physicalFirst, hidden, readonly, topLevel, appMapping, ignoreVirtual, appListener,listenerMode,listenerType);
 	}
 
 	@Override

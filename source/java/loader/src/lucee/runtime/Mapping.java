@@ -144,4 +144,17 @@ public interface Mapping extends Serializable {
 	 * @return config
 	 */
 	public Config getConfig();
+	
+	
+	/**
+	 * mapping can have a specific listener mode to overwrite the listener mode coming from the Application Context
+	 * @return
+	 */
+	public int getListenerMode();
+	
+	/**
+	 * mapping can have a specific listener type to overwrite the listener mode coming from the Application Context
+	 * @return
+	 */
+	public int getListenerType();
 }

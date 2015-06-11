@@ -85,6 +85,9 @@ public final class MappingImpl implements Mapping {
 
 	private long archMod;
 
+	private static int listenerMode;
+	private static int listenerType;
+
 	/**
 	 * constructor of the class
 	 * @param config
@@ -101,7 +104,8 @@ public final class MappingImpl implements Mapping {
 	 * @param appListener
 	 */
 	public MappingImpl(Config config, String virtual, String strPhysical,String strArchive, short inspect, 
-			boolean physicalFirst, boolean hidden, boolean readonly,boolean topLevel, boolean appMapping, boolean ignoreVirtual,ApplicationListener appListener) {
+			boolean physicalFirst, boolean hidden, boolean readonly,boolean topLevel, boolean appMapping, 
+			boolean ignoreVirtual,ApplicationListener appListener,int listenerMode,int listenerType) {
 		this.ignoreVirtual=ignoreVirtual;
 		this.config=config;
 		this.hidden=hidden;
@@ -113,6 +117,8 @@ public final class MappingImpl implements Mapping {
 		this.appMapping=appMapping;
 		this.physicalFirst=physicalFirst;
 		this.appListener=appListener;
+		this.listenerMode=listenerMode;
+		this.listenerType=listenerType;
 		
 		// virtual
 		if(virtual.length()==0)virtual="/";
@@ -299,7 +305,7 @@ public final class MappingImpl implements Mapping {
 	 * @throws IOException
 	 */
 	public MappingImpl cloneReadOnly(ConfigImpl config) {
-		return new MappingImpl(config,virtual,strPhysical,strArchive,inspect,physicalFirst,hidden,true,topLevel,appMapping,ignoreVirtual,appListener);
+		return new MappingImpl(config,virtual,strPhysical,strArchive,inspect,physicalFirst,hidden,true,topLevel,appMapping,ignoreVirtual,appListener,listenerMode,listenerType);
 	}
 
 	@Override
@@ -497,4 +503,13 @@ public final class MappingImpl implements Mapping {
 		
 	}
 
+	@Override
+	public int getListenerMode() {
+		return listenerMode;
+	}
+
+	@Override
+	public int getListenerType() {
+		return listenerType;
+	}
 }

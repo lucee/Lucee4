@@ -1024,13 +1024,24 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 			if (ResourceUtil.isEmpty(secDir))
 				secDir.delete();
 		}
-
+		
+		// lucee-context
 		f = contextDir.getRealResource("lucee-context.lar");
-		if (!f.exists() || doNew)
-			createFileFromResourceEL("/resource/context/lucee-context.lar", f);
-		else
-			createFileFromResourceCheckSizeDiffEL("/resource/context/lucee-context.lar", f);
+		if (!f.exists() || doNew) createFileFromResourceEL("/resource/context/lucee-context.lar", f);
+		else createFileFromResourceCheckSizeDiffEL("/resource/context/lucee-context.lar", f);
 
+		// lucee-admin
+		f = contextDir.getRealResource("lucee-admin.lar");
+		if (!f.exists() || doNew) createFileFromResourceEL("/resource/context/lucee-admin.lar", f);
+		else createFileFromResourceCheckSizeDiffEL("/resource/context/lucee-admin.lar", f);
+
+		// lucee-doc
+		f = contextDir.getRealResource("lucee-doc.lar");
+		if (!f.exists() || doNew) createFileFromResourceEL("/resource/context/lucee-doc.lar", f);
+		else createFileFromResourceCheckSizeDiffEL("/resource/context/lucee-doc.lar", f);
+				
+		
+		
 		f = contextDir.getRealResource("component-dump."+TEMPLATE_EXTENSION);
 		if (!f.exists())
 			createFileFromResourceEL("/resource/context/component-dump."+TEMPLATE_EXTENSION, f);
@@ -1477,7 +1488,7 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 				boolean toplevel = toBoolean(el.getAttribute("toplevel"), true);
 				//int clMaxEl = toInt(el.getAttribute("classloader-max-elements"), 100);
 
-				if(config instanceof ConfigServer && virtual.equalsIgnoreCase("/lucee-server-context/")) {
+				if(config instanceof ConfigServer && (virtual.equalsIgnoreCase("/lucee-server/") || virtual.equalsIgnoreCase("/lucee-server-context/"))) {
 					hasServerContext=true;
 				}
 				
@@ -1490,14 +1501,15 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 					toplevel = true;
 				}
 
-				ApplicationListener listener = ConfigWebUtil.loadListener(listType, null);
 				int listenerMode = ConfigWebUtil.toListenerMode(listMode, -1);
+				int listenerType = ConfigWebUtil.toListenerType(listType, -1);
+				ApplicationListener listener = ConfigWebUtil.loadListener(listenerType, null);
 				if (listener != null || listenerMode != -1) {
 					// type
 					if (mode == ConfigImpl.MODE_STRICT)
 						listener = new ModernAppListener();
 					else if (listener == null)
-						listener = ConfigWebUtil.loadListener(config.getApplicationListener().getType(), null);
+						listener = ConfigWebUtil.loadListener(ConfigWebUtil.toListenerType(config.getApplicationListener().getType(),-1), null);
 					if (listener == null)// this should never be true
 						listener = new ModernAppListener();
 
@@ -1522,7 +1534,7 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 					String primary = el.getAttribute("primary");
 					boolean physicalFirst = primary == null || !primary.equalsIgnoreCase("archive");
 
-					tmp = new MappingImpl(config, virtual, physical, archive, insTemp, physicalFirst, hidden, readonly, toplevel, false, false, listener);
+					tmp = new MappingImpl(config, virtual, physical, archive, insTemp, physicalFirst, hidden, readonly, toplevel, false, false, listener,listenerMode,listenerType);
 					mappings.put(tmp.getVirtualLowerCase(), tmp);
 					if (virtual.equals("/")) {
 						finished = true;
@@ -1533,10 +1545,10 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 			
 			// set default lucee-server-context
 			if(config instanceof ConfigServer && !hasServerContext) {
-				ApplicationListener listener = ConfigWebUtil.loadListener("modern", null);
+				ApplicationListener listener = ConfigWebUtil.loadListener(ApplicationListener.TYPE_MODERN, null);
 				listener.setMode(ApplicationListener.MODE_CURRENT2ROOT);
 				
-				tmp = new MappingImpl(config, "/lucee-server-context", "{lucee-server}/context/", null, ConfigImpl.INSPECT_ONCE, true, false, true, true, false, false, listener);
+				tmp = new MappingImpl(config, "/lucee-server", "{lucee-server}/context/", null, ConfigImpl.INSPECT_ONCE, true, false, true, true, false, false, listener,ApplicationListener.MODE_CURRENT2ROOT,ApplicationListener.TYPE_MODERN);
 				mappings.put(tmp.getVirtualLowerCase(), tmp);
 			}
 		}
@@ -1546,10 +1558,10 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 
 			if ( (config instanceof ConfigWebImpl) && ResourceUtil.isUNCPath( config.getRootDirectory().getPath() ) ) {
 
-				tmp = new MappingImpl( config, "/", config.getRootDirectory().getPath(), null, ConfigImpl.INSPECT_UNDEFINED, true, true, true, true, false, false, null );
+				tmp = new MappingImpl( config, "/", config.getRootDirectory().getPath(), null, ConfigImpl.INSPECT_UNDEFINED, true, true, true, true, false, false, null ,-1,-1);
 			} else {
 
-				tmp = new MappingImpl( config, "/", "/", null, ConfigImpl.INSPECT_UNDEFINED, true, true, true, true, false, false, null );
+				tmp = new MappingImpl( config, "/", "/", null, ConfigImpl.INSPECT_UNDEFINED, true, true, true, true, false, false, null ,-1,-1);
 			}
 
 			mappings.put( "/", tmp );
@@ -2385,7 +2397,7 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 				boolean physicalFirst = archive == null || !primary.equalsIgnoreCase("archive");
 				hasSet = true;
 				mappings[i] = new MappingImpl(config, XMLConfigAdmin.createVirtual(ctMapping), physical, archive, inspTemp, physicalFirst, hidden, readonly, true, false, true,
-						null);
+						null,-1,-1);
 				// print.out(mappings[i].isPhysicalFirst());
 			}
 
@@ -4360,6 +4372,9 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 				boolean readonly = toBoolean(cMapping.getAttribute("readonly"), false);
 				boolean hidden = toBoolean(cMapping.getAttribute("hidden"), false);
 				//boolean trusted = toBoolean(cMapping.getAttribute("trusted"), false);
+
+				int listMode=ConfigWebUtil.toListenerMode(cMapping.getAttribute("listener-mode"), -1);
+				int listType=ConfigWebUtil.toListenerType(cMapping.getAttribute("listener-type"), -1);
 				short inspTemp = inspectTemplate(cMapping);
 				String virtual = XMLConfigAdmin.createVirtual(cMapping);
 
@@ -4369,7 +4384,7 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 
 				boolean physicalFirst = archive == null || !primary.equalsIgnoreCase("archive");
 				hasSet = true;
-				mappings[i] = new MappingImpl(config, virtual, physical, archive, inspTemp, physicalFirst, hidden, readonly, true, false, true, null);
+				mappings[i] = new MappingImpl(config, virtual, physical, archive, inspTemp, physicalFirst, hidden, readonly, true, false, true, null,listMode,listType);
 			}
 
 			config.setComponentMappings(mappings);
@@ -4412,7 +4427,7 @@ public final class XMLConfigWebFactory extends XMLConfigFactory {
 		}
 
 		if (!hasSet) {
-			MappingImpl m = new MappingImpl(config, "/default", "{lucee-web}/components/", null, ConfigImpl.INSPECT_UNDEFINED, true, false, false, true, false, true, null);
+			MappingImpl m = new MappingImpl(config, "/default", "{lucee-web}/components/", null, ConfigImpl.INSPECT_UNDEFINED, true, false, false, true, false, true, null,-1,-1);
 			config.setComponentMappings(new Mapping[] { m.cloneReadOnly(config) });
 		}
 

@@ -94,6 +94,7 @@ import lucee.runtime.functions.system.IsZipFile;
 import lucee.runtime.gateway.GatewayEntry;
 import lucee.runtime.gateway.GatewayEntryImpl;
 import lucee.runtime.listener.AppListenerUtil;
+import lucee.runtime.listener.ApplicationListener;
 import lucee.runtime.monitor.Monitor;
 import lucee.runtime.net.ntp.NtpClient;
 import lucee.runtime.op.Caster;
@@ -578,9 +579,9 @@ public final class XMLConfigAdmin {
         }
 	}
     
-    static void updateMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect, boolean toplevel, boolean reload) throws SAXException, IOException, PageException, BundleException {
+    static void updateMapping(ConfigImpl config, String virtual, String physical,String archive,String primary, short inspect, boolean toplevel,int listenerMode,int listenerType,boolean readonly, boolean reload) throws SAXException, IOException, PageException, BundleException {
     	XMLConfigAdmin admin = new XMLConfigAdmin(config, null);
-    	admin._updateMapping(virtual, physical, archive, primary, inspect, toplevel);
+    	admin._updateMapping(virtual, physical, archive, primary, inspect, toplevel,listenerMode,listenerType,readonly);
     	admin._store();
     	if(reload)admin._reload();
     }
@@ -612,11 +613,15 @@ public final class XMLConfigAdmin {
      * @throws ExpressionException
      * @throws SecurityException
      */
-    public void updateMapping(String virtual, String physical,String archive,String primary, short inspect, boolean toplevel) throws ExpressionException, SecurityException {
+    public void updateMapping(String virtual, String physical,String archive,String primary, short inspect, boolean toplevel,
+    		int listenerMode, int listenerType, boolean readOnly) throws ExpressionException, SecurityException {
     	checkWriteAccess();
-    	_updateMapping(virtual, physical, archive, primary, inspect, toplevel);
+    	_updateMapping(virtual, physical, archive, primary, inspect, toplevel,listenerMode,listenerType,readOnly);
     }
-    private void _updateMapping(String virtual, String physical,String archive,String primary, short inspect, boolean toplevel) throws ExpressionException, SecurityException {
+    private void _updateMapping(String virtual, String physical,String archive,String primary, short inspect, boolean toplevel,
+    		int listenerMode, int listenerType, boolean readOnly) throws ExpressionException, SecurityException {
+    	
+    	
     	boolean hasAccess=ConfigWebUtil.hasAccess(config,SecurityManager.TYPE_MAPPING);
         virtual=virtual.trim(); 
         if(physical==null) physical="";
@@ -643,68 +648,94 @@ public final class XMLConfigAdmin {
             throw new ExpressionException("physical or archive must have a value");
         
         if(isArchive && archive.length()==0 ) isArchive=false;
-        //print.ln("isArchive:"+isArchive);
         
         if(!isArchive && archive.length()>0 && physical.length()==0 ) isArchive=true;
-        //print.ln("isArchive:"+isArchive);
-        
-        
         
         Element mappings=_getRootElement("mappings");
-        // Update
+        
+        // do we already have a record for it?
         Element[] children = XMLConfigWebFactory.getChildren(mappings,"mapping");
-      	for(int i=0;i<children.length;i++) {
+        Element el=null;
+        for(int i=0;i<children.length;i++) {
       	    String v=children[i].getAttribute("virtual");
       	    if(v!=null) {
       	        if(!v.equals("/") && v.endsWith("/"))
       	            v=v.substring(0,v.length()-1);
               
 	      	    if(v.equals(virtual)) {
-		      		Element el=children[i];
-		      		if(physical.length()>0) {
-                        el.setAttribute("physical",physical);
-                    }
-                    else if(el.hasAttribute("physical")) {
-                        el.removeAttribute("physical");
-                    }
-		      		if(archive.length()>0) {
-                        el.setAttribute("archive",archive);
-                    }
-                    else if(el.hasAttribute("archive")) {
-                        el.removeAttribute("archive");
-                    }
-		      		el.setAttribute("primary",isArchive?"archive":"physical");
-		      		el.setAttribute("inspect-template",ConfigWebUtil.inspectTemplate(inspect, ""));
+		      		el=children[i];
 		      		el.removeAttribute("trusted");
-		      		el.setAttribute("toplevel",Caster.toString(toplevel));
-		      		return ;
+		      		break;
 	  			}
       	    }
       	}
       	
-      	// Insert
-      	Element el=doc.createElement("mapping");
-      	mappings.appendChild(el);
-      	el.setAttribute("virtual",virtual);
-      	if(physical.length()>0)el.setAttribute("physical",physical);
-  		if(archive.length()>0)el.setAttribute("archive",archive);
+      	// create element if necessary 
+        boolean update=el!=null;
+      	if(el==null) {
+	      	el=doc.createElement("mapping");
+	      	mappings.appendChild(el);
+	      	el.setAttribute("virtual",virtual);
+      	}
+      	
+      	// physical
+      	if(physical.length()>0) {
+            el.setAttribute("physical",physical);
+        }
+        else if(el.hasAttribute("physical")) {
+            el.removeAttribute("physical");
+        }
+      	
+      	// archive
+      	if(archive.length()>0) {
+            el.setAttribute("archive",archive);
+        }
+        else if(el.hasAttribute("archive")) {
+            el.removeAttribute("archive");
+        }
+      	
+      	// primary
   		el.setAttribute("primary",isArchive?"archive":"physical");
+  		
+  		
+  		// listener-type
+  		String type=ConfigWebUtil.toListenerType(listenerType, null);
+  		if(type!=null) {
+            el.setAttribute("listener-type",type);
+        }
+        else if(el.hasAttribute("listener-type")) {
+            el.removeAttribute("listener-type");
+        }
+
+  		// listener-mode
+  		String mode=ConfigWebUtil.toListenerMode(listenerMode, null);
+  		if(mode!=null) {
+            el.setAttribute("listener-mode",mode);
+        }
+        else if(el.hasAttribute("listener-mode")) {
+            el.removeAttribute("listener-mode");
+        }
+  		
+  		// others
   		el.setAttribute("inspect-template",ConfigWebUtil.inspectTemplate(inspect, ""));
   		el.setAttribute("toplevel",Caster.toString(toplevel));
-  		
-  		// set / to the end
-  		children = XMLConfigWebFactory.getChildren(mappings,"mapping");
-      	for(int i=0;i<children.length;i++) {
-      	    String v=children[i].getAttribute("virtual");
-      	    
-  	        if(v!=null && v.equals("/")) {
-	      		el=children[i];
-	      		mappings.removeChild(el);
-	      		mappings.appendChild(el);
-	      		return ;
-  			}
+  		el.setAttribute("readonly",Caster.toString(readOnly));
 
-      	}
+  		// set / to the end
+  		if(!update){
+	  		children = XMLConfigWebFactory.getChildren(mappings,"mapping");
+	      	for(int i=0;i<children.length;i++) {
+	      	    String v=children[i].getAttribute("virtual");
+	      	    
+	  	        if(v!=null && v.equals("/")) {
+		      		el=children[i];
+		      		mappings.removeChild(el);
+		      		mappings.appendChild(el);
+		      		return ;
+	  			}
+	
+	      	}
+  		}
   		
     }
     
@@ -4304,6 +4335,7 @@ public final class XMLConfigAdmin {
 		String type=null,virtual=null,name=null;
 		boolean readOnly,topLevel,hidden,physicalFirst;
 		short inspect;
+		int listMode,listType;
 		InputStream is = null;
 		ZipFile file=null;
 		try {
@@ -4326,6 +4358,11 @@ public final class XMLConfigAdmin {
 			name = ListUtil.trim(virtual, "/");
 			readOnly = Caster.toBooleanValue(DeployHandler.unwrap(attr.getValue("mapping-readonly")),false);
 			topLevel = Caster.toBooleanValue(DeployHandler.unwrap(attr.getValue("mapping-top-level")),false);
+
+			listMode = ConfigWebUtil.toListenerMode(DeployHandler.unwrap(attr.getValue("mapping-listener-mode")), -1);
+			listType = ConfigWebUtil.toListenerType(DeployHandler.unwrap(attr.getValue("mapping-listener-type")), -1);
+			
+			
 			inspect = ConfigWebUtil.inspectTemplate(DeployHandler.unwrap(attr.getValue("mapping-inspect")), Config.INSPECT_UNDEFINED);
 			if(inspect==Config.INSPECT_UNDEFINED) {
 				Boolean trusted = Caster.toBoolean(DeployHandler.unwrap(attr.getValue("mapping-trusted")),null);
@@ -4334,6 +4371,7 @@ public final class XMLConfigAdmin {
 					else inspect=Config.INSPECT_ALWAYS;
 				}	
 			}
+			
 			hidden = Caster.toBooleanValue(DeployHandler.unwrap(attr.getValue("mapping-hidden")),false);
 			physicalFirst = Caster.toBooleanValue(DeployHandler.unwrap(attr.getValue("mapping-physical-first")),false);
 		} 
@@ -4358,7 +4396,7 @@ public final class XMLConfigAdmin {
 			ResourceUtil.moveTo(archive, trgFile,true);
 			logger.log(Log.LEVEL_INFO,"archive","add "+type+" mapping ["+virtual+"] with archive ["+trgFile.getAbsolutePath()+"]");
 			if("regular".equalsIgnoreCase(type))
-				_updateMapping(virtual, null, trgFile.getAbsolutePath(), "archive", inspect, topLevel);
+				_updateMapping(virtual, null, trgFile.getAbsolutePath(), "archive", inspect, topLevel,listMode,listType,readOnly);
 			else if("cfc".equalsIgnoreCase(type))
 				_updateComponentMapping(virtual, null, trgFile.getAbsolutePath(), "archive", inspect);
 			else if("ct".equalsIgnoreCase(type))
@@ -4603,18 +4641,24 @@ public final class XMLConfigAdmin {
 				
 				String virtual,physical,archive,primary;
 				short inspect;
-				boolean toplevel;
+				int lmode,ltype;
+				boolean toplevel,readonly;
 				while(itl.hasNext()){
 					map = itl.next();
 					virtual=map.get("virtual");
 					physical=map.get("physical");
 					archive=map.get("archive");
 					primary=map.get("primary");
+					
 					inspect = ConfigWebUtil.inspectTemplate(map.get("inspect"), Config.INSPECT_UNDEFINED);
+					lmode = ConfigWebUtil.toListenerMode(map.get("listener-mode"), -1);
+					ltype = ConfigWebUtil.toListenerType(map.get("listener-type"), -1);
+					
 					toplevel=Caster.toBooleanValue(map.get("toplevel"),false);
+					readonly=Caster.toBooleanValue(map.get("readonly"),false);
 					
 					
-					_updateMapping(virtual, physical, archive, primary, inspect, toplevel);
+					_updateMapping(virtual, physical, archive, primary, inspect, toplevel,lmode,ltype,readonly);
 					reload=true;
 					
 					logger.info("extension", "update Mapping ["+virtual+"]");
