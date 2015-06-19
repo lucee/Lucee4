@@ -21,6 +21,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import lucee.loader.TP;
 import lucee.loader.engine.CFMLEngineFactory;
@@ -63,7 +65,20 @@ public class VersionInfo {
 
 		int index = content.indexOf(':');
 		version = CFMLEngineFactory.toVersion(content.substring(0, index),CFMLEngineFactory.VERSION_ZERO);
-		created = Long.parseLong(content.substring(index + 1));
+		
+		String d=content.substring(index + 1);
+		try{
+			created = Long.parseLong(d);
+		}
+		catch(NumberFormatException nfe){
+			try {
+				created=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z").parse(d).getTime();
+			} catch (ParseException pe) {
+				pe.printStackTrace();
+				created=0;
+			}
+		}
+
 
 	}
 
