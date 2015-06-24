@@ -336,9 +336,6 @@ public class CFMLExpressionInterpreter {
             if(cfml.forwardIfCurrent(':')){
             	cfml.removeSpace();
             	Ref right = assignOp();    
-            	//if(!(ref instanceof Variable))
-        		//	throw new InterpreterException("left operant of the Elvis operator has to be a variable declaration "+ref.getClass().getName());
-        		
         		ref=new Elvis(ref,right);
             	
             }
@@ -682,8 +679,6 @@ public class CFMLExpressionInterpreter {
         while(cfml.isCurrent('&') && !cfml.isNext('&')) {
             cfml.next();
             ref=_concat(ref);
-            //cfml.removeSpace();
-            //ref=new Concat(pc,ref,plusMinusOp());
         }
         return ref;
     }
@@ -703,14 +698,10 @@ public class CFMLExpressionInterpreter {
             // Plus Operation
             if (cfml.forwardIfCurrent('+')) {
                 ref=_plus(ref);
-            	//cfml.removeSpace();
-                //ref=new Plus(ref,modOp());
             }
             // Minus Operation
             else if (cfml.forwardIfCurrent('-')) {
                 ref=_minus(ref);
-            	//cfml.removeSpace();
-                //ref=new Minus(ref,modOp());
             }
             else break;
         }
@@ -726,14 +717,6 @@ public class CFMLExpressionInterpreter {
 			Ref res = preciseMath?new BigPlus(ref,right):new Plus(ref,right);
 			ref=new Assign(ref,res);
 		}
-		/*/ ++
-		else if (cfml.isCurrent('+')) {
-			cfml.next();
-			cfml.removeSpace();
-			Ref res = new Plus(ref,new LNumber(new Double(1)));
-			ref=new Assign(ref,res);
-			ref=new Minus(ref,new LNumber(new Double(1)));
-		}*/
 		else {	
             cfml.removeSpace();
             ref=preciseMath?new BigPlus(ref,modOp()):new Plus(ref,modOp());
@@ -750,14 +733,6 @@ public class CFMLExpressionInterpreter {
 			Ref res = preciseMath?new BigMinus(ref,right):new Minus(ref,right);
 			ref=new Assign(ref,res);
 		}
-		/*/ --
-		else if (cfml.isCurrent('-')) {
-			cfml.next();
-			cfml.removeSpace();
-			Ref res = new Minus(ref,new LNumber(new Double(1)));
-			ref=new Assign(ref,res);
-			ref=new Plus(ref,new LNumber(new Double(1)));
-		}*/
 		else {	
             cfml.removeSpace();
             ref=preciseMath?new BigMinus(ref,modOp()):new Minus(ref,modOp());
@@ -840,10 +815,6 @@ public class CFMLExpressionInterpreter {
 		return ref;
 	}
     
-    
-    
-    
-
     /**
     * Transfomiert eine Modulus Operation. Im Gegensatz zu CFMX ,
     * wird das "%" Zeichen auch als Modulus Operator anerkannt.
@@ -858,9 +829,6 @@ public class CFMLExpressionInterpreter {
         
         while(cfml.isValidIndex() && (cfml.forwardIfCurrent('%') || cfml.forwardIfCurrent("mod"))) {
             ref=_mod(ref);
-        	
-        	//cfml.removeSpace();
-            //ref=new Mod(ref,divMultiOp());
         }
         return ref;
     }
@@ -880,22 +848,16 @@ public class CFMLExpressionInterpreter {
             // Multiply Operation
             if(cfml.forwardIfCurrent('*')) {
                 ref=_multi(ref);
-            	//cfml.removeSpace();
-                //ref=new Multi(ref,expoOp());
             }
             // Divide Operation
             else if (cfml.isCurrent('/') && (!cfml.isCurrent("/>") )) {
                 cfml.next(); 
                 ref=_div(ref);
-                //cfml.removeSpace();
-                //ref=new Div(ref,expoOp());
             }
             // Divide Operation
             else if (cfml.isCurrent('\\')) {
                 cfml.next(); 
                 ref=_intdiv(ref);
-                //cfml.removeSpace();
-                //ref=new IntDiv(ref,expoOp());
             }
             else {
                 break;
@@ -1015,7 +977,7 @@ public class CFMLExpressionInterpreter {
                 return ref;
             } 
         // Sharp
-            if((ref=sharp())!=null) {
+            if(!isJson &&(ref=sharp())!=null) {
                 mode=DYNAMIC;
                 return ref;
             }  
@@ -1053,13 +1015,9 @@ public class CFMLExpressionInterpreter {
     
     
     protected Ref json(FunctionLibFunction flf, char start, char end) throws PageException {
-		//print.out("start:"+start+":"+cfml.getCurrent());
 		if(!cfml.isCurrent(start))return null;
 		
 		Ref[] args = functionArg(flf.getName(), false, flf,end);
-		
-		//if (!cfml.forwardIfCurrent(end))
-		//	throw new InterpreterException("Invalid Syntax Closing ["+end+"] not found");
 		
 		return new BIFCall(flf,args);
 	}
@@ -1077,14 +1035,13 @@ public class CFMLExpressionInterpreter {
                         
         // Init Parameter
         char quoter = cfml.getCurrentLower();
-        //String str="";
         LStringBuffer str=new LStringBuffer();
         Ref value=null;
         
         while(cfml.hasNext()) {
             cfml.next();
             // check sharp
-            if(cfml.isCurrent('#')) {
+            if(!isJson && cfml.isCurrent('#')) {
                 if(cfml.isNext('#')){
                     cfml.next();
                     str.append('#');
@@ -1137,8 +1094,6 @@ public class CFMLExpressionInterpreter {
     */
     private Ref number() throws PageException {
         // check first character is a number literal representation
-        //if(!cfml.isCurrentDigit()) return null;
-        
         StringBuilder rtn=new StringBuilder(6);
         
         // get digit on the left site of the dot
@@ -1172,7 +1127,6 @@ public class CFMLExpressionInterpreter {
             // read right side of the dot
             if(before==cfml.getPos())
                 throw new InterpreterException("Number can't end with [.]");
-            //rtn.append(rightSite);
         }
         cfml.removeSpace();
         mode=STATIC;
@@ -1209,8 +1163,6 @@ public class CFMLExpressionInterpreter {
     * @throws PageException 
     */
     private Ref dynamic() throws PageException {
-        // Die Implementation weicht ein wenig von der Grammatik ab, 
-        // aber nicht in der Logik sondern rein wie es umgesetzt wurde.
         
         // get First Element of the Variable
         String name = identifier(false);
@@ -1222,12 +1174,10 @@ public class CFMLExpressionInterpreter {
             if (!cfml.forwardIfCurrent(')'))
                 throw new InterpreterException("Invalid Syntax Closing [)] not found");
             cfml.removeSpace();
-            return subDynamic(ref);
+            return isJson?ref:subDynamic(ref);
         }
 
-        //Element el;
         cfml.removeSpace();
-        //char first=name.charAt(0);
         
         // Boolean constant 
         if(name.equalsIgnoreCase("TRUE"))   {
@@ -1238,11 +1188,11 @@ public class CFMLExpressionInterpreter {
             cfml.removeSpace();
             return LBoolean.FALSE;
         }   
-        else if(name.equalsIgnoreCase("YES"))   {
+        else if(!isJson && name.equalsIgnoreCase("YES"))   {
             cfml.removeSpace();
             return LBoolean.TRUE;
         }
-        else if(name.equalsIgnoreCase("NO")){
+        else if(!isJson && name.equalsIgnoreCase("NO")){
     		cfml.removeSpace();
     		return LBoolean.FALSE;
     	}
@@ -1250,19 +1200,17 @@ public class CFMLExpressionInterpreter {
     		cfml.removeSpace();
     		return new  LString(null);
     	}
-    	else if(name.equalsIgnoreCase("NEW")){
+    	else if(!isJson && name.equalsIgnoreCase("NEW")){
     		Ref res = newOp();
     		if(res!=null) return res;
     	}  
         
-        
-        
         // Extract Scope from the Variable
-
-        //Object value = startElement(name);
-        return subDynamic(startElement(name));
-
+        return isJson?startElement(name):subDynamic(startElement(name));
+        
     }
+        
+
     
     private Ref subDynamic(Ref ref) throws PageException {
         String name=null;
@@ -1321,10 +1269,9 @@ public class CFMLExpressionInterpreter {
     private Ref startElement(String name) throws PageException {
         
         // check function
-        if (cfml.isCurrent('(')) {
+        if (!isJson && cfml.isCurrent('(')) {
             FunctionLibFunction function = fld.getFunction(name);
             Ref[] arguments = functionArg(name,true, function,')');
-        	//print.out(name+":"+(function!=null));
             if(function!=null) return new BIFCall(function,arguments);
 
             Ref ref = new lucee.runtime.interpreter.ref.var.Scope(Scope.SCOPE_UNDEFINED);
@@ -1403,14 +1350,14 @@ public class CFMLExpressionInterpreter {
      * @return CFXD Variable Element oder null
     */
     private Ref scope(String idStr) {
-        if (idStr.equals("var")) {
+        if (!isJson && idStr.equals("var")) {
             String name=identifier(false);
             if(name!=null){
                 cfml.removeSpace();
                 return new Variable(new lucee.runtime.interpreter.ref.var.Scope(ScopeSupport.SCOPE_VAR),name);
             }
         }
-        int scope = VariableInterpreter.scopeString2Int(pc!=null && pc.ignoreScopes(),idStr);
+        int scope = isJson?Scope.SCOPE_UNDEFINED:VariableInterpreter.scopeString2Int(pc!=null && pc.ignoreScopes(),idStr);
         if(scope==Scope.SCOPE_UNDEFINED) {
             return new Variable(new lucee.runtime.interpreter.ref.var.Scope(Scope.SCOPE_UNDEFINED),idStr);
         }
@@ -1427,7 +1374,6 @@ public class CFMLExpressionInterpreter {
     * @return Identifier.
     */
     private String identifier(boolean firstCanBeNumber) {
-        //int start = cfml.getPos();
         if(!cfml.isCurrentLetter() && !cfml.isCurrentSpecial()) {
             if(!firstCanBeNumber)return null;
             else if(!cfml.isCurrentDigit())return null;
@@ -1453,20 +1399,6 @@ public class CFMLExpressionInterpreter {
         return sb.toString();//cfml.substringLower(start,cfml.getPos()-start);
     }
 
-    /* *
-    * Transfomiert ein Collection Element das in eckigen Klammern aufgerufen wird. 
-    * <br />
-    * EBNF:<br />
-    * <code>"[" impOp "]"</code>
-    * @return CFXD Element
-    * @throws PageException 
-    * /
-    private Ref structElement() throws PageException {
-        cfml.removeSpace();
-        Ref ref = new Casting(pc,"string",CFTypes.TYPE_STRING,assignOp());
-        cfml.removeSpace();
-        return ref;
-    }*/
 
     /**
     * Liest die Argumente eines Funktonsaufruf ein und prueft ob die Funktion 
@@ -1542,7 +1474,6 @@ public class CFMLExpressionInterpreter {
                 arr.add(functionArgDeclaration());
             }
 
-            // obj=andOrXor();
             cfml.removeSpace();
             count++;
         } 
@@ -1590,16 +1521,4 @@ public class CFMLExpressionInterpreter {
         cfml.removeSpace();
         return ref;
     }
-
-    /* *
-     * Wandelt eine variable und ein key in eine reference um
-     * @param value
-     * @param name
-     * @return cast a vlue in a reference
-     * @throws PageException
-     * /
-    private Reference toReference(Object value, String name) {
-        return NativeReference.getInstance(value, name);
-    }*/
-    
 }

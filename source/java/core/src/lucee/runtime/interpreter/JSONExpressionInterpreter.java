@@ -26,12 +26,10 @@ import lucee.runtime.interpreter.ref.literal.LStringBuffer;
 public class JSONExpressionInterpreter extends CFMLExpressionInterpreter {
 	public JSONExpressionInterpreter(){
 		this(false);
-		allowNullConstant=true;
     }
 	
 	public JSONExpressionInterpreter(boolean strict){// strict is set to true, it should not be compatible with CFMLExpressionInterpreter
 		allowNullConstant=true;
-		
     }
         
 	@Override
@@ -39,7 +37,6 @@ public class JSONExpressionInterpreter extends CFMLExpressionInterpreter {
         
         // Init Parameter
         char quoter = cfml.getCurrentLower();
-        //String str="";
         LStringBuffer str=new LStringBuffer();
         
         while(cfml.hasNext()) {
@@ -126,11 +123,6 @@ public class JSONExpressionInterpreter extends CFMLExpressionInterpreter {
         
         cfml.removeSpace();
         mode=STATIC;
-        /*Ref value=null;
-        if(value!=null) {
-            if(str.isEmpty()) return value;
-            return new Concat(pc,value,str);
-        }*/
         return str;
     }
 
