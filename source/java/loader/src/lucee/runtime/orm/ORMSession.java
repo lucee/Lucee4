@@ -26,6 +26,13 @@ import lucee.runtime.type.Query;
 import lucee.runtime.type.Struct;
 
 public interface ORMSession {
+	/**
+	 * flush all elements in all sessions (for all datasources)
+	 * @param pc
+	 * @throws PageException
+	 */
+	public void flushAll(PageContext pc) throws PageException;
+
 
 	/**
 	 * flush all elements in the default sessions

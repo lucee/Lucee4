@@ -539,11 +539,9 @@ public final class PageContextImpl extends PageContext {
 				ORMEngine engine=ormSession.getEngine();
 				ORMConfiguration config=engine.getConfiguration(this);
 				if(config==null || (config.flushAtRequestEnd() && config.autoManageSession())){
-					ormSession.flush(this);
-					//ormSession.close(this);
-					//print.err("2orm flush:"+Thread.currentThread().getId());
+					ormSession.flushAll(this);
 				}
-				ormSession.close(this);
+				ormSession.closeAll(this);
 			} 
 			catch (Throwable t) {
 				//print.printST(t);
