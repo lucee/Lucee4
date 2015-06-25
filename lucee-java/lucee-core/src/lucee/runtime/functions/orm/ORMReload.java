@@ -32,8 +32,8 @@ public class ORMReload {
 		if(session!=null) {// MUST do the same with all sesson using the same engine
 			ORMConfiguration config = session.getEngine().getConfiguration(pc);
 			if(config.autoManageSession()) {
-				session.flush(pc);
-				session.close(pc);
+				session.flushAll(pc);
+				session.closeAll(pc);
 			}
 		}
 		pc.getApplicationContext().reinitORM(pc);
