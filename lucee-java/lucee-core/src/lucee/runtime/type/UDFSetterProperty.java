@@ -49,8 +49,7 @@ public final class UDFSetterProperty extends UDFGSProperty {
 					CFTypes.toShortStrict(prop.getType(),CFTypes.TYPE_UNKNOW),
 					true)
 		},CFTypes.TYPE_ANY,"wddx");
-		
-		
+
 		this.prop=prop; 
 		this.propName=KeyImpl.getInstance(prop.getName());
 		
@@ -87,6 +86,10 @@ public final class UDFSetterProperty extends UDFGSProperty {
 			throw new ExpressionException("The parameter "+prop.getName()+" to function "+getFunctionName()+" is required but was not passed in.");
 		validate(validate,validateParams,args[0]);
 		component.getComponentScope().set(propName, cast(pageContext,this.arguments[0],args[0],1));
+		
+		// make sure it is reconized that set is called by hibernate
+		if(component.isPersistent())ORMUtil.getSession(pageContext);
+		
 		return component;
 	}
 
@@ -103,6 +106,10 @@ public final class UDFSetterProperty extends UDFGSProperty {
 			else throw new ExpressionException("The parameter "+prop.getName()+" to function "+getFunctionName()+" is required but was not passed in.");
 		}
 		component.getComponentScope().set(propName, cast(pageContext,arguments[0],value,1));
+		
+		// make sure it is reconized that set is called by hibernate
+		if(component.isPersistent())ORMUtil.getSession(pageContext);
+		
 		return component;
 	}
 
