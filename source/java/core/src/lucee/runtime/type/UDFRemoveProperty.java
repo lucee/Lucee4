@@ -100,6 +100,9 @@ public final class UDFRemoveProperty extends UDFGSProperty {
 	private boolean remove(PageContext pageContext, Object value) throws PageException {
 		Object propValue = component.getComponentScope().get(propName,null);
 		value=cast(pageContext,arguments[0],value,1);
+
+		// make sure it is reconized that set is called by hibernate
+		if(component.isPersistent())ORMUtil.getSession(pageContext);
 		
 		// struct
 		if(isStruct()) {
