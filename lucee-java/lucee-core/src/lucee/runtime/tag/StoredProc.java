@@ -33,6 +33,8 @@ import java.util.Map.Entry;
 import javax.servlet.jsp.JspException;
 
 import lucee.commons.io.IOUtil;
+import lucee.commons.io.log.Log;
+import lucee.commons.io.log.LogUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.sql.SQLUtil;
 import lucee.runtime.cache.tag.CacheHandler;
@@ -40,6 +42,7 @@ import lucee.runtime.cache.tag.CacheHandlerFactory;
 import lucee.runtime.cache.tag.CacheItem;
 import lucee.runtime.cache.tag.query.StoredProcCacheItem;
 import lucee.runtime.config.ConfigImpl;
+import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.config.Constants;
 import lucee.runtime.db.CFTypes;
@@ -56,6 +59,7 @@ import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.DatabaseException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.tag.BodyTagTryCatchFinallySupport;
+import lucee.runtime.functions.displayFormatting.DecimalFormat;
 import lucee.runtime.listener.ApplicationContextPro;
 import lucee.runtime.op.Caster;
 import lucee.runtime.tag.util.DeprecatedUtil;
@@ -445,7 +449,7 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 	}
 
 	@Override
-	public int doEndTag() throws JspException {
+	public int doEndTag() throws PageException  {
 		long startNS=System.nanoTime();
 		
 		Object ds=datasource;
@@ -610,10 +614,26 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 					pageContext.getDebugger().addQuery(null,dsn,procedure,_sql,count,pageContext.getCurrentPageSource(),(int)exe);
 			}
 		    
+			// log
+			Log log = ((ConfigWebImpl)pageContext.getConfig()).getLog("datasource", true);
+			if(log.getLogLevel()>=Log.LEVEL_INFO) {
+				log.info("storedproc tag", "executed ["+sql.toString().trim()+"] in "+DecimalFormat.call(pageContext, exe/1000000D)+" ms");
+			}
+		    
 		    
 		}
 		catch (SQLException e) {
-		    throw new DatabaseException(e,new SQLImpl(sql.toString()),dc);
+			// log
+			LogUtil.log(((ConfigWebImpl)pageContext.getConfig()).getLog("datasource", true)
+					, Log.LEVEL_ERROR, "storedproc tag", e);
+						
+			throw new DatabaseException(e,new SQLImpl(sql.toString()),dc);
+		}
+		catch (PageException pe) {
+			// log
+			LogUtil.log(((ConfigWebImpl)pageContext.getConfig()).getLog("datasource", true)
+					, Log.LEVEL_ERROR, "storedproc tag", pe);		
+			throw pe;
 		}
 		finally {
 		    if(callStat!=null){
@@ -623,6 +643,10 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 		    }
 		    manager.releaseConnection(pageContext,dc);
 		}
+		
+		
+		
+		
 		return EVAL_PAGE;
 	}
 

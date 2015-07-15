@@ -22,9 +22,12 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import lucee.commons.io.log.Log;
+import lucee.commons.io.log.LogUtil;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.config.ConfigImpl;
+import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.db.DataSource;
 import lucee.runtime.db.DataSourceManager;
 import lucee.runtime.db.DatasourceConnection;
@@ -37,6 +40,7 @@ import lucee.runtime.debug.DebuggerUtil;
 import lucee.runtime.exp.DatabaseException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.ext.tag.TagImpl;
+import lucee.runtime.functions.displayFormatting.DecimalFormat;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.Struct;
@@ -190,8 +194,19 @@ public final class Update extends TagImpl {
 						((DebuggerPro)pageContext.getDebugger()).addQuery(debugUsage?query:null,dsn,"",sql,query.getRecordcount(),pageContext.getCurrentPageSource(),query.getExecutionTime());
 					}
 				}
+				// log
+				Log log = ((ConfigWebImpl)pageContext.getConfig()).getLog("datasource", true);
+				if(log.getLogLevel()>=Log.LEVEL_INFO) {
+					log.info("update tag", "executed ["+sql.toString().trim()+"] in "+DecimalFormat.call(pageContext, query.getExecutionTime()/1000000D)+" ms");
+				}
 			}
 			return EVAL_PAGE;
+		}
+		catch (PageException pe) {
+			// log
+			LogUtil.log(((ConfigWebImpl)pageContext.getConfig()).getLog("datasource", true)
+					, Log.LEVEL_ERROR, "update tag", pe);		
+			throw pe;
 		}
 		finally {
 			manager.releaseConnection(pageContext,dc);

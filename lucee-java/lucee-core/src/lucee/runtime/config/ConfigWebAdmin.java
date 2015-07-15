@@ -1169,13 +1169,24 @@ public final class ConfigWebAdmin {
 
     public static boolean fixLogging(ConfigServerImpl cs,ConfigImpl config,Document doc) {
     	
-    	if(config.setVersion(doc)>=4.2D) return false;
-    		
+    	if(config.setVersion(doc)>=4.3D) return false;
+    	
+    	// datasource
+    	Element src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "datasource");
+    	fixLogging(cs,doc,src, "datasource",false,"{lucee-config}/logs/datasource.log");
+    	
+    	
+    	setVersion(doc,Caster.toDoubleValue(Info.getVersionAsString().substring(0,3),4.3D));
+    	
+    	
+    	if(config.setVersion(doc)>=4.2D) return true;
+    	
+    	
     	//setVersion(Caster.toDoubleValue(Info.getVersionAsString().substring(0,3),1.0D));
         
     	
     	// mapping
-    	Element src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "mappings");
+    	src = ConfigWebFactory.getChildByName(doc.getDocumentElement(), "mappings");
     	fixLogging(cs,doc,src, "mapping",false,"{lucee-config}/logs/mapping.log");
     	
     	// rest
@@ -1229,7 +1240,7 @@ public final class ConfigWebAdmin {
     	// requesttimeout
     	fixLogging(cs,doc,app, "requesttimeout","requesttimeout-log","requesttimeout-log-level",false,"{lucee-config}/logs/requesttimeout.log");
     	
-    	setVersion(doc,Caster.toDoubleValue(Info.getVersionAsString().substring(0,3),4.2D));
+    	setVersion(doc,Caster.toDoubleValue(Info.getVersionAsString().substring(0,3),4.3D));
     	
     	
     	return true;
