@@ -12,8 +12,6 @@ component extends='org.lucee.cfml.test.LuceeTestCase' {
 					url="https://www.googleapis.com/youtube/v3/search" 
 					addtoken="false"
 					{};
-
-					//dump(SSLCertificateInstall("www.googleapis.com"));
 				expect( result.statuscode ).toInclude( 400 );
 
 			} );
@@ -45,7 +43,9 @@ component extends='org.lucee.cfml.test.LuceeTestCase' {
 
 			});
 
-			it( 'api.progresso.net works' , function() {
+			
+
+			/*it( 'api.progresso.net works' , function() {
 
 				http 
 					method="get" 
@@ -53,9 +53,10 @@ component extends='org.lucee.cfml.test.LuceeTestCase' {
 					url="https://api.progresso.net" 
 					addtoken="false"
 					{};
+				// SSLCertificateInstall("api.progresso.net")
 				expect( result.statuscode ).toInclude( 200 );
 
-			});
+			});*/
 
 			it( 'maps.googleapis.com works' , function() {
 
