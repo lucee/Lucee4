@@ -56,6 +56,7 @@ import lucee.commons.io.res.type.compress.CompressResourceProvider;
 import lucee.commons.io.res.util.ResourceClassLoader;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.ClassException;
+import lucee.commons.lang.ClassLoaderHelper;
 import lucee.commons.lang.ClassUtil;
 import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.Md5;
@@ -641,10 +642,16 @@ public abstract class ConfigImpl implements Config {
 
     @Override
     public ClassLoader getClassLoader() {
-    	return getResourceClassLoader();   
+    	ResourceClassLoader rcl = getResourceClassLoader(null);
+    	if(rcl!=null) return rcl;
+    	return new ClassLoaderHelper().getClass().getClassLoader();
     }
     public ResourceClassLoader getResourceClassLoader() {
     	if(resourceCL==null) throw new RuntimeException("no RCL defined yet!");
+    	return resourceCL;   
+    }
+    public ResourceClassLoader getResourceClassLoader(ResourceClassLoader defaultValue) {
+    	if(resourceCL==null) return defaultValue;
     	return resourceCL;   
     }
 

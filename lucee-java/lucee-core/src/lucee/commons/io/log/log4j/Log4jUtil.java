@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lucee.print;
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
@@ -47,13 +48,15 @@ import lucee.runtime.op.Caster;
 import lucee.runtime.reflection.Reflector;
 
 import org.apache.log4j.Appender;
+import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.HTMLLayout;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
-import org.apache.log4j.net.SyslogAppender;
+import org.apache.log4j.Priority;
+import org.apache.log4j.spi.ErrorHandler;
 import org.apache.log4j.xml.XMLLayout;
 
 public class Log4jUtil {
@@ -189,10 +192,29 @@ public class Log4jUtil {
 				Object obj = ClassUtil.loadInstance(strAppender,null,null);
 				if(obj instanceof Appender) {
 					appender=(Appender) obj;
+					
+					AppenderSkeleton as=obj instanceof AppenderSkeleton?(AppenderSkeleton)obj:null;
+					
 					Iterator<Entry<String, String>> it = appenderArgs.entrySet().iterator();
 					Entry<String, String> e;
+					String n;
 					while(it.hasNext()){
 						e = it.next();
+						n=e.getKey();
+						/*print.e("------------------------- ");
+						print.e(e.getKey());
+						print.e(e.getValue());
+						print.e("is as:"+(as!=null));*/
+						if(as!=null) {
+							if("threshold".equalsIgnoreCase(n)) {
+								Level level = Level.toLevel(e.getValue(),null);
+								if(level!=null) {
+									as.setThreshold(level);
+									continue;
+								}
+							}
+						}
+						
 						try {
 							Reflector.callSetter(obj, e.getKey(), e.getValue());
 						}
@@ -200,7 +222,6 @@ public class Log4jUtil {
 							e1.printStackTrace(); // TODO log
 						}
 					}
-					org.apache.log4j.net.SyslogAppender s=(SyslogAppender) appender;
 				}
 			}
 		}
@@ -215,7 +236,7 @@ public class Log4jUtil {
 		return appender;
     }
     
-    public static final Layout getLayout(String strLayout, Map<String, String> layoutArgs) {
+	public static final Layout getLayout(String strLayout, Map<String, String> layoutArgs) {
     	if(layoutArgs==null)layoutArgs=new HashMap<String, String>();
     	
     	// Layout

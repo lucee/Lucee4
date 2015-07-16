@@ -18,7 +18,7 @@
 			<cfset layoutArgs={}>
 			<cfset appenderArgs={}>
 		
-		
+			
 			<!--- custom --->
 			<cfloop collection="#form#" item="key">
 				<cfif left(key,13) EQ "custompart_d_">
@@ -46,7 +46,7 @@
 				name="#trim(form._name)#" 
 				level="#form.level#"
 				appenderClass="#trim(form.appenderClass)#"  
-				appenderArgs="#(appenderArgs)#" 
+				appenderArgs="#appenderArgs#" 
 				layoutClass="#trim(form.layoutClass)#"
 				layoutArgs="#(layoutArgs)#" 
 				
@@ -80,7 +80,7 @@ Redirtect to entry --->
 		<cfif hash(logs.name) EQ url.name>
 			<cfset log=querySlice(logs,logs.currentrow,1)>
 			<cfset layout=layouts[log.layoutClass]>
-			<cfset appender=appenders[log.appenderClass]>
+			<cfset appender=isNull(appenders[log.appenderClass])?nullValue():appenders[log.appenderClass]>
 		</cfif> 
 	</cfloop>
 <cfelse>
@@ -93,7 +93,7 @@ Redirtect to entry --->
 	<cfset log.layoutArgs={}>
 	<cfset log.level="ERROR">
 	<cfset layout=layouts[log.layoutClass]>
-	<cfset appender=appenders[log.appenderClass]>
+	<cfset appender=isNull(appenders[log.appenderClass])?nullValue():appenders[log.appenderClass]>
 </cfif>
 
 <cfoutput>
@@ -140,7 +140,7 @@ function enable(btn,type,id){
 						<cfloop list="TRACE,DEBUG,INFO,WARN,ERROR,FATAL" item="ll"><option<cfif log.level EQ ll> selected</cfif>>#ll#</option></cfloop>
 					</select></td>
 				</tr>
-				<cfif !arrayLen(appender.getCustomFields())>
+				<cfif !isNull(appender) && !arrayLen(appender.getCustomFields())>
 				<tr>
 					<th scope="row">#stText.Settings.logging.Appender#</th>
 					<td>#appender.getLabel()#</td>
@@ -156,11 +156,13 @@ function enable(btn,type,id){
 		</table>
 		<cfloop list="appender,layout" item="_name">
 		<cfset argsCol=_name&"Args">
+		<cfif isNull(variables[_name])>
+			<cfcontinue>
+		</cfif>
 		<cfset _driver=variables[_name]>
 		<cfset drivers=variables[_name&"s"]>
 		<!--- <cfif !arrayLen(driver.getCustomFields())><cfbreak></cfif>--->
 		<br />
-		
 		<h3>#ucFirst(_name)#</h3>
 		<cfset count=0>
 		<cfset len=structCount(drivers)>

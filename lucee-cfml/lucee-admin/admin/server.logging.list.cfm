@@ -1,3 +1,4 @@
+
 <cftry>
 	<cfset stVeritfyMessages = StructNew()>
 	<cfswitch expression="#form.mainAction#">
@@ -73,16 +74,17 @@ Redirtect to entry --->
 					<cfloop query="logs">
 						<cfif !logs.readonly><cfcontinue/></cfif>
 						<cftry>
+							<cfset appender=nullValue()>
 							<cfset layout=layouts[logs.layoutClass]>
 							<cfset appender=appenders[logs.appenderClass]>
-							<cfcatch><cfcontinue></cfcatch>
+							<cfcatch></cfcatch>
 						</cftry>
 						<tr>
 							<td>#logs.name#
 								<input type="hidden" name="name_#logs.currentrow#" value="#logs.name#">
 							</td>
 							<td>#layout.getLabel()#</td>
-							<td>#appender.getLabel()#</td>
+							<td>#isNull(appender)?logs.appenderClass:appender.getLabel()#</td>
 							<td>#logs.level#</td>
 						</tr>
 					</cfloop>
@@ -111,9 +113,10 @@ Redirtect to entry --->
 					<cfloop query="logs">
 						<cfif logs.readonly><cfcontinue/></cfif>
 						<cftry>
+							<cfset appender=nullValue()>
 							<cfset layout=layouts[logs.layoutClass]>
 							<cfset appender=appenders[logs.appenderClass]>
-							<cfcatch><cfcontinue></cfcatch>
+							<cfcatch></cfcatch>
 						</cftry>
 						<tr>
 							<td>
@@ -121,10 +124,10 @@ Redirtect to entry --->
 							</td>
 							<td nowrap><input type="hidden" name="name_#logs.currentrow#" value="#logs.name#">#logs.name#</td>
 							<td>#layout.getLabel()#</td>
-							<td>#appender.getLabel()#</td>
+							<td>#isNull(appender)?logs.appenderClass:appender.getLabel()#</td>
 							<td>#logs.level#</td>
 							<td>
-								<a href="#request.self#?action=#url.action#&action2=create&name=#Hash(logs.name)#" class="sprite edit"></a>
+								<cfif !isNull(appender)><a href="#request.self#?action=#url.action#&action2=create&name=#Hash(logs.name)#" class="sprite edit"></a></cfif>
 							</td>
 						</tr>
 					</cfloop>
