@@ -314,14 +314,15 @@ public class HTTPClient implements Objects, Iteratorable {
 					}
 					is = rsp.getContentAsStream();
 					ApplicationException ae = new ApplicationException("remote component throws the following error:"+msg);
-					if(!hasMsg)ae.setAdditional(KeyImpl.init("respone-body"),IOUtil.toString(is, mt.getCharset()));
+					if(!hasMsg)ae.setAdditional(KeyImpl.init("response-body"),IOUtil.toString(is, mt.getCharset()));
 					
 					throw ae;
 				}
-				throw new ApplicationException("cannot convert response with mime type ["+mt+"] to a CFML Object");
 			}
 			is = rsp.getContentAsStream();
-			return ReqRspUtil.toObject(pc,IOUtil.toBytes(is,false),format,mt.getCharset(),null);
+			if( format==-1) format = UDF.RETURN_FORMAT_SERIALIZE;
+			return ReqRspUtil.toObject(pc,IOUtil.toBytes(is,false),format,mt.getCharset());
+
 		}
 		catch (IOException ioe) {
 			throw Caster.toPageException(ioe);

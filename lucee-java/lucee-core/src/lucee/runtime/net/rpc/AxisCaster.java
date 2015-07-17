@@ -74,6 +74,7 @@ import lucee.runtime.type.scope.Argument;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.ComponentProUtil;
 import lucee.runtime.type.util.ComponentUtil;
+import lucee.runtime.type.util.ListUtil;
 
 import org.apache.axis.Constants;
 import org.apache.axis.types.Day;
@@ -93,6 +94,7 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.types.Year;
 import org.apache.axis.types.YearMonth;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
+import org.apache.commons.lang.StringUtils;
 
 import coldfusion.xml.rpc.QueryBean;
 
@@ -605,7 +607,7 @@ public final class AxisCaster {
         		Object pojo= toPojo(null,tm,null,null,(Component)value,done);
         		try	{
         			if(type==null || type.getLocalPart().equals("anyType")) {
-        				type= new QName(getRequestDefaultNameSpace(),pojo.getClass().getName());
+        				type= new QName(getRequestNameSpace(),pojo.getClass().getName());
         				//type= new QName(getRequestNameSpace(),pojo.getClass().getName());
         				//print.ds("missing type for "+pojo.getClass().getName());
         			}
@@ -949,19 +951,47 @@ public final class AxisCaster {
 	}
 
 	public static String getRequestNameSpace() {
-		String rawURL = ReqRspUtil.getRequestURL(ThreadLocalPageContext.get().getHttpServletRequest(),false);
+		PageContext pc = ThreadLocalPageContext.get();
+		String rawURL = ReqRspUtil.getRequestURL( pc.getHttpServletRequest(), false );
 		String urlPath ="";
 		try {
 			urlPath = new java.net.URL(rawURL).getPath();
 		}
 		catch (MalformedURLException e) {}
-		String pathWithoutContext = urlPath.replaceFirst("/[^/]*", "");
-			
+		String pathWithoutContext = urlPath.replaceFirst("/+[^/]*", "");
+		String physical=null;
+		try {
+			physical = pc.getBasePageSource().getResourceTranslated(pc).toString();
+		} catch (PageException e) {
+			physical = null;
+		}
+		try {
+			pathWithoutContext = _matchPhysicalCase( physical, pathWithoutContext );
+		}
+		catch (PageException e) { /* ignore */}
+		return "http://rpc.xml.cfml/" + pathWithoutContext;
+
+	}
+
+	private static String _matchPhysicalCase(String physical, String urlpath) throws PageException {
+		//matching case is better than lower-casing it because 
+		if(physical == null) return urlpath;
 		
-		return "http://rpc.xml.coldfusion" + pathWithoutContext.toLowerCase();
+		String[] urlArray = ListUtil.toStringArray(ListUtil.listToArrayRemoveEmpty(urlpath,"\\/",false));
+		String[] pathArray =  ListUtil.toStringArray(ListUtil.listToArrayRemoveEmpty(physical,"\\/",false));
+		int pathPlace = pathArray.length-1;
+		for(int i = urlArray.length-1; i>=0; i--) {
+			if(pathPlace < 0) break;
+			String pathElement = pathArray[pathPlace];
+			if (pathElement.toLowerCase().equals(urlArray[i].toLowerCase())) {
+				urlArray[i]=pathElement;
+			}
+			pathPlace--;
+		}
+		return StringUtils.join(urlArray,"/");
+		
 	}
-	public static String getRequestDefaultNameSpace() {
-		return "http://rpc.xml.coldfusion";
-	}
+
+
 	
 }

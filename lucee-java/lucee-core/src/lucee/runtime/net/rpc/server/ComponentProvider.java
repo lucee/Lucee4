@@ -40,7 +40,7 @@ public final class ComponentProvider extends RPCProvider {
 		PageContext pc=(PageContext) mc.getProperty(Constants.PAGE_CONTEXT);
 		Component c= (Component) mc.getProperty(Constants.COMPONENT);
 
-		RPCServer server = RPCServer.getInstance(pc.getId(),pc.getServletContext());
+		RPCServer server = RPCServer.getInstance(pc,c);
 		TypeMapping tm =mc.getTypeMapping();//TypeMappingUtil.getServerTypeMapping(server.getEngine().getTypeMappingRegistry());
 		
 		return AxisCaster.toAxisType(tm,c.call(pc,method.getName(),toLuceeType(pc,args)),null);
