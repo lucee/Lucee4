@@ -39,9 +39,16 @@ import java.util.List;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.hibernate.JDBCException;
+import org.hibernate.exception.ConstraintViolationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
+
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.types.RefBoolean;
 import lucee.loader.engine.CFMLEngineFactory;
+import lucee.loader.util.Util;
 import lucee.runtime.Component;
 import lucee.runtime.MappingImpl;
 import lucee.runtime.PageContext;
@@ -314,17 +321,26 @@ public class CommonUtil {
 	}
 	
 	public static PageException toPageException(Throwable t) {
-		if (!(t instanceof JDBCException))
-			return caster().toPageException(t);
-		
-		
-		JDBCException j = (JDBCException)t;
-		String message = j.getMessage(); 
-		Throwable cause = j.getCause();
-		if(cause != null) {
-			message += " [" + cause.getMessage() + "]";
+		PageException pe = caster().toPageException(t);;
+		if (t instanceof org.hibernate.HibernateException) {
+			org.hibernate.HibernateException he = (org.hibernate.HibernateException)t;
+			Throwable cause = he.getCause();
+			if(cause != null) {
+				pe = caster().toPageException( cause );
+				ExceptionUtil.setAdditional(pe, CommonUtil.createKey("hibernate exception"), t );
+			}
 		}
-		return CFMLEngineFactory.getInstance().getExceptionUtil().createDatabaseException(message, new SQLImpl(j.getSQL()));
+		if ( t instanceof JDBCException ) {
+			JDBCException je = (JDBCException)t;
+			ExceptionUtil.setAdditional(pe, CommonUtil.createKey("sql"), je.getSQL());
+		}
+		if( t instanceof ConstraintViolationException) {
+			ConstraintViolationException cve = (ConstraintViolationException)t;
+			if(!Util.isEmpty(cve.getConstraintName())) {
+				ExceptionUtil.setAdditional(pe, CommonUtil.createKey("constraint name"), cve.getConstraintName());
+			}
+		}
+		return pe;
 		
 	}
 	public static Serializable toSerializable(Object obj) throws PageException {

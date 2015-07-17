@@ -163,13 +163,6 @@ public class HibernateORMSession implements ORMSession {
 			getSession(dsn).flush();
 			
 		}
-		catch(ConstraintViolationException cve){
-			PageException pe = ExceptionUtil.createException(this,null,cve);
-			if(!Util.isEmpty(cve.getConstraintName())) {
-				ExceptionUtil.setAdditional(pe, CommonUtil.createKey("constraint name"), cve.getConstraintName());
-			}
-			throw pe;
-		}
 		catch(Throwable t) {
 			throw CommonUtil.toPageException(t);
 		}
