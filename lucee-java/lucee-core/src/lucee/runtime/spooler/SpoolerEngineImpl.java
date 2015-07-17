@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -367,7 +368,10 @@ public class SpoolerEngineImpl implements SpoolerEngine {
 	
 	class SimpleThread extends Thread {
 		
-		LinkedList<Task> tasks=new LinkedList<Task>();
+		// 'tasks' needs to be synchronized because the other thread will access this list.
+		// otherwise tasks.size() will not match the actual size of the server and NPEs 
+		// and unlimited loops may result.
+		List<Task> tasks = Collections.synchronizedList(new LinkedList<Task>());
 		private Config config;
 		
 		public SimpleThread(Config config, Task task){
@@ -380,7 +384,7 @@ public class SpoolerEngineImpl implements SpoolerEngine {
 			Task task;
 			while(tasks.size()>0){
 				try {
-					task= tasks.poll();
+					task = tasks.remove(0);
 					if(task!=null)task.execute(config);
 				}
 				catch (Throwable t) {}
