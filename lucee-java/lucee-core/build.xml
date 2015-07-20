@@ -90,7 +90,7 @@
 	<!-- ================================= 
           target: copy lucee.rc dependencies              
          ================================= -->
-    <target name="copy" depends="createadmin" description="Copies the resource directory.">
+    <target name="copy" depends="compile" description="Copies the resource directory.">
         <echo>Copy resource directory to build.</echo>
     	<copy todir="${build.dir}/classes/resource">
     		<fileset dir="${src.dir}/resource"/>
