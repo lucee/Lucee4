@@ -29,6 +29,22 @@ component extends="org.lucee.cfml.test.LuceeTestCase"   {
 
 		});
 
+		describe( 'LDEV-434 IsJSON' , function() {
+
+			it( 'should be false when too a trailing comma is included on a simple array' , function() {
+				expect( IsJSON( '[1,]' ) ).toBeFalse();
+			});
+
+			it( 'should false when too a trailing comma is included on an empty array' , function() {
+				expect( IsJSON( '[,]' ) ).toBeFalse();
+			});
+
+			it( 'should be true if the string is ok' , function() {
+				expect( IsJSON( '[1,2]' ) ).toBeTrue();
+			});
+
+		});
+
 	}
 	
 } 
