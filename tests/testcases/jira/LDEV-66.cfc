@@ -4,7 +4,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 		describe( 'Number in scientific notation' , function(){
 
-			it( 'works for integers' , function() {
+			it( 'works for scientific notation integers' , function() {
 
 				actual = 1E2;
 
@@ -12,8 +12,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 				expect( actual ).toBe( 100 );
 
 			});
-
-			it( 'works for decimals' , function() {
+			it( 'works for scientific notation decimals' , function() {
 
 				actual = 1.0E2;
 
@@ -22,6 +21,14 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 			});
 
+			it( 'works for decimals' , function() {
+
+				actual = 1.2;
+
+				expect( actual ).toBeNumeric();
+				expect( actual ).toBe( 1.2 );
+
+			});
 		});
 
 	}
