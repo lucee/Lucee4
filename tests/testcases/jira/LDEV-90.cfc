@@ -13,7 +13,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			it( 'dot can match newline' , function() {
 
 				actual = REMatch( '.',Chr( 10 ) );
-				expect( actual ).toHaveLength( 1 );
+				expect( actual ).toBe( [ 1 ] );
 
 			});
 
@@ -24,7 +24,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			it( 'dot can match newline' , function() {
 
 				actual = REMatchNoCase( '.',Chr( 10 ) );
-				expect( actual ).toHaveLength( 1 );
+				expect( actual ).toBe( [ 1 ] );
 
 			});
 
@@ -35,7 +35,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			it( 'dot can match newline' , function() {
 
 				actual = REFind( '.',Chr( 10 ) );
-				expect( actual ).toHaveLength( 1 );
+				expect( actual ).toBe( 1 );
 
 			});
 
@@ -46,7 +46,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			it( 'dot can match newline' , function() {
 
 				actual = REFindNoCase( '.',Chr( 10 ) );
-				expect( actual ).toHaveLength( 1 );
+				expect( actual ).toBe( 1 );
 
 			});
 
