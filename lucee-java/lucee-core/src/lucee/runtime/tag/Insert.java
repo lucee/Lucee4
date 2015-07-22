@@ -188,7 +188,7 @@ public final class Insert extends TagImpl {
 	    	
 	    	SQL sql=createSQL(meta);
 			if(sql!=null) {
-				lucee.runtime.type.Query query = new QueryImpl(pageContext,dc,sql,-1,-1,-1,"query");
+				lucee.runtime.type.Query query = new QueryImpl(pageContext,dc,sql,-1,-1,null,"query");
 				
 				if(pageContext.getConfig().debug()) {
 					String dsn=ds instanceof DataSource?((DataSource)ds).getName():Caster.toString(ds);

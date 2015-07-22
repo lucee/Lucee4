@@ -185,7 +185,7 @@ public interface Creation {
 	 * @param sql sql to execute
 	 * @param maxrow maxrow for the resultset
      * @param fetchsize
-     * @param timeout
+     * @param timeout in seconds
      * @param name
      * @return created Query
      * @throws PageException

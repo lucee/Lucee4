@@ -48,6 +48,7 @@ import lucee.runtime.net.proxy.ProxyData;
 import lucee.runtime.net.proxy.ProxyDataImpl;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
+import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.util.CollectionUtil;
 
 import org.apache.http.Header;
@@ -295,6 +296,12 @@ public class HTTPEngine4Impl {
         }
 	}
 
+	public static void setTimeout(HttpParams params, TimeSpan timeout) {
+        if(timeout!=null){
+        	HttpConnectionParams.setConnectionTimeout(params, (int)timeout.getSeconds());
+        	HttpConnectionParams.setSoTimeout(params, (int)timeout.getSeconds());
+        }
+	}
 	public static void setTimeout(HttpParams params, long timeout) {
         if(timeout>0){
         	HttpConnectionParams.setConnectionTimeout(params, (int)timeout);

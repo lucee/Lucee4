@@ -138,11 +138,11 @@ public final class CreationImpl implements Creation,Serializable {
     
     @Override
     public Query createQuery(DatasourceConnection dc, SQL sql, int maxrow, String name) throws PageException {
-		return new QueryImpl(ThreadLocalPageContext.get(),dc,sql,maxrow,-1,-1,name);
+		return new QueryImpl(ThreadLocalPageContext.get(),dc,sql,maxrow,-1,null,name);
 	}
     
     public Query createQuery(DatasourceConnection dc, SQL sql, int maxrow, int fetchsize, int timeout, String name) throws PageException {
-		return new QueryImpl(ThreadLocalPageContext.get(),dc,sql,maxrow,fetchsize,timeout,name);
+		return new QueryImpl(ThreadLocalPageContext.get(),dc,sql,maxrow,fetchsize,TimeSpanImpl.fromMillis(timeout*1000),name);
 	}
     
     @Override

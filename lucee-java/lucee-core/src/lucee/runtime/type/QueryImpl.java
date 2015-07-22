@@ -90,6 +90,7 @@ import lucee.runtime.type.comparator.SortRegister;
 import lucee.runtime.type.comparator.SortRegisterComparator;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.DateTimeImpl;
+import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.it.CollectionIterator;
 import lucee.runtime.type.it.EntryIterator;
 import lucee.runtime.type.it.ForEachQueryIterator;
@@ -199,16 +200,16 @@ public class QueryImpl implements Query,Objects {
 	 * @param maxrow maxrow for the resultset
 	 * @throws PageException
 	 */	
-    public QueryImpl(PageContext pc, DatasourceConnection dc,SQL sql,int maxrow, int fetchsize,int timeout, String name) throws PageException {
+    public QueryImpl(PageContext pc, DatasourceConnection dc,SQL sql,int maxrow, int fetchsize,TimeSpan timeout, String name) throws PageException {
     	this(pc,dc, sql, maxrow, fetchsize, timeout, name,null,false,true);
     }
     
 
-    public QueryImpl(PageContext pc, DatasourceConnection dc,SQL sql,int maxrow, int fetchsize,int timeout, String name,String template) throws PageException {
+    public QueryImpl(PageContext pc, DatasourceConnection dc,SQL sql,int maxrow, int fetchsize,TimeSpan timeout, String name,String template) throws PageException {
     	this(pc,dc, sql, maxrow, fetchsize, timeout, name,template,false,true);
     }
     
-	public QueryImpl(PageContext pc, DatasourceConnection dc,SQL sql,int maxrow, int fetchsize,int timeout, String name,String template,boolean createUpdateData, boolean allowToCachePreperadeStatement) throws PageException {
+	public QueryImpl(PageContext pc, DatasourceConnection dc,SQL sql,int maxrow, int fetchsize,TimeSpan timeout, String name,String template,boolean createUpdateData, boolean allowToCachePreperadeStatement) throws PageException {
 		this.name=name;
 		this.template=template;
         this.sql=sql;
@@ -359,10 +360,10 @@ public class QueryImpl implements Query,Objects {
 		return generatedKeys;
 	}
 
-	private void setAttributes(Statement stat,int maxrow, int fetchsize,int timeout) throws SQLException {
+	private void setAttributes(Statement stat,int maxrow, int fetchsize,TimeSpan timeout) throws SQLException {
 		if(maxrow>-1) stat.setMaxRows(maxrow);
         if(fetchsize>0)stat.setFetchSize(fetchsize);
-        if(timeout>0)stat.setQueryTimeout(timeout);
+        if(timeout!=null)stat.setQueryTimeout((int)timeout.getSeconds());
 	}
 
     private boolean fillResult(DatasourceConnection dc, ResultSet result, int maxrow, boolean closeResult,boolean createGeneratedKeys, TimeZone tz) throws SQLException, IOException, PageException {

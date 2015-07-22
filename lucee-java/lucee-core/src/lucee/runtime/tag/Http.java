@@ -21,6 +21,7 @@ package lucee.runtime.tag;
 import javax.servlet.jsp.tagext.BodyTag;
 
 import lucee.runtime.exp.PageException;
+import lucee.runtime.type.dt.TimeSpan;
 
 public interface Http extends BodyTag {
 	public static final String MULTIPART_RELATED = "multipart/related";
@@ -64,7 +65,7 @@ public interface Http extends BodyTag {
 	
 	public void setPreauth(boolean preauth);
 	
-	public void setTimeout(double timeout) throws PageException;
+	public void setTimeout(Object timeout) throws PageException;
 	
 	public void setProxyserver(String proxyserver);
 	

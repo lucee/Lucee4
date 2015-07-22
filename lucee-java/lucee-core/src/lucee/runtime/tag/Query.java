@@ -72,6 +72,7 @@ import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.dt.TimeSpan;
+import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.query.SimpleQuery;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
@@ -103,7 +104,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 	** 		indicating that the query has timed-out. This attribute is not supported by most ODBC drivers. 
 	** 		timeout is supported by the SQL Server 6.x or above driver. The minimum and maximum allowable values 
 	** 		vary, depending on the driver. */
-	private int timeout=-1;
+	private TimeSpan timeout=null;
 
 	/** This is the age of which the query data can be */
 	private Object cachedWithin;
@@ -164,7 +165,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 		items.clear();
 		password=null;
 		datasource=null;
-		timeout=-1;
+		timeout=null;
 		clearCache=false;
 		cachedWithin=null;
 		cachedAfter=null;
@@ -267,9 +268,19 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 	* 		timeout is supported by the SQL Server 6.x or above driver. The minimum and maximum allowable values 
 	* 		vary, depending on the driver.
 	* @param timeout value to set
+	 * @throws PageException 
 	**/
-	public void setTimeout(double timeout)	{
-		this.timeout=(int)timeout;
+	public void setTimeout(Object timeout) throws PageException	{
+		if(timeout instanceof TimeSpan)
+			this.timeout=(TimeSpan) timeout;
+		// seconds
+		else {
+			int i = Caster.toIntValue(timeout);
+			if(i<0)
+				throw new ApplicationException("invalid value ["+i+"] for attribute timeout, value must be a positive integer greater or equal than 0");
+			
+			this.timeout=new TimeSpanImpl(0, 0, 0, i);
+		}
 	}
 
 	/** set the value cachedafter
@@ -448,6 +459,12 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 
 	@Override
 	public int doStartTag() throws PageException	{
+
+		//timeout
+		if(this.timeout==null) { // not set
+			this.timeout=TimeSpanImpl.fromMillis(pageContext.getRequestTimeout());
+		}
+		
 		// default datasource
 		if(datasource==null && (dbtype==null || !dbtype.equals("query"))){
 			Object obj = ((ApplicationContextPro)pageContext.getApplicationContext()).getDefDataSource();
@@ -481,7 +498,9 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 	@Override
 
 	
-	public int doEndTag() throws PageException	{		
+	public int doEndTag() throws PageException	{
+		
+		
 		if(hasChangedPSQ)pageContext.setPsq(orgPSQ);
 		String strSQL=bodyContent.getString();
 		try {
@@ -708,7 +727,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 		
 		// query options
 		if(maxrows!=-1 && !ormoptions.containsKey(MAX_RESULTS)) ormoptions.setEL(MAX_RESULTS, new Double(maxrows));
-		if(timeout!=-1 && !ormoptions.containsKey(TIMEOUT)) ormoptions.setEL(TIMEOUT, new Double(timeout));
+		if(timeout!=null && !ormoptions.containsKey(TIMEOUT)) ormoptions.setEL(TIMEOUT, new Double(timeout.getSeconds()));
 		/* MUST
 offset: Specifies the start index of the resultset from where it has to start the retrieval.
 cacheable: Whether the result of this query is to be cached in the secondary cache. Default is false.

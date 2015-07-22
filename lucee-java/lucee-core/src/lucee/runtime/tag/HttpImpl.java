@@ -83,7 +83,7 @@ public class HttpImpl implements Http,BodyTag {
 	}
 
 	@Override
-	public void setTimeout(double timeout) throws PageException {
+	public void setTimeout(Object timeout) throws PageException {
 		instance.setTimeout(timeout);
 	}
 

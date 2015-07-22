@@ -79,6 +79,7 @@ import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTime;
+import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.it.CollectionIterator;
 import lucee.runtime.type.it.EntryIterator;
 import lucee.runtime.type.it.ForEachQueryIterator;
@@ -104,7 +105,7 @@ public class SimpleQuery implements Query, ResultSet, Objects {
 	private ArrayInt arrCurrentRow=new ArrayInt();
 	
 
-	public SimpleQuery(PageContext pc,DatasourceConnection dc,SQL sql,int maxrow, int fetchsize,int timeout, String name,String template,TimeZone tz) throws PageException {
+	public SimpleQuery(PageContext pc,DatasourceConnection dc,SQL sql,int maxrow, int fetchsize,TimeSpan timeout, String name,String template,TimeZone tz) throws PageException {
 		this.name=name;
 		this.template=template;
         this.sql=sql;
@@ -159,10 +160,10 @@ public class SimpleQuery implements Query, ResultSet, Objects {
 		((PageContextImpl)pc).registerLazyStatement(stat);
 	}
 	
-	private void setAttributes(Statement stat,int maxrow, int fetchsize,int timeout) throws SQLException {
+	private void setAttributes(Statement stat,int maxrow, int fetchsize,TimeSpan timeout) throws SQLException {
 		if(maxrow>-1) stat.setMaxRows(maxrow);
         if(fetchsize>0)stat.setFetchSize(fetchsize);
-        if(timeout>0)stat.setQueryTimeout(timeout);
+        if(timeout!=null)stat.setQueryTimeout((int)timeout.getSeconds());
 	}
 	private void setItems(TimeZone tz,PreparedStatement preStat, SQLItem[] items) throws DatabaseException, PageException, SQLException {
 		for(int i=0;i<items.length;i++) {

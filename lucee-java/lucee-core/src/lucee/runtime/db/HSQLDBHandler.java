@@ -49,6 +49,7 @@ import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.Query;
 import lucee.runtime.type.QueryColumn;
 import lucee.runtime.type.QueryImpl;
+import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.util.CollectionUtil;
 
 /**
@@ -249,7 +250,7 @@ public final class HSQLDBHandler {
      * @throws PageException 
      * @throws PageException
      */
-    public Query execute(PageContext pc, SQL sql, int maxrows, int fetchsize, int timeout) throws PageException {
+    public Query execute(PageContext pc, SQL sql, int maxrows, int fetchsize, TimeSpan timeout) throws PageException {
         Stopwatch stopwatch=new Stopwatch(Stopwatch.UNIT_NANO);
 		stopwatch.start();
 		String prettySQL =null;
@@ -326,7 +327,7 @@ public final class HSQLDBHandler {
 		
     }
     
-    private QueryImpl _execute(PageContext pc, SQL sql, int maxrows, int fetchsize, int timeout, Stopwatch stopwatch, Set<String> tables, boolean isUnion) throws PageException {
+    private QueryImpl _execute(PageContext pc, SQL sql, int maxrows, int fetchsize, TimeSpan timeout, Stopwatch stopwatch, Set<String> tables, boolean isUnion) throws PageException {
     	try {
 			return __execute(pc, SQLImpl.duplicate(sql), maxrows, fetchsize, timeout,stopwatch,tables,false);
 		}
@@ -338,7 +339,7 @@ public final class HSQLDBHandler {
 		}
 	}
 
-	public static  QueryImpl __execute(PageContext pc, SQL sql, int maxrows, int fetchsize, int timeout,Stopwatch stopwatch,Set<String> tables, boolean doSimpleTypes) throws PageException {
+	public static  QueryImpl __execute(PageContext pc, SQL sql, int maxrows, int fetchsize, TimeSpan timeout,Stopwatch stopwatch,Set<String> tables, boolean doSimpleTypes) throws PageException {
 		ArrayList<String> usedTables=new ArrayList<String>();
 		synchronized(lock) {
 		    	
