@@ -13,7 +13,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			it( 'dot can match newline' , function() {
 
 				actual = REMatch( '.',Chr( 10 ) );
-				expect( actual ).toBe( [ 1 ] );
+				expect( actual ).toBe( [ Chr( 10 ) ] );
 
 			});
 
@@ -24,7 +24,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 			it( 'dot can match newline' , function() {
 
 				actual = REMatchNoCase( '.',Chr( 10 ) );
-				expect( actual ).toBe( [ 1 ] );
+				expect( actual ).toBe( [ Chr( 10 ) ] );
 
 			});
 
