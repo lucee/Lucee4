@@ -10,6 +10,34 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 		describe( 'QueryExecute' , function(){
 
+			it( 'returns NULL when fed in through array parameter with nulls=true' , function() {
+
+				/*
+					I have no idea *why* this is this way, but in the source code I spotted this.
+					It turns out that there is an ability to cast to null but the parameter attribute
+					is "nulls" instead of "null", go figure!
+				*/
+
+				actual = QueryExecute(
+					options = {
+						dbtype: 'query'
+					},
+					params = [
+						{ type: 'integer' , value: 1 , nulls: true }
+					],
+					sql = "
+						SELECT 
+							COALESCE( ? , 'isnull' ) AS value,
+							COALESCE( NULL , 'isnull' ) AS control
+						FROM queryWithDataIn
+					"
+				);
+
+				expect( actual.control[1] ).toBe( 'isnull' );
+				expect( actual.value[1] ).toBe( 'isnull' );
+
+			});
+
 			it( 'returns NULL when fed in through array parameter with null=true' , function() {
 
 				actual = QueryExecute(
