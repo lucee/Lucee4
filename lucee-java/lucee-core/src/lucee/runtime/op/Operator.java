@@ -902,7 +902,7 @@ public final class Operator {
 	}
     
     public static Double modulusRef(Object left, Object right) throws PageException {
-    	double rightAsDouble = Caster.toDoubleValue(right);
+		double rightAsDouble = Caster.toDoubleValue(right);
 		if(rightAsDouble==0d)
 			throw new ArithmeticException("Division by zero is not possible");
 		return Caster.toDouble(Caster.toDoubleValue(left)%rightAsDouble);
