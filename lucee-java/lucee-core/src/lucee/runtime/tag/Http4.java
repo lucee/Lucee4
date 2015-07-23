@@ -925,6 +925,7 @@ final class Http4 extends BodyTagImpl implements Http {
 			if(this.timeout==null) { // not set
 				this.timeout=TimeSpanImpl.fromMillis(pageContext.getRequestTimeout());
     		}
+			//print.e("classic:"+timeout);
     		HTTPEngine4Impl.setTimeout(params, this.timeout);
     		
     	// set Username and Password
@@ -963,7 +964,7 @@ final class Http4 extends BodyTagImpl implements Http {
 /////////////////////////////////////////// EXECUTE /////////////////////////////////////////////////
 		Executor4 e = new Executor4(this,client,httpContext,req,redirect);
 		HTTPResponse4Impl rsp=null;
-		if(timeout==null){
+		if(true){
 			try{
 				rsp = e.execute(httpContext);
 			}
@@ -1000,7 +1001,7 @@ final class Http4 extends BodyTagImpl implements Http {
 			if(!e.done){
 				req.abort();
 				if(throwonerror)
-					throw new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp.getURL());
+					throw new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp==null?null:rsp.getURL());
 				setRequestTimeout(cfhttp);	
 				return;
 				//throw new ApplicationException("timeout");	

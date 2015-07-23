@@ -49,6 +49,7 @@ import lucee.runtime.net.proxy.ProxyDataImpl;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.type.dt.TimeSpan;
+import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.util.CollectionUtil;
 
 import org.apache.http.Header;
@@ -95,7 +96,7 @@ public class HTTPEngine4Impl {
 	 * @param url
 	 * @param username
 	 * @param password
-	 * @param timeout
+	 * @param timeout in ms
 	 * @param charset
 	 * @param useragent
 	 * @param proxyserver
@@ -118,7 +119,7 @@ public class HTTPEngine4Impl {
      * @param url
      * @param username
      * @param password
-     * @param timeout
+     * @param timeout in ms
      * @param charset
      * @param useragent
      * @param proxyserver
@@ -153,7 +154,7 @@ public class HTTPEngine4Impl {
      * @param url
      * @param username
      * @param password
-     * @param timeout
+     * @param timeout in ms
      * @param charset
      * @param useragent
      * @param proxyserver
@@ -180,7 +181,7 @@ public class HTTPEngine4Impl {
      * @param url
      * @param username
      * @param password
-     * @param timeout
+     * @param timeout in ms
      * @param charset
      * @param useragent
      * @param proxyserver
@@ -203,7 +204,7 @@ public class HTTPEngine4Impl {
      * @param url
      * @param username
      * @param password
-     * @param timeout
+     * @param timeout in ms
      * @param charset
      * @param useragent
      * @param proxyserver
@@ -246,7 +247,7 @@ public class HTTPEngine4Impl {
     	if(CollectionUtil.isEmpty(formfields))setContentType(request,charset);
     	setFormFields(request,formfields,charset);
     	setUserAgent(request,useragent);
-    	setTimeout(params,timeout);
+    	setTimeout(params,timeout>0?TimeSpanImpl.fromMillis(timeout):null);
     	HttpContext context=setCredentials(client,hh, username, password,false);  
     	setProxy(client,request,proxy);
         if(context==null)context = new BasicHttpContext();
@@ -296,16 +297,13 @@ public class HTTPEngine4Impl {
         }
 	}
 
+	/**
+	 * sets the timeout for the connection and socket (same value)
+	 */
 	public static void setTimeout(HttpParams params, TimeSpan timeout) {
         if(timeout!=null){
-        	HttpConnectionParams.setConnectionTimeout(params, (int)timeout.getSeconds());
-        	HttpConnectionParams.setSoTimeout(params, (int)timeout.getSeconds());
-        }
-	}
-	public static void setTimeout(HttpParams params, long timeout) {
-        if(timeout>0){
-        	HttpConnectionParams.setConnectionTimeout(params, (int)timeout);
-        	HttpConnectionParams.setSoTimeout(params, (int)timeout);
+        	HttpConnectionParams.setConnectionTimeout(params, (int)timeout.getMillis());
+        	HttpConnectionParams.setSoTimeout(params, (int)timeout.getMillis());
         }
 	}
 

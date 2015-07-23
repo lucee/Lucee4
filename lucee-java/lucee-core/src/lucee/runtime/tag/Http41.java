@@ -86,6 +86,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -112,7 +113,7 @@ import org.apache.http.protocol.HttpContext;
 *
 * 
 **/
-final class Http41 extends BodyTagImpl implements Http {
+public final class Http41 extends BodyTagImpl implements Http {
 
 	public static final String MULTIPART_RELATED = "multipart/related";
 	public static final String MULTIPART_FORM_DATA = "multipart/form-data";
@@ -941,9 +942,9 @@ final class Http41 extends BodyTagImpl implements Http {
 			if(this.timeout==null) { // not set
 				this.timeout=TimeSpanImpl.fromMillis(pageContext.getRequestTimeout());
     		}
-    		builder.setConnectionTimeToLive(this.timeout.getMillis(), TimeUnit.MILLISECONDS);
-        	
+			//print.e("modern:"+timeout);
     		
+			setTimeout(builder,this.timeout);
     		
     		
     		
@@ -1003,7 +1004,8 @@ final class Http41 extends BodyTagImpl implements Http {
 				synchronized(this){//print.err(timeout);
 					this.wait(timeout.getMillis()+100);
 				}
-			} catch (InterruptedException ie) {
+			} 
+			catch (InterruptedException ie) {
 				throw Caster.toPageException(ie);
 			}
 			if(e.t!=null){
@@ -1020,7 +1022,7 @@ final class Http41 extends BodyTagImpl implements Http {
 			if(!e.done){
 				req.abort();
 				if(throwonerror)
-					throw new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp.getURL());
+					throw new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp==null?null:rsp.getURL());
 				setRequestTimeout(cfhttp);	
 				return;
 				//throw new ApplicationException("timeout");	
@@ -1259,6 +1261,14 @@ final class Http41 extends BodyTagImpl implements Http {
 			if(client!=null)client.close();
 		}
 	    
+	}
+
+	public static void setTimeout(HttpClientBuilder builder, TimeSpan timeout) {
+		builder.setConnectionTimeToLive(timeout.getMillis(), TimeUnit.MILLISECONDS);
+    	SocketConfig sc=SocketConfig.custom()
+    			.setSoTimeout((int)timeout.getMillis())
+    			.build();
+    	builder.setDefaultSocketConfig(sc);
 	}
 
 	private void parseCookie(Query cookies,String raw) {
