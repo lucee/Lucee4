@@ -371,12 +371,12 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Sizeable,Externali
 	
 	@Override
 	public String getDisplayName() {
-		return properties.displayName;
+		return properties.displayName==null?"":properties.displayName;
 	}
 	
 	@Override
 	public String getHint() {
-		return properties.hint;
+		return properties.hint==null?"":properties.hint;
 	}
     
 	@Override
@@ -498,7 +498,7 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Sizeable,Externali
 	
 	@Override
 	public String getDescription() {
-		return properties.description;
+		return properties.description==null?"":properties.description;
 	}
 	
 	@Override
