@@ -5976,6 +5976,20 @@ To use cached data, the function must be called with the exact same arguments.</
 			<rtexprvalue>true</rtexprvalue>
 			<description>The domain to authenticate within. this attribute is only used when authenication type is "NTLM"</description>
 		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>clientCert</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>The full path to a PKCS12 format file that contains the client certificate for the request.</description>
+		</attribute>
+		<attribute>
+			<type>string</type>
+			<name>clientCertPassword</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>Password used to decrypt the client certificate.</description>
+		</attribute>
 	</tag>
 	<!-- HttpParam -->
 	<tag>

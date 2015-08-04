@@ -117,4 +117,7 @@ public interface Http extends BodyTag {
 	
 	public void setAddtoken(boolean addtoken);
 
+	public void setClientcert(String clientCert);
+
+	public void setClientcertpassword(String clientCertPassword);
 }

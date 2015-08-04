@@ -18,9 +18,12 @@
  **/
 package lucee.commons.net.http.httpclient4;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileInputStream;
 import java.net.URL;
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -28,6 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.TemporaryStream;
@@ -51,6 +57,8 @@ import lucee.runtime.op.Decision;
 import lucee.runtime.tag.Http41;
 import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.util.CollectionUtil;
+
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -344,6 +352,33 @@ public class HTTPEngineImpl {
                 new NTCredentials(username,password,workStation,domain));
         }
 	}
+
+    public static void setClientSSL(HttpClientBuilder builder, String clientCert, String clientCertPassword) {
+        if(!StringUtil.isEmpty(clientCert,true)) {
+            if(clientCertPassword==null)clientCertPassword="";
+            try {
+
+                File ksFile = new File(clientCert);
+                KeyStore clientStore = KeyStore.getInstance("PKCS12");
+                clientStore.load(new FileInputStream(ksFile), clientCertPassword.toCharArray());
+
+                KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                kmf.init(clientStore, clientCertPassword.toCharArray());
+
+                SSLContext sslContext = SSLContext.getInstance("TLS");
+                sslContext.init(kmf.getKeyManagers(), null, null);//new SecureRandom()
+
+                // Allow TLSv1 protocol only
+                SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                    sslContext,
+                    new String[] { "TLSv1" },
+                    null,
+                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+
+                builder.setSSLSocketFactory(sslsf);
+            } catch(Exception e) {}
+        }
+    }
 
     public static void setBody(HttpEntityEnclosingRequest req, Object body, String mimetype,String charset) throws IOException {
     	if(body!=null)req.setEntity(toHttpEntity(body,mimetype,charset));
