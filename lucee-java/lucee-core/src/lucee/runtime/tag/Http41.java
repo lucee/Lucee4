@@ -984,7 +984,7 @@ public final class Http41 extends BodyTagImpl implements Http {
     	client = builder.build();
 		Executor41 e = new Executor41(this,client,httpContext,req,redirect);
 		HTTPResponse4Impl rsp=null;
-		if(timeout==null){
+		if(timeout==null || timeout.getMillis()<=0){
 			try{
 				rsp = e.execute(httpContext);
 			}
@@ -1264,6 +1264,8 @@ public final class Http41 extends BodyTagImpl implements Http {
 	}
 
 	public static void setTimeout(HttpClientBuilder builder, TimeSpan timeout) {
+		if(timeout==null || timeout.getMillis()<=0) return;
+		
 		builder.setConnectionTimeToLive(timeout.getMillis(), TimeUnit.MILLISECONDS);
     	SocketConfig sc=SocketConfig.custom()
     			.setSoTimeout((int)timeout.getMillis())

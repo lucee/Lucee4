@@ -301,7 +301,7 @@ public class HTTPEngine4Impl {
 	 * sets the timeout for the connection and socket (same value)
 	 */
 	public static void setTimeout(HttpParams params, TimeSpan timeout) {
-        if(timeout!=null){
+        if(timeout!=null && timeout.getMillis()>0){
         	HttpConnectionParams.setConnectionTimeout(params, (int)timeout.getMillis());
         	HttpConnectionParams.setSoTimeout(params, (int)timeout.getMillis());
         }
