@@ -111,7 +111,7 @@ class DCStack {
 
 	private void clear(Item current,Item next) throws SQLException {
 		if(current==null) return;
-		if((current.dc.isTimeout() || current.dc.getConnection().isClosed())) { 
+		if(current.dc.isTimeout() || current.dc.getConnection().isClosed() || !current.dc.getConnection().isValid(10)) { 
 			if(!current.dc.getConnection().isClosed()){
 				try {
 					current.dc.close();
