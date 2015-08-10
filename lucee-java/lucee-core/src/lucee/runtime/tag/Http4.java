@@ -53,6 +53,7 @@ import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.HTTPException;
 import lucee.runtime.exp.NativeException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.RequestTimeoutException;
 import lucee.runtime.ext.tag.BodyTagImpl;
 import lucee.runtime.net.http.MultiPartResponseUtils;
 import lucee.runtime.net.http.ReqRspUtil;
@@ -73,6 +74,7 @@ import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
+import lucee.runtime.util.PageContextUtil;
 import lucee.runtime.util.URLResolver;
 
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -923,7 +925,9 @@ final class Http4 extends BodyTagImpl implements Http {
     		
     	// set timeout
 			if(this.timeout==null) { // not set
-				this.timeout=TimeSpanImpl.fromMillis(pageContext.getRequestTimeout());
+				this.timeout=PageContextUtil.remainingTime(pageContext);
+				if(this.timeout.getSeconds()<=0)
+					throw new RequestTimeoutException("request timeout occured!");
     		}
 			//print.e("classic:"+timeout);
     		HTTPEngine4Impl.setTimeout(params, this.timeout);

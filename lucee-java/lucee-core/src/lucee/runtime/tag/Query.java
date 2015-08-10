@@ -51,6 +51,7 @@ import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.DatabaseException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.RequestTimeoutException;
 import lucee.runtime.ext.tag.BodyTagTryCatchFinallyImpl;
 import lucee.runtime.functions.displayFormatting.DecimalFormat;
 import lucee.runtime.listener.AppListenerUtil;
@@ -76,6 +77,7 @@ import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.query.SimpleQuery;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
+import lucee.runtime.util.PageContextUtil;
 
 
 
@@ -462,7 +464,9 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 
 		//timeout
 		if(this.timeout==null || this.timeout.getSeconds()<=0) { // not set
-			this.timeout=TimeSpanImpl.fromMillis(pageContext.getRequestTimeout());
+			this.timeout=PageContextUtil.remainingTime(pageContext);
+			if(this.timeout.getSeconds()<=0)
+				throw new RequestTimeoutException("request timeout occured!");
 		}
 		
 		// default datasource
