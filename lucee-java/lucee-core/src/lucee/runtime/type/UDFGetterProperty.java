@@ -29,7 +29,6 @@ import lucee.runtime.type.Collection.Key;
 public final class UDFGetterProperty extends UDFGSProperty {
 
 	private final Property prop;
-	//private ComponentScope scope;
 	private final Key propName;
 
 	public UDFGetterProperty(ComponentImpl component,Property prop)  {

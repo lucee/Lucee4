@@ -1,5 +1,6 @@
 <!--- 
- * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
+ *
+ * Copyright (c) 2015, Lucee Association Switzerland. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,18 +15,27 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent><cfscript>
+ ---><cfcomponent extends="org.lucee.cfml.test.LuceeTestCase">
 
-this.name="lucee_context";
-this.clientmanagement="no";
-this.clientstorage="file"; 
-this.scriptprotect="all";
-this.sessionmanagement="yes";
-this.sessiontimeout="#createTimeSpan(0,0,30,0)#";
-this.setclientcookies="yes";
-this.setdomaincookies="no"; 
-this.applicationtimeout="#createTimeSpan(1,0,0,0)#";
-this.localmode="update";
-this.web.charset="utf-8";
-this.scopeCascading="strict";
-</cfscript></cfcomponent>
+	<cffunction name="testTagBased">
+		<cfset local.res=tagBased(new LDEV0461(),[new LDEV0461()])>
+	</cffunction>
+
+	<cffunction name="testScriptBased">
+		<cfset local.res=scriptBased(new LDEV0461(),[new LDEV0461()])>
+	</cffunction>
+
+
+
+	<cffunction access="private" name="tagBased" returntype="LDEV0461[]">
+		<cfargument name="arg1" type="LDEV0461">
+		<cfargument name="arg2" type="LDEV0461[]">
+		<cfreturn arg2>
+	</cffunction>
+	<cfscript>
+	private function scriptBased(LDEV0461 arg1, LDEV0461[] arg2){
+		return arg2;
+	}
+	</cfscript>
+
+</cfcomponent>

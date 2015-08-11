@@ -361,6 +361,7 @@ public final class HTMLEntities {
 			OFFSET_HTML40_4,
 			OFFSET_HTML40_5
       };
+	private static final char CR = (char)13;
 
       
       /**
@@ -399,6 +400,7 @@ public final class HTMLEntities {
       	
       	outer:for(int i=0;i<chars.length;i++) {
       		char c=chars[i];
+      		if(c==CR) continue;// for compatibility to ACF
       		for(int y=0;y<offset.length;y++) {
       			if(c>=offset[y] && c<data[y].length+offset[y]) {
       				

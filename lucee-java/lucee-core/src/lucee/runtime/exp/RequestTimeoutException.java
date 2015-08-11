@@ -22,10 +22,16 @@ package lucee.runtime.exp;
 public class RequestTimeoutException extends Abort implements Stop {
 
 	private StackTraceElement[] stacktrace;
+	
 
+	public RequestTimeoutException(String msg) {
+		super(SCOPE_REQUEST,msg);
+		this.stacktrace=new Throwable().getStackTrace();
+	}
+	
 	public RequestTimeoutException(Thread t,String msg) {
 		super(SCOPE_REQUEST,msg);
-		this.stacktrace=t!=null?t.getStackTrace():null;
+		this.stacktrace=t!=null?t.getStackTrace():new Throwable().getStackTrace();
 	}
 	
 	@Override

@@ -225,13 +225,16 @@ public class Log4jUtil {
 				}
 			}
 		}
-		
-		if(appender==null) {
+		if(appender instanceof AppenderSkeleton) {
+			((AppenderSkeleton)appender).activateOptions();
+		}
+		else if(appender==null) {
 			PrintWriter pw;
 			if(config.getOutWriter()==null)pw=new PrintWriter(System.out);
 			else pw=config.getOutWriter();
 			appender=new ConsoleAppender(pw,layout);
 		}
+		
 		
 		return appender;
     }

@@ -51,6 +51,7 @@ import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.ResourcesImpl;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.ClassUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.loader.TP;
 import lucee.loader.engine.CFMLEngineFactory;
@@ -1056,16 +1057,30 @@ class StopThread extends Thread {
 		int count=0;
 		if(thread.isAlive()) {
 			do{
-				if(count>0 && log!=null) {
-					LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread on the first approach", thread.getStackTrace());
-				}
-				if(count++>10) break; // should never happen
 				try{
-					thread.stop(t);
+					if(count>0 && log!=null) {
+						LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread on the first approach", thread.getStackTrace());
+					}
+					if(count++>10) break; // should never happen
+					try{
+						thread.stop(t);
+					}
+					catch(UnsupportedOperationException uoe){
+						LogUtil.log(log, Log.LEVEL_ERROR, "", "Thread.stop(Throwable) is not supported by this JVM and failed with UnsupportedOperationException", thread.getStackTrace());
+						try {
+							Method m = thread.getClass().getMethod("stop0", new Class[]{Object.class});
+							m.setAccessible(true); // allow to access private method
+							m.invoke(thread, new Object[]{t});
+						}
+						catch (Throwable t) {
+							LogUtil.log(log, Log.LEVEL_ERROR, "", t);
+							thread.stop();
+						}
+					}
 				}
-				catch(UnsupportedOperationException uoe){
-					LogUtil.log(log, Log.LEVEL_ERROR, "", "Thread.stop(Throwable) is not supported by this JVM and failed with UnsupportedOperationException", thread.getStackTrace());
-					thread.stop();
+				// catch any exception
+				catch(Throwable t){
+					LogUtil.log(log, Log.LEVEL_ERROR, "", t);
 				}
 				SystemUtil.sleep(1000);
 			}

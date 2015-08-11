@@ -40,9 +40,7 @@ import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.mimetype.ContentType;
 import lucee.commons.net.HTTPUtil;
-import lucee.commons.net.URLEncoder;
 import lucee.commons.net.http.HTTPEngine;
-import lucee.commons.net.http.Header;
 import lucee.commons.net.http.httpclient4.CachingGZIPInputStream;
 import lucee.commons.net.http.httpclient4.HTTPEngine4Impl;
 import lucee.commons.net.http.httpclient4.HTTPPatchFactory;
@@ -55,6 +53,7 @@ import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.HTTPException;
 import lucee.runtime.exp.NativeException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.RequestTimeoutException;
 import lucee.runtime.ext.tag.BodyTagImpl;
 import lucee.runtime.net.http.MultiPartResponseUtils;
 import lucee.runtime.net.http.ReqRspUtil;
@@ -71,13 +70,15 @@ import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTime;
+import lucee.runtime.type.dt.TimeSpan;
+import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
+import lucee.runtime.util.PageContextUtil;
 import lucee.runtime.util.URLResolver;
 
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -87,7 +88,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -200,7 +200,7 @@ final class Http4 extends BodyTagImpl implements Http {
 	private boolean resolveurl;
 
 	/** A value, in seconds. When a URL timeout is specified in the browser */
-	private long timeout=-1;
+	private TimeSpan timeout=null;
 
 	/** Host name or IP address of a proxy server. */
 	private String proxyserver;
@@ -294,7 +294,7 @@ final class Http4 extends BodyTagImpl implements Http {
 		password=null;
 		delimiter=',';
 		resolveurl=false;
-		timeout=-1L;
+		timeout=null;
 		proxyserver=null;
 		proxyport=80;
 		proxyuser=null;
@@ -385,14 +385,17 @@ final class Http4 extends BodyTagImpl implements Http {
 	* @param timeout value to set
 	 * @throws ExpressionException 
 	**/
-	public void setTimeout(double timeout) throws ExpressionException	{
-		if(timeout<0)
-			throw new ExpressionException("invalid value ["+Caster.toString(timeout)+"] for attribute timeout, value must be a positive integer greater or equal than 0");
-		
-	    long requestTimeout = pageContext.getRequestTimeout();
-	    long _timeout=(long)(timeout*1000D);
-	    this.timeout=requestTimeout<_timeout?requestTimeout:_timeout;
-		//print.out("this.timeout:"+this.timeout);
+	public void setTimeout(Object timeout) throws PageException	{
+		if(timeout instanceof TimeSpan)
+			this.timeout=(TimeSpan) timeout;
+		// seconds
+		else {
+			int i = Caster.toIntValue(timeout);
+			if(i<0)
+				throw new ApplicationException("invalid value ["+i+"] for attribute timeout, value must be a positive integer greater or equal than 0");
+			
+			this.timeout=new TimeSpanImpl(0, 0, 0, i);
+		}
 	}
 
 	/** set the value proxyserver
@@ -927,7 +930,13 @@ final class Http4 extends BodyTagImpl implements Http {
     			if(!HttpImpl.hasHeaderIgnoreCase(req,"Connection"))
     				req.setHeader("Connection","close");
     	// set timeout
-    		if(this.timeout>0L)HTTPEngine4Impl.setTimeout(params, (int)this.timeout);
+			if(this.timeout==null) { // not set
+				this.timeout=PageContextUtil.remainingTime(pageContext);
+				if(this.timeout.getSeconds()<=0)
+					throw new RequestTimeoutException("request timeout occured!");
+    		}
+			//print.e("classic:"+timeout);
+    		HTTPEngine4Impl.setTimeout(params, this.timeout);
     		
     	// set Username and Password
     		if(this.username!=null) {
@@ -965,7 +974,7 @@ final class Http4 extends BodyTagImpl implements Http {
 /////////////////////////////////////////// EXECUTE /////////////////////////////////////////////////
 		Executor4 e = new Executor4(this,client,httpContext,req,redirect);
 		HTTPResponse4Impl rsp=null;
-		if(timeout<0){
+		if(true){
 			try{
 				rsp = e.execute(httpContext);
 			}
@@ -983,7 +992,7 @@ final class Http4 extends BodyTagImpl implements Http {
 			e.start();
 			try {
 				synchronized(this){//print.err(timeout);
-					this.wait(timeout);
+					this.wait(timeout.getMillis()+100);
 				}
 			} catch (InterruptedException ie) {
 				throw Caster.toPageException(ie);
@@ -1002,7 +1011,7 @@ final class Http4 extends BodyTagImpl implements Http {
 			if(!e.done){
 				req.abort();
 				if(throwonerror)
-					throw new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp.getURL());
+					throw new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp==null?null:rsp.getURL());
 				setRequestTimeout(cfhttp);	
 				return;
 				//throw new ApplicationException("timeout");	

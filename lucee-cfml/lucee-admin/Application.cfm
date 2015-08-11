@@ -8,4 +8,5 @@
     setclientcookies="yes" 
     setdomaincookies="no" 
     applicationtimeout="#createTimeSpan(1,0,0,0)#"
-    localmode="update">
+    localmode="update"
+    scopeCascading="strict">

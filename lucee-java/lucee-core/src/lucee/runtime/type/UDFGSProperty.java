@@ -38,6 +38,7 @@ import lucee.runtime.functions.decision.IsValid;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.type.Collection.Key;
+import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.util.ComponentUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.UDFUtil;
@@ -54,7 +55,7 @@ public abstract class UDFGSProperty extends MemberSupport implements UDFPlus {
 
 	public UDFGSProperty(ComponentImpl component,String name,FunctionArgument[] arguments,short rtnType,String rtnFormat) {
 		super(Component.ACCESS_PUBLIC);
-		properties=UDFProperties(
+		properties=new UDFPropertiesImpl(
 				component.getPageSource(),
 				arguments,
 				-1,
@@ -62,59 +63,24 @@ public abstract class UDFGSProperty extends MemberSupport implements UDFPlus {
 				rtnType,
 				rtnFormat,
 				false,
-				true,
 				Component.ACCESS_PUBLIC,
+				true,
 				"",
 				"",
 				"",
 				Boolean.FALSE,
 				Boolean.FALSE,
-				0L,
 				null,
-				new StructImpl()
+				null,
+				null
 				
 		);
-		
+				
 		this.name=name;
 		this.arguments=arguments;
 		this.component=component;
 	}
 
-	private static UDFPropertiesImpl UDFProperties(PageSource pageSource,
-	        FunctionArgument[] arguments,
-			int index,
-	        String functionName, 
-	        short returnType, 
-	        String strReturnFormat, 
-	        boolean output, 
-	        Boolean bufferOutput, 
-	        int access, 
-	        String displayName, 
-	        String description, 
-	        String hint, 
-	        Boolean secureJson,
-	        Boolean verifyClient,
-	        long cachedWithin,
-	        Integer localMode,
-	        StructImpl meta) {
-			return new UDFPropertiesImpl( pageSource,
-			        arguments,
-					 index,
-			         functionName, 
-			         returnType, 
-			         strReturnFormat, 
-			         output,
-			         access, 
-			         bufferOutput,
-			         displayName, 
-			         description, 
-			         hint, 
-			         secureJson,
-			         verifyClient,
-			         cachedWithin,
-			         localMode,
-			         meta);
-	}
 
 	@Override
 	public FunctionArgument[] getFunctionArguments() {
