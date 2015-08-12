@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -946,8 +947,6 @@ public final class Http41 extends BodyTagImpl implements Http {
 				if(this.timeout.getSeconds()<=0)
 					throw new RequestTimeoutException("request timeout occured!");
     		}
-			//print.e("modern:"+timeout);
-    		
 			setTimeout(builder,this.timeout);
     		
     		
@@ -988,21 +987,22 @@ public final class Http41 extends BodyTagImpl implements Http {
     	client = builder.build();
 		Executor41 e = new Executor41(this,client,httpContext,req,redirect);
 		HTTPResponse4Impl rsp=null;
-		if(timeout==null || timeout.getMillis()<=0){
+		//if(timeout==null || timeout.getMillis()<=0){
 			try{
 				rsp = e.execute(httpContext);
 			}
 			
 			catch(Throwable t){
 				if(!throwonerror){
-					setUnknownHost(cfhttp, t);
+					if(t instanceof SocketTimeoutException)setRequestTimeout(cfhttp);
+					else setUnknownHost(cfhttp, t);
+					
 					return;
 				}
 				throw toPageException(t);
 				
 			}
-		}
-		else {
+		/*} else {
 			e.start();
 			try {
 				synchronized(this){//print.err(timeout);
@@ -1019,10 +1019,7 @@ public final class Http41 extends BodyTagImpl implements Http {
 				}
 				throw toPageException(e.t);	
 			}
-			
 			rsp=e.response;
-			
-			
 			if(!e.done){
 				req.abort();
 				if(throwonerror)
@@ -1031,7 +1028,7 @@ public final class Http41 extends BodyTagImpl implements Http {
 				return;
 				//throw new ApplicationException("timeout");	
 			}
-		}
+		}*/
 		
 /////////////////////////////////////////// EXECUTE /////////////////////////////////////////////////
 		Charset responseCharset=CharsetUtil.toCharset(rsp.getCharset());
@@ -1334,14 +1331,14 @@ public final class Http41 extends BodyTagImpl implements Http {
 	}
 
 	private void setUnknownHost(Struct cfhttp,Throwable t) {
-		cfhttp.setEL(CHARSET,"");
 		cfhttp.setEL(ERROR_DETAIL,"Unknown host: "+t.getMessage());
 		cfhttp.setEL(FILE_CONTENT,"Connection Failure");
-		cfhttp.setEL(KeyConstants._header,"");
 		cfhttp.setEL(KeyConstants._mimetype,"Unable to determine MIME type of file.");
-		cfhttp.setEL(RESPONSEHEADER,new StructImpl());
 		cfhttp.setEL(STATUSCODE,"Connection Failure. Status code unavailable.");
+		cfhttp.setEL(RESPONSEHEADER,new StructImpl());
 		cfhttp.setEL(KeyConstants._text,Boolean.TRUE);
+		cfhttp.setEL(CHARSET,"");
+		cfhttp.setEL(KeyConstants._header,"");
 	}
 
 	private void setRequestTimeout(Struct cfhttp) {
