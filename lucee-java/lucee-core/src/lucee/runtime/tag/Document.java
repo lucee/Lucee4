@@ -74,7 +74,7 @@ public final class Document extends BodyTagImpl {
 	private int encryption=PDFDocument.ENC_NONE;
 
 	private String ownerpassword=null;
-	private String userpassword="empty";
+	private String userpassword="";
 	private int scale=-1;
 
 	// TODO impl. tag Document backgroundvisible,fontembed,scale
