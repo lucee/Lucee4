@@ -68,6 +68,7 @@ import lucee.runtime.type.Collection;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.QueryColumn;
 import lucee.runtime.type.QueryImpl;
+import lucee.runtime.type.scope.ArgumentImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTime;
@@ -518,7 +519,9 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 			// create SQL
 			SQL sql;
 			if(params!=null) {
-				if(Decision.isArray(params))
+			if(params instanceof ArgumentImpl)
+				sql=QueryParamConverter.convert(strSQL, (ArgumentImpl) params);
+			else if(Decision.isArray(params))
 					sql=QueryParamConverter.convert(strSQL, Caster.toArray(params));
 				else if(Decision.isStruct(params))
 					sql=QueryParamConverter.convert(strSQL, Caster.toStruct(params));

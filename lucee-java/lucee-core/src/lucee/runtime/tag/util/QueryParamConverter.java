@@ -36,114 +36,81 @@ import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.type.Array;
+import lucee.runtime.type.ArrayImpl;
 import lucee.runtime.type.Collection.Key;
+import lucee.runtime.type.scope.ArgumentImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.KeyConstants;
+import lucee.runtime.type.util.ListUtil;
 
 public class QueryParamConverter {
 
+	public static SQL convert(String sql, ArgumentImpl params) throws PageException{
+		// All items of arguments will be key-based or position-based so proxy appropriate arrays
+		Iterator<Entry<Key, Object>> it = params.entryIterator();
+		if (it.hasNext()){
+			Entry<Key, Object> e = it.next();
+			if(e.getKey().getString() == new String("1")) {
+				// This indicates the first item has key == 1 therefore treat as array
+				return convert(sql,Caster.toArray(params));
+			}
+		}
+		return convert(sql,Caster.toStruct(params));
+	}
+
 	public static SQL convert(String sql, Struct params) throws PageException{
 		Iterator<Entry<Key, Object>> it = params.entryIterator();
-		List<NamedSQLItem> namedItems=new ArrayList<NamedSQLItem>();
+		ArrayList<SQLItems<NamedSQLItem>> namedItems=new ArrayList<SQLItems<NamedSQLItem>>();
 		Entry<Key, Object> e;
 		while(it.hasNext()){
 			e = it.next();
 			namedItems.add(toNamedSQLItem(e.getKey().getString(),e.getValue()));
 		}
-		return convert(sql, new ArrayList<SQLItem>(), namedItems);
+		return convert(sql, new ArrayList<SQLItems<SQLItem>>(), namedItems);
 	}
 	
 	public static SQL convert(String sql, Array params) throws PageException{
 		Iterator<Object> it = params.valueIterator();
-		List<NamedSQLItem> namedItems=new ArrayList<NamedSQLItem>();
-		List<SQLItem> items=new ArrayList<SQLItem>();
-		Object value;
-		SQLItem item;
+		ArrayList<SQLItems<NamedSQLItem>> namedItems=new ArrayList<SQLItems<NamedSQLItem>>();
+		ArrayList<SQLItems<SQLItem>> items=new ArrayList<SQLItems<SQLItem>>();
+		Object value,paramValue;
 		while(it.hasNext()){
 			value = it.next();
-			item=toSQLItem(value);
-			if(item instanceof NamedSQLItem)
-				namedItems.add((NamedSQLItem) item);
-			else
-				items.add(item);
+
+			if(Decision.isStruct(value)) {
+				Struct sct=(Struct) value;
+				// name (optional)
+				String name=null;
+				Object oName=sct.get(KeyConstants._name,null);
+				if(oName!=null) name=Caster.toString(oName);
+				
+				// value (required)
+				paramValue=sct.get(KeyConstants._value);
+				
+				if(StringUtil.isEmpty(name)) {
+					items.add(new SQLItems<SQLItem>(new SQLItemImpl(paramValue, Types.VARCHAR),sct));
+				} else {
+					namedItems.add(new SQLItems<NamedSQLItem>(new NamedSQLItem(name, paramValue, Types.VARCHAR),sct));
+				}
+			} else {
+				items.add(new SQLItems<SQLItem>(new SQLItemImpl(value)));
+			}
 		}
 		return convert(sql, items, namedItems);
 	}
-	
-	private static SQLItem toSQLItem(Object value) throws PageException {
-		if(Decision.isStruct(value)) {
-			Struct sct=(Struct) value;
-			// name (optional)
-			String name=null;
-			Object oName=sct.get(KeyConstants._name,null);
-			if(oName!=null) name=Caster.toString(oName);
-			
-			// value (required)
-			value=sct.get(KeyConstants._value);
-			
-			if(StringUtil.isEmpty(name))
-				return fill(new SQLItemImpl(value, Types.VARCHAR),sct);
-			
-			return fill(new NamedSQLItem(name, value, Types.VARCHAR),sct);
-		}
-		return new SQLItemImpl(value);
-	}
 
-	private static NamedSQLItem toNamedSQLItem(String name, Object value) throws PageException {
+	private static SQLItems<NamedSQLItem> toNamedSQLItem(String name, Object value) throws PageException {
 		if(Decision.isStruct(value)) {
 			Struct sct=(Struct) value;
 			// value (required)
 			value=sct.get(KeyConstants._value);
-			return (NamedSQLItem) fill(new NamedSQLItem(name, value, Types.VARCHAR),sct);
+			return new SQLItems<NamedSQLItem>(new NamedSQLItem(name, value, Types.VARCHAR),sct);
 		}
-		return new NamedSQLItem(name, value, Types.VARCHAR);
- 	}
-	
-	private static SQLItem fill(SQLItem item,Struct sct) throws DatabaseException, PageException {
-		// type (optional)
-		Object oType=sct.get(KeyConstants._cfsqltype,null);
-		if(oType==null)oType=sct.get(KeyConstants._sqltype,null);
-		if(oType==null)oType=sct.get(KeyConstants._type,null);
-		if(oType!=null) {
-			item.setType(SQLCaster.toSQLType(Caster.toString(oType)));
-		}
-		
-		// nulls (optional)
-		Object oNulls=sct.get(KeyConstants._nulls,null);
-		if(oNulls!=null) {
-			item.setNulls(Caster.toBooleanValue(oNulls));
-		}
-		
-		// scale (optional)
-		Object oScale=sct.get(KeyConstants._scale,null);
-		if(oScale!=null) {
-			item.setScale(Caster.toIntValue(oScale));
-		}
-		
-		/* list
-		if(Caster.toBooleanValue(sct.get("list",null),false)) {
-			String separator=Caster.toString(sct.get("separator",null),",");
-			String v = Caster.toString(item.getValue());
-	    	Array arr=null;
-	    	if(StringUtil.isEmpty(v)){
-	    		arr=new ArrayImpl();
-	    		arr.append("");
-	    	}
-	    	else arr=ListUtil.listToArrayRemoveEmpty(v,separator);
-			
-			int len=arr.size();
-			StringBuilder sb=new StringBuilder();
-			for(int i=1;i<=len;i++) {
-			    query.setParam(item.clone(check(arr.getE(i))));
-		        if(i>1)sb.append(',');
-		        sb.append('?');
-			}
-			write(sb.toString());
-		}*/
-		return item;
+		return new SQLItems<NamedSQLItem>(new NamedSQLItem(name, value, Types.VARCHAR));
 	}
+	
 
-	private static SQL convert(String sql, List<SQLItem> items, List<NamedSQLItem> namedItems) throws ApplicationException{
+	private static SQL convert(String sql, ArrayList<SQLItems<SQLItem>> items, ArrayList<SQLItems<NamedSQLItem>> namedItems) throws ApplicationException , PageException {
 		//if(namedParams.size()==0) return new Pair<String, List<Param>>(sql,params);
 		
 		StringBuilder sb=new StringBuilder();
@@ -154,7 +121,7 @@ public class QueryParamConverter {
 		for(int i=0;i<sqlLen;i++){
 			c=sql.charAt(i);
 			
-			if(c=='"' || c=='\'')	{
+			if(c=='"' || c=='\'')   {
 				if(inside) {
 					if(c==del) {
 						inside=false;
@@ -165,13 +132,13 @@ public class QueryParamConverter {
 					inside=true;
 				}
 			}
-			else {
-				if(!inside && c=='?') {
+			else if(!inside) {
+
+				if(c=='?') {
 					if(++_qm>initialParamSize) 
 						throw new ApplicationException("there are more question marks in the SQL than params defined");
-					qm++;
 				}
-				else if(!inside && c==':') {
+				else if(c==':') {
 					StringBuilder name=new StringBuilder();
 					char cc;
 					int y=i+1;
@@ -183,18 +150,35 @@ public class QueryParamConverter {
 					if(name.length()>0) {
 						i=y-1;
 						c='?';
-						
-						SQLItem p = get(name.toString(),namedItems);
-						items.add(qm, p);
-						qm++;
+						items.add( qm , get( name.toString(),namedItems ) );
 					}
-					
 				}
 			}
-			sb.append(c);
+
+			if(c=='?') {
+				int len=items.get(qm).size();
+				for(int j=1;j<=len;j++) {
+					if(j>1)sb.append(',');
+					sb.append('?');
+				}
+				qm++;
+			} else {
+				sb.append(c);
+			}
 		}
+
+		SQLItems<SQLItem> finalItems=flattenItems( items );
 		
-		return new SQLImpl(sb.toString(),items.toArray(new SQLItem[items.size()]));
+		return new SQLImpl(sb.toString(),finalItems.toArray(new SQLItem[finalItems.size()]));
+	}
+
+	private static SQLItems<SQLItem> flattenItems( ArrayList<SQLItems<SQLItem>> items ) {
+		SQLItems<SQLItem> finalItems = new SQLItems<SQLItem>();
+		Iterator<SQLItems<SQLItem>> listsToFlatten = items.iterator();
+		while(listsToFlatten.hasNext()){
+			finalItems.addAll(listsToFlatten.next());
+		}
+		return finalItems;
 	}
 	
 	public static boolean isVariableName(char c, boolean alsoNumber) {
@@ -204,12 +188,14 @@ public class QueryParamConverter {
 	}
 
 
-	private static SQLItem get(String name, List<NamedSQLItem> items) throws ApplicationException {
-		Iterator<NamedSQLItem> it = items.iterator();
-		NamedSQLItem item;
+	private static SQLItems<SQLItem> get(String name, ArrayList<SQLItems<NamedSQLItem>> items) throws ApplicationException {
+		Iterator<SQLItems<NamedSQLItem>> it = items.iterator();
+		SQLItems<NamedSQLItem> item;
 		while(it.hasNext()){
 			item=it.next();
-			if(item.name.equalsIgnoreCase(name)) return item;
+			if(item.get(0).name.equalsIgnoreCase(name)) {
+				return item.convertToSQLItems();
+			}
 		}
 		throw new ApplicationException("no param with name ["+name+"] found");
 	}
@@ -225,8 +211,81 @@ public class QueryParamConverter {
 		public String toString(){
 			return "{name:"+name+";"+super.toString()+"}";
 		}
+
+		@Override
+		public NamedSQLItem clone(Object object) {
+			NamedSQLItem item = new NamedSQLItem(name,object,getType());
+			item.setNulls(isNulls());
+			item.setScale(getScale());
+			return item;
+		}
 	}
+
+	private static class SQLItems<T extends SQLItem> extends ArrayList<T> {
+
+		public SQLItems() {}
+
+		public SQLItems(T item) {
+			add(item);
+		}
 	
+		public SQLItems(T item,Struct sct) throws PageException {
+			T filledItem = fillSQLItem(item,sct);
+			Object oList = sct.get(KeyConstants._list,null);
+			if(oList!=null && Caster.toBooleanValue(oList)){
+				Object oSeparator = sct.get(KeyConstants._separator,null);
+				String separator=",";
+				T clonedItem;
+				if(oSeparator!=null){
+					separator=Caster.toString(oSeparator);
+				}
+				String v = Caster.toString(filledItem.getValue());
+				Array values = ListUtil.listToArrayRemoveEmpty(v,separator);
+				int len=values.size();
+				for(int i=1;i<=len;i++) {
+					clonedItem = (T) filledItem.clone(values.getE(i));
+					add(clonedItem);
+				}
+			} else {
+				add(filledItem);
+			}
+		}
+
+		private SQLItems<SQLItem> convertToSQLItems() {
+			Iterator<T> it = iterator();
+			SQLItems<SQLItem> p = new SQLItems<SQLItem>();
+			while(it.hasNext()){
+				p.add((SQLItem) it.next());
+			}
+			return p;
+		}
+
+		private T fillSQLItem(T item,Struct sct) throws PageException, DatabaseException {
+
+			// type (optional)
+			Object oType=sct.get(KeyConstants._cfsqltype,null);
+			if(oType==null)oType=sct.get(KeyConstants._sqltype,null);
+			if(oType==null)oType=sct.get(KeyConstants._type,null);
+			if(oType!=null) {
+				item.setType(SQLCaster.toSQLType(Caster.toString(oType)));
+			}
+			
+			// nulls (optional)
+			Object oNulls=sct.get(KeyConstants._nulls,null);
+			if(oNulls!=null) {
+				item.setNulls(Caster.toBooleanValue(oNulls));
+			}
+			
+			// scale (optional)
+			Object oScale=sct.get(KeyConstants._scale,null);
+			if(oScale!=null) {
+				item.setScale(Caster.toIntValue(oScale));
+			}
+
+			return item;
+		}
+	}
+
 	/*
 	 
 	public static void main(String[] args) throws PageException {
