@@ -110,6 +110,8 @@ public class QueryParamConverter {
 		
 		// nulls (optional)
 		Object oNulls=sct.get(KeyConstants._nulls,null);
+		if(oNulls==null)oNulls=sct.get(KeyConstants._null,null);
+
 		if(oNulls!=null) {
 			item.setNulls(Caster.toBooleanValue(oNulls));
 		}
