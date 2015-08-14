@@ -40,11 +40,25 @@ import lucee.runtime.type.Array;
 import lucee.runtime.type.ArrayImpl;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.Struct;
+import lucee.runtime.type.scope.Argument;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
 
 public class QueryParamConverter {
 
+	public static SQL convert(String sql, Argument params) throws PageException{
+		// All items of arguments will be key-based or position-based so proxy appropriate arrays
+		Iterator<Entry<Key, Object>> it = params.entryIterator();
+		if (it.hasNext()){
+			Entry<Key, Object> e = it.next();
+			if(e.getKey().getString() == new String("1")) {
+				// This indicates the first item has key == 1 therefore treat as array
+				return convert(sql,Caster.toArray(params));
+			}
+		}
+		return convert(sql,Caster.toStruct(params));
+	}
+	
 	public static SQL convert(String sql, Struct params) throws PageException{
 		Iterator<Entry<Key, Object>> it = params.entryIterator();
 		ArrayList<SQLItems<NamedSQLItem>> namedItems=new ArrayList<SQLItems<NamedSQLItem>>();
@@ -242,7 +256,7 @@ public class QueryParamConverter {
 			Iterator<T> it = iterator();
 			SQLItems<SQLItem> p = new SQLItems<SQLItem>();
 			while(it.hasNext()){
-				p.add((SQLItem) it.next());
+				p.add(it.next());
 			}
 			return p;
 		}
