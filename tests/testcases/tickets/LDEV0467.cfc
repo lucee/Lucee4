@@ -22,6 +22,13 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 			});
 
+			it( 'returns "true" when first operand is an equality' , function() {
+
+				actual = (1==1) ?: 'foo';
+
+				expect( actual ).toBe( false );
+
+			});
 
 		});
 
