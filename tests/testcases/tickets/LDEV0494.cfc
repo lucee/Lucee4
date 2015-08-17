@@ -18,13 +18,15 @@
  ---><cfscript>
 component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	
-	variables.xmlFile=getDirectoryFromPath(getCurrentTemplatePath())&"494.xml";
+	variables.xmlFile=getDirectoryFromPath(getCurrentTemplatePath())&"LDEV0494.xml";
 
 	public void function test(){
 		try{
-			fileWrite(variables.xmlFile,'<?xml version="1.0" encoding="UTF-8" ?><html><body><br><hr></body></html>');	
+			fileWrite(variables.xmlFile,'<html><body><br/><hr/><susi/></body></html>');	
 			local.xml=xmlParse(xmlFile);
-			toString(xml);
+			//dump(xml);
+			echo(replace(replace(toString(xml),'<','{','all'),'>','}','all'));
+			assertEquals("<html><body><br></br><hr></hr><susi></susi></body></html>",toString(xml));
 		}
 		finally{
 			fileDelete(xmlFile);
