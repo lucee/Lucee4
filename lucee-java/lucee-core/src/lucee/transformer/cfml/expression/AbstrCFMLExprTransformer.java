@@ -363,10 +363,9 @@ public abstract class AbstrCFMLExprTransformer {
         	// Elvis
         	if(data.cfml.forwardIfCurrent(':')) {
 
-
         		comments(data);
             	Expression right = assignOp(data);
-        		
+
         		if (expr instanceof ExprBoolean)
         			return expr;
         		

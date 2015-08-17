@@ -40,6 +40,14 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 			});
 
+			it( 'returns second operand when first operand is null' , function() {
+
+				actual = NullValue() ?: 'foo';
+
+				expect( actual ).toBe( 'foo' );
+
+			});
+
 		});
 
 	}
