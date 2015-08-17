@@ -10,7 +10,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 				first_operand = false;
 				actual = first_operand ?: 'foo';
 
-				expect( actual ).toBe( false );
+				expect( actual ).toBeFalse();
 
 			});
 
@@ -18,7 +18,7 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 				actual = false ?: 'foo';
 
-				expect( actual ).toBe( false );
+				expect( actual ).toBeFalse();
 
 			});
 
@@ -26,7 +26,17 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 				actual = (1==1) ?: 'foo';
 
-				expect( actual ).toBe( false );
+				expect( actual ).toBeTrue();
+
+			});
+
+			it( 'returns "true" when first operand is a function that returns true' , function() {
+
+				temp = function() { return true; };
+
+				actual = temp() ?: 'foo';
+
+				expect( actual ).toBeTrue();
 
 			});
 
