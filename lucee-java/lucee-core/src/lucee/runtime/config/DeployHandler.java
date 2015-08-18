@@ -63,7 +63,7 @@ public class DeployHandler {
 			int mi = Info.getMinorVersion();
 			if(!dir.exists()) {
 				if(ma>4 || ma==4 && mi>1) {// FUTURE remove the if contition
-					dir.mkdirs();
+					dir.mkdir();
 				}
 				return;
 			}
