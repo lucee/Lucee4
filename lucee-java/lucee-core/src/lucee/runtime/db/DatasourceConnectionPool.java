@@ -38,7 +38,7 @@ import lucee.runtime.op.Caster;
 import lucee.runtime.type.util.ArrayUtil;
 
 public class DatasourceConnectionPool {
-
+	
 	private ConcurrentHashMap<String,DCStack> dcs=new ConcurrentHashMap<String,DCStack>();
 	private Map<String,RefInteger> counter=new HashMap<String,RefInteger>();
 	
@@ -80,8 +80,8 @@ public class DatasourceConnectionPool {
 				}
 			}
 			_inc(datasource);
-			return loadDatasourceConnection(datasource, user, pass).using();
 		}
+		return loadDatasourceConnection(datasource, user, pass).using();
 	}
 
 	private DatasourceConnectionImpl loadDatasourceConnection(DataSource ds, String user, String pass) throws DatabaseException  {
@@ -163,7 +163,7 @@ public class DatasourceConnectionPool {
 		catch (Throwable t) {return false;}
 
 		try {
-			if(dc.getDatasource().validate() && !DataSourceUtil.isValid(dc,1000))return false;
+			if(dc.getDatasource().validate() && !DataSourceUtil.isValid(dc,10))return false;
 		} 
 		catch (Throwable t) {} // not all driver support this, because of that we ignore a error here, also protect from java 5
 		

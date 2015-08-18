@@ -1950,6 +1950,10 @@ public final class Caster {
      * @return casted String
      */
     public static String toString(Object o,String defaultValue) {
+    	return toString(o,true,defaultValue);
+    }
+    
+    public static String toString(Object o, boolean executeDefaultToStringMethod, String defaultValue) {
         if(o instanceof String) return (String)o;
         else if(o instanceof Boolean) return toString(((Boolean)o).booleanValue());
         else if(o instanceof Number) return toString(((Number)o));
@@ -1978,8 +1982,7 @@ public final class Caster {
         else if(o instanceof Map || o instanceof List || o instanceof Function) return defaultValue;
         else if(o == null) return "";
         else if(o instanceof ObjectWrap) return toString(((ObjectWrap)o).getEmbededObject(defaultValue),defaultValue);
-		return o.toString();
-		/// TODO diese methode ist nicht gleich wie toString(Object)
+		return executeDefaultToStringMethod?o.toString():defaultValue;
     }
 
     private static String toString(Clob clob) throws ExpressionException {

@@ -51,6 +51,7 @@ import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.util.ArrayUtil;
+import lucee.runtime.type.util.CollectionUtil;
 import lucee.runtime.type.util.KeyConstants;
 
 public class SpoolerEngineImpl implements SpoolerEngine {
@@ -384,7 +385,7 @@ public class SpoolerEngineImpl implements SpoolerEngine {
 			Task task;
 			while(tasks.size()>0){
 				try {
-					task = tasks.remove(0);
+					task = CollectionUtil.remove(tasks,0,null);
 					if(task!=null)task.execute(config);
 				}
 				catch (Throwable t) {}
