@@ -119,8 +119,7 @@ public final class Page extends BodyBase {
 			new Type[]{Types.PAGE_SOURCE}//
     		);
 
-    public static final Type STRUCT_IMPL = Type.getType(StructImpl.class);
-	private static final Method INIT_STRUCT_IMPL = new Method(
+    public static final Method INIT_STRUCT_IMPL = new Method(
 			"<init>",
 			Types.VOID,
 			new Type[]{}
@@ -348,7 +347,7 @@ public final class Page extends BodyBase {
 					Types.STRING,
 					Types.BOOLEAN_VALUE,
 					Types.BOOLEAN_VALUE,
-					STRUCT_IMPL
+					Types.STRUCT_IMPL
 				}
     		);
 	private static final Method SET_EL = new Method(
@@ -1255,14 +1254,14 @@ public final class Page extends BodyBase {
 		GeneratorAdapter adapter = bc.getAdapter();
 		if((attrs==null || attrs.size()==0) && (meta==null || meta.size()==0)){
 			ASMConstants.NULL(bc.getAdapter());
-			bc.getAdapter().cast(Types.OBJECT,STRUCT_IMPL);
+			bc.getAdapter().cast(Types.OBJECT,Types.STRUCT_IMPL);
 			return;
 		}
 		
-		int sct=adapter.newLocal(STRUCT_IMPL);
-		adapter.newInstance(STRUCT_IMPL);
+		int sct=adapter.newLocal(Types.STRUCT_IMPL);
+		adapter.newInstance(Types.STRUCT_IMPL);
 		adapter.dup();
-		adapter.invokeConstructor(STRUCT_IMPL, INIT_STRUCT_IMPL);
+		adapter.invokeConstructor(Types.STRUCT_IMPL, INIT_STRUCT_IMPL);
 		adapter.storeLocal(sct);
 		if(meta!=null) {
 			_createMetaDataStruct(bc,adapter,sct,meta);
@@ -1289,7 +1288,7 @@ public final class Page extends BodyBase {
 			else
 				adapter.push("[runtime expression]");
 			
-			adapter.invokeVirtual(STRUCT_IMPL, SET_EL);
+			adapter.invokeVirtual(Types.STRUCT_IMPL, SET_EL);
 			adapter.pop();
 		}
 	}
