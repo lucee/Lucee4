@@ -16,19 +16,45 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
  ---><cfscript>
-component extends="org.lucee.cfml.test.LuceeTestCase"	{
-	
-	//public function beforeTests(){}
-	
-	//public function afterTests(){}
-	
-	//public function setUp(){}
 
-	public void function testInterface(){
-		assertEquals("java.nio.file.attribute.BasicFileAttributes",createObject("java", "java.nio.file.attribute.BasicFileAttributes").getClass().name);
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
+
+	function run(){
+
+		describe( 'java.nio.file.attribute.BasicFileAttributes' , function() {
+
+			beforeEach( function() {
+
+				proxy = CreateObject(
+					'java',
+					'java.nio.file.attribute.BasicFileAttributes'
+				);
+
+			});
+
+			it( 'is a java.lang.Class that implements the interface specified' , function() {
+
+				expect( proxy ).toBeInstanceOf( 
+					'java.nio.file.attribute.BasicFileAttributes'
+				);
+
+				c = proxy.getClass();
+
+				expect( c ).toBeInstanceOf( 
+					'java.lang.Class'
+				);
+				expect( 
+					proxy.getCLass().getName() 
+				).toBe( 
+					'java.nio.file.attribute.BasicFileAttributes' 
+				);
+
+			});
+
+
+		});
+
 	}
-	public void function testClass(){
-		assertEquals("java.lang.Object",createObject("java", "java.lang.Object").getClass().name);
-	}
-} 
+
+}
 </cfscript>
