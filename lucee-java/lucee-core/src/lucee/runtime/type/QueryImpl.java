@@ -363,8 +363,8 @@ public class QueryImpl implements Query,Objects {
 	private void setAttributes(Statement stat,int maxrow, int fetchsize,TimeSpan timeout) throws SQLException {
 		if(maxrow>-1) stat.setMaxRows(maxrow);
         if(fetchsize>0)stat.setFetchSize(fetchsize);
-        if(timeout!=null && timeout.getSeconds()>0)
-        	stat.setQueryTimeout((int)timeout.getSeconds());
+        if(timeout!=null && timeout.getSeconds()>0) 
+        	DataSourceUtil.setQueryTimeoutSilent(stat,(int)timeout.getSeconds());
 	}
 
     private boolean fillResult(DatasourceConnection dc, ResultSet result, int maxrow, boolean closeResult,boolean createGeneratedKeys, TimeZone tz) throws SQLException, IOException, PageException {

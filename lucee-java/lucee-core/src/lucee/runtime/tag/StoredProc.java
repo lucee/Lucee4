@@ -49,6 +49,7 @@ import lucee.runtime.db.CFTypes;
 import lucee.runtime.db.DataSource;
 import lucee.runtime.db.DataSourceManager;
 import lucee.runtime.db.DataSourceSupport;
+import lucee.runtime.db.DataSourceUtil;
 import lucee.runtime.db.DatasourceConnection;
 import lucee.runtime.db.ProcMeta;
 import lucee.runtime.db.ProcMetaCollection;
@@ -489,7 +490,7 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
     				//ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY); 
 		    
 		    if(blockfactor>0)callStat.setFetchSize(blockfactor);
-		    if(timeout>0)callStat.setQueryTimeout(timeout);
+		    if(timeout>0)DataSourceUtil.setQueryTimeoutSilent(callStat,timeout);
 		    
 	// set IN register OUT
 		    Iterator<ProcParamBean> it = params.iterator();
