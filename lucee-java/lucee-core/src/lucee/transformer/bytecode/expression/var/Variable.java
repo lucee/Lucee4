@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lucee.print;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefInteger;
 import lucee.commons.lang.types.RefIntegerImpl;
@@ -430,13 +431,44 @@ public class Variable extends ExpressionBase implements Invoker {
 	
 
 	private Type _writeOutFirst(BytecodeContext bc, Member member, int mode, boolean last, boolean doOnlyScope, Expression defaultValue, RefInteger startIndex) throws BytecodeException {
-		
 		if(member instanceof DataMember)
     		return _writeOutFirstDataMember(bc,(DataMember)member, scope,last , doOnlyScope,defaultValue,startIndex);
     	else if(member instanceof UDF)
     		return _writeOutFirstUDF(bc,(UDF)member,scope,doOnlyScope);
-    	else
-    		return _writeOutFirstBIF(bc,(BIF)member,mode,last,getStart());
+    	else {
+    		BIF bif = ((BIF)member);
+    		
+    		// patch: add name to queryExecute
+    		/*if(bif.getName() instanceof LitString && ((LitString)bif.getName()).getString().equalsIgnoreCase("queryExecute")) {
+    			
+    			Argument[] args = bif.getArguments();
+    			if(args!=null && args.length>=4){// should always be the case
+    				
+	    			// named arguments
+	    			if(args[args.length-1] instanceof NamedArgument){
+	    				bif.addArgument(
+	    					new NamedArgument(
+	    							LitString.toExprString("queryName"), 
+	    							LitString.toExprString("aaaa"), 
+	    							"string", false));
+	    			
+	    			}
+	    			else {
+	    				
+	    				// because the right position is importend we have to make sue we have params and options
+	    				if(args.length==4) bif.addArgument(new Argument(new EmptyStruct(),"struct")); // params
+	    				if(args.length<=5) bif.addArgument(new Argument(new EmptyStruct(),"struct")); // options
+	    				bif.addArgument(new Argument(LitString.toExprString("aaaa"),"string"));
+	    			}
+    			}
+    			//print.e("type:"+((NamedArgument)bif.getArguments()[0]).getStringType());
+    			
+    			
+    		}*/
+    		
+    		return _writeOutFirstBIF(bc,bif,mode,last,getStart());
+    		
+    	}
 	}
 	
 	static Type _writeOutFirstBIF(BytecodeContext bc, BIF bif, int mode,boolean last,Position line) throws BytecodeException {
