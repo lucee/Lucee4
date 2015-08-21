@@ -278,7 +278,7 @@ public final class CGIImpl extends StructSupport implements CGI,ScriptProtected 
             }
             else if(first=='s') {
             	if(key.equals(KeyConstants._script_name)) 		
-            		return store(key,ReqRspUtil.getScriptName(req));
+            		return store(key,ReqRspUtil.getScriptName(null,req));
         		if(key.equals(KeyConstants._server_name))		
         			return store(key,toString(req.getServerName()));
                 if(key.equals(KeyConstants._server_protocol))	
@@ -296,7 +296,7 @@ public final class CGIImpl extends StructSupport implements CGI,ScriptProtected 
             		if(StringUtil.isEmpty(pathInfo)) {
             			pathInfo = Caster.toString(req.getAttribute("requestedPath"),null);
             			if(!StringUtil.isEmpty(pathInfo,true)) {
-            				String scriptName = ReqRspUtil.getScriptName(req);
+            				String scriptName = ReqRspUtil.getScriptName(null,req);
             				if ( pathInfo.startsWith(scriptName) )
                 				pathInfo = pathInfo.substring(scriptName.length());
             			}

@@ -218,7 +218,7 @@ public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptP
             }
             else if(first=='s') {
             	if(key.equals(KeyConstants._script_name)) 
-            		return ReqRspUtil.getScriptName(req);
+            		return ReqRspUtil.getScriptName(null,req);
         			//return StringUtil.emptyIfNull(req.getContextPath())+StringUtil.emptyIfNull(req.getServletPath());
         		if(key.equals(KeyConstants._server_name))		return toString(req.getServerName());
                 if(key.equals(KeyConstants._server_protocol))	return toString(req.getProtocol());
@@ -234,7 +234,7 @@ public final class CGIImplReadOnly extends ReadOnlyStruct implements CGI,ScriptP
             		if(StringUtil.isEmpty(pathInfo)) {
             			pathInfo = Caster.toString(req.getAttribute("requestedPath"),null);
             			if(!StringUtil.isEmpty(pathInfo,true)) {
-            				String scriptName = ReqRspUtil.getScriptName(req);
+            				String scriptName = ReqRspUtil.getScriptName(null,req);
             				if ( pathInfo.startsWith(scriptName) )
                 				pathInfo = pathInfo.substring(scriptName.length());
             			}

@@ -54,6 +54,7 @@ import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TryCatchFinally;
 
+import lucee.print;
 import lucee.commons.db.DBUtil;
 import lucee.commons.io.BodyContentStack;
 import lucee.commons.io.CharsetUtil;
@@ -137,6 +138,7 @@ import lucee.runtime.rest.RestRequestListener;
 import lucee.runtime.rest.RestUtil;
 import lucee.runtime.security.Credential;
 import lucee.runtime.security.CredentialImpl;
+import lucee.runtime.security.ScriptProtect;
 import lucee.runtime.tag.Login;
 import lucee.runtime.tag.TagHandlerPool;
 import lucee.runtime.tag.TagUtil;
@@ -176,6 +178,7 @@ import lucee.runtime.type.scope.Scope;
 import lucee.runtime.type.scope.ScopeContext;
 import lucee.runtime.type.scope.ScopeFactory;
 import lucee.runtime.type.scope.ScopeSupport;
+import lucee.runtime.type.scope.ScriptProtected;
 import lucee.runtime.type.scope.Server;
 import lucee.runtime.type.scope.Session;
 import lucee.runtime.type.scope.Threads;
@@ -2066,7 +2069,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 					for(int i=0;i<mappings.length;i++){
 						_mapping=mappings[i];
 						Resource p = _mapping.getPhysical();
-						path=_req.getContextPath()+ReqRspUtil.getScriptName(_req)+_mapping.getVirtual();
+						path=_req.getContextPath()+ReqRspUtil.getScriptName(this,_req)+_mapping.getVirtual();
 						write("<li "+(p==null || !p.isDirectory()?" style=\"color:red\"":"")+">"+path+"</li>");
 						
 						
@@ -2224,6 +2227,10 @@ public final class PageContextImpl extends PageContext implements Sizeable {
     	execute(relPath, throwExcpetion, true);
     }
     public void execute(String relPath, boolean throwExcpetion, boolean onlyTopLevel) throws PageException  {
+    	if((config.getScriptProtect()&ApplicationContext.SCRIPT_PROTECT_URL)>0) {
+    		relPath=ScriptProtect.translate(relPath);
+    	}
+    	
     	//SystemOut.printDate(config.getOutWriter(),"Call:"+relPath+" (id:"+getId()+";running-requests:"+config.getThreadQueue().size()+";)");
 	    if(relPath.startsWith("/mapping-")){
 	    	base=null;
