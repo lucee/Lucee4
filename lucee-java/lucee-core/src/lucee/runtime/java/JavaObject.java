@@ -217,9 +217,12 @@ public class JavaObject implements Objects,ObjectWrap {
 	public Object call(PageContext pc, String methodName, Object[] arguments) throws PageException {
         if(arguments==null)arguments=new Object[0];
         
-        // init
+        // edge cases
         if(methodName.equalsIgnoreCase("init")) {
             return init(arguments);
+        }
+        else if(methodName.equalsIgnoreCase("getClass")) {
+            return clazz;
         }
         else if(isInit) {
 		    return Reflector.callMethod(object,methodName,arguments);
