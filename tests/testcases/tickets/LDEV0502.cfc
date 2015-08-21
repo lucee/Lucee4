@@ -25,10 +25,10 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 	//public function setUp(){}
 
 	public void function testInterface(){
-		createObject("java", "java.nio.file.attribute.BasicFileAttributes").getClass();
+		assertEquals("java.nio.file.attribute.BasicFileAttributes",createObject("java", "java.nio.file.attribute.BasicFileAttributes").getClass().name);
 	}
 	public void function testClass(){
-		createObject("java", "java.lang.Object").getClass();
+		assertEquals("java.lang.Object",createObject("java", "java.lang.Object").getClass().name);
 	}
 } 
 </cfscript>
