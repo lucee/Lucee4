@@ -346,7 +346,7 @@ public final class HSQLDBHandler {
 			QueryImpl nqr=null;
 			ConfigImpl config = (ConfigImpl)pc.getConfig();
 			DatasourceConnectionPool pool = config.getDatasourceConnectionPool();
-			DatasourceConnection dc=pool.getDatasourceConnection(pc,config.getDataSource(QOQ_DATASOURCE_NAME),"sa","");
+			DatasourceConnection dc=pool.getDatasourceConnection(config.getDataSource(QOQ_DATASOURCE_NAME),"sa","");
 	    	Connection conn = dc.getConnection();
 	    	try {
 	    		DBUtil.setAutoCommitEL(conn,false);

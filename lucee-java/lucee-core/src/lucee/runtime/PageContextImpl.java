@@ -3073,7 +3073,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 		if(dc!=null && DatasourceConnectionPool.isValid(dc,null)){
 			return dc;
 		}
-		dc=config.getDatasourceConnectionPool().getDatasourceConnection(this,ds, user, pass);
+		dc=config.getDatasourceConnectionPool().getDatasourceConnection(ds, user, pass);
 		transConns.put(id, dc);
 		return dc;
 	}

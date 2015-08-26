@@ -25,13 +25,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import lucee.print;
 import lucee.commons.db.DBUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefInteger;
 import lucee.commons.lang.types.RefIntegerImpl;
-import lucee.runtime.PageContext;
 import lucee.runtime.config.Config;
-import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.DatabaseException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.op.Caster;
@@ -42,14 +41,13 @@ public class DatasourceConnectionPool {
 	private ConcurrentHashMap<String,DCStack> dcs=new ConcurrentHashMap<String,DCStack>();
 	private Map<String,RefInteger> counter=new HashMap<String,RefInteger>();
 	
-	public DatasourceConnection getDatasourceConnection(PageContext pc,DataSource datasource, String user, String pass) throws PageException {
-		pc=ThreadLocalPageContext.get(pc);
+	public DatasourceConnection getDatasourceConnection(DataSource datasource, String user, String pass) throws PageException {
+		// pc=ThreadLocalPageContext.get(pc);
 		if(StringUtil.isEmpty(user)) {
             user=datasource.getUsername();
             pass=datasource.getPassword();
         }
         if(pass==null)pass="";
-		
 		
 		// get stack
 		DCStack stack=getDCStack(datasource,user,pass);
@@ -67,16 +65,13 @@ public class DatasourceConnectionPool {
 				catch (InterruptedException e) {
 					throw Caster.toPageException(e);
 				}
-				
 			}
-			if(pc!=null){
-				while(!stack.isEmpty()) {
-					DatasourceConnectionImpl dc=(DatasourceConnectionImpl) stack.get(pc);
-						if(dc!=null && isValid(dc,Boolean.TRUE)){
-							_inc(datasource);
-							return dc.using();
-						}
-					
+			
+			while(!stack.isEmpty()) {
+				DatasourceConnectionImpl dc=(DatasourceConnectionImpl) stack.get();
+				if(dc!=null && isValid(dc,Boolean.TRUE)){
+					_inc(datasource);
+					return dc.using();
 				}
 			}
 			_inc(datasource);
@@ -106,7 +101,6 @@ public class DatasourceConnectionPool {
 	
 	public void releaseDatasourceConnection(DatasourceConnection dc) {
 		if(dc==null) return;
-		
 		DCStack stack=getDCStack(dc.getDatasource(), dc.getUsername(), dc.getPassword());
 		synchronized (stack) {
 			stack.add(dc);

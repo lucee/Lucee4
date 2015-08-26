@@ -564,7 +564,7 @@ public class CommonUtil {
 	}
 
 	public static DatasourceConnection getDatasourceConnection(PageContext pc, DataSource ds) throws PageException {
-		return ((ConfigWebImpl)pc.getConfig()).getDatasourceConnectionPool().getDatasourceConnection(pc,ds,null,null); // TODO use reflection
+		return ((ConfigWebImpl)pc.getConfig()).getDatasourceConnectionPool().getDatasourceConnection(ds,null,null); // TODO use reflection
 	}
 	
 	public static void releaseDatasourceConnection(PageContext pc, DatasourceConnection dc) {
