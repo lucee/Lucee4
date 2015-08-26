@@ -20,9 +20,7 @@ package lucee.runtime.db;
 
 import java.sql.SQLException;
 
-import lucee.print;
 import lucee.commons.lang.SystemOut;
-import lucee.runtime.PageContext;
 
 class DCStack {
 

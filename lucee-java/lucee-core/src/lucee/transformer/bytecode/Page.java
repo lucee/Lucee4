@@ -35,7 +35,6 @@ import lucee.runtime.component.ImportDefintion;
 import lucee.runtime.component.ImportDefintionImpl;
 import lucee.runtime.exp.TemplateException;
 import lucee.runtime.type.KeyImpl;
-import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.UDF;
 import lucee.runtime.type.scope.Undefined;
 import lucee.runtime.type.util.KeyConstants;

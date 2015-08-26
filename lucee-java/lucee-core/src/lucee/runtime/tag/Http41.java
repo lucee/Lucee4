@@ -32,7 +32,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 
 import lucee.print;

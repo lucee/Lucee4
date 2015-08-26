@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import lucee.commons.lang.StringUtil;
-import lucee.runtime.config.ConfigWebImpl;
-import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.type.util.ComponentUtil;
 import lucee.transformer.bytecode.Body;
 import lucee.transformer.bytecode.BodyBase;

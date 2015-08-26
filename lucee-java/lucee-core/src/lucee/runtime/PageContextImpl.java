@@ -177,7 +177,6 @@ import lucee.runtime.type.scope.Scope;
 import lucee.runtime.type.scope.ScopeContext;
 import lucee.runtime.type.scope.ScopeFactory;
 import lucee.runtime.type.scope.ScopeSupport;
-import lucee.runtime.type.scope.ScriptProtected;
 import lucee.runtime.type.scope.Server;
 import lucee.runtime.type.scope.Session;
 import lucee.runtime.type.scope.Threads;

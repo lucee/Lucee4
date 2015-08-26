@@ -20,7 +20,6 @@ package lucee.runtime.type.scope.storage.clean;
 
 import java.sql.SQLException;
 
-import lucee.print;
 import lucee.commons.io.log.Log;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigWeb;

@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.Thread.State;
 import java.util.Iterator;
-import java.util.Map.Entry;
 
 import lucee.runtime.PageContext;
 import lucee.runtime.config.NullSupportHelper;
@@ -40,7 +39,6 @@ import lucee.runtime.tag.HttpImpl;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.StructImpl;
-import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.it.EntryIterator;

@@ -39,12 +39,6 @@ import java.util.List;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.hibernate.JDBCException;
-import org.hibernate.exception.ConstraintViolationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.types.RefBoolean;
 import lucee.loader.engine.CFMLEngineFactory;
@@ -81,6 +75,7 @@ import lucee.runtime.util.Creation;
 import lucee.runtime.util.Decision;
 
 import org.hibernate.JDBCException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
