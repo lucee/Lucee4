@@ -21,6 +21,7 @@
  */
 package lucee.runtime.functions.arrays;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -36,7 +37,6 @@ import lucee.runtime.type.Array;
 import lucee.runtime.type.Closure;
 import lucee.runtime.type.UDF;
 import lucee.runtime.type.util.ArrayUtil;
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 public final class ArraySort extends BIF {
 
