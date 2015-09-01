@@ -45,7 +45,7 @@ public final class Switch extends StatementBaseNoFinal implements FlowControlBre
 											new Type[]{Types.OBJECT}
 	);
 
-	private static final Method INIT = new Method(
+	public static final Method INIT = new Method(
 			"<init>",
 			Types.VOID,
 			new Type[]{}

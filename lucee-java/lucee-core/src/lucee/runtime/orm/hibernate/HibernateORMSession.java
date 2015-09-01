@@ -59,7 +59,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.query.HQLQueryPlan;
 import org.hibernate.engine.query.ParameterMetadata;
 import org.hibernate.engine.query.QueryPlanCache;
-import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.type.Type;
 

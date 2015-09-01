@@ -74,7 +74,7 @@ public final class DatasourceManagerImpl implements DataSourceManager {
 	@Override
 	public DatasourceConnection getConnection(PageContext pc,DataSource ds, String user, String pass) throws PageException {
 		if(autoCommit)
-			return config.getDatasourceConnectionPool().getDatasourceConnection(pc,ds,user,pass);
+			return config.getDatasourceConnectionPool().getDatasourceConnection(ds,user,pass);
 		
 		
 		pc=ThreadLocalPageContext.get(pc);

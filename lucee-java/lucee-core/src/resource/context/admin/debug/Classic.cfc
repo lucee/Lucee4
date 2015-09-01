@@ -1,5 +1,4 @@
 <!--- 
- *
  * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -34,9 +33,6 @@
 		
 		
 		,group("Custom Debugging Output","Define what is outputted",3)
-
-		
-
 
 		,field("General Debug Information ","general",true,false,
 				"Select this option to show general information about this request. General items are Lucee Version, Template, Time Stamp, User Locale, User Agent, User IP, and Host Name. ","checkbox")
@@ -123,7 +119,7 @@ private function isColumnEmpty(query query, string columnName){
 
 <cfset unit={
 millisecond:"ms"
-,microsecond:"s"
+,microsecond:"�s"
 ,nanosecond:"ns"
 
 }>
@@ -163,7 +159,7 @@ millisecond:"ms"
 		</tr>
 		<tr>
 			<td class="cfdebug" nowrap> Template </td>
-			<td class="cfdebug">#_cgi.SCRIPT_NAME# (#expandPath(_cgi.SCRIPT_NAME)#)</td>
+			<td class="cfdebug">#HTMLEditFormat(_cgi.SCRIPT_NAME)# (#HTMLEditFormat(_cgi.cf_template_path)#)</td>
 		</tr>
 		<tr>
 			<td class="cfdebug" nowrap> Time Stamp </td>
@@ -339,9 +335,8 @@ millisecond:"ms"
 			<cfif hasAction><td align="left" class="cfdebug" nowrap>#traces.action#</td></cfif>
 			<td align="left" class="cfdebug" nowrap><cfif len(traces.varName)>#traces.varName#<cfif structKeyExists(traces,'varValue')> = #traces.varValue#</cfif><cfelse>&nbsp;<br />
 			</cfif></td>
-			<td align="right" class="cfdebug" nowrap>#formatUnit(custom.unit, total * 1000000)#</td>
- 			<td align="right" class="cfdebug" nowrap>#formatUnit(custom.unit, traces.time * 1000000)#</td>
-  		
+			<td align="right" class="cfdebug" nowrap>#formatUnit(custom.unit, total)#</td>
+			<td align="right" class="cfdebug" nowrap>#formatUnit(custom.unit, traces.time)#</td>
 		</tr>
 </cfloop>                
  </table>
@@ -375,7 +370,7 @@ millisecond:"ms"
 
 <cfif doPrint and structCount(scp)>
 <pre class="cfdebug"><b>#name# Variables:</b><cftry><cfloop index="key" list="#ListSort(StructKeyList(scp),"textnocase")#">
-#(key)#=<cftry><cfif IsSimpleValue(scp[key])>#scp[key]#<!--- 
+#(key)#=<cftry><cfif IsSimpleValue(scp[key])>#HTMLEditFormat(scp[key])#<!--- 
 ---><cfelseif isArray(scp[key])>Array (#arrayLen(scp[key])#)<!--- 
 ---><cfelseif isValid('component',scp[key])>Component (#GetMetaData(scp[key]).name#)<!--- 
 ---><cfelseif isStruct(scp[key])>Struct (#StructCount(scp[key])#)<!--- 

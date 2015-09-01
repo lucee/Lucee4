@@ -21,7 +21,6 @@ package lucee.runtime.util;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.MappingImpl;
 import lucee.runtime.PageContext;
-import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
 import lucee.runtime.listener.ApplicationListener;
 import lucee.runtime.op.Caster;

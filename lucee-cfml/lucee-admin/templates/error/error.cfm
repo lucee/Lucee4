@@ -94,7 +94,7 @@
 							<cfset isFirst = ( idx == 1 )>
 
 							<a class="-lucee-icon-#isFirst ? 'minus' : 'plus'#" id="__btn$#idx#" onclick="__LUCEE.oc( this );" style="cursor: pointer;">
-								#isFirst ? "<b>#tc.template#: line #tc.line#</b>" : "<b>called from</b> #tc.template#: line #tc.line#"#
+								#isFirst ? "<b>#HTMLEditFormat(tc.template)#: line #tc.line#</b>" : "<b>called from</b> #HTMLEditFormat(tc.template)#: line #tc.line#"#
 							</a>
 							<br>
 
@@ -102,7 +102,7 @@
 								#tc.codeprinthtml#<br>
 							</blockquote>
 						<cfelse>
-							<span class="-no-icon">#idx == 1 ? "<b>#tc.template#: line #tc.line#</b>" : "<b>called from</b> #tc.template#: line #tc.line#"#</span>
+							<span class="-no-icon">#idx == 1 ? "<b>#HTMLEditFormat(tc.template)#: line #tc.line#</b>" : "<b>called from</b> #HTMLEditFormat(tc.template)#: line #tc.line#"#</span>
 							<br>
 						</cfif>
 					</cfloop>
@@ -112,7 +112,7 @@
 	</cfif>
 	<tr>
 		<td class="label">Java Stacktrace</td>
-		<td>#replace( catch.stacktrace, chr(10), "<br><span style='margin-right: 1em;'>&nbsp;</span>", "all" )#</td>
+		<td>#replace(HTMLEditFormat( catch.stacktrace), chr(10), "<br><span style='margin-right: 1em;'>&nbsp;</span>", "all" )#</td>
 	</tr>
 	<tr>
 		<td class="label">Timestamp</td>

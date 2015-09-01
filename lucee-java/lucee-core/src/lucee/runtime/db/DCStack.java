@@ -21,7 +21,6 @@ package lucee.runtime.db;
 import java.sql.SQLException;
 
 import lucee.commons.lang.SystemOut;
-import lucee.runtime.PageContext;
 
 class DCStack {
 
@@ -44,7 +43,7 @@ class DCStack {
 		item=new Item(item,dc);
 	}
 
-	public DatasourceConnection get(PageContext pc){
+	public DatasourceConnection get(){
 		if(item==null) return null;
 		DatasourceConnection rtn = item.dc;
 		item=item.prev;
@@ -53,7 +52,7 @@ class DCStack {
 			if(!rtn.getConnection().isClosed()){
 				return rtn;
 			}
-			return get(pc);
+			return get();
 		} 
 		catch (SQLException e) {}
 		return null;
@@ -111,7 +110,9 @@ class DCStack {
 
 	private void clear(Item current,Item next) throws SQLException {
 		if(current==null) return;
-		if(current.dc.isTimeout() || current.dc.getConnection().isClosed() || !current.dc.getConnection().isValid(10)) { 
+		if(current.dc.isTimeout() || 
+				(current.dc instanceof DatasourceConnectionImpl && ((DatasourceConnectionImpl)current.dc).isLifecycleTimeout()) || 
+				current.dc.getConnection().isClosed() /*|| !current.dc.getConnection().isValid(10)*/) { 
 			if(!current.dc.getConnection().isClosed()){
 				try {
 					current.dc.close();

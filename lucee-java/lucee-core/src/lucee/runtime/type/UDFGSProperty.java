@@ -38,7 +38,6 @@ import lucee.runtime.functions.decision.IsValid;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
 import lucee.runtime.type.Collection.Key;
-import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.util.ComponentUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.UDFUtil;

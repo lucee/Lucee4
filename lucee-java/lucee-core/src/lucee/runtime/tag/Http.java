@@ -21,7 +21,6 @@ package lucee.runtime.tag;
 import javax.servlet.jsp.tagext.BodyTag;
 
 import lucee.runtime.exp.PageException;
-import lucee.runtime.type.dt.TimeSpan;
 
 public interface Http extends BodyTag {
 	public static final String MULTIPART_RELATED = "multipart/related";
