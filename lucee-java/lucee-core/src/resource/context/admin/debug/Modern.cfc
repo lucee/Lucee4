@@ -108,7 +108,7 @@
 		}
 	</cfscript>
 
-	<cffunction name="output" returntype="void">
+	<cffunction name="output" returntype="void" output="true">
 		<cfargument name="custom" type="struct" required="yes" />
 		<cfargument name="debugging" required="true" type="struct" />
 		<cfargument name="context" type="string" default="web" />
