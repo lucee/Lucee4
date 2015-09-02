@@ -27,6 +27,7 @@ import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.StringUtil;
+import lucee.runtime.CFMLFactoryImpl;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
@@ -467,7 +468,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 		if(this.timeout==null || this.timeout.getSeconds()<=0) { // not set
 			this.timeout=PageContextUtil.remainingTime(pageContext);
 			if(this.timeout.getSeconds()<=0)
-				throw new RequestTimeoutException("request timeout occured!");
+				throw CFMLFactoryImpl.createRequestTimeoutException(pageContext);
 		}
 		
 		// default datasource
