@@ -48,6 +48,7 @@ import lucee.commons.net.http.httpclient4.HTTPEngineImpl;
 import lucee.commons.net.http.httpclient4.HTTPPatchFactory;
 import lucee.commons.net.http.httpclient4.HTTPResponse4Impl;
 import lucee.commons.net.http.httpclient4.ResourceBody;
+import lucee.runtime.CFMLFactoryImpl;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.exp.ApplicationException;
@@ -947,7 +948,7 @@ public final class Http41 extends BodyTagImpl implements Http {
 			if(this.timeout==null) { // not set
 				this.timeout=PageContextUtil.remainingTime(pageContext);
 				if(this.timeout.getSeconds()<=0)
-					throw new RequestTimeoutException("request timeout occured!");
+					throw CFMLFactoryImpl.createRequestTimeoutException(pageContext);
     		}
 			print.e(this.timeout);
 			setTimeout(builder,this.timeout);
