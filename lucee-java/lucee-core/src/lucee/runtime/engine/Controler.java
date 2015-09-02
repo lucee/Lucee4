@@ -160,7 +160,7 @@ public final class Controler extends Thread {
             	}
             	// stop it!
             	else if(time>TIMEOUT) {
-            		SystemUtil.stop(ct);
+            		SystemUtil.stop(ct,configServer.getApplicationLogger());
             		//print.e(ct.getStackTrace());
             		if(!ct.isAlive()) {
             			configServer.getApplicationLogger().error("controller", "controler thread ["+ct.hashCode()+"] forced to stop after "+time+"ms");
