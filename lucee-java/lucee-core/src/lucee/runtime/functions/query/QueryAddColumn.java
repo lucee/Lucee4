@@ -21,7 +21,6 @@
  */
 package lucee.runtime.functions.query;
 
-import lucee.print;
 import lucee.runtime.PageContext;
 import lucee.runtime.db.SQLCaster;
 import lucee.runtime.exp.PageException;

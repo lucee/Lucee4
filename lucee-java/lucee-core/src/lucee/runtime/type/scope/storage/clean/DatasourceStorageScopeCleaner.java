@@ -64,10 +64,9 @@ public class DatasourceStorageScopeCleaner extends StorageScopeCleanerSupport {
 	private void clean(ConfigWeb config, DataSource dataSource) throws PageException, SQLException	{
 		ConfigWebImpl cwi=(ConfigWebImpl) config;
 		DatasourceConnection dc=null;
-		
 		DatasourceConnectionPool pool = cwi.getDatasourceConnectionPool();
 		try {
-			dc=pool.getDatasourceConnection(null,dataSource,null,null);
+			dc=pool.getDatasourceConnection(dataSource,null,null);
 			Log log=((ConfigImpl)config).getLog("scope");
 			SQLExecutor executor=SQLExecutionFactory.getInstance(dc);
 			executor.clean(config, dc, type, engine,this, listener, log);

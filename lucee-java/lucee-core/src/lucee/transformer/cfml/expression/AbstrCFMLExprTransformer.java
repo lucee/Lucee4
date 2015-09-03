@@ -1148,6 +1148,24 @@ public abstract class AbstrCFMLExprTransformer {
 				rightSite="0";//throw new TemplateException(cfml, "Number can't end with [.]"); // DIFF 23
 			rtn.append(rightSite);
 		}
+		else if(data.cfml.forwardIfCurrent('e')) {
+			Boolean expOp=null;
+			if(data.cfml.forwardIfCurrent('+')) expOp=Boolean.TRUE;
+			else if(data.cfml.forwardIfCurrent('-')) expOp=Boolean.FALSE;
+			
+			if(data.cfml.isCurrentBetween('0','9')) {
+				String rightSite = "e";
+				if(expOp==Boolean.FALSE) rightSite+="-";
+				else if(expOp==Boolean.TRUE) rightSite+="+";
+		        rightSite+=digit(data);
+		        rtn.append(rightSite);
+		    }
+		    else {
+		    	if(expOp!=null) data.cfml.previous();
+		        data.cfml.previous();
+		    }
+
+		}
         comments(data);
         
 		try {

@@ -60,8 +60,8 @@ public class FileStreamWrapperWrite extends FileStreamWrapper {
 		else if(obj instanceof Resource) {
 			is=((Resource)obj).getInputStream();
 		}
-		else if(Decision.isSimpleValue(obj)){
-			String str = Caster.toString(obj,null);
+		else {//if(Decision.isSimpleValue(obj)){
+			String str = Caster.toString(obj,false,null);
 			if(str!=null) bytes=str.getBytes(charset);
 		}
 		

@@ -97,7 +97,7 @@ component extends="Debug" {
 				echo(' (CFML Version '&server.ColdFusion.ProductVersion&')');
 				echo(NL);
 				
-				echo("Template: #cgi.SCRIPT_NAME# (#getBaseTemplatePath()#)");
+				echo("Template: #htmlEditFormat(cgi.SCRIPT_NAME)# (#htmlEditFormat(getBaseTemplatePath())#)");
 				echo(NL);
 				
 				echo("Time Stamp: #LSDateFormat(now())# #LSTimeFormat(now())#");
@@ -193,7 +193,7 @@ component extends="Debug" {
 	                    for(var y=1;y<=arrayLen(keys);y++){
 	                    	local.key=keys[y];
 	                    	echo("- "&key&"=");
-	                        if(IsSimpleValue(scp[key]))				echo(scp[key]);
+	                        if(IsSimpleValue(scp[key]))				echo(htmlEditFormat(scp[key]));
 							else if(isArray(scp[key]))				echo('Array (#arrayLen(scp[key])#)');
 							else if(isValid('component',scp[key]))	echo('Component (#GetMetaData(scp[key]).name#)');
 							else if(isStruct(scp[key]))				echo('Struct (#StructCount(scp[key])#)');

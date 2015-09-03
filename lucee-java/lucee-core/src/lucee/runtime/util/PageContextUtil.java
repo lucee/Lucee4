@@ -24,6 +24,8 @@ import lucee.runtime.PageContext;
 import lucee.runtime.PageSource;
 import lucee.runtime.listener.ApplicationListener;
 import lucee.runtime.op.Caster;
+import lucee.runtime.type.dt.TimeSpan;
+import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
 
@@ -69,5 +71,12 @@ public class PageContextUtil {
 		}
 
 		return result;
+	}
+
+
+	public static TimeSpan remainingTime(PageContext pc) {
+		long ms = pc.getRequestTimeout()-(System.currentTimeMillis()-pc.getStartTime());
+		if(ms>0) return TimeSpanImpl.fromMillis(ms);
+		return TimeSpanImpl.fromMillis(0);
 	}
 }

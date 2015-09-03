@@ -1,5 +1,6 @@
 <!--- 
- * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
+ *
+ * Copyright (c) 2015, Lucee Assosication Switzerland. All rights reserved.*
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,18 +15,22 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent><cfscript>
+ ---><cfscript>
+component extends="org.lucee.cfml.test.LuceeTestCase"	{
+	
+	variables.xmlFile=getDirectoryFromPath(getCurrentTemplatePath())&"LDEV0494.xml";
 
-this.name="lucee_context";
-this.clientmanagement="no";
-this.clientstorage="file"; 
-this.scriptprotect="all";
-this.sessionmanagement="yes";
-this.sessiontimeout="#createTimeSpan(0,0,30,0)#";
-this.setclientcookies="yes";
-this.setdomaincookies="no"; 
-this.applicationtimeout="#createTimeSpan(1,0,0,0)#";
-this.localmode="update";
-this.web.charset="utf-8";
-this.scopeCascading="strict";
-</cfscript></cfcomponent>
+	public void function test(){
+		try{
+			fileWrite(variables.xmlFile,'<html><body><br/><hr/><susi/></body></html>');	
+			local.xml=xmlParse(xmlFile);
+			//dump(xml);
+			echo(replace(replace(toString(xml),'<','{','all'),'>','}','all'));
+			assertEquals("<html><body><br></br><hr></hr><susi></susi></body></html>",toString(xml));
+		}
+		finally{
+			fileDelete(xmlFile);
+		}
+	}
+} 
+</cfscript>

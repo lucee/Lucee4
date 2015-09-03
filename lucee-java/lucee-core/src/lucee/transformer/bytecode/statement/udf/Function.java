@@ -147,7 +147,7 @@ public abstract class Function extends StatementBaseNoFinal implements Opcodes, 
 					Types.BOOLEAN,
 					Types.OBJECT,
 					Types.INTEGER,
-					Page.STRUCT_IMPL
+					Types.STRUCT_IMPL
 				}
     		);
 	private static final Method INIT_UDF_PROPERTIES_SHORTTYPE = new Method(
@@ -170,7 +170,7 @@ public abstract class Function extends StatementBaseNoFinal implements Opcodes, 
 					Types.BOOLEAN,
 					Types.OBJECT,
 					Types.INTEGER,
-					Page.STRUCT_IMPL
+					Types.STRUCT_IMPL
 				}
     		);
 	private static final Method INIT_UDF_PROPERTIES_SHORTTYPE_LIGHT = new Method(
@@ -271,7 +271,7 @@ public abstract class Function extends StatementBaseNoFinal implements Opcodes, 
 					Types.BOOLEAN_VALUE,
 					Types.STRING,
 					Types.STRING,
-					Page.STRUCT_IMPL}
+					Types.STRUCT_IMPL}
     		);	
 	private static final Method[] INIT_FAI_KEY=new Method[]{
 		INIT_FAI_KEY1,INIT_FAI_KEY3,INIT_FAI_KEY4,INIT_FAI_KEY5,INIT_FAI_KEY6,INIT_FAI_KEY7,INIT_FAI_KEY8,INIT_FAI_KEY9

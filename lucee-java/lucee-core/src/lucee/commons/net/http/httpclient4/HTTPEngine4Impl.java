@@ -71,7 +71,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.ClientContext;
@@ -301,7 +300,7 @@ public class HTTPEngine4Impl {
 	 * sets the timeout for the connection and socket (same value)
 	 */
 	public static void setTimeout(HttpParams params, TimeSpan timeout) {
-        if(timeout!=null){
+        if(timeout!=null && timeout.getMillis()>0){
         	HttpConnectionParams.setConnectionTimeout(params, (int)timeout.getMillis());
         	HttpConnectionParams.setSoTimeout(params, (int)timeout.getMillis());
         }

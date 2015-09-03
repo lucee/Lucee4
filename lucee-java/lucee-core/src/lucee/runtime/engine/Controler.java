@@ -20,9 +20,15 @@ package lucee.runtime.engine;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import lucee.commons.io.IOUtil;
+import lucee.commons.io.SystemUtil;
+import lucee.commons.io.log.Log;
+import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
 import lucee.commons.io.res.filter.ResourceFilter;
@@ -51,6 +57,7 @@ import lucee.runtime.type.util.ArrayUtil;
  */
 public final class Controler extends Thread {
 
+	private static final long TIMEOUT = 50*1000;
 	private int interval;
 	private long lastMinuteInterval=System.currentTimeMillis();
 	private long lastHourInterval=System.currentTimeMillis();
@@ -78,63 +85,137 @@ public final class Controler extends Thread {
         
 	}
 	
+	private static class ControlerThread extends Thread {
+		private Controler controler;
+		private CFMLFactoryImpl[] factories;
+		private boolean firstRun;
+		private long done=-1;
+		private Throwable t;
+		private Log log;
+		private long start;
+
+		public ControlerThread(Controler controler, CFMLFactoryImpl[] factories, boolean firstRun, Log log) {
+			this.start=System.currentTimeMillis();
+			this.controler=controler;
+			this.factories=factories;
+			this.firstRun=firstRun;
+			this.log=log;
+		}
+
+		@Override
+		public void run() {
+			long start=System.currentTimeMillis();
+			try {
+				controler.control(factories,firstRun);
+				done=System.currentTimeMillis()-start;
+			} 
+			catch (Throwable t) {
+				this.t=t;
+			}
+			//long time=System.currentTimeMillis()-start;
+			//if(time>10000) {
+				//log.info("controller", "["+hashCode()+"] controller was running for "+time+"ms");
+			//}
+		}
+	}
+	
+	
 	@Override
 	public void run() {
 		//scheduleThread.start();
 		boolean firstRun=true;
-		
+		List<ControlerThread> threads=new ArrayList<ControlerThread>();
 		CFMLFactoryImpl factories[]=null;
 		while(run.toBooleanValue()) {
-	        try {
-				sleep(interval);
-			} 
-            catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-            long now = System.currentTimeMillis();
-            //print.out("now:"+new Date(now));
-            boolean doMinute=lastMinuteInterval+60000<now;
-            if(doMinute)lastMinuteInterval=now;
-            boolean doHour=(lastHourInterval+(1000*60*60))<now;
-            if(doHour)lastHourInterval=now;
-            
-            // broadcast cluster scope
+			// sleep
+	        SystemUtil.sleep(interval);
+	        
             factories=toFactories(factories,contextes);
-            try {
-				ScopeContext.getClusterScope(configServer,true).broadcast();
-			} 
-            catch (Throwable t) {
-				t.printStackTrace();
-			}
+            // start the thread that calls control
+            ControlerThread ct = new ControlerThread(this,factories,firstRun,configServer.getApplicationLogger());
+            ct.start();
+            threads.add(ct);
+            
+            if(threads.size()>10 && lastMinuteInterval+60000<System.currentTimeMillis())
+            	configServer.getApplicationLogger().info("controller", threads.size()+" active controller threads");
+            
+            
+            // now we check all threads we have 
+            Iterator<ControlerThread> it = threads.iterator();
+            long time;
+            while(it.hasNext()){
+            	ct=it.next();
+            	//print.e(ct.hashCode());
+            	time=System.currentTimeMillis()-ct.start;
+            	// done
+            	if(ct.done>=0) {
+            		if(time>10000) 
+            			configServer.getApplicationLogger().info("controller", "controler took "+ct.done+"ms to execute sucessfully.");
+            		it.remove();
+            	}
+            	// failed
+            	else if(ct.t!=null){
+            		LogUtil.log(configServer.getApplicationLogger(), Log.LEVEL_ERROR, "controler", ct.t);
+            		it.remove();
+            	}
+            	// stop it!
+            	else if(time>TIMEOUT) {
+            		SystemUtil.stop(ct,configServer.getApplicationLogger());
+            		//print.e(ct.getStackTrace());
+            		if(!ct.isAlive()) {
+            			configServer.getApplicationLogger().error("controller", "controler thread ["+ct.hashCode()+"] forced to stop after "+time+"ms");
+                		it.remove();
+            		}
+            		else {
+            			LogUtil.log(configServer.getApplicationLogger(), Log.LEVEL_ERROR, "controler","was not able to stop conroler thread running for "+time+"ms", ct.getStackTrace());
+            		}
+            	}
+            }
             
 
-            // every minute
-            if(doMinute) {
-            	// deploy extensions, archives ...
-				try{DeployHandler.deploy(configServer);}catch(Throwable t){t.printStackTrace();}
-                try{ConfigWebAdmin.checkForChangesInConfigFile(configServer);}catch(Throwable t){}
-            }
-            // every hour
-            if(doHour) {
-            	try{configServer.checkPermGenSpace(true);}catch(Throwable t){}
-            }
             
-            for(int i=0;i<factories.length;i++) {
-	            run(factories[i], doMinute, doHour,firstRun);
-	        }
-	        if(factories.length>0)
-				firstRun=false;
+	        if(factories.length>0) firstRun=false;
 	    }    
 	}
 
-	private CFMLFactoryImpl[] toFactories(CFMLFactoryImpl[] factories,Map contextes) {
-		if(factories==null || factories.length!=contextes.size())
-			factories=(CFMLFactoryImpl[]) contextes.values().toArray(new CFMLFactoryImpl[contextes.size()]);
-		
-		return factories;
+	
+	
+	
+	
+	private void control(CFMLFactoryImpl[] factories, boolean firstRun) {
+		long now = System.currentTimeMillis();
+        boolean doMinute=lastMinuteInterval+60000<now;
+        if(doMinute)lastMinuteInterval=now;
+        boolean doHour=(lastHourInterval+(1000*60*60))<now;
+        if(doHour)lastHourInterval=now;
+        
+        // broadcast cluster scope
+        try {
+			ScopeContext.getClusterScope(configServer,true).broadcast();
+		} 
+        catch (Throwable t) {
+			t.printStackTrace();
+		}
+        
+
+        // every minute
+        if(doMinute) {
+        	// deploy extensions, archives ...
+			try{DeployHandler.deploy(configServer);}catch(Throwable t){t.printStackTrace();}
+            try{ConfigWebAdmin.checkForChangesInConfigFile(configServer);}catch(Throwable t){}
+        }
+        // every hour
+        if(doHour) {
+        	try{configServer.checkPermGenSpace(true);}catch(Throwable t){}
+        }
+        
+        for(int i=0;i<factories.length;i++) {
+            control(factories[i], doMinute, doHour,firstRun);
+        }
 	}
 
-	private void run(CFMLFactoryImpl cfmlFactory, boolean doMinute, boolean doHour, boolean firstRun) {
+
+	private void control(CFMLFactoryImpl cfmlFactory, boolean doMinute, boolean doHour, boolean firstRun) {
 		try {
 				boolean isRunning=cfmlFactory.getUsedPageContextLength()>0;   
 			    if(isRunning) {
@@ -212,6 +293,8 @@ public final class Controler extends Thread {
 					// check cache directory
 					try{checkCacheFileSize(config);}catch(Throwable t){}
 				}
+
+	        	try{configServer.checkPermGenSpace(true);}catch(Throwable t){}
 			}
 			catch(Throwable t){
 				
@@ -219,6 +302,13 @@ public final class Controler extends Thread {
 			finally{
 				ThreadLocalConfig.release();
 			}
+	}
+
+	private CFMLFactoryImpl[] toFactories(CFMLFactoryImpl[] factories,Map contextes) {
+		if(factories==null || factories.length!=contextes.size())
+			factories=(CFMLFactoryImpl[]) contextes.values().toArray(new CFMLFactoryImpl[contextes.size()]);
+		
+		return factories;
 	}
 
 	private void doClearMailConnections() {

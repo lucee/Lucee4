@@ -61,6 +61,7 @@ import lucee.runtime.type.FunctionValue;
 import lucee.runtime.type.Iteratorable;
 import lucee.runtime.type.Query;
 import lucee.runtime.type.Struct;
+import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.UDF;
 import lucee.runtime.type.UDFImpl;
 import lucee.runtime.type.UDFProperties;
@@ -103,6 +104,8 @@ public final class Types {
 
     public static final Type ABORT=Type.getType(Abort.class);
     public static final Type ARRAY=Type.getType(lucee.runtime.type.Array.class);
+    public static final Type ARRAY_IMPL=Type.getType(lucee.runtime.type.ArrayImpl.class);
+
 
     public static final Type BYTE=Type.getType(Byte.class);
     public static final Type BYTE_VALUE=Type.getType(byte.class);
@@ -182,6 +185,8 @@ public final class Types {
     public static final Type STRING_ARRAY = Type.getType(String[].class);
     
     public static final Type STRUCT = Type.getType(lucee.runtime.type.Struct.class);
+    public static final Type STRUCT_IMPL = Type.getType(StructImpl.class);
+	
     
     public static final Type OPERATOR = Type.getType(Operator.class);
 

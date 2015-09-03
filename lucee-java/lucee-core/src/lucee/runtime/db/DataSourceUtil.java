@@ -20,6 +20,7 @@ package lucee.runtime.db;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import lucee.commons.lang.StringUtil;
 
@@ -112,6 +113,14 @@ public class DataSourceUtil {
 		if (StringUtil.isEmpty(dbName))
 			dbName = dc.getConnection().getCatalog();  // works on most JDBC drivers (except Oracle )
 		return dbName;
+	}
+
+
+	public static void setQueryTimeoutSilent(Statement stat, int seconds) {
+    	try {
+			stat.setQueryTimeout(seconds);
+		}
+		catch (SQLException e) {}
 	}
 
 }

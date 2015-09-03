@@ -26,10 +26,12 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import lucee.commons.io.CharsetUtil;
@@ -46,6 +48,7 @@ import lucee.commons.net.http.httpclient4.HTTPEngine4Impl;
 import lucee.commons.net.http.httpclient4.HTTPPatchFactory;
 import lucee.commons.net.http.httpclient4.HTTPResponse4Impl;
 import lucee.commons.net.http.httpclient4.ResourceBody;
+import lucee.runtime.CFMLFactoryImpl;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.exp.ApplicationException;
@@ -53,6 +56,7 @@ import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.HTTPException;
 import lucee.runtime.exp.NativeException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.RequestTimeoutException;
 import lucee.runtime.ext.tag.BodyTagImpl;
 import lucee.runtime.net.http.MultiPartResponseUtils;
 import lucee.runtime.net.http.ReqRspUtil;
@@ -71,8 +75,10 @@ import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.dt.TimeSpanImpl;
+import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
+import lucee.runtime.util.PageContextUtil;
 import lucee.runtime.util.URLResolver;
 
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -943,8 +949,10 @@ final class Http4 extends BodyTagImpl implements Http {
     		
     	// set timeout
 			if(this.timeout==null) { // not set
-				this.timeout=TimeSpanImpl.fromMillis(pageContext.getRequestTimeout());
-    		}
+				this.timeout=PageContextUtil.remainingTime(pageContext);
+				if(this.timeout.getSeconds()<=0)
+					throw CFMLFactoryImpl.createRequestTimeoutException(pageContext);
+			}
 			//print.e("classic:"+timeout);
     		HTTPEngine4Impl.setTimeout(params, this.timeout);
     		
@@ -984,7 +992,7 @@ final class Http4 extends BodyTagImpl implements Http {
 /////////////////////////////////////////// EXECUTE /////////////////////////////////////////////////
 		Executor4 e = new Executor4(this,client,httpContext,req,redirect);
 		HTTPResponse4Impl rsp=null;
-		if(true){
+		if(timeout==null || timeout.getMillis()<=0){
 			try{
 				rsp = e.execute(httpContext);
 			}
@@ -994,7 +1002,7 @@ final class Http4 extends BodyTagImpl implements Http {
 					setUnknownHost(cfhttp, t);
 					return;
 				}
-				throw toPageException(t);
+				throw toPageException(t,rsp);
 				
 			}
 		}
@@ -1012,7 +1020,7 @@ final class Http4 extends BodyTagImpl implements Http {
 					setUnknownHost(cfhttp,e.t);
 					return;
 				}
-				throw toPageException(e.t);	
+				throw toPageException(e.t,rsp);	
 			}
 			
 			rsp=e.response;
@@ -1310,13 +1318,27 @@ final class Http4 extends BodyTagImpl implements Http {
     	return ReqRspUtil.decode(str, charset, false);
 	}
 
-	private PageException toPageException(Throwable t) {
+	private PageException toPageException(Throwable t, HTTPResponse4Impl rsp) {
+		if(t instanceof SocketTimeoutException) {
+			HTTPException he = new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp==null?null:rsp.getURL());
+			List<StackTraceElement> merged = ArrayUtil.merge(t.getStackTrace(), he.getStackTrace());
+			StackTraceElement[] traces=new StackTraceElement[merged.size()];
+			Iterator<StackTraceElement> it = merged.iterator();
+			int index=0;
+			while(it.hasNext()){
+				traces[index++]=it.next();
+			}
+			he.setStackTrace(traces);
+			return he;
+		}
 		PageException pe = Caster.toPageException(t);
 		if(pe instanceof NativeException) {
 			((NativeException) pe).setAdditional(KeyConstants._url, url);
 		}
 		return pe;
 	}
+	
+	
 
 	private void setUnknownHost(Struct cfhttp,Throwable t) {
 		cfhttp.setEL(CHARSET,"");

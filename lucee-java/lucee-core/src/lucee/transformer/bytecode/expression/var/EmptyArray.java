@@ -1,4 +1,5 @@
-<!--- 
+/**
+ *
  * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -14,18 +15,26 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- ---><cfcomponent><cfscript>
+ **/
+package lucee.transformer.bytecode.expression.var;
 
-this.name="lucee_context";
-this.clientmanagement="no";
-this.clientstorage="file"; 
-this.scriptprotect="all";
-this.sessionmanagement="yes";
-this.sessiontimeout="#createTimeSpan(0,0,30,0)#";
-this.setclientcookies="yes";
-this.setdomaincookies="no"; 
-this.applicationtimeout="#createTimeSpan(1,0,0,0)#";
-this.localmode="update";
-this.web.charset="utf-8";
-this.scopeCascading="strict";
-</cfscript></cfcomponent>
+import lucee.transformer.bytecode.BytecodeContext;
+import lucee.transformer.bytecode.BytecodeException;
+import lucee.transformer.bytecode.expression.ExpressionBase;
+import lucee.transformer.bytecode.util.ASMUtil;
+import lucee.transformer.bytecode.util.Types;
+
+import org.objectweb.asm.Type;
+
+public class EmptyArray extends ExpressionBase {
+
+	public EmptyArray() {
+		super(null,null);
+	}
+
+	public Type _writeOut(BytecodeContext bc, int mode) throws BytecodeException {
+		ASMUtil.createEmptyArray(bc.getAdapter());
+		return Types.ARRAY;
+	}
+
+}

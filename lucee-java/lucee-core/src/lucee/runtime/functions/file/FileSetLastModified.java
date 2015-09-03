@@ -18,6 +18,8 @@
  **/
 package lucee.runtime.functions.file;
 
+import java.io.FileNotFoundException;
+
 import lucee.commons.io.res.Resource;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
@@ -29,6 +31,8 @@ public class FileSetLastModified {
 	public static String call(PageContext pc, Object oSrc, DateTime date) throws PageException {
 		Resource src = Caster.toResource(pc,oSrc,false);
 		pc.getConfig().getSecurityManager().checkFileLocation(src);
+		if(!src.exists() || !src.isFile()) throw Caster.toPageException(new FileNotFoundException(src.getAbsolutePath()));
+
 		src.setLastModified(date.getTime());
 		return null;
 	}

@@ -27,6 +27,7 @@ import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.StringUtil;
+import lucee.runtime.CFMLFactoryImpl;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.PageSource;
@@ -51,6 +52,7 @@ import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.DatabaseException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.RequestTimeoutException;
 import lucee.runtime.ext.tag.BodyTagTryCatchFinallyImpl;
 import lucee.runtime.functions.displayFormatting.DecimalFormat;
 import lucee.runtime.listener.AppListenerUtil;
@@ -74,8 +76,10 @@ import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.query.SimpleQuery;
+import lucee.runtime.type.scope.Argument;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
+import lucee.runtime.util.PageContextUtil;
 
 
 
@@ -461,8 +465,10 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 	public int doStartTag() throws PageException	{
 
 		//timeout
-		if(this.timeout==null) { // not set
-			this.timeout=TimeSpanImpl.fromMillis(pageContext.getRequestTimeout());
+		if(this.timeout==null || this.timeout.getSeconds()<=0) { // not set
+			this.timeout=PageContextUtil.remainingTime(pageContext);
+			if(this.timeout.getSeconds()<=0)
+				throw CFMLFactoryImpl.createRequestTimeoutException(pageContext);
 		}
 		
 		// default datasource
@@ -514,7 +520,9 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 			// create SQL
 			SQL sql;
 			if(params!=null) {
-				if(Decision.isArray(params))
+				if(params instanceof Argument)
+					sql=QueryParamConverter.convert(strSQL, (Argument) params);
+				else if(Decision.isArray(params))
 					sql=QueryParamConverter.convert(strSQL, Caster.toArray(params));
 				else if(Decision.isStruct(params))
 					sql=QueryParamConverter.convert(strSQL, Caster.toStruct(params));
@@ -727,7 +735,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 		
 		// query options
 		if(maxrows!=-1 && !ormoptions.containsKey(MAX_RESULTS)) ormoptions.setEL(MAX_RESULTS, new Double(maxrows));
-		if(timeout!=null && !ormoptions.containsKey(TIMEOUT)) ormoptions.setEL(TIMEOUT, new Double(timeout.getSeconds()));
+		if(timeout!=null && timeout.getSeconds()>0 && !ormoptions.containsKey(TIMEOUT)) ormoptions.setEL(TIMEOUT, new Double(timeout.getSeconds()));
 		/* MUST
 offset: Specifies the start index of the resultset from where it has to start the retrieval.
 cacheable: Whether the result of this query is to be cached in the secondary cache. Default is false.
