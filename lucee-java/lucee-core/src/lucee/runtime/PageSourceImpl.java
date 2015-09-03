@@ -75,6 +75,7 @@ public final class PageSourceImpl implements PageSource, Sizeable {
     private Page page;
 	private long lastAccess;	
 	private int accessCount=0;
+	private boolean flush=false;
     //private boolean recompileAlways;
     //private boolean recompileAfterStartUp;
     
@@ -230,18 +231,6 @@ public final class PageSourceImpl implements PageSource, Sizeable {
     	if((mapping.getInspectTemplate()==ConfigImpl.INSPECT_NEVER || pci.isTrusted(page)) && isLoad(LOAD_PHYSICAL)) return page;
     	Resource srcFile = getPhyscalFile();
     	
-    	/*{
-    		String dp = getDisplayPath();
-    		String cn = getClassName();
-    		if(dp.endsWith(".cfc") && cn.startsWith("cfc")) {
-    			print.ds("->"+dp);
-    			print.e("trusted:"+mapping.isTrusted());
-    			print.e(mapping.getVirtual());
-    			print.e("mod:"+srcFile.lastModified());
-    		}
-    	}*/
-    	
-    	
 		long srcLastModified = srcFile.lastModified();
         if(srcLastModified==0L) return null;
     	
@@ -263,9 +252,10 @@ public final class PageSourceImpl implements PageSource, Sizeable {
                     Resource classFile=classRootDir.getRealResource(getJavaName()+".class");
                     boolean isNew=false;
                     // new class
-                    if(!classFile.exists()) {
+                    if(flush || !classFile.exists()) {
                     //if(!classFile.exists() || recompileAfterStartUp) {
                     	this.page=page= compile(config,classRootDir,Boolean.FALSE);
+                    	flush=false;
                         isNew=true;
                     }
                     // load page
@@ -303,6 +293,11 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 		return page!=null && load==page.getLoadType();
 	}
     
+    public void flush() {
+		page=null;
+		flush=true;
+	}
+    
 
 	private synchronized Page compile(ConfigWeb config,Resource classRootDir, Boolean resetCL) throws PageException {
 		try {
@@ -329,6 +324,11 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 
 	private Page _compile(ConfigWeb config,Resource classRootDir, Boolean resetCL) throws IOException, SecurityException, IllegalArgumentException, PageException {
         ConfigWebImpl cwi=(ConfigWebImpl) config;
+        
+        long now;
+        if((getPhyscalFile().lastModified()+60000)>(now=System.currentTimeMillis()))
+        	cwi.getCompiler().watch(this,now);//SystemUtil.get
+        
         
         
         byte[] barr = cwi.getCompiler().
