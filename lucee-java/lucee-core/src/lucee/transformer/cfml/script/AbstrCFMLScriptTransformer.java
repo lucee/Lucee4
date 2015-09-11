@@ -1556,7 +1556,7 @@ int pos=data.cfml.getPos();
 		if(attr!=null){
 			attrType = attr.getScriptSupport();
 			char c = data.cfml.getCurrent();
-			if(ATTR_TYPE_REQUIRED==attrType || (!data.cfml.isCurrent(';') && ATTR_TYPE_OPTIONAL==attrType)) {
+			if(ATTR_TYPE_REQUIRED==attrType || ((!data.cfml.isCurrent(';') && !data.cfml.isCurrent('{')) && ATTR_TYPE_OPTIONAL==attrType)) {
 				attrValue =attributeValue(data, tlt.getScript().getRtexpr());
 				if(attrValue!=null && isOperator(c)) {
 					data.cfml.setPos(pos);
@@ -1575,7 +1575,16 @@ int pos=data.cfml.getPos();
 			return null;
 		}
 		
-		checkSemiColonLineFeed(data,true,true,true);
+		// body
+		if(tlt.getHasBody()){
+			Body body=new BodyBase();
+			boolean wasSemiColon=statement(data,body,tlt.getScript().getContext());
+			if(!wasSemiColon || !tlt.isBodyFree() || body.hasStatements())
+				tag.setBody(body);
+		}
+		else checkSemiColonLineFeed(data,true,true,true);
+		
+		
 		if(!StringUtil.isEmpty(tlt.getTteClassName()))data.ep.add(tlt, tag, data.flibs, data.cfml);
 		
 		if(!StringUtil.isEmpty(attrName))validateAttributeName(attrName, data.cfml, new ArrayList<String>(), tlt, new RefBooleanImpl(false), new StringBuffer(), allowTwiceAttr);
