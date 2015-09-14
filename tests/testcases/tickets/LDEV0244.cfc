@@ -21,8 +21,6 @@ component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
 
     function run(){
-        new LDEV0244.bad();
-
         describe( 'component' , function() {
 
             it( 'can be initiated' , function() {
