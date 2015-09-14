@@ -19,12 +19,64 @@
 
 component extends="org.lucee.cfml.test.LuceeTestCase"	{
 
-    public void function testSingleLineComment(){
+
+    function run(){
+
+        describe( 'component' , function() {
+
+            it( 'can be initiated' , function() {
+
+                actual = new LDEV0244.good();
+
+                    expect( actual ).toBe( 'hi' );
+
+            });
+
+            it( 'can be initiated even with a single line comment at the end' , function() {
+
+                actual = new LDEV0244.bad();
+
+                    expect( actual ).toBe( 'hi' );
+
+            });
+
+            it( 'can be initiated even with a single line comment at the end within a cfscript' , function() {
+
+                actual = new LDEV0244.SingleLine();
+
+                    expect( actual ).toBe( 'hi' );
+
+            });
+
+            it( 'can be initiated even with a multi line comment at the end' , function() {
+
+                actual = new LDEV0244.MultiLine();
+
+                    expect( actual ).toBe( 'hi' );
+
+            });
+
+
+            it( 'can be initiated even with a multi line comment at the end within a script' , function() {
+
+                actual = new LDEV0244.MultiLineScript();
+
+                    expect( actual ).toBe( 'hi' );
+
+            });
+
+        });
+
+    }
+
+    /*public void function testSingleLineComment(){
         new LDEV0244.SingleLine();
     }
     public void function testMultiLineComment(){
         new LDEV0244.MultiLine();
-    }
+    }*/
+
+
 
 }
 </cfscript>

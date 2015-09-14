@@ -1,10 +1,13 @@
 <cfscript>
 
 component {
-    
+
   public function init() {
     return 'hi';
   }
-
-}// single line comment
+}/*
+qqq
+qqq
+qqq
+*/
 </cfscript>
