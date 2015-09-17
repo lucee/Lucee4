@@ -49,8 +49,10 @@ import lucee.commons.net.http.httpclient4.HTTPPatchFactory;
 import lucee.commons.net.http.httpclient4.HTTPResponse4Impl;
 import lucee.commons.net.http.httpclient4.ResourceBody;
 import lucee.runtime.CFMLFactoryImpl;
+import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.config.ConfigWeb;
+import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.HTTPException;
@@ -989,7 +991,7 @@ public final class Http41 extends BodyTagImpl implements Http {
     		
 /////////////////////////////////////////// EXECUTE /////////////////////////////////////////////////
     	client = builder.build();
-		Executor41 e = new Executor41(this,client,httpContext,req,redirect);
+		Executor41 e = new Executor41(pageContext,this,client,httpContext,req,redirect);
 		HTTPResponse4Impl rsp=null;
 		if(timeout==null || timeout.getMillis()<=0) {// never happens
 			try{
@@ -1449,7 +1451,8 @@ public final class Http41 extends BodyTagImpl implements Http {
 }
 
 class Executor41 extends Thread {
-	
+
+	private final PageContext pc;
 	 final Http41 http;
 	 private final CloseableHttpClient client;
 	 final boolean redirect;
@@ -1460,7 +1463,8 @@ class Executor41 extends Thread {
 	private HttpRequestBase req;
 	private HttpContext context;
 
-	public Executor41(Http41 http,CloseableHttpClient client, HttpContext context, HttpRequestBase req, boolean redirect) {
+	public Executor41(PageContext pc,Http41 http,CloseableHttpClient client, HttpContext context, HttpRequestBase req, boolean redirect) {
+		this.pc=pc;
 		this.http=http;
 		this.client=client;
 		this.context=context;
@@ -1470,6 +1474,7 @@ class Executor41 extends Thread {
 	
 	@Override
 	public void run(){
+		ThreadLocalPageContext.register(pc);
 		try {
 			response=execute(context);
 			done=true;
