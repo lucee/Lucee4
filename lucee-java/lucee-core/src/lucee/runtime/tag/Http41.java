@@ -946,13 +946,17 @@ public final class Http41 extends BodyTagImpl implements Http {
     			if(!HttpImpl.hasHeaderIgnoreCase(req,"User-Agent"))
     				req.setHeader("User-Agent",this.useragent);
     		
-    	// set timeout
-			if(this.timeout==null) { // not set
-				this.timeout=PageContextUtil.remainingTime(pageContext);
-				if(((int)this.timeout.getSeconds())<=0)
-					throw CFMLFactoryImpl.createRequestTimeoutException(pageContext);
+    			//timeout not defined
+			if(this.timeout==null || ((int)timeout.getSeconds())<=0) { // not set
+				this.timeout=PageContextUtil.remainingTime(pageContext,true);
     		}
-			print.e(this.timeout);
+			// timeout bigger than remaining time
+			else {
+				TimeSpan remaining = PageContextUtil.remainingTime(pageContext,true);
+				if(timeout.getSeconds()>remaining.getSeconds())
+					timeout=remaining;
+			}
+			
 			setTimeout(builder,this.timeout);
     		
     		
@@ -1275,9 +1279,11 @@ public final class Http41 extends BodyTagImpl implements Http {
 	public static void setTimeout(HttpClientBuilder builder, TimeSpan timeout) {
 		if(timeout==null || timeout.getMillis()<=0) return;
 		
-		//builder.setConnectionTimeToLive(timeout.getMillis(), TimeUnit.MILLISECONDS);
+		int ms = (int)timeout.getMillis();
+		if(ms<0)ms=Integer.MAX_VALUE; // long value was bigger than Integer.MAX
+		
     	SocketConfig sc=SocketConfig.custom()
-    			.setSoTimeout((int)timeout.getMillis())
+    			.setSoTimeout(ms)
     			.build();
     	builder.setDefaultSocketConfig(sc);
 	}

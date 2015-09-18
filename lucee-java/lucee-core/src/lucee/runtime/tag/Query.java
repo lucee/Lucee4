@@ -464,12 +464,18 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 	@Override
 	public int doStartTag() throws PageException	{
 
-		//timeout
-		if(this.timeout==null || ((int)this.timeout.getSeconds())<=0) { // not set
-			this.timeout=PageContextUtil.remainingTime(pageContext);
-			if(((int)this.timeout.getSeconds())<=0)
-				throw CFMLFactoryImpl.createRequestTimeoutException(pageContext);
+		//timeout not defined
+		if(timeout==null || ((int)timeout.getSeconds())<=0) { // not set
+			this.timeout=PageContextUtil.remainingTime(pageContext,true);
 		}
+		// timeout bigger than remaining time
+		else {
+			TimeSpan remaining = PageContextUtil.remainingTime(pageContext,true);
+			if(timeout.getSeconds()>remaining.getSeconds())
+				timeout=remaining;
+		}
+		
+		
 		
 		// default datasource
 		if(datasource==null && (dbtype==null || !dbtype.equals("query"))){

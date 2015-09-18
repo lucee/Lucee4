@@ -930,12 +930,15 @@ final class Http4 extends BodyTagImpl implements Http {
     				req.setHeader("User-Agent",this.useragent);
     		
     	// set timeout
-			if(this.timeout==null) { // not set
-				this.timeout=PageContextUtil.remainingTime(pageContext);
-				if(((int)this.timeout.getSeconds())<=0)
-					throw CFMLFactoryImpl.createRequestTimeoutException(pageContext);
+			if(this.timeout==null || ((int)timeout.getSeconds())<=0) { // not set
+				this.timeout=PageContextUtil.remainingTime(pageContext,true);
 			}
-			//print.e("classic:"+timeout);
+			// timeout bigger than remaining time
+			else {
+				TimeSpan remaining = PageContextUtil.remainingTime(pageContext,true);
+				if(timeout.getSeconds()>remaining.getSeconds())
+					timeout=remaining;
+			}
     		HTTPEngine4Impl.setTimeout(params, this.timeout);
     		
     	// set Username and Password

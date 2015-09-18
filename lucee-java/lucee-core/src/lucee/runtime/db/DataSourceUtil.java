@@ -22,6 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import lucee.print;
 import lucee.commons.lang.StringUtil;
 
 
@@ -117,7 +118,10 @@ public class DataSourceUtil {
 
 
 	public static void setQueryTimeoutSilent(Statement stat, int seconds) {
-    	try {
+		// some jdbc driver multiply the value by 1000 to get milli second what can end in a negative value, so we have to make sure the given timeout can be multiply by 1000 
+		int max=Integer.MAX_VALUE/1000;
+		if(max<seconds) seconds=max;
+		try {
 			if(seconds>0)stat.setQueryTimeout(seconds);
 		}
 		catch (SQLException e) {}
