@@ -465,9 +465,9 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 	public int doStartTag() throws PageException	{
 
 		//timeout
-		if(this.timeout==null || this.timeout.getSeconds()<=0) { // not set
+		if(this.timeout==null || ((int)this.timeout.getSeconds())<=0) { // not set
 			this.timeout=PageContextUtil.remainingTime(pageContext);
-			if(this.timeout.getSeconds()<=0)
+			if(((int)this.timeout.getSeconds())<=0)
 				throw CFMLFactoryImpl.createRequestTimeoutException(pageContext);
 		}
 		
@@ -735,7 +735,7 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 		
 		// query options
 		if(maxrows!=-1 && !ormoptions.containsKey(MAX_RESULTS)) ormoptions.setEL(MAX_RESULTS, new Double(maxrows));
-		if(timeout!=null && timeout.getSeconds()>0 && !ormoptions.containsKey(TIMEOUT)) ormoptions.setEL(TIMEOUT, new Double(timeout.getSeconds()));
+		if(timeout!=null && ((int)timeout.getSeconds())>0 && !ormoptions.containsKey(TIMEOUT)) ormoptions.setEL(TIMEOUT, new Double(timeout.getSeconds()));
 		/* MUST
 offset: Specifies the start index of the resultset from where it has to start the retrieval.
 cacheable: Whether the result of this query is to be cached in the secondary cache. Default is false.

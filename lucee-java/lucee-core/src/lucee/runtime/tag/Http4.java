@@ -932,7 +932,7 @@ final class Http4 extends BodyTagImpl implements Http {
     	// set timeout
 			if(this.timeout==null) { // not set
 				this.timeout=PageContextUtil.remainingTime(pageContext);
-				if(this.timeout.getSeconds()<=0)
+				if(((int)this.timeout.getSeconds())<=0)
 					throw CFMLFactoryImpl.createRequestTimeoutException(pageContext);
 			}
 			//print.e("classic:"+timeout);
