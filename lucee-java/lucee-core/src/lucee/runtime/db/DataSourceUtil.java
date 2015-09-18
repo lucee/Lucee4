@@ -22,7 +22,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import lucee.print;
 import lucee.commons.lang.StringUtil;
 
 
