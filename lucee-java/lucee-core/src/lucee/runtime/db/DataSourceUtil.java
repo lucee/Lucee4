@@ -118,7 +118,7 @@ public class DataSourceUtil {
 
 	public static void setQueryTimeoutSilent(Statement stat, int seconds) {
     	try {
-			stat.setQueryTimeout(seconds);
+			if(seconds>0)stat.setQueryTimeout(seconds);
 		}
 		catch (SQLException e) {}
 	}
