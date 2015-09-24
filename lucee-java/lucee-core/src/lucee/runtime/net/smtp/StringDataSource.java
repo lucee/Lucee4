@@ -34,7 +34,18 @@ public class StringDataSource implements DataSource {
 	private String charset;
 
 	public StringDataSource(String text, String ct, String charset, int maxLineLength) {
-		this.text=WordUtils.wrap(text, maxLineLength);
+		if (text.length > maxLineLength) {
+			String sep = System.getProperty("line.separator");
+			String[] lines=text.split(sep);
+			for(int i = 0; i < lines.length; i++) {
+				if (lines[i].length > maxLineLength) {
+					lines[i]=WordUtils.wrap(lines[i], maxLineLength);
+				}
+			}
+			this.text=lines.join(sep);
+		} else {
+			this.text=text;
+		}
 		this.ct=ct;
 		this.charset=charset;
 	}
