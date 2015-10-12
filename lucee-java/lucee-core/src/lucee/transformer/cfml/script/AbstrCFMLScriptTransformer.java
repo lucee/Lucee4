@@ -1556,8 +1556,17 @@ int pos=data.cfml.getPos();
 		if(attr!=null){
 			attrType = attr.getScriptSupport();
 			char c = data.cfml.getCurrent();
-			if(ATTR_TYPE_REQUIRED==attrType || ((!data.cfml.isCurrent(';') && !data.cfml.isCurrent('{')) && ATTR_TYPE_OPTIONAL==attrType)) {
-				attrValue =attributeValue(data, tlt.getScript().getRtexpr());
+			if(ATTR_TYPE_REQUIRED==attrType || ((!data.cfml.isCurrent(';')) && ATTR_TYPE_OPTIONAL==attrType)) {
+				if(data.cfml.isCurrent('{')) {// this can be only a json string
+					int p=data.cfml.getPos();
+					try{
+						attrValue=isSimpleValue(attr.getType())?null:json(data,JSON_STRUCT,'{','}');
+					}
+					catch(Throwable t){
+						data.cfml.setPos(p);
+					}
+				}
+				else attrValue =attributeValue(data, tlt.getScript().getRtexpr());
 				if(attrValue!=null && isOperator(c)) {
 					data.cfml.setPos(pos);
 					return null;
@@ -1591,6 +1600,10 @@ int pos=data.cfml.getPos();
 		tag.setEnd(data.cfml.getPosition());
 		eval(tlt,data,tag);
 		return tag;
+	}
+
+	private boolean isSimpleValue(String type) {
+		return type.equalsIgnoreCase("string") || type.equalsIgnoreCase("boolean") || type.equalsIgnoreCase("number") || type.equalsIgnoreCase("numeric");
 	}
 
 	private boolean isOperator(char c) {
