@@ -3712,6 +3712,8 @@ public final class ConfigWebFactory extends ConfigFactory {
 							toInt(el.getAttribute("port"), 25), 
 							el.getAttribute("username"),
 							decrypt(el.getAttribute("password")), 
+							toLong(el.getAttribute("life"), 1000*60*5),
+							toLong(el.getAttribute("idle"), 1000*60*1),
 							toBoolean(el.getAttribute("tls"), false), 
 							toBoolean(el.getAttribute("ssl"), false), 
 							toBoolean(el.getAttribute("reuse-connection"), true));
