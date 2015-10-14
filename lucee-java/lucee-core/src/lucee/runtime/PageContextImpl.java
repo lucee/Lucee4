@@ -907,7 +907,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	public void doInclude(PageSource[] sources, boolean runOnce) throws PageException {
     	// debug
 		if(!gatewayContext && config.debug()) {
-			long currTime=executionTime;
+			final long currTime=executionTime;
             long exeTime=0;
             long time=System.nanoTime();
             
@@ -937,7 +937,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 			finally {
 				includeOnce.add(currentPage.getPageSource());
 				long diff= ((System.nanoTime()-exeTime)-(executionTime-currTime));
-			    executionTime+=(System.nanoTime()-time);
+				executionTime+=(System.nanoTime()-time);
 				debugEntry.updateExeTime(diff);
 				removeLastPageSource(true);
 			}	
@@ -2904,10 +2904,18 @@ public final class PageContextImpl extends PageContext implements Sizeable {
     public int getExecutionTime() {
         return (int)executionTime;
     }
+    
+    public long getExecutionTimeLong() {
+        return executionTime;
+    }
 
     @Override
     public void setExecutionTime(int executionTime) {
-        this.executionTime = executionTime;
+    	this.executionTime = executionTime;
+    }
+    
+    public void setExecutionTimeLong(long executionTime) {
+    	this.executionTime = executionTime;
     }
 
     @Override
