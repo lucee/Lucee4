@@ -41,10 +41,6 @@ import lucee.commons.io.res.Resource;
 
 public class CertificateInstaller {
 
-	
-	
-	
-	
     private String host;
 	private int port;
 	private char[] passphrase;
@@ -76,7 +72,7 @@ public class CertificateInstaller {
 			IOUtil.closeEL(in);
 		}
 
-		context = SSLContext.getInstance("TLS");
+		context = SSLContext.getInstance("SSL");
 		tmf =
 		    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 		tmf.init(ks);
@@ -89,9 +85,6 @@ public class CertificateInstaller {
 		if (tm.chain == null) 
 		    throw new IOException("Could not obtain server certificate chain");
 		    
-		
-		
-		
 		
 		
 	}
@@ -167,46 +160,27 @@ public class CertificateInstaller {
 
     private static class SavingTrustManager implements X509TrustManager {
 
-	private final X509TrustManager tm;
-	private X509Certificate[] chain;
-
-	SavingTrustManager(X509TrustManager tm) {
-	    this.tm = tm;
-	}
-
-	public X509Certificate[] getAcceptedIssuers() {
-	    throw new UnsupportedOperationException();
-	}
-
-	public void checkClientTrusted(X509Certificate[] chain, String authType)
-		throws CertificateException {
-	    throw new UnsupportedOperationException();
-	}
-
-	public void checkServerTrusted(X509Certificate[] chain, String authType)
-		throws CertificateException {
-	    this.chain = chain;
-	    tm.checkServerTrusted(chain, authType);
-	}
-    }
-
-/*
-	public static void main(String[] args) throws Exception {
-    	//String host="jira.jboss.org";
-    	
-    	String host="sso.vogel.de";
-		int port=443;
-		char[] passphrase="changeit".toCharArray();
-		 
-		ResourceProvider frp = ResourcesImpl.getFileResourceProvider();
-		Resource source = frp.getResource("/Users/mic/Temp/cacerts");
-		
-		
-		CertificateInstaller util = new CertificateInstaller(source,host,port,passphrase);
-		util.printCertificates();
-		util.installAll();
+		private final X509TrustManager tm;
+		private X509Certificate[] chain;
 	
+		SavingTrustManager(X509TrustManager tm) {
+		    this.tm = tm;
+		}
+	
+		public X509Certificate[] getAcceptedIssuers() {
+		    throw new UnsupportedOperationException();
+		}
+	
+		public void checkClientTrusted(X509Certificate[] chain, String authType)
+			throws CertificateException {
+		    throw new UnsupportedOperationException();
+		}
+	
+		public void checkServerTrusted(X509Certificate[] chain, String authType)
+			throws CertificateException {
+		    this.chain = chain;
+		    tm.checkServerTrusted(chain, authType);
+		}
     }
-	*/
-    
+
 }
