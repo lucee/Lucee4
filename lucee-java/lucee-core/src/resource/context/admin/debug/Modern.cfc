@@ -231,7 +231,7 @@
 						<cfset isOpen = this.isSectionOpen( sectionId )>
 						<table>
 
-							<cfset renderSectionHeadTR( sectionId, "Template:", "#_cgi.SCRIPT_NAME# (#expandPath(_cgi.SCRIPT_NAME)#)" )>
+							<cfset renderSectionHeadTR( sectionId, "Template:", "#HTMLEditFormat(_cgi.SCRIPT_NAME)# (#HTMLEditFormat(expandPath(_cgi.SCRIPT_NAME))#)" )>
 
 							<tr>
 								<td class="pad label">User Agent:</td>
