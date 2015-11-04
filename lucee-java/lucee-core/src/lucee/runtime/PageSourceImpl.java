@@ -325,9 +325,9 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 	private Page _compile(ConfigWeb config,Resource classRootDir, Boolean resetCL) throws IOException, SecurityException, IllegalArgumentException, PageException {
         ConfigWebImpl cwi=(ConfigWebImpl) config;
         
-        long now;
-        if((getPhyscalFile().lastModified()+60000)>(now=System.currentTimeMillis()))
-        	cwi.getCompiler().watch(this,now);//SystemUtil.get
+        //long now; // TODO reenable keywods, double check, inspect template, watch 
+        //if((getPhyscalFile().lastModified()+60000)>(now=System.currentTimeMillis()))
+        //	cwi.getCompiler().watch(this,now);//SystemUtil.get
         
         
         
