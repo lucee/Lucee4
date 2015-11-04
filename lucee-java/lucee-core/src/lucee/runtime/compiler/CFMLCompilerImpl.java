@@ -154,7 +154,10 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 	public void watch(PageSource ps, long now) {
 		watched.put(ps.getDisplayPath(),new WatchEntry(ps,now,ps.getPhyscalFile().length(),ps.getPhyscalFile().lastModified()));
 	}
+	
 	public void checkWatched() {
+		if(watched.size()==0) return ;
+		
 		long now=System.currentTimeMillis();
 		Iterator<Entry<String, WatchEntry>> it = watched.entrySet().iterator();
 		Entry<String, WatchEntry> e;
@@ -176,13 +179,13 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 		private final PageSource ps;
 		private final long now;
 		private final long length;
-		private final long lastModified;
+		//private final long lastModified;
 
 		public WatchEntry(PageSource ps, long now, long length, long lastModified) {
 			this.ps=ps;
 			this.now=now;
 			this.length=length;
-			this.lastModified=lastModified;
+			//this.lastModified=lastModified;
 		}
 
 	}
