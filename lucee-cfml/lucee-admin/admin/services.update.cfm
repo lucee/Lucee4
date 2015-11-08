@@ -245,7 +245,7 @@ For testing
 		<cfscript>
 			// Jira
 			jira=stText.services.update.jira;
-			jira=replace(jira,'{a}','<a href="https://luceeserver.atlassian.net" target="_blank">');
+			jira=replace(jira,'{a}','<a href="http://issues.lucee.org" target="_blank">');
 			jira=replace(jira,'{/a}','</a>');
 			try	{
 				// Changelog http://issues.lucee.org/browse/LDEV-148
@@ -266,7 +266,7 @@ For testing
 				for(i=arrayLen(matches);i>=1;i--){
 					match=trim(matches[i]);
 					nbr=trim(mid(match,8,len(match)-8));
-					content=replace(content,match,'<a target="_blank" href="https://luceeserver.atlassian.net/browse/LDEV-'&nbr&'">##'& nbr & '</a>',"all");
+					content=replace(content,match,'<a target="_blank" href="http://issues.lucee.org/browse/LDEV-'&nbr&'">##'& nbr & '</a>',"all");
 				}
 
 
