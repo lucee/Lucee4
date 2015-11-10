@@ -11742,6 +11742,7 @@ dWord: creates a value of 0 (zero)</description>
 		<attribute>
 			<type>boolean</type>
 			<name>bufferoutput</name>
+			<script-support>optional</script-support>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<script-support>optional</script-support>
@@ -11749,7 +11750,7 @@ dWord: creates a value of 0 (zero)</description>
 			if set to false the content to body is ignored and not disabled when a failure in the body of the tag occur.</description>
 		</attribute>
 	</tag>
-	
+
 	<!-- Slider -->
 	<tag>
 		<name>Slider</name>
