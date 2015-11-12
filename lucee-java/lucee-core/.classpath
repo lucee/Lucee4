@@ -109,6 +109,5 @@
 	<classpathentry kind="lib" path="/Lucee-Libs/javasysmon.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/slf4j-nop.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/jcifs.jar"/>
-	<classpathentry kind="lib" path="/Users/mic/Test/gelf/lib/ext/gelfj-1.1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
