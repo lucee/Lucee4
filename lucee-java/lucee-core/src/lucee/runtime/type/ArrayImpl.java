@@ -270,9 +270,6 @@ public class ArrayImpl extends ArraySupport implements Sizeable {
 		int diff=offCount-offset;
 		int minCapacity = Math.max(arr.length, key + offset + diff + 1);
 		
-		
-		
-		//print.e(size()+"->"+key);
 		if(minCapacity>arr.length) {
 			int oldCapacity = arr.length;
 	        int newCapacity = oldCapacity + (oldCapacity >> 1);
