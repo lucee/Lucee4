@@ -473,11 +473,11 @@ public final class ArrayImplNS extends ArraySupport implements Array,Sizeable {
 	
 	@Override
 	public void sort(String sortType, String sortOrder) throws PageException {
-		sort(ArrayUtil.toComparator(null, sortType, sortOrder, false));
+		sortWithComparator(ArrayUtil.toComparator(null, sortType, sortOrder, false));
 	}
 
 	@Override
-	public synchronized void sort(Comparator comp) {
+	public synchronized void sortWithComparator(Comparator comp) {
 		if(getDimension()>1)
 			throw new PageRuntimeException("only 1 dimensional arrays can be sorted");
 		Arrays.sort(arr,offset,offset+size,comp);	

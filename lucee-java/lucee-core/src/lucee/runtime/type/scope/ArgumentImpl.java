@@ -345,7 +345,7 @@ public final class ArgumentImpl extends ScopeSupport implements Argument {
 		throw new ExpressionException("can't sort ["+sortType+"-"+sortOrder+"] Argument Scope","not Implemnted Yet");
 	}
 
-	public void sort(Comparator com) {
+	public void sortWithComparator(Comparator com) {
 		// TODO Impl.
 		throw new PageRuntimeException("can't sort Argument Scope","not Implemnted Yet");
 	}
