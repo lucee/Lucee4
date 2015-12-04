@@ -1450,7 +1450,7 @@ public final class ComponentImpl extends StructSupport implements Externalizable
         		p=pit.next().getValue();
         		parr.append(p.getMetaData());
         	}
-        	parr.sort(new ArrayOfStructComparator(KeyConstants._name));
+        	parr.sortWithComparator(new ArrayOfStructComparator(KeyConstants._name));
         	sct.set(KeyConstants._properties,parr);
         }
 

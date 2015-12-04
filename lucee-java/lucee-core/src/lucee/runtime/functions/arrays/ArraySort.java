@@ -60,7 +60,7 @@ public final class ArraySort extends BIF {
 			comp=ArrayUtil.toComparator(pc,Caster.toString(sortTypeOrClosure), sortorder,localeSensitive);
 		
 		// we always need to convert the original object, because we do not return the result
-		if(objArr instanceof Array) 			((Array)objArr).sort(comp);
+		if(objArr instanceof Array) 			((Array)objArr).sortWithComparator(comp);
 		else if(objArr instanceof List) 		Collections.sort((List)objArr, comp);
 		else if(objArr instanceof Object[]) 	Arrays.sort((Object[])objArr, comp);
 		// else if(objArr instanceof boolean[])	Arrays.sort((boolean[])objArr);
@@ -95,7 +95,7 @@ public final class ArraySort extends BIF {
 		else 
 			comp=ArrayUtil.toComparator(pc,Caster.toString(sortTypeOrClosure), sortorder,localeSensitive);
 		
-		arr.sort(comp);
+		arr.sortWithComparator(comp);
 		return true;
 	}
 	

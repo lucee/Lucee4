@@ -492,7 +492,7 @@ public class ArrayImpl extends ArraySupport implements Sizeable {
 		}
 	}
 
-	public synchronized void sort(Comparator comp) {
+	public synchronized void sortWithComparator(Comparator comp) {
 		if(getDimension()>1)
 			throw new PageRuntimeException("only 1 dimensional arrays can be sorted");
 		Arrays.sort(arr,offset,offset+size,comp);	

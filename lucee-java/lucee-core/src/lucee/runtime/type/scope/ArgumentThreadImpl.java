@@ -409,7 +409,7 @@ public final class ArgumentThreadImpl implements Argument,Sizeable {
 		throw new CasterException(sct,"Array");
 	}
 
-	public void sort(Comparator com) {
+	public void sortWithComparator(Comparator com) {
 		throw new PageRuntimeException( new CasterException(sct,"Array"));
 	}
 

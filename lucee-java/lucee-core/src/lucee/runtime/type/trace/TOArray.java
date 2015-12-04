@@ -118,9 +118,9 @@ public class TOArray extends TOCollection implements Array {
 	}
 
 	@Override
-	public void sort(Comparator comp) {
+	public void sortWithComparator(Comparator comp) {
 		log();
-		arr.sort(comp);
+		arr.sortWithComparator(comp);
 	}
 
 	@Override
