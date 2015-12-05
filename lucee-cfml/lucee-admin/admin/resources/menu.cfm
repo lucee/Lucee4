@@ -5,6 +5,12 @@
 	array(
 		
 		struct(
+			action:"overview",label:stMenu.overview.label,
+			children:array(
+				struct(action:"overview",label:stMenu.overview.overview)
+			)
+		),
+		struct(
 			action:"server",label:stMenu.server.label,
 			children:array(
 				struct(action:"cache",label:stMenu.server.cache),
