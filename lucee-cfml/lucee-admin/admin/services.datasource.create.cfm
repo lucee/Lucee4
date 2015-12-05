@@ -139,6 +139,9 @@
 		<cfset datasource.className= driver.getClass()>
 		<cfset datasource.host     = driver.getValue('host')>
 		<cfset datasource.database = driver.getValue('database')>
+		<cfif datasource.database EQ "">
+			<cfset datasource.database = datasource.name>
+		</cfif>
 		<cfset datasource.port     = driver.getValue('port')>
 		<cfset datasource.timezone = "">
 		<cfset datasource.username = driver.getValue('username')>
