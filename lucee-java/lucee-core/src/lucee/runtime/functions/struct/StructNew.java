@@ -39,6 +39,7 @@ public final class StructNew extends BIF {
     public static Struct call(PageContext pc ,String type) throws FunctionException {
         type=type.toLowerCase();
         if(type.equals("linked")) return new StructImpl(Struct.TYPE_LINKED);
+        else if(type.equals("ordered")) return new StructImpl(Struct.TYPE_LINKED);
         else if(type.equals("weak")) return new StructImpl(Struct.TYPE_WEAKED);
         else if(type.equals("syncronized")) return new StructImpl(Struct.TYPE_SYNC);
         else if(type.equals("synchronized")) return new StructImpl(Struct.TYPE_SYNC);

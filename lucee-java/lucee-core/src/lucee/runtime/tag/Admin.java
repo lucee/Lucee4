@@ -51,7 +51,6 @@ import lucee.commons.io.log.log4j.Log4jUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.DirectoryResourceFilter;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
-import lucee.commons.io.res.filter.LogResourceFilter;
 import lucee.commons.io.res.filter.NotResourceFilter;
 import lucee.commons.io.res.filter.OrResourceFilter;
 import lucee.commons.io.res.filter.ResourceFilter;
@@ -153,6 +152,7 @@ import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.dt.TimeSpan;
+import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.scope.Cluster;
 import lucee.runtime.type.scope.ClusterEntryImpl;
 import lucee.runtime.type.util.ComponentUtil;
@@ -2352,19 +2352,36 @@ public final class Admin extends TagImpl implements DynamicAttributes {
      */
     private void doUpdateMailServer() throws PageException {
         
+    	
+    	
+    	
         admin.updateMailServer(
                 getString("admin",action,"hostname"),
                 getString("admin",action,"dbusername"),
                 getString("admin",action,"dbpassword"),
                 Caster.toIntValue(getString("admin",action,"port")),
                 getBoolV("tls", false),
-                getBoolV("ssl", false)
+                getBoolV("ssl", false),
+                toTimeout(getObject("life",null),1000*60*5),
+                toTimeout(getObject("idle",null),1000*60*5)
         );
+        
+        
         store();
         adminSync.broadcast(attributes, config);
     }
 
-    /**
+    private long toTimeout(Object timeout, long defaultValue ) throws PageException {
+    	if(timeout instanceof TimeSpan)
+			return ((TimeSpan) timeout).getMillis();
+		// seconds
+		int i = Caster.toIntValue(timeout);
+		if(i<0)
+			throw new ApplicationException("invalid value ["+i+"], value must be a positive integer greater or equal than 0");
+		return i*1000;
+	}
+
+	/**
      * @throws PageException
      * 
      */
@@ -2440,7 +2457,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         
 
         Server[] servers = config.getMailServers();
-        lucee.runtime.type.Query qry=new QueryImpl(new String[]{"hostname","password","username","port","authentication","readonly","tls","ssl"},servers.length,"query");
+        lucee.runtime.type.Query qry=new QueryImpl(new String[]{"hostname","password","username","port","authentication","readonly","tls","ssl","life","idle"},servers.length,"query");
         
         
         for(int i=0;i<servers.length;i++) {
@@ -2456,6 +2473,8 @@ public final class Admin extends TagImpl implements DynamicAttributes {
             	ServerImpl si = (ServerImpl)s;
 	            qry.setAt("ssl",row,Caster.toBoolean(si.isSSL()));
 	            qry.setAt("tls",row,Caster.toBoolean(si.isTLS()));
+	            qry.setAt("life",row,(si.getLifeTimeSpan()/1000));
+	            qry.setAt("idle",row,(si.getIdleTimeSpan()/1000));
             }
         }
         pageContext.setVariable(getString("admin",action,"returnVariable"),qry);

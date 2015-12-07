@@ -63,7 +63,7 @@ public class DeployHandler {
 			int mi = Info.getMinorVersion();
 			if(!dir.exists()) {
 				if(ma>4 || ma==4 && mi>1) {// FUTURE remove the if contition
-					dir.mkdirs();
+					dir.mkdir(); // TODO we have set this to mkdir to avoid that delted context are recreated (the file structure), but the question is, why is this executed on a deleted context
 				}
 				return;
 			}

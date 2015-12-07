@@ -26,11 +26,12 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import lucee.commons.io.CharsetUtil;
@@ -41,16 +42,15 @@ import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.mimetype.ContentType;
 import lucee.commons.net.HTTPUtil;
-import lucee.commons.net.URLEncoder;
-import lucee.commons.net.http.HTTPEngine;
-import lucee.commons.net.http.Header;
 import lucee.commons.net.http.httpclient4.CachingGZIPInputStream;
 import lucee.commons.net.http.httpclient4.HTTPEngineImpl;
 import lucee.commons.net.http.httpclient4.HTTPPatchFactory;
 import lucee.commons.net.http.httpclient4.HTTPResponse4Impl;
 import lucee.commons.net.http.httpclient4.ResourceBody;
+import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.config.ConfigWeb;
+import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.HTTPException;
@@ -72,13 +72,16 @@ import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTime;
+import lucee.runtime.type.dt.TimeSpan;
+import lucee.runtime.type.dt.TimeSpanImpl;
+import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
+import lucee.runtime.util.PageContextUtil;
 import lucee.runtime.util.URLResolver;
 
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -88,7 +91,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -115,7 +118,7 @@ import org.apache.http.protocol.HttpContext;
 *
 * 
 **/
-final class Http41 extends BodyTagImpl implements Http {
+public final class Http41 extends BodyTagImpl implements Http {
 
 	public static final String MULTIPART_RELATED = "multipart/related";
 	public static final String MULTIPART_FORM_DATA = "multipart/form-data";
@@ -204,7 +207,7 @@ final class Http41 extends BodyTagImpl implements Http {
 	private boolean resolveurl;
 
 	/** A value, in seconds. When a URL timeout is specified in the browser */
-	private long timeout=-1;
+	private TimeSpan timeout=null;
 
 	/** Host name or IP address of a proxy server. */
 	private String proxyserver;
@@ -303,7 +306,7 @@ final class Http41 extends BodyTagImpl implements Http {
 		password=null;
 		delimiter=',';
 		resolveurl=false;
-		timeout=-1L;
+		timeout=null;
 		proxyserver=null;
 		proxyport=80;
 		proxyuser=null;
@@ -394,14 +397,17 @@ final class Http41 extends BodyTagImpl implements Http {
 	* @param timeout value to set
 	 * @throws ExpressionException 
 	**/
-	public void setTimeout(double timeout) throws ExpressionException	{
-		if(timeout<0)
-			throw new ExpressionException("invalid value ["+Caster.toString(timeout)+"] for attribute timeout, value must be a positive integer greater or equal than 0");
-		
-	    long requestTimeout = pageContext.getRequestTimeout();
-	    long _timeout=(long)(timeout*1000D);
-	    this.timeout=requestTimeout<_timeout?requestTimeout:_timeout;
-		//print.out("this.timeout:"+this.timeout);
+	public void setTimeout(Object timeout) throws PageException	{
+		if(timeout instanceof TimeSpan)
+			this.timeout=(TimeSpan) timeout;
+		// seconds
+		else {
+			int i = Caster.toIntValue(timeout);
+			if(i<0)
+				throw new ApplicationException("invalid value ["+i+"] for attribute timeout, value must be a positive integer greater or equal than 0");
+			
+			this.timeout=new TimeSpanImpl(0, 0, 0, i);
+		}
 	}
 
 	/** set the value proxyserver
@@ -937,10 +943,20 @@ final class Http41 extends BodyTagImpl implements Http {
     			if(!HttpImpl.hasHeaderIgnoreCase(req,"User-Agent"))
     				req.setHeader("User-Agent",this.useragent);
     		
-    	// set timeout
-    		if(this.timeout>0L) {
-        		builder.setConnectionTimeToLive(this.timeout, TimeUnit.MILLISECONDS);
-        	}
+    			//timeout not defined
+			if(this.timeout==null || ((int)timeout.getSeconds())<=0) { // not set
+				this.timeout=PageContextUtil.remainingTime(pageContext,true);
+    		}
+			// timeout bigger than remaining time
+			else {
+				TimeSpan remaining = PageContextUtil.remainingTime(pageContext,true);
+				if(timeout.getSeconds()>remaining.getSeconds())
+					timeout=remaining;
+			}
+			
+			setTimeout(builder,this.timeout);
+    		
+    		
     		
     	// set Username and Password
     		if(this.username!=null) {
@@ -976,19 +992,21 @@ final class Http41 extends BodyTagImpl implements Http {
     		
 /////////////////////////////////////////// EXECUTE /////////////////////////////////////////////////
     	client = builder.build();
-		Executor41 e = new Executor41(this,client,httpContext,req,redirect);
+		Executor41 e = new Executor41(pageContext,this,client,httpContext,req,redirect);
 		HTTPResponse4Impl rsp=null;
-		if(timeout<0){
+		if(timeout==null || timeout.getMillis()<=0) {// never happens
 			try{
 				rsp = e.execute(httpContext);
 			}
 			
 			catch(Throwable t){
 				if(!throwonerror){
-					setUnknownHost(cfhttp, t);
+					if(t instanceof SocketTimeoutException)setRequestTimeout(cfhttp);
+					else setUnknownHost(cfhttp, t);
+					
 					return;
 				}
-				throw toPageException(t);
+				throw toPageException(t,rsp);
 				
 			}
 		}
@@ -996,9 +1014,10 @@ final class Http41 extends BodyTagImpl implements Http {
 			e.start();
 			try {
 				synchronized(this){//print.err(timeout);
-					this.wait(timeout);
+					this.wait(timeout.getMillis()+100);
 				}
-			} catch (InterruptedException ie) {
+			} 
+			catch (InterruptedException ie) {
 				throw Caster.toPageException(ie);
 			}
 			if(e.t!=null){
@@ -1006,16 +1025,14 @@ final class Http41 extends BodyTagImpl implements Http {
 					setUnknownHost(cfhttp,e.t);
 					return;
 				}
-				throw toPageException(e.t);	
+				
+				throw toPageException(e.t,rsp);	
 			}
-			
 			rsp=e.response;
-			
-			
 			if(!e.done){
 				req.abort();
 				if(throwonerror)
-					throw new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp.getURL());
+					throw new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp==null?null:rsp.getURL());
 				setRequestTimeout(cfhttp);	
 				return;
 				//throw new ApplicationException("timeout");	
@@ -1256,6 +1273,18 @@ final class Http41 extends BodyTagImpl implements Http {
 	    
 	}
 
+	public static void setTimeout(HttpClientBuilder builder, TimeSpan timeout) {
+		if(timeout==null || timeout.getMillis()<=0) return;
+		
+		int ms = (int)timeout.getMillis();
+		if(ms<0)ms=Integer.MAX_VALUE; // long value was bigger than Integer.MAX
+		
+    	SocketConfig sc=SocketConfig.custom()
+    			.setSoTimeout(ms)
+    			.build();
+    	builder.setDefaultSocketConfig(sc);
+	}
+
 	private void parseCookie(Query cookies,String raw) {
 		String[] arr =ListUtil.trimItems(ListUtil.trim(ListUtil.listToStringArray(raw, ';')));
 		if(arr.length==0) return;
@@ -1304,7 +1333,19 @@ final class Http41 extends BodyTagImpl implements Http {
     	return ReqRspUtil.decode(str, charset, false);
 	}
 
-	private PageException toPageException(Throwable t) {
+	private PageException toPageException(Throwable t, HTTPResponse4Impl rsp) {
+		if(t instanceof SocketTimeoutException) {
+			HTTPException he = new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp==null?null:rsp.getURL());
+			List<StackTraceElement> merged = ArrayUtil.merge(t.getStackTrace(), he.getStackTrace());
+			StackTraceElement[] traces=new StackTraceElement[merged.size()];
+			Iterator<StackTraceElement> it = merged.iterator();
+			int index=0;
+			while(it.hasNext()){
+				traces[index++]=it.next();
+			}
+			he.setStackTrace(traces);
+			return he;
+		}
 		PageException pe = Caster.toPageException(t);
 		if(pe instanceof NativeException) {
 			((NativeException) pe).setAdditional(KeyConstants._url, url);
@@ -1313,14 +1354,14 @@ final class Http41 extends BodyTagImpl implements Http {
 	}
 
 	private void setUnknownHost(Struct cfhttp,Throwable t) {
-		cfhttp.setEL(CHARSET,"");
 		cfhttp.setEL(ERROR_DETAIL,"Unknown host: "+t.getMessage());
 		cfhttp.setEL(FILE_CONTENT,"Connection Failure");
-		cfhttp.setEL(KeyConstants._header,"");
 		cfhttp.setEL(KeyConstants._mimetype,"Unable to determine MIME type of file.");
-		cfhttp.setEL(RESPONSEHEADER,new StructImpl());
 		cfhttp.setEL(STATUSCODE,"Connection Failure. Status code unavailable.");
+		cfhttp.setEL(RESPONSEHEADER,new StructImpl());
 		cfhttp.setEL(KeyConstants._text,Boolean.TRUE);
+		cfhttp.setEL(CHARSET,"");
+		cfhttp.setEL(KeyConstants._header,"");
 	}
 
 	private void setRequestTimeout(Struct cfhttp) {
@@ -1413,7 +1454,8 @@ final class Http41 extends BodyTagImpl implements Http {
 }
 
 class Executor41 extends Thread {
-	
+
+	private final PageContext pc;
 	 final Http41 http;
 	 private final CloseableHttpClient client;
 	 final boolean redirect;
@@ -1424,7 +1466,8 @@ class Executor41 extends Thread {
 	private HttpRequestBase req;
 	private HttpContext context;
 
-	public Executor41(Http41 http,CloseableHttpClient client, HttpContext context, HttpRequestBase req, boolean redirect) {
+	public Executor41(PageContext pc,Http41 http,CloseableHttpClient client, HttpContext context, HttpRequestBase req, boolean redirect) {
+		this.pc=pc;
 		this.http=http;
 		this.client=client;
 		this.context=context;
@@ -1434,6 +1477,7 @@ class Executor41 extends Thread {
 	
 	@Override
 	public void run(){
+		ThreadLocalPageContext.register(pc);
 		try {
 			response=execute(context);
 			done=true;

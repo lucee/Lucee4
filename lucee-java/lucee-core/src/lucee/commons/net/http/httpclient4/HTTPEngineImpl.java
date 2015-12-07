@@ -22,12 +22,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.TemporaryStream;
@@ -48,6 +46,8 @@ import lucee.runtime.net.proxy.ProxyData;
 import lucee.runtime.net.proxy.ProxyDataImpl;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
+import lucee.runtime.tag.Http41;
+import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.util.CollectionUtil;
 
 import org.apache.http.Header;
@@ -55,47 +55,33 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpMessage;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.ProtocolException;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
-
-import flex.messaging.services.http.HTTPConnectionManagerSettings;
 
 public class HTTPEngineImpl {
 	
@@ -258,7 +244,7 @@ public class HTTPEngineImpl {
     	if(CollectionUtil.isEmpty(formfields))setContentType(request,charset);
     	setFormFields(request,formfields,charset);
     	setUserAgent(request,useragent);
-    	if(timeout>0)builder.setConnectionTimeToLive(timeout, TimeUnit.MILLISECONDS);
+    	if(timeout>0)Http41.setTimeout(builder,TimeSpanImpl.fromMillis(timeout));
     	HttpContext context=setCredentials(builder,hh, username, password,false);  
     	setProxy(builder,request,proxy);
     	CloseableHttpClient client = builder.build();

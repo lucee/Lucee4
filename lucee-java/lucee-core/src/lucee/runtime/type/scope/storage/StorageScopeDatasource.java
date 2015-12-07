@@ -100,7 +100,7 @@ public abstract class StorageScopeDatasource extends StorageScopeImpl {
 	protected static Struct _loadData(PageContext pc, String datasourceName,String strType,int type, Log log, boolean mxStyle) throws PageException	{
 		ConfigImpl config = (ConfigImpl)pc.getConfig();
 		DatasourceConnectionPool pool = config.getDatasourceConnectionPool();
-		DatasourceConnection dc=pool.getDatasourceConnection(pc,((PageContextImpl)pc).getDataSource(datasourceName),null,null);
+		DatasourceConnection dc=pool.getDatasourceConnection(((PageContextImpl)pc).getDataSource(datasourceName),null,null);
 		SQLExecutor executor=SQLExecutionFactory.getInstance(dc);
 		
 		
@@ -156,7 +156,7 @@ public abstract class StorageScopeDatasource extends StorageScopeImpl {
 			DataSource ds;
 			if(pc!=null) ds=((PageContextImpl)pc).getDataSource(datasourceName);
 			else ds=config.getDataSource(datasourceName);
-			dc=pool.getDatasourceConnection(null,ds,null,null);
+			dc=pool.getDatasourceConnection(ds,null,null);
 			SQLExecutor executor=SQLExecutionFactory.getInstance(dc);
 			executor.update(config, cfid,appName, dc, getType(), sct,getTimeSpan(),log);
 		} 
@@ -180,7 +180,7 @@ public abstract class StorageScopeDatasource extends StorageScopeImpl {
 			DataSource ds;
 			if(pc!=null) ds=((PageContextImpl)pc).getDataSource(datasourceName);
 			else ds=config.getDataSource(datasourceName);
-			dc=pool.getDatasourceConnection(null,ds,null,null);
+			dc=pool.getDatasourceConnection(ds,null,null);
 			SQLExecutor executor=SQLExecutionFactory.getInstance(dc);
 			executor.delete(config, cfid,appName, dc, getType(),log);
 		} 

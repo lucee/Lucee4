@@ -14,10 +14,6 @@ import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.Tag;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.methods.HttpUriRequest;
-
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -28,6 +24,10 @@ import lucee.commons.net.http.Header;
 import lucee.commons.net.http.httpclient4.HTTPResponse4Impl;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.net.http.ReqRspUtil;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.HttpUriRequest;
 
 public class HttpImpl implements Http,BodyTag {
 	
@@ -83,7 +83,7 @@ public class HttpImpl implements Http,BodyTag {
 	}
 
 	@Override
-	public void setTimeout(double timeout) throws PageException {
+	public void setTimeout(Object timeout) throws PageException {
 		instance.setTimeout(timeout);
 	}
 

@@ -41,6 +41,7 @@ import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
+import javax.mail.NoSuchProviderException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -134,6 +135,9 @@ public final class SMTPClient implements Serializable  {
 
 	private String username;
 	private String password="";
+	private long lifeTimespan=100*60*5;
+	private long idleTimespan=100*60*1;
+	
 
 
 	
@@ -179,7 +183,7 @@ public final class SMTPClient implements Serializable  {
 	}
 
 	
-	public static ServerImpl toServerImpl(String server,int port, String usr,String pwd) throws MailException {
+	public static ServerImpl toServerImpl(String server,int port, String usr,String pwd, long lifeTimespan, long idleTimespan) throws MailException {
 		int index;
 		
 		// username/password
@@ -206,7 +210,7 @@ public final class SMTPClient implements Serializable  {
 		}
 		
 		
-		ServerImpl srv = ServerImpl.getInstance(server, port, usr, pwd, false, false);
+		ServerImpl srv = ServerImpl.getInstance(server, port, usr, pwd,lifeTimespan,idleTimespan, false, false);
 		return srv;
 	}
 	
@@ -226,6 +230,14 @@ public final class SMTPClient implements Serializable  {
 	 */
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public void setLifeTimespan(long life) {
+		this.lifeTimespan = life;
+	}
+	
+	public void setIdleTimespan(long idle) {
+		this.idleTimespan = idle;
 	}
 	
 
@@ -360,50 +372,32 @@ public final class SMTPClient implements Serializable  {
 		}
 	}
 	
-	
-	private MimeMessageAndSession createMimeMessage(lucee.runtime.config.Config config,String hostName, int port, String username, String password,
+	public static SessionAndTransport getSessionAndTransport(lucee.runtime.config.Config config,String hostName, int port,
+			String username, String password, long lifeTimesan, long idleTimespan,int socketTimeout,
+			boolean tls,boolean ssl, boolean newConnection) throws NoSuchProviderException, MessagingException {
+		Properties props = createProperties(config,hostName,port,username,password,tls,ssl,socketTimeout);
+		Authenticator auth=null;
+	    if(!StringUtil.isEmpty(username)) 
+	    	auth=new SMTPAuthenticator( username, password );
+	    
+		return newConnection?new SessionAndTransport(hash(props), props, auth,lifeTimesan,idleTimespan):
+    		SMTPConnectionPool.getSessionAndTransport(props,hash(props),auth,lifeTimesan,idleTimespan);
+	      
+	}
+	private MimeMessageAndSession createMimeMessage(lucee.runtime.config.Config config,String hostName, int port, 
+			String username, String password, long lifeTimesan, long idleTimespan,
 			boolean tls,boolean ssl, boolean newConnection) throws MessagingException {
 		
-	      Properties props = (Properties) System.getProperties().clone();
-	      String strTimeout = Caster.toString(getTimeout(config));
+		SessionAndTransport sat = getSessionAndTransport(config, hostName, port, username, password, lifeTimesan, idleTimespan, timeout, tls, ssl, newConnection);
+		/*Properties props = createProperties(config,hostName,port,username,password,tls,ssl,timeout);
+		Authenticator auth=null;
+	    if(!StringUtil.isEmpty(username)) 
+	    	auth=new SMTPAuthenticator( username, password );
+	    
 	      
-	      props.put("mail.smtp.host", hostName);
-	      props.put("mail.smtp.timeout", strTimeout);
-	      props.put("mail.smtp.connectiontimeout", strTimeout);
-	      if(port>0){
-	    	  props.put("mail.smtp.port", Caster.toString(port));
-	      }
-	      if(ssl)	{
-              props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-	    	  props.put("mail.smtp.socketFactory.port", Caster.toString(port));
-              props.put("mail.smtp.socketFactory.fallback", "false");
-          }
-          else {
-        	  props.put("mail.smtp.socketFactory.class", "javax.net.SocketFactory");
-	    	  props.remove("mail.smtp.socketFactory.port");
-              props.remove("mail.smtp.socketFactory.fallback");
-          }
-	      Authenticator auth=null;
-	      if(!StringUtil.isEmpty(username)) {
-	    	  props.put("mail.smtp.auth", "true"); 
-	    	  props.put("mail.smtp.starttls.enable",tls?"true":"false");
-	    	  
-	    	  props.put("mail.smtp.user", username);
-	    	  props.put("mail.smtp.password", password);
-	    	  props.put("password", password);
-	    	  auth=new SMTPAuthenticator( username, password );
-	      }
-	      else {
-	    	  props.put("mail.smtp.auth", "false"); 
-	    	  props.remove("mail.smtp.starttls.enable");
-	    	  
-	    	  props.remove("mail.smtp.user");
-	    	  props.remove("mail.smtp.password");
-	    	  props.remove("password");
-	      }
-	      SessionAndTransport sat = newConnection?new SessionAndTransport(hash(props), props, auth):
-    		SMTPConnectionPool.getSessionAndTransport(props,hash(props),auth);
-	      
+	      SessionAndTransport sat = newConnection?new SessionAndTransport(hash(props), props, auth,lifeTimesan,idleTimespan):
+    		SMTPConnectionPool.getSessionAndTransport(props,hash(props),auth,lifeTimesan,idleTimespan);
+	   */ 
 	// Contacts
 		SMTPMessage msg = new SMTPMessage(sat.session);
 		if(from==null)throw new MessagingException("you have do define the from for the mail"); 
@@ -504,6 +498,46 @@ public final class SMTPClient implements Serializable  {
 	    
 		return new MimeMessageAndSession(msg,sat);
 	}
+
+	private static Properties createProperties(Config config, String hostName, int port, String username,String password, boolean tls, boolean ssl, int timeout) {
+		Properties props = (Properties) System.getProperties().clone();
+	      String strTimeout = Caster.toString(getTimeout(config,timeout));
+	      
+	      props.put("mail.smtp.host", hostName);
+	      props.put("mail.smtp.timeout", strTimeout);
+	      props.put("mail.smtp.connectiontimeout", strTimeout);
+	      if(port>0){
+	    	  props.put("mail.smtp.port", Caster.toString(port));
+	      }
+	      if(ssl)	{
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+	    	  props.put("mail.smtp.socketFactory.port", Caster.toString(port));
+            props.put("mail.smtp.socketFactory.fallback", "false");
+        }
+        else {
+      	  props.put("mail.smtp.socketFactory.class", "javax.net.SocketFactory");
+	    	  props.remove("mail.smtp.socketFactory.port");
+            props.remove("mail.smtp.socketFactory.fallback");
+        }
+	      if(!StringUtil.isEmpty(username)) {
+	    	  props.put("mail.smtp.auth", "true"); 
+	    	  props.put("mail.smtp.starttls.enable",tls?"true":"false");
+	    	  
+	    	  props.put("mail.smtp.user", username);
+	    	  props.put("mail.smtp.password", password);
+	    	  props.put("password", password);
+	      }
+	      else {
+	    	  props.put("mail.smtp.auth", "false"); 
+	    	  props.remove("mail.smtp.starttls.enable");
+	    	  
+	    	  props.remove("mail.smtp.user");
+	    	  props.remove("mail.smtp.password");
+	    	  props.remove("password");
+	      }
+		return props;
+	}
+
 
 	private static String hash(Properties props) {
 		Enumeration<?> e = props.propertyNames();
@@ -662,7 +696,7 @@ public final class SMTPClient implements Serializable  {
 	public void _send(lucee.runtime.config.ConfigWeb config) throws MailException {
 		
 		long start=System.nanoTime();
-		long _timeout = getTimeout(config);
+		long _timeout = getTimeout(config,timeout);
 		try {
 
         	Proxy.start(proxyData);
@@ -682,8 +716,7 @@ public final class SMTPClient implements Serializable  {
         			usr=username;
         			pwd=password;
         		}
-        		
-        		nServers[i]=toServerImpl(host[i],prt,usr,pwd);
+        		nServers[i]=toServerImpl(host[i],prt,usr,pwd,lifeTimespan,idleTimespan);
 				if(ssl==SSL_YES) nServers[i].setSSL(true);
         		if(tls==TLS_YES) nServers[i].setTLS(true);
         			
@@ -723,7 +756,11 @@ public final class SMTPClient implements Serializable  {
 			{//synchronized(LOCK) { no longer necessary we have a proxy lock now
 				try {
 					
-					msgSess = createMimeMessage(config,server.getHostName(),server.getPort(),_username,_password,_tls,_ssl,!recyleConnection);
+					
+					
+					msgSess = createMimeMessage(config,server.getHostName(),server.getPort(),_username,_password,
+							((ServerImpl)server) .getLifeTimeSpan(),((ServerImpl)server).getIdleTimeSpan(),
+							_tls,_ssl,!recyleConnection);
 
 				} catch (MessagingException e) {
 					// listener
@@ -803,7 +840,7 @@ public final class SMTPClient implements Serializable  {
 		props.put("proxyData", this.proxyData);
 		props.put("rts", this.rts);
 		props.put("subject", this.subject);
-		props.put("timeout", getTimeout(config));
+		props.put("timeout", getTimeout(config,timeout));
 		props.put("timezone", this.timeZone);
 		props.put("tos", this.tos);
 		props.put("username", this.username);
@@ -826,7 +863,7 @@ public final class SMTPClient implements Serializable  {
 	}
 
 
-	private long getTimeout(Config config) {
+	private static long getTimeout(Config config, int timeout) {
 		return timeout>0?timeout:config.getMailTimeout()*1000L;
 	}
 

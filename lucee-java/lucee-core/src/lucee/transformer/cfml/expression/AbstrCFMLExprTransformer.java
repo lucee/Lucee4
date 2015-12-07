@@ -156,7 +156,7 @@ public abstract class AbstrCFMLExprTransformer {
 	private static final short STATIC=0;
 	private static final short DYNAMIC=1;
 	private static FunctionLibFunction JSON_ARRAY = null;
-	private static FunctionLibFunction JSON_STRUCT = null;
+	protected static FunctionLibFunction JSON_STRUCT = null;
 
 	public static final short CTX_OTHER = TagLibTagScript.CTX_OTHER;
 	public static final short CTX_NONE = TagLibTagScript.CTX_NONE;
@@ -1148,6 +1148,24 @@ public abstract class AbstrCFMLExprTransformer {
 				rightSite="0";//throw new TemplateException(cfml, "Number can't end with [.]"); // DIFF 23
 			rtn.append(rightSite);
 		}
+		else if(data.cfml.forwardIfCurrent('e')) {
+			Boolean expOp=null;
+			if(data.cfml.forwardIfCurrent('+')) expOp=Boolean.TRUE;
+			else if(data.cfml.forwardIfCurrent('-')) expOp=Boolean.FALSE;
+			
+			if(data.cfml.isCurrentBetween('0','9')) {
+				String rightSite = "e";
+				if(expOp==Boolean.FALSE) rightSite+="-";
+				else if(expOp==Boolean.TRUE) rightSite+="+";
+		        rightSite+=digit(data);
+		        rtn.append(rightSite);
+		    }
+		    else {
+		    	if(expOp!=null) data.cfml.previous();
+		        data.cfml.previous();
+		    }
+
+		}
         comments(data);
         
 		try {
@@ -1240,7 +1258,7 @@ public abstract class AbstrCFMLExprTransformer {
 	
 
 	
-	private Expression json(ExprData data,FunctionLibFunction flf, char start, char end) throws TemplateException {
+	protected Expression json(ExprData data,FunctionLibFunction flf, char start, char end) throws TemplateException {
 		if(!data.cfml.forwardIfCurrent(start))return null;
 		
 		Position line = data.cfml.getPosition();

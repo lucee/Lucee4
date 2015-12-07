@@ -140,4 +140,13 @@ public class CollectionUtil {
 		}
 		return keyArr;
 	}
+
+	public static <T> T remove(List<T> list,int index, T defaultValue) {
+		try{
+			return list.remove(index);
+		}
+		catch(Throwable t){
+			return defaultValue;
+		}
+	}
 }

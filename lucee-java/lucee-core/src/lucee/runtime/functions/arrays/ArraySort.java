@@ -21,11 +21,11 @@
  */
 package lucee.runtime.functions.arrays;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.CasterException;
 import lucee.runtime.exp.FunctionException;

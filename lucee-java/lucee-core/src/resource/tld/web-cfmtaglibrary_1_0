@@ -5928,11 +5928,11 @@ To use cached data, the function must be called with the exact same arguments.</
 	Lucee behaves as if redirect = "no".</description>
 		</attribute>
 		<attribute>
-			<type>number</type>
+			<type>any</type>
 			<name>timeout</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<description>A value, in seconds. When a URL timeout is specified in the browser, the timeout attribute setting
+			<description>A value, in seconds or a TimeSpan object. When a URL timeout is specified in the browser, the timeout attribute setting
 		takes precedence over the Lucee Administrator timeout. The server then uses the lesser
 		of the URL timeout and the timeout passed in the timeout attribute, so that the request always times
 		out before or at the same time as the page times out. If there is no URL timeout specified, Lucee
@@ -10205,13 +10205,12 @@ sct["bracketNotation"] --> keyname: "bracketNotation"
 		Certain ODBC drivers may dynamically reduce the block factor at runtime.</description>
 		</attribute>
 		<attribute>
-			<type>number</type>
+			<type>any</type>
 			<name>timeout</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<description>The maximum number of milliseconds for the query to execute before returning an error
-		indicating that the query has timed-out. This attribute is not supported by most ODBC drivers.
-		timeout is supported by the SQL Server 6.x or above driver. The minimum and maximum allowable values
+			<description>The maximum number of seconds for the query to execute before returning an error
+		indicating that the query has timed-out. Value can be a number (seconds) or a Timespan Object. The minimum and maximum allowable values
 		vary, depending on the driver.</description>
 		</attribute>
 		<attribute>
@@ -11729,6 +11728,7 @@ dWord: creates a value of 0 (zero)</description>
 		<attribute>
 			<type>boolean</type>
 			<name>bufferoutput</name>
+			<script-support>optional</script-support>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<script-support>optional</script-support>
@@ -11736,7 +11736,7 @@ dWord: creates a value of 0 (zero)</description>
 			if set to false the content to body is ignored and not disabled when a failure in the body of the tag occur.</description>
 		</attribute>
 	</tag>
-	
+
 	<!-- Slider -->
 	<tag>
 		<name>Slider</name>

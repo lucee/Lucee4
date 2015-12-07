@@ -26,10 +26,12 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import lucee.commons.io.CharsetUtil;
@@ -40,16 +42,16 @@ import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.mimetype.ContentType;
 import lucee.commons.net.HTTPUtil;
-import lucee.commons.net.URLEncoder;
 import lucee.commons.net.http.HTTPEngine;
-import lucee.commons.net.http.Header;
 import lucee.commons.net.http.httpclient4.CachingGZIPInputStream;
 import lucee.commons.net.http.httpclient4.HTTPEngine4Impl;
 import lucee.commons.net.http.httpclient4.HTTPPatchFactory;
 import lucee.commons.net.http.httpclient4.HTTPResponse4Impl;
 import lucee.commons.net.http.httpclient4.ResourceBody;
+import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.config.ConfigWeb;
+import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.HTTPException;
@@ -71,13 +73,16 @@ import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTime;
+import lucee.runtime.type.dt.TimeSpan;
+import lucee.runtime.type.dt.TimeSpanImpl;
+import lucee.runtime.type.util.ArrayUtil;
 import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
+import lucee.runtime.util.PageContextUtil;
 import lucee.runtime.util.URLResolver;
 
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -87,7 +92,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -200,7 +204,7 @@ final class Http4 extends BodyTagImpl implements Http {
 	private boolean resolveurl;
 
 	/** A value, in seconds. When a URL timeout is specified in the browser */
-	private long timeout=-1;
+	private TimeSpan timeout=null;
 
 	/** Host name or IP address of a proxy server. */
 	private String proxyserver;
@@ -294,7 +298,7 @@ final class Http4 extends BodyTagImpl implements Http {
 		password=null;
 		delimiter=',';
 		resolveurl=false;
-		timeout=-1L;
+		timeout=null;
 		proxyserver=null;
 		proxyport=80;
 		proxyuser=null;
@@ -385,14 +389,17 @@ final class Http4 extends BodyTagImpl implements Http {
 	* @param timeout value to set
 	 * @throws ExpressionException 
 	**/
-	public void setTimeout(double timeout) throws ExpressionException	{
-		if(timeout<0)
-			throw new ExpressionException("invalid value ["+Caster.toString(timeout)+"] for attribute timeout, value must be a positive integer greater or equal than 0");
-		
-	    long requestTimeout = pageContext.getRequestTimeout();
-	    long _timeout=(long)(timeout*1000D);
-	    this.timeout=requestTimeout<_timeout?requestTimeout:_timeout;
-		//print.out("this.timeout:"+this.timeout);
+	public void setTimeout(Object timeout) throws PageException	{
+		if(timeout instanceof TimeSpan)
+			this.timeout=(TimeSpan) timeout;
+		// seconds
+		else {
+			int i = Caster.toIntValue(timeout);
+			if(i<0)
+				throw new ApplicationException("invalid value ["+i+"] for attribute timeout, value must be a positive integer greater or equal than 0");
+			
+			this.timeout=new TimeSpanImpl(0, 0, 0, i);
+		}
 	}
 
 	/** set the value proxyserver
@@ -919,9 +926,24 @@ final class Http4 extends BodyTagImpl implements Http {
     		// set User Agent
     			if(!HttpImpl.hasHeaderIgnoreCase(req,"User-Agent"))
     				req.setHeader("User-Agent",this.useragent);
-    		
+    		// if connecting to an http server using Connection: keep-alive (the default for HTTP 1.1)
+    		// it will keep the connection open. The problem is, railo never reuses it.
+    		// we don't get any benefit from keep-alive. What's worse is we can starve
+    		// a system of connections that does repetative cfhttp calls. Fix is
+    		// to turn off keep-alive by default. (user can override it)
+    			if(!HttpImpl.hasHeaderIgnoreCase(req,"Connection"))
+    				req.setHeader("Connection","close");
     	// set timeout
-    		if(this.timeout>0L)HTTPEngine4Impl.setTimeout(params, (int)this.timeout);
+			if(this.timeout==null || ((int)timeout.getSeconds())<=0) { // not set
+				this.timeout=PageContextUtil.remainingTime(pageContext,true);
+			}
+			// timeout bigger than remaining time
+			else {
+				TimeSpan remaining = PageContextUtil.remainingTime(pageContext,true);
+				if(timeout.getSeconds()>remaining.getSeconds())
+					timeout=remaining;
+			}
+    		HTTPEngine4Impl.setTimeout(params, this.timeout);
     		
     	// set Username and Password
     		if(this.username!=null) {
@@ -957,9 +979,9 @@ final class Http4 extends BodyTagImpl implements Http {
     	if(httpContext==null)httpContext = new BasicHttpContext();
     		
 /////////////////////////////////////////// EXECUTE /////////////////////////////////////////////////
-		Executor4 e = new Executor4(this,client,httpContext,req,redirect);
+		Executor4 e = new Executor4(pageContext,this,client,httpContext,req,redirect);
 		HTTPResponse4Impl rsp=null;
-		if(timeout<0){
+		if(timeout==null || timeout.getMillis()<=0){
 			try{
 				rsp = e.execute(httpContext);
 			}
@@ -969,7 +991,7 @@ final class Http4 extends BodyTagImpl implements Http {
 					setUnknownHost(cfhttp, t);
 					return;
 				}
-				throw toPageException(t);
+				throw toPageException(t,rsp);
 				
 			}
 		}
@@ -977,7 +999,7 @@ final class Http4 extends BodyTagImpl implements Http {
 			e.start();
 			try {
 				synchronized(this){//print.err(timeout);
-					this.wait(timeout);
+					this.wait(timeout.getMillis()+100);
 				}
 			} catch (InterruptedException ie) {
 				throw Caster.toPageException(ie);
@@ -987,7 +1009,7 @@ final class Http4 extends BodyTagImpl implements Http {
 					setUnknownHost(cfhttp,e.t);
 					return;
 				}
-				throw toPageException(e.t);	
+				throw toPageException(e.t,rsp);	
 			}
 			
 			rsp=e.response;
@@ -996,7 +1018,7 @@ final class Http4 extends BodyTagImpl implements Http {
 			if(!e.done){
 				req.abort();
 				if(throwonerror)
-					throw new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp.getURL());
+					throw new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp==null?null:rsp.getURL());
 				setRequestTimeout(cfhttp);	
 				return;
 				//throw new ApplicationException("timeout");	
@@ -1285,13 +1307,27 @@ final class Http4 extends BodyTagImpl implements Http {
     	return ReqRspUtil.decode(str, charset, false);
 	}
 
-	private PageException toPageException(Throwable t) {
+	private PageException toPageException(Throwable t, HTTPResponse4Impl rsp) {
+		if(t instanceof SocketTimeoutException) {
+			HTTPException he = new HTTPException("408 Request Time-out","a timeout occurred in tag http",408,"Time-out",rsp==null?null:rsp.getURL());
+			List<StackTraceElement> merged = ArrayUtil.merge(t.getStackTrace(), he.getStackTrace());
+			StackTraceElement[] traces=new StackTraceElement[merged.size()];
+			Iterator<StackTraceElement> it = merged.iterator();
+			int index=0;
+			while(it.hasNext()){
+				traces[index++]=it.next();
+			}
+			he.setStackTrace(traces);
+			return he;
+		}
 		PageException pe = Caster.toPageException(t);
 		if(pe instanceof NativeException) {
 			((NativeException) pe).setAdditional(KeyConstants._url, url);
 		}
 		return pe;
 	}
+	
+	
 
 	private void setUnknownHost(Struct cfhttp,Throwable t) {
 		cfhttp.setEL(CHARSET,"");
@@ -1394,7 +1430,8 @@ final class Http4 extends BodyTagImpl implements Http {
 }
 
 class Executor4 extends Thread {
-	
+
+	private final PageContext pc;
 	 final Http4 http;
 	 private final DefaultHttpClient client;
 	 final boolean redirect;
@@ -1405,7 +1442,8 @@ class Executor4 extends Thread {
 	private HttpRequestBase req;
 	private HttpContext context;
 
-	public Executor4(Http4 http,DefaultHttpClient client, HttpContext context, HttpRequestBase req, boolean redirect) {
+	public Executor4(PageContext pc,Http4 http,DefaultHttpClient client, HttpContext context, HttpRequestBase req, boolean redirect) {
+		this.pc=pc;
 		this.http=http;
 		this.client=client;
 		this.context=context;
@@ -1415,6 +1453,7 @@ class Executor4 extends Thread {
 	
 	@Override
 	public void run(){
+		ThreadLocalPageContext.register(pc);
 		try {
 			response=execute(context);
 			done=true;

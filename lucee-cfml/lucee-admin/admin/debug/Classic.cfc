@@ -90,7 +90,7 @@ private function isColumnEmpty(query query, string columnName){
 </cfscript>   
     
     
-    <cffunction name="output" returntype="void">
+    <cffunction name="output" returntype="void" output="true">
     	<cfargument name="custom" type="struct" required="yes">
 		<cfargument name="debugging" required="true" type="struct">
 		<cfargument name="context" type="string" default="web"><cfsilent>
@@ -159,7 +159,7 @@ millisecond:"ms"
 		</tr>
 		<tr>
 			<td class="cfdebug" nowrap> Template </td>
-			<td class="cfdebug">#_cgi.SCRIPT_NAME# (#_cgi.cf_template_path#)</td>
+			<td class="cfdebug">#HTMLEditFormat(_cgi.SCRIPT_NAME)# (#HTMLEditFormat(_cgi.cf_template_path)#)</td>
 		</tr>
 		<tr>
 			<td class="cfdebug" nowrap> Time Stamp </td>
@@ -370,7 +370,7 @@ millisecond:"ms"
 
 <cfif doPrint and structCount(scp)>
 <pre class="cfdebug"><b>#name# Variables:</b><cftry><cfloop index="key" list="#ListSort(StructKeyList(scp),"textnocase")#">
-#(key)#=<cftry><cfif IsSimpleValue(scp[key])>#scp[key]#<!--- 
+#(key)#=<cftry><cfif IsSimpleValue(scp[key])>#HTMLEditFormat(scp[key])#<!--- 
 ---><cfelseif isArray(scp[key])>Array (#arrayLen(scp[key])#)<!--- 
 ---><cfelseif isValid('component',scp[key])>Component (#GetMetaData(scp[key]).name#)<!--- 
 ---><cfelseif isStruct(scp[key])>Struct (#StructCount(scp[key])#)<!--- 

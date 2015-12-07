@@ -157,14 +157,14 @@ public final class CFMLTransformer {
 			
 			// try inside a cfscript
 			tlt = CFMLTransformer.getTLT(original,"script");
-			String text="<"+tlt.getFullName()+">"+original.getText()+"</"+tlt.getFullName()+">";
+			String text="<"+tlt.getFullName()+">"+original.getText()+"\n</"+tlt.getFullName()+">";
 			cfml=new CFMLString(text,charset,writeLog,ps);
 			
 			try {
 				while(true){
 					if(cfml==null){
 						cfml=new CFMLString(ps,charset,writeLog);
-						text="<"+tlt.getFullName()+">"+cfml.getText()+"</"+tlt.getFullName()+">";
+						text="<"+tlt.getFullName()+">"+cfml.getText()+"\n</"+tlt.getFullName()+">";
 						cfml=new CFMLString(text,charset,writeLog,ps);
 					}
 					try {
@@ -192,13 +192,13 @@ public final class CFMLTransformer {
 			// try inside a component
 			if(p.isPage()){
 				tlt = CFMLTransformer.getTLT(original,"component");
-				text="<"+tlt.getFullName()+">"+original.getText()+"</"+tlt.getFullName()+">";
+				text="<"+tlt.getFullName()+">"+original.getText()+"\n</"+tlt.getFullName()+">";
 				cfml=new CFMLString(text,charset,writeLog,ps);
 						
 				while(true){
 					if(cfml==null){
 						cfml=new CFMLString(ps,charset,writeLog);
-						text="<"+tlt.getFullName()+">"+cfml.getText()+"</"+tlt.getFullName()+">";
+						text="<"+tlt.getFullName()+">"+cfml.getText()+"\n</"+tlt.getFullName()+">";
 						cfml=new CFMLString(text,charset,writeLog,ps);
 					}
 					try {

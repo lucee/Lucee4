@@ -72,6 +72,7 @@ import lucee.transformer.bytecode.statement.FlowControlFinal;
 import lucee.transformer.bytecode.statement.FlowControlRetry;
 import lucee.transformer.bytecode.statement.HasBody;
 import lucee.transformer.bytecode.statement.PrintOut;
+import lucee.transformer.bytecode.statement.Switch;
 import lucee.transformer.bytecode.statement.TryCatchFinally;
 import lucee.transformer.bytecode.statement.tag.Attribute;
 import lucee.transformer.bytecode.statement.tag.Tag;
@@ -1170,5 +1171,18 @@ public final class ASMUtil {
 			// TODO Auto-generated catch block
 			t.printStackTrace();
 		}
+	}
+
+
+	public static void createEmptyStruct(GeneratorAdapter adapter) {
+		adapter.newInstance(Types.STRUCT_IMPL);
+		adapter.dup();
+		adapter.invokeConstructor(Types.STRUCT_IMPL, Page.INIT_STRUCT_IMPL);
+	}
+	
+	public static void createEmptyArray(GeneratorAdapter adapter) {
+		adapter.newInstance(Types.ARRAY_IMPL);
+		adapter.dup();
+		adapter.invokeConstructor(Types.ARRAY_IMPL, Switch.INIT);
 	}
 }

@@ -92,7 +92,6 @@ Redirtect to entry --->
 			</table>
 		</cfform>
 	</cfif>
-
 	<!--- LIST CACHE --->
 	<cfif logs.recordcount and hasReadable>
 		<h2>#stText.Settings.logging.title#</h2>

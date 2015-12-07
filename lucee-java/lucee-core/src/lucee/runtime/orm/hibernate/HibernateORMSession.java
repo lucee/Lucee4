@@ -59,7 +59,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.query.HQLQueryPlan;
 import org.hibernate.engine.query.ParameterMetadata;
 import org.hibernate.engine.query.QueryPlanCache;
-import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.type.Type;
 
@@ -162,13 +161,6 @@ public class HibernateORMSession implements ORMSession {
 		try {
 			getSession(dsn).flush();
 			
-		}
-		catch(ConstraintViolationException cve){
-			PageException pe = ExceptionUtil.createException(this,null,cve);
-			if(!Util.isEmpty(cve.getConstraintName())) {
-				ExceptionUtil.setAdditional(pe, CommonUtil.createKey("constraint name"), cve.getConstraintName());
-			}
-			throw pe;
 		}
 		catch(Throwable t) {
 			throw CommonUtil.toPageException(t);

@@ -48,6 +48,8 @@ import lucee.runtime.net.proxy.ProxyData;
 import lucee.runtime.net.proxy.ProxyDataImpl;
 import lucee.runtime.op.Caster;
 import lucee.runtime.op.Decision;
+import lucee.runtime.type.dt.TimeSpan;
+import lucee.runtime.type.dt.TimeSpanImpl;
 import lucee.runtime.type.util.CollectionUtil;
 
 import org.apache.http.Header;
@@ -69,7 +71,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.ClientContext;
@@ -94,7 +95,7 @@ public class HTTPEngine4Impl {
 	 * @param url
 	 * @param username
 	 * @param password
-	 * @param timeout
+	 * @param timeout in ms
 	 * @param charset
 	 * @param useragent
 	 * @param proxyserver
@@ -117,7 +118,7 @@ public class HTTPEngine4Impl {
      * @param url
      * @param username
      * @param password
-     * @param timeout
+     * @param timeout in ms
      * @param charset
      * @param useragent
      * @param proxyserver
@@ -152,7 +153,7 @@ public class HTTPEngine4Impl {
      * @param url
      * @param username
      * @param password
-     * @param timeout
+     * @param timeout in ms
      * @param charset
      * @param useragent
      * @param proxyserver
@@ -179,7 +180,7 @@ public class HTTPEngine4Impl {
      * @param url
      * @param username
      * @param password
-     * @param timeout
+     * @param timeout in ms
      * @param charset
      * @param useragent
      * @param proxyserver
@@ -202,7 +203,7 @@ public class HTTPEngine4Impl {
      * @param url
      * @param username
      * @param password
-     * @param timeout
+     * @param timeout in ms
      * @param charset
      * @param useragent
      * @param proxyserver
@@ -245,7 +246,7 @@ public class HTTPEngine4Impl {
     	if(CollectionUtil.isEmpty(formfields))setContentType(request,charset);
     	setFormFields(request,formfields,charset);
     	setUserAgent(request,useragent);
-    	setTimeout(params,timeout);
+    	setTimeout(params,timeout>0?TimeSpanImpl.fromMillis(timeout):null);
     	HttpContext context=setCredentials(client,hh, username, password,false);  
     	setProxy(client,request,proxy);
         if(context==null)context = new BasicHttpContext();
@@ -295,10 +296,16 @@ public class HTTPEngine4Impl {
         }
 	}
 
-	public static void setTimeout(HttpParams params, long timeout) {
-        if(timeout>0){
-        	HttpConnectionParams.setConnectionTimeout(params, (int)timeout);
-        	HttpConnectionParams.setSoTimeout(params, (int)timeout);
+	/**
+	 * sets the timeout for the connection and socket (same value)
+	 */
+	public static void setTimeout(HttpParams params, TimeSpan timeout) {
+        if(timeout!=null && timeout.getMillis()>0){
+        	int ms = (int)timeout.getMillis();
+        	if(ms<0) ms=Integer.MAX_VALUE;
+        	
+        	HttpConnectionParams.setConnectionTimeout(params,ms);
+        	HttpConnectionParams.setSoTimeout(params, ms);
         }
 	}
 

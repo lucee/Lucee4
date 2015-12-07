@@ -64,7 +64,7 @@ public interface Http extends BodyTag {
 	
 	public void setPreauth(boolean preauth);
 	
-	public void setTimeout(double timeout) throws PageException;
+	public void setTimeout(Object timeout) throws PageException;
 	
 	public void setProxyserver(String proxyserver);
 	
