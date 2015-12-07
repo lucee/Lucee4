@@ -1,18 +1,18 @@
-<!--- 
+<!---
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ---><cfif request.admintype EQ "web"><cflocation url="#request.self#" addtoken="no"></cfif>
 
 <cfparam name="url.action2" default="none">
@@ -25,19 +25,19 @@
     	<cfif not len(form.location)>
         	<cfset form.location=form.locationCustom>
         </cfif>
-        
-		<cfadmin 
+
+		<cfadmin
 			action="UpdateUpdate"
 			type="#request.adminType#"
 			password="#session["password"&request.adminType]#"
-			
+
 			updateType="#form.type#"
 			updateLocation="#form.location#"
 			remoteClients="#request.getRemoteClients()#">
 	</cfcase>
 	<cfcase value="run">
 		<cfsetting requesttimeout="10000">
-		<cfadmin 
+		<cfadmin
 			action="runUpdate"
 			type="#request.adminType#"
 			password="#session["password"&request.adminType]#"
@@ -45,14 +45,14 @@
 	</cfcase>
 	<cfcase value="updateJars">
 		<cfsetting requesttimeout="10000">
-		<cfadmin 
+		<cfadmin
 			action="updateJars"
 			type="#request.adminType#"
 			password="#session["password"&request.adminType]#"
 			remoteClients="#request.getRemoteClients()#">
 	</cfcase>
 	<cfcase value="remove">
-		<cfadmin 
+		<cfadmin
 			action="removeUpdate"
             onlyLatest="#StructKeyExists(form,'latest')#"
 			type="#request.adminType#"
@@ -66,25 +66,25 @@
 	</cfcatch>
 </cftry>
 
-<!--- 
+<!---
 Redirtect to entry --->
 <cfif cgi.request_method EQ "POST" and error.message EQ "">
 	<cflocation url="#request.self#?action=#url.action#" addtoken="no">
 </cfif>
 
-<!--- 
+<!---
 Error Output --->
 <cfset printError(error)>
 
 
-<cfadmin 
+<cfadmin
 			action="listPatches"
 			returnvariable="patches"
             type="#request.adminType#"
             password="#session["password"&request.adminType]#">
-            
-<!---- 
-<cfadmin 
+
+<!----
+<cfadmin
 			action="needNewJars"
 			returnvariable="needNewJars"
             type="#request.adminType#"
@@ -95,10 +95,10 @@ because this is only about optional updates, we do this only in background from 
 
 
 <cffunction name="getAvailableVersion" output="false">
-	
+
 	<cftry>
-	<cfhttp 
-			url="#update.location#/lucee/remote/version/Info.cfc?method=getpatchversionfor&version=#server.lucee.version#" 
+	<cfhttp
+			url="#update.location#/lucee/remote/version/Info.cfc?method=getpatchversionfor&version=#server.lucee.version#"
 		method="get" resolveurl="no" result="local.http">
 
 	<cfwddx action="wddx2cfml" input="#http.fileContent#" output="local.wddx">
@@ -111,13 +111,13 @@ because this is only about optional updates, we do this only in background from 
 </cffunction>
 
 <cffunction name="getAvailableVersionDoc" output="true">
-	
+
 	<cftry>
-	<cfhttp 
-		url="#update.location#/lucee/remote/version/Info.cfc?method=getPatchVersionDocFor&level=#server.ColdFusion.ProductLevel#&version=#server.lucee.version#" 
+	<cfhttp
+		url="#update.location#/lucee/remote/version/Info.cfc?method=getPatchVersionDocFor&level=#server.ColdFusion.ProductLevel#&version=#server.lucee.version#"
 		method="get" resolveurl="no" result="local.http"><!--- #server.lucee.version# --->
 	<cfwddx action="wddx2cfml" input="#http.fileContent#" output="wddx">
-		
+
 	<cfreturn wddx>
 		<cfcatch>
 			<cfreturn "-">
@@ -125,7 +125,7 @@ because this is only about optional updates, we do this only in background from 
 	</cftry>
 </cffunction>
 
-<cfadmin 
+<cfadmin
 	action="getUpdate"
 	type="#request.adminType#"
 	password="#session["password"&request.adminType]#"
@@ -138,7 +138,7 @@ because this is only about optional updates, we do this only in background from 
 
 <cfoutput>
 	<div class="pageintro">#stText.services.update.desc#</div>
-	
+
 	<!--- Settings --->
 	<h2>#stText.services.update.setTitle#</h2>
 	<div class="itemintro">#stText.services.update.setDesc#</div>
@@ -179,7 +179,7 @@ because this is only about optional updates, we do this only in background from 
 									</label>
 									<input id="customtextinput" type="text" class="text" name="locationCustom" size="40" value="<cfif isCustom>#update.location#</cfif>">
 									<div class="comment">#stText.services.update.location_customDesc#</div>
-									
+
 									<cfsavecontent variable="headText">
 										<script type="text/javascript">
 											function sp_clicked()
@@ -231,8 +231,8 @@ because this is only about optional updates, we do this only in background from 
 			</cfif>
 		</table>
 	</cfform>
-	
-	<!--- 
+
+	<!---
 For testing
 	<cfsavecontent variable="txt" trim>
 [ ##331 ] cached query not disconnect from life query
@@ -245,7 +245,7 @@ For testing
 		<cfscript>
 			// Jira
 			jira=stText.services.update.jira;
-			jira=replace(jira,'{a}','<a href="https://issues.lucee.org" target="_blank">');
+			jira=replace(jira,'{a}','<a href="http://issues.lucee.org" target="_blank">');
 			jira=replace(jira,'{/a}','</a>');
 			try	{
 				// Changelog http://issues.lucee.org/browse/LDEV-148
@@ -287,8 +287,8 @@ Version ","all");
 		<h2>#stText.services.update.infoTitle#</h2>
 		<div class="text">#replace(stText.services.update.noUpdate,'{current}',curr)#</div>
 	</cfif>
-	
-	
+
+
 	<cfif hasUpdate>
 		<!--- run update --->
 		<h2>#stText.services.update.exe#</h2>
@@ -325,7 +325,7 @@ Version ","all");
 			</table>
 		</cfform>
 	</cfif>
-	
+
 	<!--- remove update --->
 	<cfset size=arrayLen(patches)>
 	<cfif size>
