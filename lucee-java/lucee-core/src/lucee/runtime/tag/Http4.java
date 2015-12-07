@@ -290,6 +290,10 @@ final class Http4 extends BodyTagImpl implements Http {
 	
 	private boolean compression=true;
 
+	/** The full path to a PKCS12 format file that contains the client certificate for the request. */
+	private String clientCert;
+	/** Password used to decrypt the client certificate. */
+	private String clientCertPassword;
 	
 	@Override
 	public void release()	{
@@ -542,6 +546,22 @@ final class Http4 extends BodyTagImpl implements Http {
 		else if("ntlm".equalsIgnoreCase(strAuthType)) authType=AUTH_TYPE_NTLM;
 		else
 			throw new ExpressionException("invalid value ["+strAuthType+"] for attribute authType, value must be one of the following [basic,ntlm]");
+	}
+
+	/** set the value clientCert
+	*  set the clientCert for the call.
+	* @param clientCert value to set
+	**/
+	public void setClientcert(String clientCert)	{
+		this.clientCert=clientCert;
+	}
+
+	/** set the value clientCertPassword
+	*  set the clientCertPassword for the call.
+	* @param clientCertPassword value to set
+	**/
+	public void setClientcertpassword(String clientCertPassword)	{
+		this.clientCertPassword=clientCertPassword;
 	}
 
 	public void setWorkstation(String workStation)	{

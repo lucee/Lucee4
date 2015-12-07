@@ -212,6 +212,15 @@ public class HttpImpl implements Http,BodyTag {
 		instance.setAddtoken(addtoken);
 	}
 
+	@Override
+	public void setClientcert(String clientCert) {
+		instance.setClientcert(clientCert);
+	}
+
+	@Override
+	public void setClientcertpassword(String clientCertPassword) {
+		instance.setClientcertpassword(clientCertPassword);
+	}
 
 	@Override
 	public int doAfterBody() throws JspException {

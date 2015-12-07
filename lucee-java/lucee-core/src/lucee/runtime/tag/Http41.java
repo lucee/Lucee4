@@ -293,6 +293,10 @@ public final class Http41 extends BodyTagImpl implements Http {
 	
 	private boolean compression=true;
 
+	/** The full path to a PKCS12 format file that contains the client certificate for the request. */
+	private String clientCert;
+	/** Password used to decrypt the client certificate. */
+	private String clientCertPassword;
 	
 	public Http41() {
 		// Test if library is ok
@@ -552,6 +556,22 @@ public final class Http41 extends BodyTagImpl implements Http {
 			throw new ExpressionException("invalid value ["+strAuthType+"] for attribute authType, value must be one of the following [basic,ntlm]");
 	}
 
+	/** set the value clientCert
+	*  set the clientCert for the call.
+	* @param clientCert value to set
+	**/
+	public void setClientcert(String clientCert)	{
+		this.clientCert=clientCert;
+	}
+
+	/** set the value clientCertPassword
+	*  set the clientCertPassword for the call.
+	* @param clientCertPassword value to set
+	**/
+	public void setClientcertpassword(String clientCertPassword)	{
+		this.clientCertPassword=clientCertPassword;
+	}
+
 	public void setWorkstation(String workStation)	{
 		this.workStation=workStation;
 	}
@@ -646,7 +666,10 @@ public final class Http41 extends BodyTagImpl implements Http {
     	BasicCookieStore cookieStore = new BasicCookieStore();
     	builder.setDefaultCookieStore(cookieStore);
     	
-		
+		// clientCert
+		if(this.clientCert!=null) {
+			HTTPEngineImpl.setClientSSL(builder, this.clientCert, this.clientCertPassword);
+		}
     	
     	ConfigWeb cw = pageContext.getConfig();
     	HttpRequestBase req=null;
