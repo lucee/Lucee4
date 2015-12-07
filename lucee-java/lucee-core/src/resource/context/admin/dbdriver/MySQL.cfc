@@ -27,6 +27,10 @@
 		//,field("Allow Multiple Queries","allowMultiQueries","true,false",false,"Allow the use of "";"" to delimit multiple queries during one statement (true/false), defaults to ""false""","radio")
 		
 		
+		field('UseSSL','useSSL','true,false',false,'Uses SSL stuff',"radio"),
+		field('requireSSL','requireSSL','true,false',false,'Uses SSL stuff',"radio"),
+		field('verifyServerCertificate','verifyServerCertificate','true,false',false,'Uses SSL stuff',"radio"),
+
 		field('Allow multiple Queries','allowMultiQueries','true,false',false,'Allow the use of ";" to delimit multiple queries during one statement',"radio"),
 		
 		field('Zero DateTime behavior','zeroDateTimeBehavior','exception,round,convertToNull',false,'What should happen when the driver encounters DATETIME values that are composed entirely of zeroes (used by MySQL to represent invalid dates)? Valid values are "exception", "round" and "convertToNull"',"radio"),
