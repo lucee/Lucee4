@@ -37,6 +37,7 @@ import lucee.transformer.bytecode.Position;
 import lucee.transformer.bytecode.cast.CastDouble;
 import lucee.transformer.bytecode.cast.CastString;
 import lucee.transformer.bytecode.expression.ClosureAsExpression;
+import lucee.transformer.bytecode.expression.ExprBoolean;
 import lucee.transformer.bytecode.expression.ExprDouble;
 import lucee.transformer.bytecode.expression.ExprString;
 import lucee.transformer.bytecode.expression.Expression;
@@ -361,8 +362,12 @@ public abstract class AbstrCFMLExprTransformer {
         	comments(data);
         	// Elvis
         	if(data.cfml.forwardIfCurrent(':')) {
+
         		comments(data);
             	Expression right = assignOp(data);
+
+        		if (expr instanceof ExprBoolean)
+        			return expr;
         		
         		if(!(expr instanceof Variable) )
         			throw new TemplateException(data.cfml,"left operant of the Elvis operator has to be a variable or a function call");
