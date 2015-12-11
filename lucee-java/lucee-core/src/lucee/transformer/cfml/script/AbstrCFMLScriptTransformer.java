@@ -1200,7 +1200,7 @@ int pos=data.cfml.getPos();
 		
 		
 		// folgend wird tlt extra nicht uebergeben, sonst findet pruefung statt
-		Attribute[] attrs = attributes(property,tlt,data,SEMI,	NULL,Boolean.FALSE,"name",true,NO_ATTR_SEP,false);
+		Attribute[] attrs = attributes(property,tlt,data,SEMI,	LitString.toExprString(""),Boolean.FALSE,"name",true,NO_ATTR_SEP,false);
 		
 		checkSemiColonLineFeed(data,true,true,false);
 

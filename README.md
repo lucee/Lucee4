@@ -5,7 +5,7 @@ Welcome to the Lucee Server source code repository.
 Lucee Server, or simply Lucee, is a dynamic Java based tag and scripting language used for rapid development from simple to highly sophisticated web applications. Lucee simplifies technologies like webservices (REST,SOAP,HTTP), ORM (Hibernate), searching (Lucene), datasources (MSSQl,Oracle,MySQL ...), caching (infinispan,ehcache,memcached ...) and a lot more. It was never easier to integrate any backend technology with the internet.
 Lucee is of course open source (LGPL 2.1) and available for free!
 
-### PLEASE NOTE: The issue tracker has moved to [JIRA](https://luceeserver.atlassian.net). ###
+### PLEASE NOTE: The issue tracker has moved to [JIRA](http://issues.lucee.org). ###
 
 License/Copyright
 -----------------
@@ -14,11 +14,11 @@ The "Railo Company LCC" (TRC) is copyright owner of the initial code in this pro
 
 Platform
 ---------
-Lucee is a JVM language and runs on the JVM as a servlet and will work with any servlet container (e.g. [Apache Tomcat](http://tomcat.apache.org/), [Eclipse Jetty](http://eclipse.org/jetty/)) or application server (e.g. [JBoss AS](http://jbossas.jboss.org/), [GlassFish](https://glassfish.java.net/)). 
+Lucee is a JVM language and runs on the JVM as a servlet and will work with any servlet container (e.g. [Apache Tomcat](http://tomcat.apache.org/), [Eclipse Jetty](http://eclipse.org/jetty/)) or application server (e.g. [JBoss AS](http://jbossas.jboss.org/), [GlassFish](https://glassfish.java.net/)).
 
 Philosophy
 ----------
 A primary aim of Lucee is to provide the functionality of ColdFusion(c) using less resources and giving better performance, and the Lucee team continues to "treat slowness as a bug" as a core development philosophy. Many performance tests have shown Lucee to perform faster than other CFML engines. In addition to this, Lucee attempts to resolve many inconsistencies found in traditional CFML. These are either forced changes in behavior, or configurable options in the Lucee Administrator.
 The Lucee team is always open to feedback and active at CFML community events, and is keen to remind people that Lucee is a community project.
 
-**Please consult our [Wiki](https://bitbucket.org/lucee/lucee/wiki) for any questions you may have.**
+**Please consult our [documentation](http://docs.lucee.org) for any questions you may have.**

@@ -108,7 +108,7 @@
 		}
 	</cfscript>
 
-	<cffunction name="output" returntype="void">
+	<cffunction name="output" returntype="void" output="true">
 		<cfargument name="custom" type="struct" required="yes" />
 		<cfargument name="debugging" required="true" type="struct" />
 		<cfargument name="context" type="string" default="web" />
@@ -168,48 +168,49 @@
 		<cfif arguments.context EQ "web">
 			</td></td></td></th></th></th></tr></tr></tr></table></table></table></a></abbrev></acronym></address></applet></au></b></banner></big></blink></blockquote></bq></caption></center></cite></code></comment></del></dfn></dir></div></div></dl></em></fig></fn></font></form></frame></frameset></h1></h2></h3></h4></h5></h6></head></i></ins></kbd></listing></map></marquee></menu></multicol></nobr></noframes></noscript></note></ol></p></param></person></plaintext></pre></q></s></samp></script></select></small></strike></strong></sub></sup></table></td></textarea></th></title></tr></tt></u></ul></var></wbr></xmp>
 		</cfif>
+		<cfoutput>
 		<style type="text/css">
-			#-lucee-debug 			{ margin: 2.5em 1em 0 1em; padding: 1em; background-color: #FFF; color: #222; border: 1px solid #CCC; border-radius: 5px; text-shadow: none; }
-			#-lucee-debug.collapsed	{ padding: 0; border-width: 0; }
-			#-lucee-debug legend 	{ padding: 0 1em; background-color: #FFF; color: #222; }
-			#-lucee-debug legend span { font-weight: normal; }
+			##-lucee-debug 			{ margin: 2.5em 1em 0 1em; padding: 1em; background-color: ##FFF; color: ##222; border: 1px solid ##CCC; border-radius: 5px; text-shadow: none; }
+			##-lucee-debug.collapsed	{ padding: 0; border-width: 0; }
+			##-lucee-debug legend 	{ padding: 0 1em; background-color: ##FFF; color: ##222; }
+			##-lucee-debug legend span { font-weight: normal; }
 
-			#-lucee-debug, #-lucee-debug td	{ font-family: Helvetica, Arial, sans-serif; font-size: 9pt; line-height: 1.35; }
-			#-lucee-debug.large, #-lucee-debug.large td	{ font-size: 10pt; }
-			#-lucee-debug.small, #-lucee-debug.small td	{ font-size: 8.5pt; }
+			##-lucee-debug, ##-lucee-debug td	{ font-family: Helvetica, Arial, sans-serif; font-size: 9pt; line-height: 1.35; }
+			##-lucee-debug.large, ##-lucee-debug.large td	{ font-size: 10pt; }
+			##-lucee-debug.small, ##-lucee-debug.small td	{ font-size: 8.5pt; }
 
-			#-lucee-debug table		{ empty-cells: show; border-collapse: collapse; border-spacing: 0; }
-			#-lucee-debug table.details	{ margin-top: 0.5em; border: 1px solid #ddd; margin-left: 9pt; max-width: 100%; }
-			#-lucee-debug table.details th { font-size: 9pt; font-weight: normal; background-color: #f2f2f2; color: #3c3e40; }
-			#-lucee-debug table.details td, #-lucee-debug table.details th { padding: 2px 4px;  border: 1px solid #ddd; }
+			##-lucee-debug table		{ empty-cells: show; border-collapse: collapse; border-spacing: 0; }
+			##-lucee-debug table.details	{ margin-top: 0.5em; border: 1px solid ##ddd; margin-left: 9pt; max-width: 100%; }
+			##-lucee-debug table.details th { font-size: 9pt; font-weight: normal; background-color: ##f2f2f2; color: ##3c3e40; }
+			##-lucee-debug table.details td, ##-lucee-debug table.details th { padding: 2px 4px;  border: 1px solid ##ddd; }
 
-			#-lucee-debug .section-title	{ margin-top: 1.25em; font-size: 1.25em; font-weight: normal; color:#555; }
-			#-lucee-debug .section-title:first-child	{ margin-top: auto; }
-			#-lucee-debug .label		{ white-space: nowrap; vertical-align: top; text-align: right; padding-right: 1em; background-color: inherit; color: inherit; text-shadow: none; }
-			#-lucee-debug .collapsed	{ display: none; }
-			#-lucee-debug .bold 		{ font-weight: bold; }
-			#-lucee-debug .txt-c 	{ text-align: center; }
-			#-lucee-debug .txt-l 	{ text-align: left; }
-			#-lucee-debug .txt-r 	{ text-align: right; }
-			#-lucee-debug .faded 	{ color: #999; }
-			#-lucee-debug .ml14px 	{ margin-left: 14px; }
-			#-lucee-debug table.details td.txt-r { padding-right: 1em; }
-			#-lucee-debug .num-lsv 	{ font-weight: normal; }
-			#-lucee-debug tr.nowrap td { white-space: nowrap; }
-			#-lucee-debug tr.red td, #-lucee-debug .red 	{ background-color: #FDD; }
+			##-lucee-debug .section-title	{ margin-top: 1.25em; font-size: 1.25em; font-weight: normal; color:##555; }
+			##-lucee-debug .section-title:first-child	{ margin-top: auto; }
+			##-lucee-debug .label		{ white-space: nowrap; vertical-align: top; text-align: right; padding-right: 1em; background-color: inherit; color: inherit; text-shadow: none; }
+			##-lucee-debug .collapsed	{ display: none; }
+			##-lucee-debug .bold 		{ font-weight: bold; }
+			##-lucee-debug .txt-c 	{ text-align: center; }
+			##-lucee-debug .txt-l 	{ text-align: left; }
+			##-lucee-debug .txt-r 	{ text-align: right; }
+			##-lucee-debug .faded 	{ color: ##999; }
+			##-lucee-debug .ml14px 	{ margin-left: 14px; }
+			##-lucee-debug table.details td.txt-r { padding-right: 1em; }
+			##-lucee-debug .num-lsv 	{ font-weight: normal; }
+			##-lucee-debug tr.nowrap td { white-space: nowrap; }
+			##-lucee-debug tr.red td, ##-lucee-debug .red 	{ background-color: ##FDD; }
 
-			#-lucee-debug .sortby.selected, #-lucee-debug .sortby:hover { background-color: #25A; color: #FFF; }
-			#-lucee-debug .pad 	{ padding-left: 16px; }
-			#-lucee-debug a 	{ cursor: pointer; }
-			#-lucee-debug td a 	{ color: #25A; }
-			#-lucee-debug td a:hover	{ color: #58C; text-decoration: underline; }
-			#-lucee-debug pre 	{ background-color: #EEE; padding: 1em; border: solid 1px #333; border-radius: 1em; white-space: pre-wrap; word-break: break-all; word-wrap: break-word; tab-size: 2; }
+			##-lucee-debug .sortby.selected, ##-lucee-debug .sortby:hover { background-color: ##25A; color: ##FFF; }
+			##-lucee-debug .pad 	{ padding-left: 16px; }
+			##-lucee-debug a 	{ cursor: pointer; }
+			##-lucee-debug td a 	{ color: ##25A; }
+			##-lucee-debug td a:hover	{ color: ##58C; text-decoration: underline; }
+			##-lucee-debug pre 	{ background-color: ##EEE; padding: 1em; border: solid 1px ##333; border-radius: 1em; white-space: pre-wrap; word-break: break-all; word-wrap: break-word; tab-size: 2; }
 
 			.-lucee-icon-plus 	{ background: url(data:image/gif;base64,R0lGODlhCQAJAIABAAAAAP///yH5BAEAAAEALAAAAAAJAAkAAAIRhI+hG7bwoJINIktzjizeUwAAOw==) no-repeat left center; padding: 4px 0 4px 16px; }
 			.-lucee-icon-minus 	{ background: url(data:image/gif;base64,R0lGODlhCQAJAIABAAAAAP///yH5BAEAAAEALAAAAAAJAAkAAAIQhI+hG8brXgPzTHllfKiDAgA7)     no-repeat left center; padding: 4px 0 4px 16px; }
 		</style>
 
-		<cfoutput>
+		
 
 			<cfset var sectionId = "ALL">
 			<cfset var isOpen = this.isSectionOpen( sectionId )>

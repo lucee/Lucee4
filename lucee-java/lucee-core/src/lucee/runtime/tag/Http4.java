@@ -926,7 +926,13 @@ final class Http4 extends BodyTagImpl implements Http {
     		// set User Agent
     			if(!HttpImpl.hasHeaderIgnoreCase(req,"User-Agent"))
     				req.setHeader("User-Agent",this.useragent);
-    		
+    		// if connecting to an http server using Connection: keep-alive (the default for HTTP 1.1)
+    		// it will keep the connection open. The problem is, railo never reuses it.
+    		// we don't get any benefit from keep-alive. What's worse is we can starve
+    		// a system of connections that does repetative cfhttp calls. Fix is
+    		// to turn off keep-alive by default. (user can override it)
+    			if(!HttpImpl.hasHeaderIgnoreCase(req,"Connection"))
+    				req.setHeader("Connection","close");
     	// set timeout
 			if(this.timeout==null || ((int)timeout.getSeconds())<=0) { // not set
 				this.timeout=PageContextUtil.remainingTime(pageContext,true);

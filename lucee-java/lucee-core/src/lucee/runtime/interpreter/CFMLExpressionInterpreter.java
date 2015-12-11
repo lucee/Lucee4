@@ -1395,8 +1395,13 @@ public class CFMLExpressionInterpreter {
             cfml.removeSpace();
 
             // finish
-            if (cfml.isCurrent(end))
+            if (cfml.isCurrent(end)) {
+                if (isJson && !arr.isEmpty()) {
+                    // LDEV-434 JSON does not allow trailing commas, which is what this must be
+                    throw new InterpreterException("Invalid Syntax trailing comma found");
+                }
                 break;
+            }
 
             // too many Attributes
             boolean isDynamic=false;

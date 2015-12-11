@@ -393,7 +393,7 @@
 					<th scope="row">#stText.Settings.dbAllowed#</th>
 					<td>
 
-						<div class="warning">
+						<div class="warningops">
 							This functionality is deprecated and will be removed in future versions, 
 							restrict operations by using roles and permissions in your DBMS!
 						</div>
