@@ -14233,6 +14233,44 @@ You can find a list of all available timezones in the Lucee administrator (Setti
 	</function>
 	
 	
+	<!-- QueryExecute -->
+    	<function>
+    		<name>QueryExecute</name>
+    		<class>lucee.runtime.functions.query.QueryExecute</class>
+    		<keywords>query</keywords>
+			<description>Executes a SQL query, returns the result.</description>
+    		<argument>
+    			<name>sql</name>
+    			<type>string</type>
+    			<required>Yes</required>
+    			<description>SQL to execute</description>
+    	    </argument>
+    		<argument>
+    			<name>params</name>
+    			<alias>param</alias>
+    			<type>any</type>
+    			<required>No</required>
+    			<description>
+    			Array or Struct of parameter values. 
+    			When passing an array use ? as place holders. 
+    			When passing a struct use :keyName where keyName is the name of the key in the structure corresponding to
+    			the parameter. 
+    			The struct or array can be a struct with keys such as the following: cfsqltype, list
+    			</description>
+    	    </argument>
+    	    
+    	    <argument>
+    			<name>options</name>
+    			<alias>option</alias>
+    			<type>struct</type>
+    			<required>No</required>
+    			<description>Struct containing query options, all cfquery tag attributes are supported except the name attribute.</description>
+    	    </argument>
+    		<return>
+    			<type>any</type>
+    		</return>
+    	</function>
+	
 	<!-- QueryGetRow -->
     	<function>
     		<name>QueryGetRow</name>
