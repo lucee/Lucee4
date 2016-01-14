@@ -313,7 +313,13 @@ public class ModernAppListener extends AppListenerSupport {
 			call(app,pc, ON_SESSION_START, ArrayUtil.OBJECT_EMPTY,true);
 		}
 	}
-
+	
+	@Override
+	public boolean hasOnSessionEnd(String applicationName) {
+		ComponentPro app = apps.get(applicationName);
+		return app!=null && app.containsKey(ON_SESSION_END);
+	}
+	
 	@Override
 	public void onSessionEnd(CFMLFactory factory, String applicationName, String cfid) throws PageException {
 		ComponentPro app = apps.get(applicationName);

@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import lucee.runtime.CFMLFactoryImpl;
 import lucee.runtime.exp.ExceptionHandler;
+import lucee.runtime.listener.AppListenerSupport;
 import lucee.runtime.listener.ApplicationListener;
 import lucee.runtime.op.Caster;
 
@@ -39,6 +40,23 @@ public class SessionEndListener implements StorageScopeListener,Serializable {
 		} 
 		catch (Throwable t) {
 			ExceptionHandler.log(factory.getConfig(),Caster.toPageException(t));
+		}
+	}
+	
+	@Override
+	public boolean hasDoEnd(StorageScopeEngine engine,StorageScopeCleaner cleaner,String appName) {
+		CFMLFactoryImpl factory = engine.getFactory();
+		ApplicationListener listener = factory.getConfig().getApplicationListener();
+		if((listener instanceof AppListenerSupport))
+			return false; // FUTURE move the method used to the loader and this contion is no longer needed
+		AppListenerSupport als=(AppListenerSupport)listener;
+		
+		try {
+			return als.hasOnSessionEnd(appName);
+		} 
+		catch (Throwable t) {
+			ExceptionHandler.log(factory.getConfig(),Caster.toPageException(t));
+			return false;
 		}
 	}
 
