@@ -36,7 +36,7 @@ public final class PropertiesImpl implements Properties {
 		Struct sct=new StructImpl();
 
 		sct.setEL("accessKeyId", accessKeyId);
-		sct.setEL("awsSecretKey", accessKeyId);
+		sct.setEL("awsSecretKey", secretAccessKey);
 		sct.setEL("defaultLocation", S3.toStringStorage(defaultLocation,""));
 		sct.setEL("host", host);
 		
