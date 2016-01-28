@@ -2640,7 +2640,7 @@ public class QueryImpl implements Query,Objects {
 
 	public void readExternal(ObjectInput in) throws IOException {
 		try {
-			QueryImpl other=(QueryImpl) new CFMLExpressionInterpreter().interpret(ThreadLocalPageContext.get(),in.readUTF());
+			QueryImpl other=(QueryImpl) new CFMLExpressionInterpreter(false).interpret(ThreadLocalPageContext.get(),in.readUTF());
 			this.arrCurrentRow=other.arrCurrentRow;
 			this.columncount=other.columncount;
 			this.columnNames=other.columnNames;

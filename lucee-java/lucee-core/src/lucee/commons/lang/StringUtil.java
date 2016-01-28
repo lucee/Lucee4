@@ -1332,4 +1332,9 @@ public final class StringUtil {
         
         return result;
     }
+
+
+	public static String toStringNative(Object obj,String defaultValue) {
+		return obj==null?defaultValue:obj.toString();
+	}
 }

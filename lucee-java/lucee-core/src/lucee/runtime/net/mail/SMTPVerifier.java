@@ -26,7 +26,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 
 import lucee.commons.lang.StringUtil;
-import lucee.runtime.net.smtp.SMTPClient;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 

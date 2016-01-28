@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import lucee.commons.lang.CFTypes;
+import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
@@ -385,7 +386,7 @@ public final class VariableUtilImpl implements VariableUtil {
 		Iterator it = map.keySet().iterator();
 		while(it.hasNext()) {
 			if(sb.length()>0)sb.append(',');
-			sb.append(it.next().toString());
+			sb.append(StringUtil.toStringNative(it.next(),""));
 		}
 		return sb.toString();
 	}
