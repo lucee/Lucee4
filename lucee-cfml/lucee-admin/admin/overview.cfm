@@ -433,7 +433,7 @@ Error Output --->
 
 					<!--- Mailing list --->
 					<h3>
-						<a href="https://groups.google.com/forum/#!forum/lucee" target="_blank">#stText.Overview.Mailinglist#</a>
+						<a href="https://groups.google.com/forum/##!forum/lucee" target="_blank">#stText.Overview.Mailinglist#</a>
 					</h3>
 					<div class="comment">#stText.Overview.MailinglistDesc#</div>
 
