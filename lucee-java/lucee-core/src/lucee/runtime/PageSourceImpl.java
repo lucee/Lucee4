@@ -637,12 +637,14 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 		Resource res = this.getPhyscalFile();
 	    String str=null;
 		if(res!=null) {
-			
 			str=res.getAbsolutePath();
-			str=str.substring(str.length()-relPath.length());
-			if(!str.equalsIgnoreCase(relPath)) {
-				str=relPath;
+			if(str.length()>relPath.length() && !relPath.startsWith(".")) {// if the component is outside the mapping we have no problem
+				str=str.substring(str.length()-relPath.length());
+				if(!str.equalsIgnoreCase(relPath)) {
+					str=relPath;
+				}
 			}
+			else str=relPath;
 		}
 		else str=relPath;
 	    
