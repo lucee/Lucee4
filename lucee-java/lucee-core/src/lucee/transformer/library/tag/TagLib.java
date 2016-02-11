@@ -31,6 +31,7 @@ import java.util.Map.Entry;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.ClassUtil;
 import lucee.commons.lang.Md5;
+import lucee.commons.lang.StringUtil;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageRuntimeException;
 import lucee.transformer.cfml.ExprTransformer;
@@ -163,7 +164,7 @@ public class TagLib implements Cloneable {
 		Iterator<String> it = appendixTags.keySet().iterator();
 		String match="";
 		while(it.hasNext()) {
-			String tagName=it.next().toString();
+			String tagName=StringUtil.toStringNative(it.next(),"");
 			if(match.length()<tagName.length() && name.indexOf(tagName)==0) {
 				match=tagName;
 			}

@@ -26,6 +26,7 @@ import lucee.runtime.Page;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.config.ConfigImpl;
+import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
@@ -359,7 +360,7 @@ public final class ThreadTag extends BodyTagImpl implements DynamicAttributes {
 		
 		if(ct.isAlive()){
 			ct.terminated();
-			SystemUtil.stop(ct);
+			SystemUtil.stop(ct,ThreadLocalPageContext.getConfig(pageContext).getApplicationLogger());
 		}
 		
 	}

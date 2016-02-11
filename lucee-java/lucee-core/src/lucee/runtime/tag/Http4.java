@@ -48,14 +48,15 @@ import lucee.commons.net.http.httpclient4.HTTPEngine4Impl;
 import lucee.commons.net.http.httpclient4.HTTPPatchFactory;
 import lucee.commons.net.http.httpclient4.HTTPResponse4Impl;
 import lucee.commons.net.http.httpclient4.ResourceBody;
+import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.config.ConfigWeb;
+import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.HTTPException;
 import lucee.runtime.exp.NativeException;
 import lucee.runtime.exp.PageException;
-import lucee.runtime.exp.RequestTimeoutException;
 import lucee.runtime.ext.tag.BodyTagImpl;
 import lucee.runtime.net.http.MultiPartResponseUtils;
 import lucee.runtime.net.http.ReqRspUtil;
@@ -933,12 +934,15 @@ final class Http4 extends BodyTagImpl implements Http {
     			if(!HttpImpl.hasHeaderIgnoreCase(req,"Connection"))
     				req.setHeader("Connection","close");
     	// set timeout
-			if(this.timeout==null) { // not set
-				this.timeout=PageContextUtil.remainingTime(pageContext);
-				if(this.timeout.getSeconds()<=0)
-					throw new RequestTimeoutException("request timeout occured!");
-    		}
-			//print.e("classic:"+timeout);
+			if(this.timeout==null || ((int)timeout.getSeconds())<=0) { // not set
+				this.timeout=PageContextUtil.remainingTime(pageContext,true);
+			}
+			// timeout bigger than remaining time
+			else {
+				TimeSpan remaining = PageContextUtil.remainingTime(pageContext,true);
+				if(timeout.getSeconds()>remaining.getSeconds())
+					timeout=remaining;
+			}
     		HTTPEngine4Impl.setTimeout(params, this.timeout);
     		
     	// set Username and Password
@@ -975,7 +979,7 @@ final class Http4 extends BodyTagImpl implements Http {
     	if(httpContext==null)httpContext = new BasicHttpContext();
     		
 /////////////////////////////////////////// EXECUTE /////////////////////////////////////////////////
-		Executor4 e = new Executor4(this,client,httpContext,req,redirect);
+		Executor4 e = new Executor4(pageContext,this,client,httpContext,req,redirect);
 		HTTPResponse4Impl rsp=null;
 		if(timeout==null || timeout.getMillis()<=0){
 			try{
@@ -1426,7 +1430,8 @@ final class Http4 extends BodyTagImpl implements Http {
 }
 
 class Executor4 extends Thread {
-	
+
+	private final PageContext pc;
 	 final Http4 http;
 	 private final DefaultHttpClient client;
 	 final boolean redirect;
@@ -1437,7 +1442,8 @@ class Executor4 extends Thread {
 	private HttpRequestBase req;
 	private HttpContext context;
 
-	public Executor4(Http4 http,DefaultHttpClient client, HttpContext context, HttpRequestBase req, boolean redirect) {
+	public Executor4(PageContext pc,Http4 http,DefaultHttpClient client, HttpContext context, HttpRequestBase req, boolean redirect) {
+		this.pc=pc;
 		this.http=http;
 		this.client=client;
 		this.context=context;
@@ -1447,6 +1453,7 @@ class Executor4 extends Thread {
 	
 	@Override
 	public void run(){
+		ThreadLocalPageContext.register(pc);
 		try {
 			response=execute(context);
 			done=true;

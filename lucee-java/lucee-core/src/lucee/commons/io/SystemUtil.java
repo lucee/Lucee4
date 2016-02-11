@@ -1017,15 +1017,16 @@ public final class SystemUtil {
 	}
 
 	@Deprecated
-	public static void stop(Thread thread) {
-		if(thread.isAlive()){
+	public static void stop(Thread thread,Log log) {
+		new StopThread(thread,new StopException(thread),null).start();
+		/*if(thread.isAlive()){
 			try{
 				thread.stop(new StopException(thread));
 			}
 			catch(UnsupportedOperationException uoe){// Java 8 does not support Thread.stop(Throwable)
 				thread.stop();
 			}
-		}
+		}*/
 	}
 
 	public static void stop(PageContext pc,Log log) {
@@ -1042,30 +1043,44 @@ class StopThread extends Thread {
 	private final PageContext pc;
 	private final Throwable t;
 	private final Log log; 
+	private final Thread thread;
 
 	public StopThread(PageContext pc, Throwable t, Log log) {
 		this.pc=pc;
 		this.t=t;
 		this.log=log;
+		this.thread=pc.getThread();
+	}
+	
+	public StopThread(Thread thread, Throwable t, Log log) {
+		this.pc=null;
+		this.t=t;
+		this.log=log;
+		this.thread=thread;
 	}
 
 	public void run(){
-		PageContextImpl pci=(PageContextImpl) pc;
-		Thread thread = pc.getThread();
-		pci.stop(t);
+		if(pc!=null){
+			PageContextImpl pci=(PageContextImpl) pc;
+			pci.stop(t);
+		}
 		int count=0;
 		if(thread.isAlive()) {
 			do{
 				try{
 					if(count>0 && log!=null) {
-						LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread on the first approach", thread.getStackTrace());
+						LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread on the "+count+" approach", thread.getStackTrace());
 					}
-					if(count++>10) break; // should never happen
+					if(count++>10) {
+						if(log!=null)LogUtil.log(log, Log.LEVEL_ERROR, "", "could not terminate the thread", thread.getStackTrace());
+						aprint.e(thread.getStackTrace());
+						break; // should never happen
+					}
 					try{
 						thread.stop(t);
 					}
 					catch(UnsupportedOperationException uoe){
-						LogUtil.log(log, Log.LEVEL_ERROR, "", "Thread.stop(Throwable) is not supported by this JVM and failed with UnsupportedOperationException", thread.getStackTrace());
+						LogUtil.log(log, Log.LEVEL_INFO, "", "Thread.stop(Throwable) is not supported by this JVM and failed with UnsupportedOperationException", thread.getStackTrace());
 						try {
 							Method m = thread.getClass().getMethod("stop0", new Class[]{Object.class});
 							m.setAccessible(true); // allow to access private method
@@ -1083,13 +1098,9 @@ class StopThread extends Thread {
 				}
 				SystemUtil.sleep(1000);
 			}
-			while(thread.isAlive() && pci.isInitialized());
+			while(thread.isAlive() && (pc==null || ((PageContextImpl)pc).isInitialized()));
 		}
 
-		if(count>10 && log!=null) {
-			LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread", thread.getStackTrace());
-			aprint.e(thread.getStackTrace());
-		}
 	}
 	
 }

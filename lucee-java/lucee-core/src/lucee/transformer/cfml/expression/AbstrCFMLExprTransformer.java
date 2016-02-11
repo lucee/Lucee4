@@ -37,6 +37,7 @@ import lucee.transformer.bytecode.Position;
 import lucee.transformer.bytecode.cast.CastDouble;
 import lucee.transformer.bytecode.cast.CastString;
 import lucee.transformer.bytecode.expression.ClosureAsExpression;
+import lucee.transformer.bytecode.expression.ExprBoolean;
 import lucee.transformer.bytecode.expression.ExprDouble;
 import lucee.transformer.bytecode.expression.ExprString;
 import lucee.transformer.bytecode.expression.Expression;
@@ -156,7 +157,7 @@ public abstract class AbstrCFMLExprTransformer {
 	private static final short STATIC=0;
 	private static final short DYNAMIC=1;
 	private static FunctionLibFunction JSON_ARRAY = null;
-	private static FunctionLibFunction JSON_STRUCT = null;
+	protected static FunctionLibFunction JSON_STRUCT = null;
 
 	public static final short CTX_OTHER = TagLibTagScript.CTX_OTHER;
 	public static final short CTX_NONE = TagLibTagScript.CTX_NONE;
@@ -361,8 +362,12 @@ public abstract class AbstrCFMLExprTransformer {
         	comments(data);
         	// Elvis
         	if(data.cfml.forwardIfCurrent(':')) {
+
         		comments(data);
             	Expression right = assignOp(data);
+
+        		if (expr instanceof ExprBoolean)
+        			return expr;
         		
         		if(!(expr instanceof Variable) )
         			throw new TemplateException(data.cfml,"left operant of the Elvis operator has to be a variable or a function call");
@@ -1258,7 +1263,7 @@ public abstract class AbstrCFMLExprTransformer {
 	
 
 	
-	private Expression json(ExprData data,FunctionLibFunction flf, char start, char end) throws TemplateException {
+	protected Expression json(ExprData data,FunctionLibFunction flf, char start, char end) throws TemplateException {
 		if(!data.cfml.forwardIfCurrent(start))return null;
 		
 		Position line = data.cfml.getPosition();

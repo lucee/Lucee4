@@ -363,7 +363,7 @@ public class QueryImpl implements Query,Objects {
 	private void setAttributes(Statement stat,int maxrow, int fetchsize,TimeSpan timeout) throws SQLException {
 		if(maxrow>-1) stat.setMaxRows(maxrow);
         if(fetchsize>0)stat.setFetchSize(fetchsize);
-        if(timeout!=null && timeout.getSeconds()>0) 
+        if(timeout!=null && ((int)timeout.getSeconds())>0) 
         	DataSourceUtil.setQueryTimeoutSilent(stat,(int)timeout.getSeconds());
 	}
 
@@ -2640,7 +2640,7 @@ public class QueryImpl implements Query,Objects {
 
 	public void readExternal(ObjectInput in) throws IOException {
 		try {
-			QueryImpl other=(QueryImpl) new CFMLExpressionInterpreter().interpret(ThreadLocalPageContext.get(),in.readUTF());
+			QueryImpl other=(QueryImpl) new CFMLExpressionInterpreter(false).interpret(ThreadLocalPageContext.get(),in.readUTF());
 			this.arrCurrentRow=other.arrCurrentRow;
 			this.columncount=other.columncount;
 			this.columnNames=other.columnNames;

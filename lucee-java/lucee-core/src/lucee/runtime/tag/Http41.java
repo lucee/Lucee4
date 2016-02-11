@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import lucee.print;
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
@@ -48,14 +47,15 @@ import lucee.commons.net.http.httpclient4.HTTPEngineImpl;
 import lucee.commons.net.http.httpclient4.HTTPPatchFactory;
 import lucee.commons.net.http.httpclient4.HTTPResponse4Impl;
 import lucee.commons.net.http.httpclient4.ResourceBody;
+import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
 import lucee.runtime.config.ConfigWeb;
+import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.HTTPException;
 import lucee.runtime.exp.NativeException;
 import lucee.runtime.exp.PageException;
-import lucee.runtime.exp.RequestTimeoutException;
 import lucee.runtime.ext.tag.BodyTagImpl;
 import lucee.runtime.net.http.MultiPartResponseUtils;
 import lucee.runtime.net.http.ReqRspUtil;
@@ -943,13 +943,17 @@ public final class Http41 extends BodyTagImpl implements Http {
     			if(!HttpImpl.hasHeaderIgnoreCase(req,"User-Agent"))
     				req.setHeader("User-Agent",this.useragent);
     		
-    	// set timeout
-			if(this.timeout==null) { // not set
-				this.timeout=PageContextUtil.remainingTime(pageContext);
-				if(this.timeout.getSeconds()<=0)
-					throw new RequestTimeoutException("request timeout occured!");
+    			//timeout not defined
+			if(this.timeout==null || ((int)timeout.getSeconds())<=0) { // not set
+				this.timeout=PageContextUtil.remainingTime(pageContext,true);
     		}
-			print.e(this.timeout);
+			// timeout bigger than remaining time
+			else {
+				TimeSpan remaining = PageContextUtil.remainingTime(pageContext,true);
+				if(timeout.getSeconds()>remaining.getSeconds())
+					timeout=remaining;
+			}
+			
 			setTimeout(builder,this.timeout);
     		
     		
@@ -988,7 +992,7 @@ public final class Http41 extends BodyTagImpl implements Http {
     		
 /////////////////////////////////////////// EXECUTE /////////////////////////////////////////////////
     	client = builder.build();
-		Executor41 e = new Executor41(this,client,httpContext,req,redirect);
+		Executor41 e = new Executor41(pageContext,this,client,httpContext,req,redirect);
 		HTTPResponse4Impl rsp=null;
 		if(timeout==null || timeout.getMillis()<=0) {// never happens
 			try{
@@ -1272,9 +1276,11 @@ public final class Http41 extends BodyTagImpl implements Http {
 	public static void setTimeout(HttpClientBuilder builder, TimeSpan timeout) {
 		if(timeout==null || timeout.getMillis()<=0) return;
 		
-		//builder.setConnectionTimeToLive(timeout.getMillis(), TimeUnit.MILLISECONDS);
+		int ms = (int)timeout.getMillis();
+		if(ms<0)ms=Integer.MAX_VALUE; // long value was bigger than Integer.MAX
+		
     	SocketConfig sc=SocketConfig.custom()
-    			.setSoTimeout((int)timeout.getMillis())
+    			.setSoTimeout(ms)
     			.build();
     	builder.setDefaultSocketConfig(sc);
 	}
@@ -1448,7 +1454,8 @@ public final class Http41 extends BodyTagImpl implements Http {
 }
 
 class Executor41 extends Thread {
-	
+
+	private final PageContext pc;
 	 final Http41 http;
 	 private final CloseableHttpClient client;
 	 final boolean redirect;
@@ -1459,7 +1466,8 @@ class Executor41 extends Thread {
 	private HttpRequestBase req;
 	private HttpContext context;
 
-	public Executor41(Http41 http,CloseableHttpClient client, HttpContext context, HttpRequestBase req, boolean redirect) {
+	public Executor41(PageContext pc,Http41 http,CloseableHttpClient client, HttpContext context, HttpRequestBase req, boolean redirect) {
+		this.pc=pc;
 		this.http=http;
 		this.client=client;
 		this.context=context;
@@ -1469,6 +1477,7 @@ class Executor41 extends Thread {
 	
 	@Override
 	public void run(){
+		ThreadLocalPageContext.register(pc);
 		try {
 			response=execute(context);
 			done=true;

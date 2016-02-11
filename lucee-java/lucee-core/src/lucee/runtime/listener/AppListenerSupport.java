@@ -27,9 +27,13 @@ public abstract class AppListenerSupport implements ApplicationListener {
 	public boolean hasOnApplicationStart(){
 		return false;
 	}
-	
+
 	@Override
 	public boolean hasOnSessionStart(PageContext pc){
+		return false;
+	}
+	
+	public boolean hasOnSessionEnd(String applicationName) {
 		return false;
 	}
 

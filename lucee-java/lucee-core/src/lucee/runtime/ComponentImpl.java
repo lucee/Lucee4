@@ -579,7 +579,8 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 		// debug yes
 		if(pc.getConfig().debug()) {
 		    DebugEntryTemplate debugEntry=pc.getDebugger().getEntry(pc,pageSource,udf.getFunctionName());//new DebugEntry(src,udf.getFunctionName());
-			int currTime=pc.getExecutionTime();
+			PageContextImpl pci=(PageContextImpl) pc;
+		    long currTime=pci.getExecutionTimeLong();
 			long time=System.nanoTime();
 			
 			// sync yes
@@ -592,8 +593,8 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 					}		
 					finally {
 						pc.setVariablesScope(parent);
-						int diff= ((int)(System.nanoTime()-time)-(pc.getExecutionTime()-currTime));
-						pc.setExecutionTime(pc.getExecutionTime()+diff);
+						long diff= ((System.nanoTime()-time)-(pci.getExecutionTimeLong()-currTime));
+						pci.setExecutionTimeLong(pci.getExecutionTimeLong()+diff);
 						debugEntry.updateExeTime(diff);	
 					}	
 				}
@@ -608,8 +609,8 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 				}		
 				finally {
 					pc.setVariablesScope(parent);
-					int diff= ((int)(System.nanoTime()-time)-(pc.getExecutionTime()-currTime));
-					pc.setExecutionTime(pc.getExecutionTime()+diff);
+					long diff= ((System.nanoTime()-time)-(pci.getExecutionTimeLong()-currTime));
+					pci.setExecutionTimeLong(pci.getExecutionTimeLong()+diff);
 					debugEntry.updateExeTime(diff);	
 				}	
 			}
@@ -1997,7 +1998,7 @@ public final class ComponentImpl extends StructSupport implements Externalizable
 
 	private void readExternalOldStyle(PageContext pc, String str) throws IOException {
 		try {
-			ComponentImpl other=(ComponentImpl) new CFMLExpressionInterpreter().interpret(pc,str);
+			ComponentImpl other=(ComponentImpl) new CFMLExpressionInterpreter(false).interpret(pc,str);
 			_readExternal(other);
 		}
 		catch (PageException e) {

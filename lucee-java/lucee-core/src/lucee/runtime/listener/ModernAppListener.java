@@ -103,6 +103,8 @@ public class ModernAppListener extends AppListenerSupport {
 	
 	protected void _onRequest(PageContext pc, PageSource requestedPage,PageSource appPS, RequestListener rl) throws PageException {
 		PageContextImpl pci = (PageContextImpl)pc;
+		pci.setAppListenerType(AppListenerUtil.TYPE_NEW);
+		
 		if(appPS!=null) {
 			String callPath=appPS.getComponentName();
 			
@@ -311,7 +313,13 @@ public class ModernAppListener extends AppListenerSupport {
 			call(app,pc, ON_SESSION_START, ArrayUtil.OBJECT_EMPTY,true);
 		}
 	}
-
+	
+	@Override
+	public boolean hasOnSessionEnd(String applicationName) {
+		ComponentPro app = apps.get(applicationName);
+		return app!=null && app.containsKey(ON_SESSION_END);
+	}
+	
 	@Override
 	public void onSessionEnd(CFMLFactory factory, String applicationName, String cfid) throws PageException {
 		ComponentPro app = apps.get(applicationName);
@@ -339,15 +347,16 @@ public class ModernAppListener extends AppListenerSupport {
 		
 		// Response	
 		OutputStream os=DevNullOutputStream.DEV_NULL_OUTPUT_STREAM;
-		try {
+		
+		// File based output stream
+		/*try {
 			Resource out = factory.getConfig().getConfigDir().getRealResource("output/"+methodName.getString()+".out");
 			out.getParentResource().mkdirs();
 			os = out.getOutputStream(false);
 		} 
-		catch (IOException e) {
-			e.printStackTrace();
-			// TODO was passiert hier
-		}
+		catch (IOException e) {}*/
+		
+		
 		HttpServletResponseDummy rsp = new HttpServletResponseDummy(os);
 		
 		// PageContext

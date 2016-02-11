@@ -115,6 +115,7 @@ import lucee.runtime.exp.PageServletException;
 import lucee.runtime.functions.dynamicEvaluation.Serialize;
 import lucee.runtime.interpreter.CFMLExpressionInterpreter;
 import lucee.runtime.interpreter.VariableInterpreter;
+import lucee.runtime.listener.AppListenerUtil;
 import lucee.runtime.listener.ApplicationContext;
 import lucee.runtime.listener.ApplicationContextPro;
 import lucee.runtime.listener.ApplicationListener;
@@ -333,6 +334,8 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 
 	private Throwable requestTimeoutException;
 
+	private int appListenerType=AppListenerUtil.TYPE_ALL;
+
 
 	public long sizeOf() {
 		
@@ -473,7 +476,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 		requestId=counter++;
 		rsp.setContentType("text/html; charset=UTF-8");
 		this.isChild=isChild;
-		
+		appListenerType=AppListenerUtil.TYPE_ALL;
         //rsp.setHeader("Connection", "close");
         applicationContext=defaultApplicationContext;
         
@@ -907,7 +910,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	public void doInclude(PageSource[] sources, boolean runOnce) throws PageException {
     	// debug
 		if(!gatewayContext && config.debug()) {
-			long currTime=executionTime;
+			final long currTime=executionTime;
             long exeTime=0;
             long time=System.nanoTime();
             
@@ -937,7 +940,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 			finally {
 				includeOnce.add(currentPage.getPageSource());
 				long diff= ((System.nanoTime()-exeTime)-(executionTime-currTime));
-			    executionTime+=(System.nanoTime()-time);
+				executionTime+=(System.nanoTime()-time);
 				debugEntry.updateExeTime(diff);
 				removeLastPageSource(true);
 			}	
@@ -2904,10 +2907,18 @@ public final class PageContextImpl extends PageContext implements Sizeable {
     public int getExecutionTime() {
         return (int)executionTime;
     }
+    
+    public long getExecutionTimeLong() {
+        return executionTime;
+    }
 
     @Override
     public void setExecutionTime(int executionTime) {
-        this.executionTime = executionTime;
+    	this.executionTime = executionTime;
+    }
+    
+    public void setExecutionTimeLong(long executionTime) {
+    	this.executionTime = executionTime;
     }
 
     @Override
@@ -2971,7 +2982,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 
 	@Override
 	public Object evaluate(String expression) throws PageException {
-		return new CFMLExpressionInterpreter().interpret(this,expression);
+		return new CFMLExpressionInterpreter(false).interpret(this,expression);
 	}
 	
 	@Override
@@ -3299,6 +3310,15 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	public void registerLazyStatement(Statement s) {
 		if(lazyStats==null)lazyStats=new ArrayList<Statement>();
 		lazyStats.add(s);
+	}
+
+
+
+	public void setAppListenerType(int appListenerType) {
+		this.appListenerType=appListenerType;
+	}
+	public int getAppListenerType() {
+		return appListenerType;
 	}
 
 

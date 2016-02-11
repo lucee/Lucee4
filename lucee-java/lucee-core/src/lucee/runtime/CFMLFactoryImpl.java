@@ -224,6 +224,16 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 	public static void terminate(PageContextImpl pc) {
 		Log log = ((ConfigImpl)pc.getConfig()).getLog("requesttimeout");
         
+		
+        if(log!=null)LogUtil.log(log,Log.LEVEL_ERROR,"controler",
+        		"stop thread ("+pc.getId()+") because run into a timeout "+getPath(pc)+"."+getLocks(pc),pc.getThread().getStackTrace());
+        
+        // then we release the pagecontext
+        pc.getConfig().getThreadQueue().exit(pc);
+        SystemUtil.stop(pc,createRequestTimeoutException(pc),log);
+	}
+
+	private static String getLocks(PageContext pc) {
 		String strLocks="";
 		try{
 			LockManager manager = pc.getConfig().getLockManager();
@@ -233,12 +243,11 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 	        //LockManagerImpl.unlockAll(pc.getId());
 		}
 		catch(Throwable t){}
-        if(log!=null)LogUtil.log(log,Log.LEVEL_ERROR,"controler",
-        		"stop thread ("+pc.getId()+") because run into a timeout "+getPath(pc)+"."+strLocks,pc.getThread().getStackTrace());
-        
-        // then we release the pagecontext
-        pc.getConfig().getThreadQueue().exit(pc);
-        SystemUtil.stop(pc,new RequestTimeoutException(pc.getThread(),"request ("+getPath(pc)+":"+pc.getId()+") has run into a timeout ("+(pc.getRequestTimeout()/1000)+" seconds) and has been stopped."+strLocks),log);
+		return strLocks;
+	}
+
+	public static RequestTimeoutException createRequestTimeoutException(PageContext pc) {
+		return new RequestTimeoutException(pc.getThread(),"request ("+getPath(pc)+":"+pc.getId()+") has run into a timeout ("+(pc.getRequestTimeout()/1000)+" seconds) and has been stopped."+getLocks(pc));
 	}
 
 	private static String getPath(PageContext pc) {

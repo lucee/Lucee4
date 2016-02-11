@@ -26,7 +26,6 @@
 		and only return aliases (if any) rather than the original column/table name? In 5.0.x, the default value was true.","radio"),
 		//,field("Allow Multiple Queries","allowMultiQueries","true,false",false,"Allow the use of "";"" to delimit multiple queries during one statement (true/false), defaults to ""false""","radio")
 		
-		
 		field('Allow multiple Queries','allowMultiQueries','true,false',false,'Allow the use of ";" to delimit multiple queries during one statement',"radio"),
 		
 		field('Zero DateTime behavior','zeroDateTimeBehavior','exception,round,convertToNull',false,'What should happen when the driver encounters DATETIME values that are composed entirely of zeroes (used by MySQL to represent invalid dates)? Valid values are "exception", "round" and "convertToNull"',"radio"),

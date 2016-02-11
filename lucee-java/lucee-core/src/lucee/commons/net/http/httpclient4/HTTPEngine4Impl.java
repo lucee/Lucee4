@@ -301,8 +301,11 @@ public class HTTPEngine4Impl {
 	 */
 	public static void setTimeout(HttpParams params, TimeSpan timeout) {
         if(timeout!=null && timeout.getMillis()>0){
-        	HttpConnectionParams.setConnectionTimeout(params, (int)timeout.getMillis());
-        	HttpConnectionParams.setSoTimeout(params, (int)timeout.getMillis());
+        	int ms = (int)timeout.getMillis();
+        	if(ms<0) ms=Integer.MAX_VALUE;
+        	
+        	HttpConnectionParams.setConnectionTimeout(params,ms);
+        	HttpConnectionParams.setSoTimeout(params, ms);
         }
 	}
 

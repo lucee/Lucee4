@@ -19,6 +19,7 @@
 package lucee.transformer.cfml.evaluator.impl;
 
 import lucee.runtime.op.Caster;
+import lucee.transformer.bytecode.cast.CastBoolean;
 import lucee.transformer.bytecode.cast.CastString;
 import lucee.transformer.bytecode.expression.ExprString;
 import lucee.transformer.bytecode.expression.Expression;
@@ -84,6 +85,21 @@ public final class Argument extends EvaluatorSupport {
 		}
 
 	public static void checkDefaultValue(Tag tag) {
+		// required (patch)
+		Attribute req = tag.getAttribute("required");
+		if(req!=null) {
+			Expression value = req.getValue();
+			if(value instanceof CastBoolean) {
+				Expression expr = ((CastBoolean)value).getExpr();
+				if(expr instanceof LitString) {
+					LitString ls=(LitString) expr;
+					if(ls.getString()==null || ls.getString().isEmpty())
+						tag.addAttribute(new Attribute(req.isDynamicType(),req.getName(), LitBoolean.TRUE, req.getType()));
+				}
+			}
+		}
+				
+		// type
 		Attribute _type = tag.getAttribute("type");
 		if(_type!=null) {
 			ExprString typeValue = CastString.toExprString(_type.getValue());

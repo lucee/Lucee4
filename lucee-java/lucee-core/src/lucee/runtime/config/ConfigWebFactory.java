@@ -2795,9 +2795,10 @@ public final class ConfigWebFactory extends ConfigFactory {
 				createFileFromResourceEL("/resource/library/function/trace.cfm", f);
 
 			f = dir.getRealResource("queryExecute.cfm");
-			if (!f.exists() || doNew)
-				createFileFromResourceEL("/resource/library/function/queryExecute.cfm", f);
-
+			//if (!f.exists() || doNew)
+			//	createFileFromResourceEL("/resource/library/function/queryExecute.cfm", f);
+			if(f.exists())
+				delete(dir, "queryExecute.cfm");
 			
 			f = dir.getRealResource("transactionCommit.cfm");
 			if (!f.exists() || doNew)
@@ -3712,6 +3713,8 @@ public final class ConfigWebFactory extends ConfigFactory {
 							toInt(el.getAttribute("port"), 25), 
 							el.getAttribute("username"),
 							decrypt(el.getAttribute("password")), 
+							toLong(el.getAttribute("life"), 1000*60*5),
+							toLong(el.getAttribute("idle"), 1000*60*1),
 							toBoolean(el.getAttribute("tls"), false), 
 							toBoolean(el.getAttribute("ssl"), false), 
 							toBoolean(el.getAttribute("reuse-connection"), true));

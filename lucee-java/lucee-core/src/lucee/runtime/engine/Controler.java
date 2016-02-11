@@ -44,6 +44,7 @@ import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.config.ConfigServer;
 import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.config.ConfigWebAdmin;
+import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.config.DeployHandler;
 import lucee.runtime.lock.LockManagerImpl;
 import lucee.runtime.net.smtp.SMTPConnectionPool;
@@ -160,7 +161,7 @@ public final class Controler extends Thread {
             	}
             	// stop it!
             	else if(time>TIMEOUT) {
-            		SystemUtil.stop(ct);
+            		SystemUtil.stop(ct,configServer.getApplicationLogger());
             		//print.e(ct.getStackTrace());
             		if(!ct.isAlive()) {
             			configServer.getApplicationLogger().error("controller", "controler thread ["+ct.hashCode()+"] forced to stop after "+time+"ms");
@@ -250,6 +251,9 @@ public final class Controler extends Thread {
 					}
 					ThreadLocalConfig.register(config);
 					
+					// double check templates
+					try{((ConfigWebImpl)config).getCompiler().checkWatched();}catch(Throwable t){t.printStackTrace();}
+
 					// deploy extensions, archives ...
 					try{DeployHandler.deploy(config);}catch(Throwable t){t.printStackTrace();}
 					

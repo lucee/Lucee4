@@ -35,8 +35,6 @@ import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.commons.Method;
 
 public final class Switch extends StatementBaseNoFinal implements FlowControlBreak,HasBodies {
-    
-	private static final Type ARRAY_IMPL=Type.getType(lucee.runtime.type.ArrayImpl.class);
 
 	// Object append(Object o)
 	private static final Method APPEND = new Method(
@@ -106,9 +104,9 @@ public final class Switch extends StatementBaseNoFinal implements FlowControlBre
 		
 	// Array cases=new ArrayImpl();
 		int array=adapter.newLocal(Types.ARRAY);
-		adapter.newInstance(ARRAY_IMPL);
+		adapter.newInstance(Types.ARRAY_IMPL);
 		adapter.dup();
-		adapter.invokeConstructor(ARRAY_IMPL, INIT);
+		adapter.invokeConstructor(Types.ARRAY_IMPL, INIT);
 		
 		adapter.storeLocal(array);
 		
@@ -121,7 +119,7 @@ public final class Switch extends StatementBaseNoFinal implements FlowControlBre
 
 			adapter.loadLocal(array);
 			c.expression.writeOut(bc, Expression.MODE_REF);
-			adapter.invokeVirtual(ARRAY_IMPL, APPEND);
+			adapter.invokeVirtual(Types.ARRAY_IMPL, APPEND);
 			adapter.pop();
 		}
 		

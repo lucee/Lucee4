@@ -19,9 +19,11 @@
 package lucee.runtime.util;
 
 import lucee.commons.lang.StringUtil;
+import lucee.runtime.CFMLFactoryImpl;
 import lucee.runtime.MappingImpl;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageSource;
+import lucee.runtime.exp.RequestTimeoutException;
 import lucee.runtime.listener.ApplicationListener;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.dt.TimeSpan;
@@ -74,9 +76,13 @@ public class PageContextUtil {
 	}
 
 
-	public static TimeSpan remainingTime(PageContext pc) {
+	public static TimeSpan remainingTime(PageContext pc, boolean throwWhenAlreadyTimeout) throws RequestTimeoutException {
 		long ms = pc.getRequestTimeout()-(System.currentTimeMillis()-pc.getStartTime());
 		if(ms>0) return TimeSpanImpl.fromMillis(ms);
-		return TimeSpanImpl.fromMillis(0);
+
+		if(throwWhenAlreadyTimeout)
+			throw CFMLFactoryImpl.createRequestTimeoutException(pc);
+		
+		return TimeSpanImpl.fromMillis(0);		
 	}
 }

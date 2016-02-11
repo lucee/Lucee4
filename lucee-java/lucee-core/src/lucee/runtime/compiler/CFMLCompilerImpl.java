@@ -21,11 +21,16 @@ package lucee.runtime.compiler;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageSource;
+import lucee.runtime.PageSourceImpl;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.exp.TemplateException;
 import lucee.transformer.bytecode.BytecodeException;
@@ -45,7 +50,9 @@ import lucee.transformer.util.AlreadyClassException;
  */
 public final class CFMLCompilerImpl implements CFMLCompiler {
 	
+
 	private CFMLTransformer cfmlTransformer;
+	private Map<String,WatchEntry> watched=new ConcurrentHashMap<String,WatchEntry>(); 
 	
 	
 	/**
@@ -144,10 +151,42 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 		//}
 	}
 
-    /* *
-     * @return Returns the cfmlTransformer.
-     * /
-    public CFMLTransformer getCfmlTransformer() {
-        return cfmlTransformer;
-    }*/
+	public void watch(PageSource ps, long now) {
+		watched.put(ps.getDisplayPath(),new WatchEntry(ps,now,ps.getPhyscalFile().length(),ps.getPhyscalFile().lastModified()));
+	}
+	
+	public void checkWatched() {
+		if(watched.size()==0) return ;
+		
+		long now=System.currentTimeMillis();
+		Iterator<Entry<String, WatchEntry>> it = watched.entrySet().iterator();
+		Entry<String, WatchEntry> e;
+		while(it.hasNext()){
+			e=it.next();
+			if(e.getValue().now+1000<=now) {// only check entries that are at least a second old
+				if(e.getValue().length!=e.getValue().ps.getPhyscalFile().length()) { // file changed (size or time)
+					((PageSourceImpl)e.getValue().ps).flush();
+				}
+				watched.remove(e.getKey());
+			}
+		}
+		
+	}
+
+
+	private class WatchEntry {
+
+		private final PageSource ps;
+		private final long now;
+		private final long length;
+		//private final long lastModified;
+
+		public WatchEntry(PageSource ps, long now, long length, long lastModified) {
+			this.ps=ps;
+			this.now=now;
+			this.length=length;
+			//this.lastModified=lastModified;
+		}
+
+	}
 }
