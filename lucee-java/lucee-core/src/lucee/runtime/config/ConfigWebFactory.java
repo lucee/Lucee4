@@ -1363,10 +1363,16 @@ public final class ConfigWebFactory extends ConfigFactory {
 		_getDotNotationUpperCase(sb,config.getServerFunctionMapping());
 		_getDotNotationUpperCase(sb,config.getTagMapping());
 		_getDotNotationUpperCase(sb,config.getServerTagMapping());
-		
+
 		// suppress ws before arg
 		sb.append(config.getSuppressWSBeforeArg());
 		sb.append(';');
+
+		// externalize strings
+		sb.append(config.getExternalizeStringGTE());
+		sb.append(';');
+		
+		// output
 		sb.append(config.getDefaultFunctionOutput());
 		sb.append(';');
 
