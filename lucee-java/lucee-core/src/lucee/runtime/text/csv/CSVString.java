@@ -26,6 +26,9 @@ import lucee.commons.lang.StringUtil;
 
 public class CSVString {
 
+	private static final char LF=10;
+	private static final char CR=13;
+	
     private char[] buffer;
     private int pos;
     private char delim;
@@ -55,13 +58,13 @@ public class CSVString {
 
                 sb.append( fwdQuote( c ) );
             }
-            else if ( c == '\n' ) {
-
+            else if ( c == LF || c == CR ) {
+            	if(c == CR && isNext(LF)) next();
                 line.add( sb.toString().trim() );
                 sb = new StringBuilder();
                 if ( isValidLine( line ) )
                     result.add( line );
-                line = new ArrayList();
+                line = new ArrayList<String>();
             }
             else if ( c == delim ) {
 
