@@ -1,4 +1,10 @@
 apply plugin: 'idea' // allows us to make an intelliJ IDEA project
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+buildDir = 'builddir'
+group = 'lucee'
 
 idea.project {
     languageLevel = '1.8'
@@ -29,12 +35,9 @@ buildscript {
     }
 }
 
-allprojects {
-    apply plugin: "com.jfrog.artifactory"
-    apply plugin: 'java'
-    apply plugin: 'maven'
-    apply plugin: 'maven-publish'
-}
+
+
+
 repositories {
     maven {
         url "${artifactory_contextUrl}"
@@ -50,7 +53,6 @@ repositories {
 
 }
 configurations {
-    provided
     compile.extendsFrom provided
 }
 
@@ -98,7 +100,7 @@ dependencies {
     compile 'org.apache.flex.blazeds:flex-messaging-core:4.7.2'
     compile 'org.apache.axis:axis-jaxrpc:1.4'
     //compile 'org.apache.lucene:lucene-core:2.4.1'
-    provided 'org.lucee.lib:javax-servlet:1.4.1-01' //servlet container being deployed in has this included
+    compile 'org.lucee.lib:javax-servlet:1.4.1-01' //servlet container being deployed in has this included
     compile 'org.lucee.lib:openamf:1.5.8'
     compile 'wsdl4j:wsdl4j:1.6.3'
     compile 'org.lucee.lib:sun-jai_core:1.2.1' //cfimage
@@ -120,13 +122,43 @@ dependencies {
     compile 'log4j:log4j:1.2.16'
 
 }
-task copyDeps(type: Copy) {
-    copy
-            {
-                from configurations.compile
-                into 'D:/downloads/luceejars/new'
-            }
+
+
+defaultTasks 'build'
+ant.importBuild 'build.xml'
+def libversion = ant.properties['number'] //from ant build.xml
+def snapshotText = "-SNAPSHOT"
+if (release == "true") {
+    snapshotText = ""
 }
+version = libversion + snapshotText
+publishing {
+    publications {
+        LuceeCore(MavenPublication) {
+            version libversion + snapshotText
+            from components.java
+            artifacts = ['dist/' + project.version + '.jar']
+        }
+    }
+}
+
+
+build.dependsOn {
+    renameFile
+}
+
+artifactoryPublish.dependsOn {
+    build
+}
+
+task renameFile(dependsOn: 'core') {
+    doLast {
+        println('renaming dist/' + libversion + '.lco to dist/' + libversion + snapshotText + '.jar')
+        file('dist/' + libversion + '.lco').renameTo(file('dist/' + libversion + snapshotText + '.jar'))
+    }
+}
+
+
 artifactory {
     contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
     publish {
@@ -153,41 +185,5 @@ artifactory {
             maven = true
 
         }
-    }
-}
-
-defaultTasks 'build'
-ant.importBuild 'build.xml'
-def libversion = ant.properties['number'] //from ant build.xml
-def snapshotText = "-SNAPSHOT"
-if (release == "true") {
-    snapshotText = ""
-}
-publishing {
-    publications {
-        LuceeCore(MavenPublication) {
-            groupId 'lucee'
-            artifactId 'lucee-core'
-
-            version libversion + snapshotText
-
-            artifact file('dist/' + libversion + snapshotText + '.jar')
-        }
-    }
-}
-
-
-build.dependsOn {
-    renameFile
-}
-
-artifactoryPublish.dependsOn {
-    build
-}
-
-task renameFile(dependsOn: 'core') {
-    doLast {
-        println('renaming dist/' + libversion + '.lco to dist/' + libversion + snapshotText + '.jar')
-        file('dist/' + libversion + '.lco').renameTo(file('dist/' + libversion + snapshotText + '.jar'))
     }
 }
