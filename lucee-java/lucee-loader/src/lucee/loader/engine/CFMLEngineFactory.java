@@ -183,8 +183,11 @@ public class CFMLEngineFactory {
 		if(Util.isEmpty(initParam))initParam=config.getInitParameter("railo-server-dir");
 		if(Util.isEmpty(initParam))initParam=config.getInitParameter("railo-server");
 		
-		
-		
+        // if this property is true, the lucee patch file should be renamed to a jar file and placed on the classpath in order for it to work.
+        String loadLuceeFromClasspathProperty = config.getInitParameter("load-from-classpath");
+        if ( !Util.isEmpty( loadLuceeFromClasspathProperty ) ) {
+        	loadLuceeFromClassPath = loadLuceeFromClasspathProperty.toLowerCase().equals("true");
+        }	
 		
 		initParam=Util.parsePlaceHolder(Util.removeQuotes(initParam,true));
 		
@@ -204,11 +207,7 @@ public class CFMLEngineFactory {
 				}
 		}
 		catch(IOException ioe){}
-        // if this property is true, the lucee patch file should be renamed to a jar file and placed on the classpath in order for it to work.
-        String loadLuceeFromClasspathProperty = config.getInitParameter("load-from-classpath");
-        if ( !Util.isEmpty( loadLuceeFromClasspathProperty ) ) {
-        	loadLuceeFromClassPath = loadLuceeFromClasspathProperty.toLowerCase().equals("true");
-        }
+
 	 }
 	 
 
