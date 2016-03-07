@@ -29,6 +29,7 @@ import lucee.commons.db.DBUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefInteger;
 import lucee.commons.lang.types.RefIntegerImpl;
+import lucee.commons.lang.types.RefIntegerSync;
 import lucee.runtime.config.Config;
 import lucee.runtime.exp.DatabaseException;
 import lucee.runtime.exp.PageException;
@@ -38,7 +39,7 @@ import lucee.runtime.type.util.ArrayUtil;
 public class DatasourceConnectionPool {
 	
 	private ConcurrentHashMap<String,DCStack> dcs=new ConcurrentHashMap<String,DCStack>();
-	private Map<String,RefInteger> counter=new HashMap<String,RefInteger>();
+	private Map<String,RefInteger> counter=new ConcurrentHashMap<String,RefInteger>();
 	
 	public DatasourceConnection getDatasourceConnection(DataSource datasource, String user, String pass) throws PageException {
 		// pc=ThreadLocalPageContext.get(pc);
@@ -143,7 +144,7 @@ public class DatasourceConnectionPool {
         
         RefInteger ri=counter.get(id);
 		if(ri!=null)ri.setValue(0);
-		else counter.put(id,new RefIntegerImpl(0));
+		else counter.put(id,new RefIntegerSync(0));
         
 	}
 	
@@ -206,7 +207,7 @@ public class DatasourceConnectionPool {
 		String did = createId(datasource);
 		RefInteger ri=counter.get(did);
 		if(ri==null) {
-			counter.put(did,ri=new RefIntegerImpl(0));
+			counter.put(did,ri=new RefIntegerSync(0));
 		}
 		return ri;
 	}
