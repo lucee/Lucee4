@@ -35,7 +35,7 @@ public class CSVString {
 
     public CSVString( String input, char delim ) {
 
-        this.buffer = input.toCharArray();
+        this.buffer = input.trim().toCharArray();
         this.delim = delim;
     }
 
@@ -77,12 +77,12 @@ public class CSVString {
             next();
         } while ( hasNext() );
 
-        sb.append( buffer[ pos ] );
+        if(buffer.length>pos)sb.append( buffer[ pos ] );
+        
         line.add( sb.toString().trim() );
 
         if ( isValidLine( line ) )
             result.add( line );
-
         return result;
     }
 
