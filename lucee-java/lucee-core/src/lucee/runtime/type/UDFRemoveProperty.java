@@ -28,6 +28,7 @@ import lucee.runtime.PageContext;
 import lucee.runtime.component.Property;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.listener.ApplicationContextPro;
 import lucee.runtime.op.Caster;
 import lucee.runtime.orm.ORMUtil;
 import lucee.runtime.type.Collection.Key;
@@ -103,7 +104,9 @@ public final class UDFRemoveProperty extends UDFGSProperty {
 		
 
 		// make sure it is reconized that set is called by hibernate
-		if(component.isPersistent())ORMUtil.getSession(pageContext);
+		//if(component.isPersistent())ORMUtil.getSession(pageContext);
+		ApplicationContextPro appContext = (ApplicationContextPro) pageContext.getApplicationContext();
+		if(appContext.isORMEnabled() && component.isPersistent())ORMUtil.getSession(pageContext);
 		
 		// struct
 		if(isStruct()) {
