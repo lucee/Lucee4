@@ -104,6 +104,7 @@ dependencies {
     compile 'org.lucee.lib:openamf:1.5.8'
     compile 'wsdl4j:wsdl4j:1.6.3'
     compile 'org.lucee.lib:sun-jai_core:1.2.1' //cfimage
+    compile 'org.lucee.lib:sun-jai_codec:1.2.1' //cfimage
     compile 'com.drewnoakes:metadata-extractor:2.6.2'
     compile 'org.apache.poi:poi-ooxml:3.13'
     compile 'com.lowagie:itext:2.1.7'
@@ -120,6 +121,13 @@ dependencies {
     compile 'org.ccil.cowan.tagsoup:tagsoup:1.2.1'
     compile 'org.textmining:tm-extractors:0.4'
     compile 'log4j:log4j:1.2.16'
+	compile 'org.lucee.lib:sun-jndi-ldap:1.2.4'
+	compile 'org.lucee.lib:sun-jndi-ldapbp:1.2.4'
+	compile 'org.lucee.lib:sun-jndi-ldapsec:1.2.4'
+	compile 'org.lucee.lib:sun-jndi-providerutil:1.2.4'
+	compile 'org.lucee.lib:sun-security-jaas:1.2.4'
+	compile 'org.lucee.lib:sun-mail:1.3.3_01'
+	compile 'org.lucee.lib:sun-xml-saaj:1.2.1'
 
 }
 
