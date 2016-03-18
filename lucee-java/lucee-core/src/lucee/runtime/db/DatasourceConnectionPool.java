@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import lucee.commons.db.DBUtil;
+import lucee.commons.io.IOUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefInteger;
 import lucee.commons.lang.types.RefIntegerImpl;
@@ -92,18 +93,28 @@ public class DatasourceConnectionPool {
 		//print.err("create connection");
         return new DatasourceConnectionImpl(conn,ds,user,pass);
     }
-	
+
 	public void releaseDatasourceConnection(Config config,DatasourceConnection dc, boolean async) {
-		releaseDatasourceConnection(dc);
+		releaseDatasourceConnection(dc,false);
+		//if(async)((SpoolerEngineImpl)config.getSpoolerEngine()).add((DatasourceConnectionImpl)dc);
+		//else releaseDatasourceConnection(dc);
+	}
+	public void releaseDatasourceConnection(Config config,DatasourceConnection dc, boolean async, boolean closeIt) {
+		releaseDatasourceConnection(dc,closeIt);
 		//if(async)((SpoolerEngineImpl)config.getSpoolerEngine()).add((DatasourceConnectionImpl)dc);
 		//else releaseDatasourceConnection(dc);
 	}
 	
 	public void releaseDatasourceConnection(DatasourceConnection dc) {
+		releaseDatasourceConnection(dc, false);
+	}
+	
+	public void releaseDatasourceConnection(DatasourceConnection dc, boolean closeIt) {
 		if(dc==null) return;
 		DCStack stack=getDCStack(dc.getDatasource(), dc.getUsername(), dc.getPassword());
 		synchronized (stack) {
-			stack.add(dc);
+			if(closeIt) IOUtil.closeEL(dc.getConnection());
+			else stack.add(dc);
 			int max = dc.getDatasource().getConnectionLimit();
 
 			if(max!=-1) {
