@@ -569,9 +569,9 @@ public abstract class ComponentPage extends PagePlus  {
 			
 			String input = IOUtil.toString(is,CharsetUtil.ISO88591);
 			return 
-			StringUtil.indexOfIgnoreCase(input, "soap:Envelope")!=-1 || 
-			StringUtil.indexOfIgnoreCase(input, "soapenv:Envelope")!=-1 || 
-				StringUtil.indexOfIgnoreCase(input, "SOAP-ENV:Envelope")!=-1;
+			StringUtil.indexOfIgnoreCase(input, ":Envelope>")!=-1;
+			
+			// soap:Envelope
 		} 
 		catch (IOException e) {
 			return false;
