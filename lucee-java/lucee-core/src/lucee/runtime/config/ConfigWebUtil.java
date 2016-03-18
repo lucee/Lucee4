@@ -316,7 +316,7 @@ public final class ConfigWebUtil {
 
     public static Password checkPassword(ConfigImpl config, String type,String password) throws SecurityException {
     	if(!config.hasPassword())
-            throw new SecurityException("can't access, no password is defined");
+            throw new SecurityException("can't access password protected information from the configuration, no password is defined"); // TODO make the message more clear for someone using the admin indirectly in source code by using ACF specific interfaces
     	Password pw = config.isPasswordEqual(password,true);
         if(pw==null){
         	if(StringUtil.isEmpty(password)){
