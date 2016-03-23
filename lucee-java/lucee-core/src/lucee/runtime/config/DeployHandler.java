@@ -297,7 +297,7 @@ public class DeployHandler {
 	        	}
 	        	
 	        	// tlds
-	        	if(!entry.isDirectory() && startsWith(path,type,"tlds") && StringUtil.endsWithIgnoreCase(path, ".tld")) {
+	        	if(!entry.isDirectory() && startsWith(path,type,"tlds") && (StringUtil.endsWithIgnoreCase(path, ".tld") || StringUtil.endsWithIgnoreCase(path, ".tldx"))) {
 	        		logger.log(Log.LEVEL_INFO,"extension","deploy tld "+fileName);
 	        		ConfigWebAdmin.updateTLD(config, zis, fileName,false); 
 	        		tlds.add(fileName);

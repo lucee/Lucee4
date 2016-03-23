@@ -109,7 +109,7 @@ public final class Import extends EvaluatorSupport {
         textTagLib=ConfigWebUtil.replacePlaceholder(textTagLib, config);
         // File TagLib
         String ext=ResourceUtil.getExtension(textTagLib,null);
-        boolean hasTldExtension="tld".equalsIgnoreCase(ext);
+        boolean hasTldExtension="tld".equalsIgnoreCase(ext) || "tldx".equalsIgnoreCase(ext);
         
         Resource absFile=config.getResource(textTagLib);
 	    // TLD
@@ -187,9 +187,10 @@ public final class Import extends EvaluatorSupport {
     	try {
 			filename=Md5.getDigestAsString(ResourceUtil.getCanonicalPathEL(jarFile)+jarFile.lastModified());
 		} catch (IOException e) {}
-    	
+
 		Resource tldFile = jspTagLibDir.getRealResource(filename+".tld");
-    	if(tldFile.exists() ) return tldFile;
+		if(!tldFile.exists()) tldFile = jspTagLibDir.getRealResource(filename+".tldx");
+    	if(tldFile.exists()) return tldFile;
     	
     	
     	byte[] barr = getTLDFromJarAsBarr(config,jarFile);
