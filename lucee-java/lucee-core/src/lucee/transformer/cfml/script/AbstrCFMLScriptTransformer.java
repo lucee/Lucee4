@@ -28,6 +28,7 @@ import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefBoolean;
 import lucee.commons.lang.types.RefBooleanImpl;
 import lucee.runtime.Component;
+import lucee.runtime.PageSource;
 import lucee.runtime.exp.TemplateException;
 import lucee.runtime.functions.system.CFFunction;
 import lucee.runtime.type.util.ArrayUtil;
@@ -735,7 +736,16 @@ int pos=data.cfml.getPos();
 			
 			if(!data.isCFC && !data.isInterface){
 				FunctionLibFunction flf = getFLF(data,id);
-				if(flf!=null && flf.getClazz()!=CFFunction.class)throw new TemplateException(data.cfml,"The name ["+id+"] is already used by a built in Function");
+				if(flf!=null && flf.getClazz()!=CFFunction.class) {
+					PageSource ps = data.cfml.getPageSource();
+					String path=null;
+					if(ps!=null) {
+						path = ps.getDisplayPath();
+						path=path.replace('\\', '/');
+					}
+					if(path==null || path.indexOf("/library/function/")==-1)// TODO make better
+						throw new TemplateException(data.cfml,"The name ["+id+"] is already used by a built in Function");
+				}
 			}
 			return closurePart(data, id,access,rtnType,line,false);
 	}
