@@ -6,27 +6,17 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either 
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  **/
 package lucee.runtime.net.http;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.lang.ExceptionUtil;
@@ -75,6 +65,16 @@ import lucee.runtime.type.util.KeyConstants;
 import lucee.runtime.type.util.ListUtil;
 import lucee.runtime.type.util.UDFUtil;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * Client to implement http based webservice
  */
@@ -84,7 +84,7 @@ public class HTTPClient implements Objects, Iteratorable {
 
 	private static final String USER_AGENT = "Lucee "+Info.getFullVersionInfo();
 
-	
+
 	private URL metaURL;
 	private String username;
 	private String password;
@@ -97,18 +97,18 @@ public class HTTPClient implements Objects, Iteratorable {
 	public HTTPClient(String httpUrl, String username, String password, ProxyData proxyData) throws PageException {
 		try {
 			url=HTTPUtil.toURL(httpUrl,true);
-			
+
 			if(!StringUtil.isEmpty(this.url.getQuery())) throw new ApplicationException("invalid url, query string is not allowed as part of the call");
 			metaURL=HTTPUtil.toURL(url.toExternalForm()+"?cfml",true);
 		}
 		catch (MalformedURLException e) {
 			throw Caster.toPageException(e);
 		}
-		
+
 		this.username=username;
 		this.password=password;
 		this.proxyData=proxyData;
-		
+
 	}
 
 	@Override
@@ -125,13 +125,13 @@ public class HTTPClient implements Objects, Iteratorable {
 			while(it.hasNext()){
 				e = it.next();
 				val=Caster.toStruct(e.getValue());
-				
+
 				// udf name
 				udf = new DumpTable("udf","#66ccff","#ccffff","#000000");
 				arg = new DumpTable("udf","#66ccff","#ccffff","#000000");
-				
+
 				cfc.appendRow(1, new SimpleDumpData(e.getKey().getString()),udf);
-				
+
 				// args
 				args = Caster.toArray(val.get(KeyConstants._arguments));
 				udf.appendRow(1,new SimpleDumpData("arguments"),arg);
@@ -143,7 +143,7 @@ public class HTTPClient implements Objects, Iteratorable {
 							new SimpleDumpData(Caster.toString(a.get(KeyConstants._name))),
 							new SimpleDumpData(Caster.toString(a.get(KeyConstants._required))),
 							new SimpleDumpData(Caster.toString(a.get(KeyConstants._type))));
-					
+
 				}
 
 				// return type
@@ -158,21 +158,21 @@ public class HTTPClient implements Objects, Iteratorable {
 						new SimpleDumpData(arg.getTypeAsString()),
 						def,
 						new SimpleDumpData(arg.getHint())}));*/
-				
+
 			}
 			return cfc;
-	        
+
 		}
 		catch (Throwable t) {
 			throw new PageRuntimeException(Caster.toPageException(t));
 		}
 	}
-	
+
 	private Struct getMetaData(PageContext pc) {
 		if(meta==null) {
 			pc=ThreadLocalPageContext.get(pc);
 			InputStream is=null;
-			
+
 			try{
 				HTTPResponse rsp = HTTPEngine.get(metaURL, username, password, -1, 0, "UTF-8", USER_AGENT, proxyData, null);
 				MimeType mt = getMimeType(rsp,null);
@@ -182,7 +182,7 @@ public class HTTPClient implements Objects, Iteratorable {
 				Struct data = Caster.toStruct(ReqRspUtil.toObject(pc,IOUtil.toBytes(is,false),format,mt.getCharset(),null));
 				Object oUDF=data.get(KeyConstants._functions,null);
 				Object oAACF=data.get(ComponentPage.ACCEPT_ARG_COLL_FORMATS,null);
-				
+
 				if(oUDF!=null && oAACF!=null) {
 					meta=Caster.toStruct(oUDF);
 					String[] strFormats = ListUtil.listToStringArray(Caster.toString(oAACF),',');
@@ -191,8 +191,8 @@ public class HTTPClient implements Objects, Iteratorable {
 				else {
 					meta=data;
 				}
-				
-				
+
+
 			}
 			catch(Throwable t) {
 				throw new PageRuntimeException(Caster.toPageException(t));
@@ -217,11 +217,11 @@ public class HTTPClient implements Objects, Iteratorable {
 	@Override
 	public Object call(PageContext pc, Key methodName, Object[] arguments) throws PageException {
 		checkFunctionExistence(pc,methodName,false);
-		
+
 		if(arguments.length==0) return _callWithNamedValues(pc, methodName, new StructImpl());
 		Struct m = checkFunctionExistence(pc,methodName,true);
-		
-		
+
+
 		Array args = Caster.toArray(m.get(KeyConstants._arguments,null),null);
 		if(args==null) args=new ArrayImpl();
 		Struct sct=new StructImpl(),el;
@@ -239,8 +239,8 @@ public class HTTPClient implements Objects, Iteratorable {
 			}
 			sct.set("arg"+(i+1), arguments[i]);
 		}
-		
-		
+
+
 		return _callWithNamedValues(pc, methodName, sct);
 	}
 
@@ -249,17 +249,17 @@ public class HTTPClient implements Objects, Iteratorable {
 	public Object callWithNamedValues(PageContext pc, Key methodName, Struct args) throws PageException {
 		checkFunctionExistence(pc,methodName,false);
 		return _callWithNamedValues(pc, methodName, args);
-		
+
 	}
-	
+
 	private Object _callWithNamedValues(PageContext pc, Key methodName, Struct args) throws PageException {
-		
+
 		// prepare request
 		Map<String,String> formfields=new HashMap<String, String>();
 		formfields.put("method", methodName.getString());
 		formfields.put("returnformat", "cfml");
-		
-		
+
+
 		String str;
 		try {
 			if(UDF.RETURN_FORMAT_JSON==argumentsCollectionFormat)	{
@@ -278,8 +278,8 @@ public class HTTPClient implements Objects, Iteratorable {
 		catch (ConverterException e) {
 			throw Caster.toPageException(e);
 		}
-		
-		
+
+
 		// add aparams to request
 		formfields.put("argumentCollection", str);
 		/*
@@ -289,15 +289,15 @@ public class HTTPClient implements Objects, Iteratorable {
 			e = it.next();
 			formfields.put(e.getKey().getString(), Caster.toString(e.getValue()));
 		}*/
-		
+
 		Map<String,String> headers=new HashMap<String, String>();
 		headers.put("accept", "application/cfml,application/json"); // application/java disabled for the moment, it is not working when we have different lucee versions
-		
+
 		InputStream is=null;
 		try {
 			// call remote cfc
 			HTTPResponse rsp = HTTPEngine.post(url, username, password, -1, 0, "UTF-8", USER_AGENT, proxyData,headers, formfields);
-			
+
 			// read result
 			Header[] rspHeaders = rsp.getAllHeaders();
 			MimeType mt = getMimeType(rspHeaders,null);
@@ -314,15 +314,14 @@ public class HTTPClient implements Objects, Iteratorable {
 					}
 					is = rsp.getContentAsStream();
 					ApplicationException ae = new ApplicationException("remote component throws the following error:"+msg);
-					if(!hasMsg)ae.setAdditional(KeyImpl.init("response-body"),IOUtil.toString(is, mt.getCharset()));
-					
+					if(!hasMsg)ae.setAdditional(KeyImpl.init("respone-body"),IOUtil.toString(is, mt.getCharset()));
+
 					throw ae;
 				}
+				throw new ApplicationException("cannot convert response with mime type ["+mt+"] to a CFML Object");
 			}
 			is = rsp.getContentAsStream();
-			if( format==-1) format = UDF.RETURN_FORMAT_SERIALIZE;
-			return ReqRspUtil.toObject(pc,IOUtil.toBytes(is,false),format,mt.getCharset());
-
+			return ReqRspUtil.toObject(pc,IOUtil.toBytes(is,false),format,mt.getCharset(),null);
 		}
 		catch (IOException ioe) {
 			throw Caster.toPageException(ioe);
@@ -353,7 +352,7 @@ public class HTTPClient implements Objects, Iteratorable {
 			else if(headers[i].getName().equalsIgnoreCase("Content-Type"))contentType=headers[i].getValue();
 		}
 		MimeType rf=null,ct=null;
-		
+
 		// return format
 		if(!StringUtil.isEmpty(returnFormat)) {
 			int format=UDFUtil.toReturnFormat(returnFormat,-1);
@@ -369,39 +368,39 @@ public class HTTPClient implements Objects, Iteratorable {
 		}
 		if(rf!=null) return rf;
 		if(ct!=null) return ct;
-		
-		
+
+
 		return defaultValue;
 	}
 
 	@Override
 	public Object get(PageContext pc, Collection.Key key) throws PageException {
-        return call(pc,KeyImpl.init("get"+key.getString()), ArrayUtil.OBJECT_EMPTY);
+		return call(pc,KeyImpl.init("get"+key.getString()), ArrayUtil.OBJECT_EMPTY);
 	}
 
 	@Override
 	public Object get(PageContext pc, Collection.Key key, Object defaultValue) {
 		try {
-            return call(pc,KeyImpl.init("get"+StringUtil.ucFirst(key.getString())), ArrayUtil.OBJECT_EMPTY);
-        } catch (PageException e) {
-            return defaultValue;
-        }
+			return call(pc,KeyImpl.init("get"+StringUtil.ucFirst(key.getString())), ArrayUtil.OBJECT_EMPTY);
+		} catch (PageException e) {
+			return defaultValue;
+		}
 	}
-	
+
 	@Override
 	public Object set(PageContext pc, Collection.Key propertyName, Object value) throws PageException {
-        return call(pc,KeyImpl.init("set"+propertyName.getString()), new Object[]{value});
+		return call(pc,KeyImpl.init("set"+propertyName.getString()), new Object[]{value});
 	}
 
 	@Override
 	public Object setEL(PageContext pc, Collection.Key propertyName, Object value) {
 		try {
-            return call(pc,KeyImpl.init("set"+propertyName.getString()), new Object[]{value});
-        } catch (PageException e) {
-            return null;
-        }
+			return call(pc,KeyImpl.init("set"+propertyName.getString()), new Object[]{value});
+		} catch (PageException e) {
+			return null;
+		}
 	}
-	
+
 	@Override
 	public Iterator<String> keysAsStringIterator() {
 		return new KeyAsStringIterator(keyIterator());
@@ -411,51 +410,51 @@ public class HTTPClient implements Objects, Iteratorable {
 	public Iterator<Object> valueIterator() {
 		return new ObjectsIterator(keyIterator(),this);
 	}
-	
+
 	@Override
 	public Iterator<Entry<Key, Object>> entryIterator() {
 		return new ObjectsEntryIterator(keyIterator(), this);
 	}
 
 	@Override
-    public String castToString() throws ExpressionException {
-        throw new RPCException("can't cast Webservice to a string");
-    }
+	public String castToString() throws ExpressionException {
+		throw new RPCException("can't cast Webservice to a string");
+	}
 
 	@Override
 	public String castToString(String defaultValue) {
 		return defaultValue;
 	}
 
-    @Override
-    public boolean castToBooleanValue() throws ExpressionException {
-        throw new RPCException("can't cast Webservice to a boolean");
-    }
-    
-    @Override
-    public Boolean castToBoolean(Boolean defaultValue) {
-        return defaultValue;
-    }
+	@Override
+	public boolean castToBooleanValue() throws ExpressionException {
+		throw new RPCException("can't cast Webservice to a boolean");
+	}
 
-    @Override
-    public double castToDoubleValue() throws ExpressionException {
-        throw new RPCException("can't cast Webservice to a number");
-    }
-    
-    @Override
-    public double castToDoubleValue(double defaultValue) {
-        return defaultValue;
-    }
+	@Override
+	public Boolean castToBoolean(Boolean defaultValue) {
+		return defaultValue;
+	}
 
-    @Override
-    public DateTime castToDateTime() throws RPCException {
-        throw new RPCException("can't cast Webservice to a Date Object");
-    }
-    
-    @Override
-    public DateTime castToDateTime(DateTime defaultValue) {
-        return defaultValue;
-    }
+	@Override
+	public double castToDoubleValue() throws ExpressionException {
+		throw new RPCException("can't cast Webservice to a number");
+	}
+
+	@Override
+	public double castToDoubleValue(double defaultValue) {
+		return defaultValue;
+	}
+
+	@Override
+	public DateTime castToDateTime() throws RPCException {
+		throw new RPCException("can't cast Webservice to a Date Object");
+	}
+
+	@Override
+	public DateTime castToDateTime(DateTime defaultValue) {
+		return defaultValue;
+	}
 
 	@Override
 	public int compareTo(boolean b) throws ExpressionException {
