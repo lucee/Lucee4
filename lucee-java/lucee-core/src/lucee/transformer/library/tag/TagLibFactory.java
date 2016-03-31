@@ -449,7 +449,7 @@ public final class TagLibFactory extends DefaultHandler {
 		if(!dir.isDirectory())return new TagLib[0];
 		ArrayList<TagLib> arr=new ArrayList<TagLib>();
 		
-		Resource[] files=dir.listResources(new ExtensionResourceFilter("tld"));
+		Resource[] files=dir.listResources(new ExtensionResourceFilter(new String[]{"tld","tldx"}));
 		for(int i=0;i<files.length;i++)	{
 			if(files[i].isFile())
 				arr.add(TagLibFactory.loadFromFile(files[i],saxParser));

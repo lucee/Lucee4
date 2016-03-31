@@ -26,9 +26,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import lucee.commons.db.DBUtil;
+import lucee.commons.io.IOUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefInteger;
 import lucee.commons.lang.types.RefIntegerImpl;
+import lucee.commons.lang.types.RefIntegerSync;
 import lucee.runtime.config.Config;
 import lucee.runtime.exp.DatabaseException;
 import lucee.runtime.exp.PageException;
@@ -38,7 +40,7 @@ import lucee.runtime.type.util.ArrayUtil;
 public class DatasourceConnectionPool {
 	
 	private ConcurrentHashMap<String,DCStack> dcs=new ConcurrentHashMap<String,DCStack>();
-	private Map<String,RefInteger> counter=new HashMap<String,RefInteger>();
+	private Map<String,RefInteger> counter=new ConcurrentHashMap<String,RefInteger>();
 	
 	public DatasourceConnection getDatasourceConnection(DataSource datasource, String user, String pass) throws PageException {
 		// pc=ThreadLocalPageContext.get(pc);
@@ -91,18 +93,28 @@ public class DatasourceConnectionPool {
 		//print.err("create connection");
         return new DatasourceConnectionImpl(conn,ds,user,pass);
     }
-	
+
 	public void releaseDatasourceConnection(Config config,DatasourceConnection dc, boolean async) {
-		releaseDatasourceConnection(dc);
+		releaseDatasourceConnection(dc,false);
+		//if(async)((SpoolerEngineImpl)config.getSpoolerEngine()).add((DatasourceConnectionImpl)dc);
+		//else releaseDatasourceConnection(dc);
+	}
+	public void releaseDatasourceConnection(Config config,DatasourceConnection dc, boolean async, boolean closeIt) {
+		releaseDatasourceConnection(dc,closeIt);
 		//if(async)((SpoolerEngineImpl)config.getSpoolerEngine()).add((DatasourceConnectionImpl)dc);
 		//else releaseDatasourceConnection(dc);
 	}
 	
 	public void releaseDatasourceConnection(DatasourceConnection dc) {
+		releaseDatasourceConnection(dc, false);
+	}
+	
+	public void releaseDatasourceConnection(DatasourceConnection dc, boolean closeIt) {
 		if(dc==null) return;
 		DCStack stack=getDCStack(dc.getDatasource(), dc.getUsername(), dc.getPassword());
 		synchronized (stack) {
-			stack.add(dc);
+			if(closeIt) IOUtil.closeEL(dc.getConnection());
+			else stack.add(dc);
 			int max = dc.getDatasource().getConnectionLimit();
 
 			if(max!=-1) {
@@ -143,7 +155,7 @@ public class DatasourceConnectionPool {
         
         RefInteger ri=counter.get(id);
 		if(ri!=null)ri.setValue(0);
-		else counter.put(id,new RefIntegerImpl(0));
+		else counter.put(id,new RefIntegerSync(0));
         
 	}
 	
@@ -206,7 +218,7 @@ public class DatasourceConnectionPool {
 		String did = createId(datasource);
 		RefInteger ri=counter.get(did);
 		if(ri==null) {
-			counter.put(did,ri=new RefIntegerImpl(0));
+			counter.put(did,ri=new RefIntegerSync(0));
 		}
 		return ri;
 	}

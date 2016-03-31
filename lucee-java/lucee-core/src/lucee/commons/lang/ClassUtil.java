@@ -65,6 +65,9 @@ public final class ClassUtil {
 			isRef=true;
 		}
 
+		if(lcClassName.equals("void") || className.equals("[V"))	{ 
+			return void.class; 
+		}
 		if(lcClassName.equals("boolean") || className.equals("[Z"))	{ 
 			if(isRef) return Boolean.class;
 			return boolean.class; 

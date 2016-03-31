@@ -18,12 +18,14 @@
  **/
 package lucee.runtime.type.scope;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.servlet.http.HttpSession;
 
+import lucee.print;
 import lucee.commons.collection.MapFactory;
 import lucee.commons.io.log.Log;
 import lucee.commons.lang.ExceptionUtil;
@@ -611,9 +613,8 @@ public final class ScopeContext {
 		
         int s=(int) appContext.getSessionTimeout().getSeconds();
         if(maxSessionTimeout<s)maxSessionTimeout=s;
-        
         if(httpSession!=null) {
-        	httpSession.setMaxInactiveInterval(maxSessionTimeout);
+        	httpSession.setMaxInactiveInterval(maxSessionTimeout+60);// we let the http session run a minute longer so we are sure it exists when sessionTimeout is triggered.
         	session= httpSession.getAttribute(appContext.getName());
         }
         else {

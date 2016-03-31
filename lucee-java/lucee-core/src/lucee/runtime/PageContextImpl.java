@@ -3146,16 +3146,15 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	 * @throws PageException
 	 */
 	public ORMSession getORMSession(boolean create) throws PageException {
+		
 		if(ormSession==null || !ormSession.isValid())	{
 			if(!create) return null;
 			ormSession=config.getORMEngine(this).createSession(this);
-			DatasourceManagerImpl manager = (DatasourceManagerImpl) getDataSourceManager();
-			manager.add(this,ormSession);
 		}
+		DatasourceManagerImpl manager = (DatasourceManagerImpl) getDataSourceManager();
+		manager.add(this,ormSession);
 		
 		return ormSession;
-		
-		
 	}
 
 	public ClassLoader getClassLoader() throws IOException {

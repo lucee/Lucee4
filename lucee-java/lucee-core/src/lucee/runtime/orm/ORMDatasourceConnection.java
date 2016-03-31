@@ -35,7 +35,7 @@ import lucee.runtime.op.Caster;
 public class ORMDatasourceConnection implements DatasourceConnection {
 
 	private DataSource datasource;
-	private Connection connection;
+	private ORMConnection connection;
 	private Boolean supportsGetGeneratedKeys;
 
 	public ORMDatasourceConnection(PageContext pc, ORMSession session, DataSource ds) throws PageException {
@@ -49,11 +49,11 @@ public class ORMDatasourceConnection implements DatasourceConnection {
 				throw new PageRuntimeException(pe);
 			}
 		}
-		connection=new ORMConnection(pc,session,datasource);
+		connection=new ORMConnection(pc,session,datasource,false);
 	}
 
 	public Connection getConnection() {
-		// TODO Auto-generated method stub
+		connection.begin();
 		return connection;
 	}
 

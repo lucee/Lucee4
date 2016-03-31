@@ -24,11 +24,13 @@ import java.util.List;
 import java.util.Map;
 
 import lucee.commons.lang.StringUtil;
+import lucee.runtime.PageSource;
 import lucee.runtime.functions.system.CFFunction;
 import lucee.runtime.listener.AppListenerUtil;
 import lucee.transformer.bytecode.Body;
 import lucee.transformer.bytecode.BytecodeException;
 import lucee.transformer.bytecode.Literal;
+import lucee.transformer.bytecode.Page;
 import lucee.transformer.bytecode.Statement;
 import lucee.transformer.bytecode.cast.CastBoolean;
 import lucee.transformer.bytecode.cast.CastString;
@@ -68,7 +70,8 @@ public final class Function extends EvaluatorSupport {
 		if(attrName!=null) {
 			Expression expr = attrName.getValue();
 			if(expr instanceof LitString && !isCI){
-				checkFunctionName(((LitString)expr).getString(),flibs);
+				Page p = ASMUtil.getAncestorPage(tag,null);
+				checkFunctionName(((LitString)expr).getString(),flibs,p!=null?p.getPageSource():null);
 			}
 				
 		}
@@ -143,12 +146,19 @@ public final class Function extends EvaluatorSupport {
         
 	}
 	
-	public static void checkFunctionName(String name, FunctionLib[] flibs) throws EvaluatorException {
+	private static void checkFunctionName(String name, FunctionLib[] flibs,PageSource ps) throws EvaluatorException {
 		FunctionLibFunction flf;
 		for (int i = 0; i < flibs.length; i++) {
 			flf = flibs[i].getFunction(name);
 			if(flf!=null && flf.getClazz(null)!=CFFunction.class) {
-				throw new EvaluatorException("The name ["+name+"] is already used by a built in Function");
+				
+				String path=null;
+				if(ps!=null) {
+					path = ps.getDisplayPath();
+					path=path.replace('\\', '/');
+				}
+				if(path==null || path.indexOf("/library/function/")==-1)// TODO make better
+					throw new EvaluatorException("The name ["+name+"] is already used by a built in Function");
 			}
 		}
 	}
