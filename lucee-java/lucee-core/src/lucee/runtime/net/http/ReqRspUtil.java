@@ -525,7 +525,7 @@ public final class ReqRspUtil {
     	break;
     	case UDF.RETURN_FORMAT_SERIALIZE:
     		try{
-    			return new CFMLExpressionInterpreter().interpret(pc, toString(data,charset));
+    			return new CFMLExpressionInterpreter(false).interpret(pc, toString(data,charset));
     		}
     		catch(PageException pe){}
     	break;
