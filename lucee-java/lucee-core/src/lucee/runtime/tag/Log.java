@@ -4,17 +4,17 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  **/
 package lucee.runtime.tag;
 
@@ -56,9 +56,9 @@ import org.apache.log4j.Level;
 **/
 public final class Log extends TagImpl {
 
-	private static final String DEfAULT_LOG = "application"; 
+	private static final String DEfAULT_LOG = "application";
 
-	/** If you omit the file attribute, specifies the standard log file in which to write the message. 
+	/** If you omit the file attribute, specifies the standard log file in which to write the message.
 	** 		Ignored if you specify a file attribute */
 	private String log=DEfAULT_LOG;
 
@@ -76,7 +76,7 @@ public final class Log extends TagImpl {
 	private Charset charset=null;
 
 	private boolean async;
-	
+
 	@Override
 	public void release()	{
 		super.release();
@@ -91,7 +91,7 @@ public final class Log extends TagImpl {
 	}
 
 	/** set the value log
-	*  If you omit the file attribute, specifies the standard log file in which to write the message. 
+	*  If you omit the file attribute, specifies the standard log file in which to write the message.
 	* 		Ignored if you specify a file attribute
 	* @param log value to set
 	 * @throws ApplicationException
@@ -113,8 +113,8 @@ public final class Log extends TagImpl {
 		this.exception=Throw.toPageException(exception, null);
 		if(this.exception==null) throw new CasterException(exception,Exception.class);
 	}
-	
-	
+
+
 
 	/** set the value type
 	*  The type or severity of the message.
@@ -122,7 +122,7 @@ public final class Log extends TagImpl {
 	 * @throws ApplicationException
 	**/
 	public void setType(String type) throws ApplicationException	{
-	    type=type.toLowerCase().trim(); 
+	    type=type.toLowerCase().trim();
 	    if(type.equals("information")) this.type=lucee.commons.io.log.Log.LEVEL_INFO;
 	    else if(type.equals("info")) this.type=lucee.commons.io.log.Log.LEVEL_INFO;
 	    else if(type.equals("warning")) this.type=lucee.commons.io.log.Log.LEVEL_WARN;
@@ -149,13 +149,13 @@ public final class Log extends TagImpl {
 	}
 
 	/** set the value file
-	*  
+	*
 	* @param file value to set
 	 * @throws ApplicationException
 	**/
 	public void setFile(String file) throws ApplicationException	{
 		if(StringUtil.isEmpty(file))return;
-		
+
 	    if(file.indexOf('/')!=-1 || file.indexOf('\\')!=-1)
 	        throw new ApplicationException("value ["+file+"] from attribute [file] at tag [log] can only contain a filename, file separators like [\\/] are not allowed");
 		if(!file.endsWith(".log"))file+=".log";
@@ -174,9 +174,9 @@ public final class Log extends TagImpl {
 	}
 
 	/** set the value thread
-	*  Specifies whether to log the thread ID. The thread ID identifies which internal service thread logged a 
-	* 		message. Since a service thread normally services a CFML page request to completion, then moves on to 
-	* 		the next queued request, the thread ID serves as a rough indication of which request logged a message. 
+	*  Specifies whether to log the thread ID. The thread ID identifies which internal service thread logged a
+	* 		message. Since a service thread normally services a CFML page request to completion, then moves on to
+	* 		the next queued request, the thread ID serves as a rough indication of which request logged a message.
 	* 		Leaving thread IDs turned on can help diagnose patterns of server activity.
 	* @param thread value to set
 	 * @throws ApplicationException
@@ -194,12 +194,12 @@ public final class Log extends TagImpl {
 	public void setApplication(boolean application)	{
 		this.application=application;
 	}
-	
+
 	// old function for backward compatiblity
 	public void setSpoolenable(boolean async){
 		setAsync(async);
 	}
-	
+
 	public void setAsync(boolean async){
 		this.async=async;
 	}
@@ -207,10 +207,10 @@ public final class Log extends TagImpl {
 
 	@Override
 	public int doStartTag() throws PageException	{
-		
+
 		 if(text==null && exception==null)
 	        	throw new ApplicationException("Wrong Context, you must define one of the following attributes [text, exception]");
-		
+
 		ConfigImpl config =(ConfigImpl) pageContext.getConfig();
 	    lucee.commons.io.log.Log logger;
 		if(file==null) {
@@ -227,7 +227,7 @@ public final class Log extends TagImpl {
 	    			while(it.hasNext()){
 	    				keys[index++]=KeyImpl.init(it.next());
 	    			}
-	    			
+
 	    			throw new ApplicationException(ExceptionUtil.similarKeyMessage(keys, log, "attribute log", "log names", true));
 	    		}
 	    	}
@@ -235,15 +235,15 @@ public final class Log extends TagImpl {
 	    else {
 	    	logger=getFileLog(pageContext,file,charset,async);
 	    }
-		
-	    
+
+
 	    String contextName = pageContext.getApplicationContext().getName();
 	    if(contextName==null || !application)contextName="";
 	    if(exception!=null) {
 	    	if(StringUtil.isEmpty(text)) LogUtil.log(logger, type, contextName, exception);
 	    	else LogUtil.log(logger, type, contextName, text, exception);
 	    }
-	    else if(!StringUtil.isEmpty(text)) 
+	    else if(!StringUtil.isEmpty(text))
 	    	logger.log(type,contextName,text);
 	    else
 	    	throw new ApplicationException("you must define attribute text or attribute exception with the tag cflog");
@@ -252,19 +252,19 @@ public final class Log extends TagImpl {
 	}
 
 	private static lucee.commons.io.log.Log getFileLog(PageContext pc, String file, Charset charset, boolean async) throws PageException {
-		LogAdapter log= FileLogPool.instance.get(file,charset);
-		if(log!=null) return log;
-		
 		Config config=pc.getConfig();
-		if(charset==null) charset=((PageContextImpl)pc).getResourceCharset();
     	Resource logDir=config.getConfigDir().getRealResource("logs");
-        
     	if(!logDir.exists())logDir.mkdirs();
+    	Resource res = logDir.getRealResource(file);
+		LogAdapter log= FileLogPool.instance.get(res.toString(),charset);
+		if(log!=null) return log;
+
+		if(charset==null) charset=((PageContextImpl)pc).getResourceCharset();
+
         try {
-        	Resource res = logDir.getRealResource(file);
         	log=new LogAdapter(Log4jUtil.getResourceLog(config,res,charset , "cflog."+FileLogPool.toKey(file,charset), Level.TRACE,5,new Listener(FileLogPool.instance,file,charset),async));
-            FileLogPool.instance.put(file,charset,log);
-        } 
+            FileLogPool.instance.put(res.toString(),charset,log);
+        }
         catch (IOException e) {
             throw Caster.toPageException(e);
         }
@@ -278,12 +278,12 @@ public final class Log extends TagImpl {
 		if(StringUtil.isEmpty(charset,true)) return;
 	    this.charset = CharsetUtil.toCharset(charset);
 	}
-	
+
 	private static class FileLogPool {
-		
+
 		private static Map<String,LogAdapter> logs=new ConcurrentHashMap<String, LogAdapter>();
 		private static FileLogPool instance=new FileLogPool();
-		
+
 		public void retire(String file, Charset charset) {
 			logs.remove(toKey(file, charset));
 		}
@@ -302,9 +302,9 @@ public final class Log extends TagImpl {
 			return StringUtil.toVariableName(file)+"."+StringUtil.toVariableName(charset.name());
 		}
 	}
-	
+
 	private static class Listener implements RetireListener {
-		
+
 		private FileLogPool pool;
 		private String file;
 		private Charset charset;
@@ -314,7 +314,7 @@ public final class Log extends TagImpl {
 			this.file=file;
 			this.charset=charset;
 		}
-		
+
 		@Override
 		public void retire(RetireOutputStream os) {
 			pool.retire(file,charset);
