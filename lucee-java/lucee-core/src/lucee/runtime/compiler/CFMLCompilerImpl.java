@@ -21,11 +21,15 @@ package lucee.runtime.compiler;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import lucee.commons.digest.RSA;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.StringUtil;
@@ -112,29 +116,24 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 		        return barr;
 			} 
 	        catch (AlreadyClassException ace) {
-	        	InputStream is=null;
-	        	try{
-	        		barr=IOUtil.toBytes(is=ace.getInputStream());
-	        		
-	        		String srcName = ASMUtil.getClassName(barr);
-	        		// source is cfm and target cfc
-	        		if(srcName.endsWith("_cfm$cf") && className.endsWith("_cfc$cf"))
-	        				throw new TemplateException("source file ["+source.getDisplayPath()+"] contains the bytecode for a regular cfm template not for a component");
-	        		// source is cfc and target cfm
-	        		if(srcName.endsWith("_cfc$cf") && className.endsWith("_cfm$cf"))
-	        				throw new TemplateException("source file ["+source.getDisplayPath()+"] contains a component not a regular cfm template");
-	        		
-	        		// rename class name when needed
-	        		if(!srcName.equals(className))barr=ClassRenamer.rename(barr, className);
-	        		
-	        		
-	        		barr=Page.setSourceLastModified(barr,source.getPhyscalFile().lastModified());
-	        		IOUtil.copy(new ByteArrayInputStream(barr), classFile,true);
-	        		
-	        	}
-	        	finally {
-	        		IOUtil.closeEL(is);
-	        	}
+        		
+        		barr = ace.getEncrypted()?readEncrypted(ace):readPlain(ace);
+        		
+        		String srcName = ASMUtil.getClassName(barr);
+        		// source is cfm and target cfc
+        		if(srcName.endsWith("_cfm$cf") && className.endsWith("_cfc$cf"))
+        				throw new TemplateException("source file ["+source.getDisplayPath()+"] contains the bytecode for a regular cfm template not for a component");
+        		// source is cfc and target cfm
+        		if(srcName.endsWith("_cfc$cf") && className.endsWith("_cfm$cf"))
+        				throw new TemplateException("source file ["+source.getDisplayPath()+"] contains a component not a regular cfm template");
+        		
+        		// rename class name when needed
+        		if(!srcName.equals(className))barr=ClassRenamer.rename(barr, className);
+        		
+        		
+        		barr=Page.setSourceLastModified(barr,source.getPhyscalFile().lastModified());
+        		IOUtil.copy(new ByteArrayInputStream(barr), classFile,true);
+        	
 	        	return barr;
 	        }
 	        catch (BytecodeException bce) {
@@ -149,6 +148,34 @@ public final class CFMLCompilerImpl implements CFMLCompiler {
 	        	
 	        }*/
 		//}
+	}
+
+	private byte[] readPlain(AlreadyClassException ace) throws IOException {
+		return IOUtil.toBytes(ace.getInputStream(),true);
+	}
+
+	private byte[] readEncrypted(AlreadyClassException ace) throws IOException {
+		
+		String str = System.getenv("PUBLIC_KEY");
+		if(StringUtil.isEmpty(str,true)) str=System.getProperty("PUBLIC_KEY");
+		if(StringUtil.isEmpty(str,true)) throw new RuntimeException("to decrypt encrypted bytecode, you need to set PUBLIC_KEY as system property or or enviroment variable");
+		
+		System.out.println("PK:"+str);
+		
+		byte[] bytes = IOUtil.toBytes(ace.getInputStream(),true);
+		try {	
+			PublicKey publicKey = RSA.toPublicKey(str);
+			// first 2 bytes are just a mask to detect encrypted code, so we need to set offset 2
+			bytes=RSA.decrypt(bytes, publicKey,2);
+		}
+		catch (IOException ioe) {
+			throw ioe;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		return bytes;
 	}
 
 	public void watch(PageSource ps, long now) {

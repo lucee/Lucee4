@@ -890,7 +890,9 @@ public class KeyConstants {
 	public static final Key _include = KeyImpl._const("include");
 	public static final Key _compression = KeyImpl._const("compression");
 	public static final Key _invoke = KeyImpl._const("invoke");
-	public static final  Key _generator = KeyImpl._const("generator");
+	public static final Key _generator = KeyImpl._const("generator");
+	public static final Key _public = KeyImpl._const("public");
+	public static final Key _private = KeyImpl._const("private");
 	
 	private static MapPro<String,Key> _____keys;
 	
