@@ -288,7 +288,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
     // Pools
     private ErrorPagePool errorPagePool=new ErrorPagePool();
 	private TagHandlerPool tagHandlerPool;
-	private FTPPool ftpPool=new FTPPoolImpl();
+	private FTPPoolImpl ftpPool=new FTPPoolImpl();
 	
 	private Component activeComponent;
 	private UDF activeUDF;
@@ -2772,6 +2772,9 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 
     @Override
     public FTPPool getFTPPool() {
+        return null;
+    }
+    public FTPPoolImpl getFTPPoolImpl() {
         return ftpPool;
     }
 
