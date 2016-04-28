@@ -56,6 +56,14 @@ public class ORMDatasourceConnection implements DatasourceConnection {
 		connection.begin();
 		return connection;
 	}
+	
+	public boolean isAutoCommit() throws SQLException {
+		return connection.getAutoCommit();
+	}
+	
+	public void setAutoCommit(boolean setting) throws SQLException {
+		connection.setAutoCommit(setting);
+	}
 
 	@Override
 	public DataSource getDatasource() {
