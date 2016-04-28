@@ -84,7 +84,7 @@ dependencies {
     compile 'org.lucee.lib:fusiondebug-api-server:1.0.20'
     compile 'com.h2database:h2:1.3.172' // a database lucee supports out of the box
     compile 'org.hibernate:hibernate-core:3.5.5-Final' //ORM
-    compile 'org.lucee:hsqldb:1.8.0.10' // a database lucee supports out of the box
+    compile 'org.lucee:hsqldb:2.3.3' // a database lucee supports out of the box
     compile 'org.lucee.lib:icepdf-core:3.1.0_3'
     compile 'org.lucee.lib:javasysmon:0.3.3' // tool behind getCPUUsage()
     compile 'org.lucee.lib:jcifs:1.3.17' //SMB:// protocol for file operations
@@ -94,7 +94,8 @@ dependencies {
     compile(group: "org.safehaus.jug", name: "jug", version: "2.0.0", classifier: "lgpl") //used for UUID creation
     compile 'org.ow2.asm:asm-all:4.0' //cfml compilation
     compile 'org.swinglabs:pdf-renderer:1.0.5' //adds watermarks to pdf, etc
-    compile 'stax:stax-api:1.0.1'
+    compile 'javax.xml.stream:stax-api:1.0-2'
+    compile 'com.jcraft:jsch:0.1.53'
     compile 'cssparser:cssparser:0.9.4'
     compile 'javax.activation:activation:1.1'
     compile 'org.apache.flex.blazeds:flex-messaging-core:4.7.2'
