@@ -40,14 +40,14 @@ public interface FTPPool {
     public abstract FTPClient get(FTPConnection conn) throws IOException, PageException;
 
     /**
-     * removes a FTPConnection from pool andreturn it (disconnected)
+     * removes a FTPConnectionPro from pool andreturn it (disconnected)
      * @param conn 
      * @return disconnetd Client
      */
     public abstract FTPClient remove(FTPConnection conn);
 
     /**
-     * removes a FTPConnection from pool andreturn it (disconnected)
+     * removes a FTPConnectionPro from pool andreturn it (disconnected)
      * @param name Name of the connection to remove
      * @return disconnetd Client
      */

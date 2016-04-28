@@ -18,12 +18,6 @@
  **/
 package lucee.runtime.tag;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import org.apache.commons.net.ftp.FTPFile;
-
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -34,6 +28,7 @@ import lucee.runtime.ext.tag.TagImpl;
 import lucee.runtime.net.ftp.AFTPClient;
 import lucee.runtime.net.ftp.FTPConnection;
 import lucee.runtime.net.ftp.FTPConnectionImpl;
+import lucee.runtime.net.ftp.FTPConnectionPro;
 import lucee.runtime.net.ftp.FTPConstant;
 import lucee.runtime.net.ftp.FTPPath;
 import lucee.runtime.net.ftp.FTPPoolImpl;
@@ -45,6 +40,11 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.util.ListUtil;
+import org.apache.commons.net.ftp.FTPFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
 * 
@@ -708,7 +708,7 @@ public final class Ftp extends TagImpl {
     /**
      * @return return a new FTP Connection Object
      */
-    private FTPConnection _createConnection() {
+    private FTPConnectionPro _createConnection() {
         return new FTPConnectionImpl(connectionName,server,username,password,port,timeout,transferMode,passive,
         		proxyserver,proxyport,proxyuser,proxypassword,
         		fingerprint,stoponerror,secure);

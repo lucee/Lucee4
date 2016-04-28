@@ -20,7 +20,7 @@ package lucee.runtime.net.ftp;
 /**
  * represent a ftp connection
  */
-public interface FTPConnection {
+public interface FTPConnectionPro extends FTPConnection {
 
     /**
      * @return Returns the name.
