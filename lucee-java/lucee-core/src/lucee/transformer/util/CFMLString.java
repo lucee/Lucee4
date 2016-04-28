@@ -84,14 +84,17 @@ public final class CFMLString {
 		InputStream is=null;
 		try {
 			is = IOUtil.toBufferedInputStream(ps.getPhyscalFile().getInputStream());
-			if(ClassUtil.isBytecode(is))throw new AlreadyClassException(ps.getPhyscalFile());
-			content=IOUtil.toString(is,charset);
+			//print.e(ps.getDisplayPath()+":"+ClassUtil.isEncryptedBytecode(is)+":"+ClassUtil.isBytecode(is));
 			
+			if(ClassUtil.isEncryptedBytecode(is))throw new AlreadyClassException(ps.getPhyscalFile(),true);
+			if(ClassUtil.isBytecode(is)) throw new AlreadyClassException(ps.getPhyscalFile(),false);
+			
+			content=IOUtil.toString(is,charset);
 		}
 		finally {
 			IOUtil.closeEL(is);
 		}
-		init(content.toString().toCharArray());
+		init(ps,content.toString().toCharArray());
 	}
 
 	/**
@@ -103,7 +106,7 @@ public final class CFMLString {
 	 * @param ps
 	 */
 	public CFMLString(String text,Charset charset,boolean writeLog,PageSource ps) {
-		init(text.toCharArray());
+		init(null,text.toCharArray());
 		this.charset=charset;
 		this.writeLog=writeLog;
 		this.ps=ps;
@@ -115,7 +118,7 @@ public final class CFMLString {
 	 * @param charset
 	 */
 	public CFMLString(String text,Charset charset) {
-		init(text.toCharArray());
+		init(null,text.toCharArray());
 		this.charset=charset;
 		this.writeLog=false;
 	}
@@ -124,7 +127,7 @@ public final class CFMLString {
 	 * initialize the CFMLString, used by all constructors
 	 * @param text
 	 */
-	protected void init(char[] text) {
+	protected void init(PageSource ps, char[] text) {// TO NOT REMOVE PageSource THIS IS NEEDED by Bytecode refactoring!!!!
 		this.text=text;
 		lcText=new char[text.length];
 		

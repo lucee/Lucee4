@@ -17,6 +17,9 @@
 package lucee.transformer.bytecode.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import lucee.print;
 import lucee.commons.io.IOUtil;
@@ -30,6 +33,9 @@ import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ExpressionException;
+import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.PageRuntimeException;
+import lucee.runtime.op.Caster;
 import lucee.runtime.type.util.ListUtil;
 
 import org.objectweb.asm.ClassReader;
@@ -70,13 +76,7 @@ public class MethodCleaner extends ClassVisitor implements Opcodes {
     
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
     	if(name.equals(methodName) && desc.equals(strArgs)) {
-    		
-    		
-    		
-    		
-    		
-    		
-        	MethodVisitor mv = cv.visitMethod(access,  name,  desc,  signature,  exceptions);
+    		MethodVisitor mv = cv.visitMethod(access,  name,  desc,  signature,  exceptions);
     		mv.visitCode();
     		
     		if(msg==null)empty(mv);
@@ -88,14 +88,77 @@ public class MethodCleaner extends ClassVisitor implements Opcodes {
     	return super.visitMethod(access,  name,  desc,  signature,  exceptions);
     
 	}
+    
+	private static List<Object> parse(String str) {
+		List<Object> list=new ArrayList<Object>();
+		int last=0,index1,index2;
+		while((index1=str.indexOf("{arg:",last))!=-1) {
+			list.add(str.substring(last,index1));
+			index2=str.indexOf('}',index1+5);
+			try {
+				list.add(Caster.toInteger(str.substring(index1+5,index2)));
+			}
+			catch (PageException pe) {throw new PageRuntimeException(pe);}
+			
+			last=index2+1;
+			//break;
+		}
+		if(str.length()>last) {
+			list.add(str.substring(last));
+		}
+		
+		
+		return list;
+	}
+
 
 	private void exception(MethodVisitor mv) {
-		mv.visitTypeInsn(NEW, "java/lang/RuntimeException");
-		mv.visitInsn(DUP);
-		mv.visitLdcInsn(msg);
-		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/RuntimeException", "<init>", "(Ljava/lang/String;)V");
-		mv.visitInsn(ATHROW);
-		mv.visitMaxs(3, 1);
+		List<Object> list = parse(msg);
+		if(list.size()==1) {
+			mv.visitTypeInsn(NEW, "java/lang/RuntimeException");
+			mv.visitInsn(DUP);
+			mv.visitLdcInsn(msg);
+			mv.visitMethodInsn(INVOKESPECIAL, "java/lang/RuntimeException", "<init>", "(Ljava/lang/String;)V");
+			mv.visitInsn(ATHROW);
+			//mv.visitMaxs(3, 1);
+		}
+		else {
+			mv.visitTypeInsn(NEW, "java/lang/RuntimeException");
+			mv.visitInsn(DUP);
+			mv.visitTypeInsn(NEW, "java/lang/StringBuffer");
+			mv.visitInsn(DUP);
+			
+			Iterator<Object> it = list.iterator();
+			int count=0;
+			Object o;
+			while(it.hasNext()){
+				o=it.next();
+				
+				// add left
+				mv.visitLdcInsn(o);
+				if(count++==0) {
+					mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuffer", "<init>", "(Ljava/lang/String;)V");
+				}
+				else {
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuffer", "append", "(Ljava/lang/String;)Ljava/lang/StringBuffer;");
+				}
+				
+				// add arg
+				if(it.hasNext()) {
+					Integer i=(Integer) it.next();
+					mv.visitVarInsn(ALOAD, i.intValue());
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuffer", "append", "(Ljava/lang/Object;)Ljava/lang/StringBuffer;");
+				}
+			}
+			
+			mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuffer", "toString", "()Ljava/lang/String;");
+			mv.visitMethodInsn(INVOKESPECIAL, "java/lang/RuntimeException", "<init>", "(Ljava/lang/String;)V");
+			mv.visitInsn(ATHROW);
+			
+		}
+		
+		
+		
 	}
 
 

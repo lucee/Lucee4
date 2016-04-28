@@ -18,6 +18,8 @@
  **/
 package lucee.runtime.net.ftp;
 
+import java.io.IOException;
+
 import lucee.runtime.PageContext;
 import lucee.runtime.dump.DumpData;
 import lucee.runtime.dump.DumpProperties;
@@ -42,11 +44,10 @@ public final class FTPPath implements Dumpable{
      * @param current
      * @param relpath
      * @throws PageException
+     * @throws IOException 
      */
-    public FTPPath(String current, String relpath) throws PageException {
+    public FTPPath(AFTPClient client, String relpath) throws PageException, IOException {
         relpath=relpath.replace('\\','/');
-        //if(relpath.startsWith("./")) relpath=relpath.substring(2);
-        //if(relpath.startsWith(".")) relpath=relpath.substring(1);
         Array relpathArr=ListUtil.listToArrayTrim(relpath,'/');
 
         // relpath is absolute
@@ -54,8 +55,9 @@ public final class FTPPath implements Dumpable{
             init(relpathArr);
             return;
         }
-        if(current==null)current="";
-        else current=current.replace('\\','/');
+        String current;
+        if(client==null)current="";
+        else current=client.printWorkingDirectory().replace('\\','/');
         Array parentArr=ListUtil.listToArrayTrim(current,'/');
         
         // Single Dot .

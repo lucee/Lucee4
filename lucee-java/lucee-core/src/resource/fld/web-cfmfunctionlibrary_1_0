@@ -17823,7 +17823,7 @@ You can find a list of all available timezones in the Lucee administrator (Setti
         string to a number. If conversion fails, returns zero.</description>
 		<argument>
 			<name>value</name>
-			<type>any</type>
+			<type>string</type>
 			<required>Yes</required>
 		<description>A string or a variable that contains one</description>
     </argument>
