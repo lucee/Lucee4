@@ -18,14 +18,14 @@
  **/
 package lucee.runtime.net.ftp;
 
+import lucee.commons.lang.StringUtil;
+import lucee.runtime.exp.ApplicationException;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import lucee.commons.lang.StringUtil;
-import lucee.runtime.exp.ApplicationException;
 
 /**
  * Pool of FTP Client
@@ -34,7 +34,7 @@ public final class FTPPoolImpl {
 
     Map<String,FTPWrap> wraps=new HashMap<String, FTPWrap>();
 
-    public AFTPClient get(FTPConnection conn) throws IOException, ApplicationException {
+    public AFTPClient get(FTPConnectionPro conn) throws IOException, ApplicationException {
         AFTPClient client = _get(conn).getClient();
         if(client==null)throw new ApplicationException("can't connect to server ["+conn.getServer()+"]");
         
@@ -51,7 +51,7 @@ public final class FTPPoolImpl {
      * @throws IOException
      * @throws ApplicationException
      */
-    protected FTPWrap _get(FTPConnection conn) throws IOException, ApplicationException {
+    protected FTPWrap _get(FTPConnectionPro conn) throws IOException, ApplicationException {
         FTPWrap wrap=null;
         
       
