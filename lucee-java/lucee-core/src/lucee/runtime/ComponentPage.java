@@ -642,7 +642,7 @@ public abstract class ComponentPage extends PagePlus  {
 		        		// CFML
 			        	if(UDF.RETURN_FORMAT_SERIALIZE==format)	{
 			        		 // do not catch exception when format is defined
-			        		args=new CFMLExpressionInterpreter().interpret(pc, str);
+			        		args=new CFMLExpressionInterpreter(false).interpret(pc, str);
 			        	}
 			        	// JSON
 			        	if(UDF.RETURN_FORMAT_JSON==format)	{
@@ -657,7 +657,7 @@ public abstract class ComponentPage extends PagePlus  {
 			        		} 
 			        		catch (PageException pe) {
 			        			try {
-				        			args=new CFMLExpressionInterpreter().interpret(pc, str);
+				        			args=new CFMLExpressionInterpreter(false).interpret(pc, str);
 				        		} 
 				        		catch (PageException _pe) {}
 							}
