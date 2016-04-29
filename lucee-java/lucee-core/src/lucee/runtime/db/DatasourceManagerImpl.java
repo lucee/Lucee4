@@ -253,7 +253,7 @@ public final class DatasourceManagerImpl implements DataSourceManager {
 	            catch (SQLException e) {
 	                ExceptionHandler.printStackTrace(e);
 	            }
-	        	releaseConnection(null, dc);
+	        	//releaseConnection(null, dc);
     		}
             transConns.clear();
         }
@@ -269,21 +269,7 @@ public final class DatasourceManagerImpl implements DataSourceManager {
 	}
 
 	public void release() {
-		if(transConns.size()>0) {
-        	Iterator<DatasourceConnection> it = this.transConns.values().iterator();
-        	DatasourceConnection dc;
-    		while(it.hasNext()) {
-    			dc = it.next();
-	        	try {
-	            	dc.getConnection().setAutoCommit(true);
-	            } 
-	            catch (SQLException e) {
-	                ExceptionHandler.printStackTrace(e);
-	            }
-	        	releaseConnection(null, dc);
-    		}
-            transConns.clear();
-        }
+		transConns.clear();
 		this.isolation=Connection.TRANSACTION_NONE;
 	}
 

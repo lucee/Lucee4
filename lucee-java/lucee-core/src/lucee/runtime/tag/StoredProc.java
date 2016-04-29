@@ -1,6 +1,6 @@
 /**
- *
- * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
+ * Copyright (c) 2014, the Railo Company Ltd.
+ * Copyright (c) 2015, Lucee Assosication Switzerland
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,9 +15,10 @@
  * You should have received a copy of the GNU Lesser General Public 
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  * 
- **/
+ */
 package lucee.runtime.tag;
 
+import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -25,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +39,15 @@ import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.sql.SQLUtil;
+import lucee.loader.engine.CFMLEngine;
+import lucee.runtime.PageContextImpl;
 import lucee.runtime.cache.tag.CacheHandler;
 import lucee.runtime.cache.tag.CacheHandlerFactory;
 import lucee.runtime.cache.tag.CacheItem;
 import lucee.runtime.cache.tag.query.StoredProcCacheItem;
+import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
+import lucee.runtime.config.ConfigWeb;
 import lucee.runtime.config.ConfigWebImpl;
 import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.config.Constants;
@@ -56,6 +62,7 @@ import lucee.runtime.db.ProcMetaCollection;
 import lucee.runtime.db.SQLCaster;
 import lucee.runtime.db.SQLImpl;
 import lucee.runtime.db.SQLItemImpl;
+import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.DatabaseException;
 import lucee.runtime.exp.PageException;
@@ -127,6 +134,7 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 	private Object cachedWithin;
 	//private Map<String,ProcMetaCollection> procedureColumnCache;
 	
+	@Override
 	public void release() {
 		params.clear();
 		results.clear();
@@ -215,6 +223,7 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 	 * @param blockfactor
 	 * @deprecated replaced with setBlockfactor(double)
 	 */
+	@Deprecated
 	public void setBlockfactor(int blockfactor) {
 		DeprecatedUtil.tagAttribute(pageContext,"storedproc","blockfactor");
 		this.blockfactor = blockfactor;
@@ -295,82 +304,142 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 
 	private void returnValue(DatasourceConnection dc) throws PageException {
 		Connection conn = dc.getConnection();
-		
-		
 		if(SQLUtil.isOracle(conn)){
-			String name=this.procedure.toUpperCase();
-			int index=name.lastIndexOf('.');
+			String name=this.procedure.toUpperCase().trim();
 			
-			String pack=null,scheme=null;
+			// split procedure definition 
+			String catalog=null,scheme=null;
+			{
+				int index=name.lastIndexOf('.');
 			if(index!=-1){
-				pack=name.substring(0,index);
-				name=name.substring(index+1);
+					catalog=name.substring(0,index).trim();
+					name=name.substring(index+1).trim();
 				
-				index=pack.lastIndexOf('.');
+					index=catalog.lastIndexOf('.');
 				if(index!=-1){
-					scheme=pack.substring(index+1);
-					pack=pack.substring(0,index);
+		                scheme=catalog.substring(0,index).trim();
+		                catalog=catalog.substring(index+1).trim();
+						//scheme=catalog.substring(index+1);
+						//catalog=catalog.substring(0,index);
 				}
-				
-				
+			}
+				if(StringUtil.isEmpty(scheme)) scheme=null;
+				if(StringUtil.isEmpty(catalog)) catalog=null;
 			}
 			
+			
 			try {
-				DatabaseMetaData md = conn.getMetaData();
+								
 				
 				//if(procedureColumnCache==null)procedureColumnCache=new ReferenceMap();
 				//ProcMetaCollection coll=procedureColumnCache.get(procedure);
 				DataSourceSupport d = ((DataSourceSupport)dc.getDatasource());
 				long cacheTimeout = d.getMetaCacheTimeout();
 				Map<String, ProcMetaCollection> procedureColumnCache = d.getProcedureColumnCache();
-				ProcMetaCollection coll=procedureColumnCache.get(procedure);
+				String id=procedure.toLowerCase();
+				ProcMetaCollection coll=procedureColumnCache.get(id);
 				
 				if(coll==null || (cacheTimeout>=0 && (coll.created+cacheTimeout)<System.currentTimeMillis())) {
-					ResultSet res = md.getProcedureColumns(pack, scheme, name, null);
+					DatabaseMetaData md = conn.getMetaData();
+					String _catalog=null,_scheme=null,_name=null;
+					boolean available=false;
+					/*print.e("pro:"+procedure);
+					print.e("cat:"+catalog);
+					print.e("sch:"+scheme);
+					print.e("nam:"+name);*/
+					ResultSet proc = md.getProcedures(null, null, name);
+					try {
+						while (proc.next()) {
+							_catalog = proc.getString(1);
+							_scheme = proc.getString(2);
+							_name = proc.getString(3);
+							if(
+									_name.equalsIgnoreCase(name)
+									&&
+									(catalog==null || _catalog==null || catalog.equalsIgnoreCase(_catalog)) // second option is very unlikely to ever been the case, but does not hurt to test
+									&&
+									(scheme==null || _scheme==null || scheme.equalsIgnoreCase(_scheme)) // second option is very unlikely to ever been the case, but does not hurt to test
+							  ) {
+								available=true;
+								break;
+							}
+						}
+					}
+					finally {
+						IOUtil.closeEL(proc);
+					}
+					
+					
+					
+					
+					if(available) {		
+						/*print.e("---------------");
+						print.e("_pro:"+procedure);
+						print.e("_cat:"+_catalog);
+						print.e("_sch:"+_scheme);
+						print.e("_nam:"+_name);*/
+						ResultSet res = md.getProcedureColumns(_catalog, _scheme, _name, "%");
 					coll=createProcMetaCollection(res);
-					procedureColumnCache.put(procedure,coll);
+						procedureColumnCache.put(id,coll);
+					}
 				}
 				
-				index=-1;
-				for(int i=0;i<coll.metas.length;i++) { 
+				int index=-1;
+				int ct;
+				if(coll!=null) {
+					Iterator<ProcMeta> it = coll.metas.iterator();
+					ProcMeta pm;
+					while(it.hasNext()) { 
 					index++;
+						pm=it.next();
+						ct=pm.columnType;
 					
 					// Return
-					if(coll.metas[i].columnType==DatabaseMetaData.procedureColumnReturn) {
+						if(ct==DatabaseMetaData.procedureColumnReturn) {
 						index--;
 						ProcResultBean result= getFirstResult();
 						ProcParamBean param = new ProcParamBean();
 						
-						param.setType(coll.metas[i].dataType);
+							param.setType(pm.dataType);
 						param.setDirection(ProcParamBean.DIRECTION_OUT);
 						if(result!=null)param.setVariable(result.getName());
 						returnValue=param;
 						
 					}	
-					else if(coll.metas[i].columnType==DatabaseMetaData.procedureColumnOut || coll.metas[i].columnType==DatabaseMetaData.procedureColumnInOut) {
-						if(coll.metas[i].dataType==CFTypes.CURSOR){
+						else if(ct==DatabaseMetaData.procedureColumnOut || ct==DatabaseMetaData.procedureColumnInOut) {
+							// review of the code: seems to add an addional column in this case
+							if(pm.dataType==CFTypes.CURSOR) {
 							ProcResultBean result= getFirstResult();
-							
 							ProcParamBean param = new ProcParamBean();
-							param.setType(coll.metas[i].dataType);
+								
+								param.setType(pm.dataType);
 							param.setDirection(ProcParamBean.DIRECTION_OUT);
 							if(result!=null)param.setVariable(result.getName());
+								
+								if(params.size()<index)
+									throw new DatabaseException("you have only defined ["+params.size()+"] procparam tags, but the procedure/function called is expecting more", null, null, dc);
+								else if(params.size()==index)
+									params.add(param);
+								else
 							params.add(index, param);
 						}
 						else {								
 							ProcParamBean param= params.get(index);
-							if(coll.metas[i].dataType!=Types.OTHER && coll.metas[i].dataType!=param.getType()){
-								param.setType(coll.metas[i].dataType);
+								if(param!=null && pm.dataType!=Types.OTHER && pm.dataType!=param.getType()){
+									param.setType(pm.dataType);
 							}
 						}
 					}	
-					else if(coll.metas[i].columnType==DatabaseMetaData.procedureColumnIn) {	
+						else if(ct==DatabaseMetaData.procedureColumnIn) {	
 						ProcParamBean param=get(params,index);
-						if(param!=null && coll.metas[i].dataType!=Types.OTHER && coll.metas[i].dataType!=param.getType()){
-							param.setType(coll.metas[i].dataType);
+							if(param!=null && pm.dataType!=Types.OTHER && pm.dataType!=param.getType()){
+								param.setType(pm.dataType);
+							}
 						}
 					}	
 				}
+				
+				
 				contractTo(params,index+1);
 				
 				//if(res!=null)print.out(new QueryImpl(res,"columns").toString());
@@ -378,8 +447,6 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 			catch (SQLException e) {
 			    throw new DatabaseException(e,dc);
 			}
-			
-			
 		}
 		
 		// return code
@@ -395,7 +462,6 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 		catch(Throwable t){
 			return null;
 		}
-		
 	}
 
 
@@ -419,10 +485,15 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 		} catch (PageException e) {}
 		*/
 		ArrayList<ProcMeta> list=new ArrayList<ProcMeta>();
+		try {
 		while(res.next()) {
 			list.add(new ProcMeta(res.getInt(COLUMN_TYPE),getDataType(res)));
 		}
-		return new ProcMetaCollection(list.toArray(new ProcMeta[list.size()]));
+		}
+		finally {
+			IOUtil.closeEL(res);
+		}
+		return new ProcMetaCollection(list);
 	}
 
 
@@ -486,9 +557,6 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 		CallableStatement callStat=null;
 		try {
 		    callStat = dc.getConnection().prepareCall(sql.toString());
-		    		//ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY); 
-    				//ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY); 
-		    
 		    if(blockfactor>0)callStat.setFetchSize(blockfactor);
 		    if(timeout>0)DataSourceUtil.setQueryTimeoutSilent(callStat,timeout);
 		    
@@ -601,7 +669,6 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 				}
 				isFromCache=true;
 			}
-			
 		    // result
 		    long exe;
 		    
@@ -620,7 +687,6 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 			if(log.getLogLevel()>=Log.LEVEL_INFO) {
 				log.info("storedproc tag", "executed ["+sql.toString().trim()+"] in "+DecimalFormat.call(pageContext, exe/1000000D)+" ms");
 			}
-		    
 		    
 		}
 		catch (SQLException e) {
@@ -701,8 +767,4 @@ public class StoredProc extends BodyTagTryCatchFinallySupport {
 	public void setTimeout(double timeout) {
 		this.timeout = (int) timeout;
 	}
-	
-	
 }
-
-

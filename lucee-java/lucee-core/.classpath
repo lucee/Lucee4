@@ -108,5 +108,6 @@
 	<classpathentry kind="lib" path="/Lucee-Libs/javasysmon.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/slf4j-nop.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/jcifs.jar"/>
+	<classpathentry kind="lib" path="/Lucee-Libs/jsch-0.1.53.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

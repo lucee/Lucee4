@@ -150,7 +150,7 @@ public final class PhysicalClassLoader extends ExtendableClassLoader implements 
 	        in=res.getInputStream();
 	        byte[] buffer = new byte[10];
 	    	in.read(buffer);
-	    	if(!ClassUtil.hasCF33Prefix(buffer)) return defaultValue;
+	    	if(!ClassUtil.isEncryptedBytecode(buffer)) return defaultValue;
 	    	
 	    	 byte[] _buffer = new byte[]{
 	    			 buffer[2],
@@ -198,7 +198,7 @@ public final class PhysicalClassLoader extends ExtendableClassLoader implements 
 
     public Class<?> loadClass(String name, byte[] barr) {
     	int start=0;
-    	if(ClassUtil.hasCF33Prefix(barr)) start=10;
+    	if(ClassUtil.isEncryptedBytecode(barr)) start=10;
     	size+=barr.length-start;
     	count++;
     	try {
