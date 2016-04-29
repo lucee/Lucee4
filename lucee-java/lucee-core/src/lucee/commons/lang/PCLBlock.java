@@ -120,7 +120,7 @@ public final class PCLBlock extends ExtendableClassLoader implements Sizeable  {
 	        in=res.getInputStream();
 	        byte[] buffer = new byte[10];
 	    	in.read(buffer);
-	    	if(!ClassUtil.hasCF33Prefix(buffer)) return defaultValue;
+	    	if(!ClassUtil.isEncryptedBytecode(buffer)) return defaultValue;
 	    	
 	    	 byte[] _buffer = new byte[]{
 	    			 buffer[2],

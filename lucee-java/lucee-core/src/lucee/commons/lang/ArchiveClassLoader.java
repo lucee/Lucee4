@@ -24,13 +24,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.PublicKey;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import lucee.commons.digest.RSA;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.FileWrapper;
 import lucee.runtime.type.Sizeable;
+import lucee.transformer.util.AlreadyClassException;
 
 // TODO umbauen auf ZipInputStream oder ein wrapper schreiben fuer resorces der das file interface einhaelt
 
@@ -130,8 +133,8 @@ public final class ArchiveClassLoader extends ClassLoader implements Sizeable,Cl
     	byte[] barr = getBytes(name.replace('.','/').concat(".class"));
         if(barr!=null) {
             try {
-            	int start=ClassUtil.hasCF33Prefix(barr)?10:0;
-            	return defineClass(name,barr,start,barr.length-start);
+            	barr = toRaw(barr);
+                return defineClass(name,barr,0,barr.length);
             }
             catch(Throwable t) {}
         }
@@ -143,12 +146,31 @@ public final class ArchiveClassLoader extends ClassLoader implements Sizeable,Cl
         InputStream is = super.getResourceAsStream(name);
         if(is!=null) return is;
         
-        byte[] barr = getBytes(name);
-    	int start=ClassUtil.hasCF33Prefix(barr)?10:0;
-        if(barr!=null) return new ByteArrayInputStream(barr,start,barr.length-start);
+        byte[] barr = toRaw(getBytes(name));
+        if(barr!=null) return new ByteArrayInputStream(barr);
         
         return null;
     }
+    
+    
+    private byte[] toRaw(byte[] bytes) {
+    	if(bytes==null || !ClassUtil.isEncryptedBytecode(bytes)) return bytes;
+        	
+		String str = System.getenv("PUBLIC_KEY");
+		if(StringUtil.isEmpty(str,true)) str=System.getProperty("PUBLIC_KEY");
+		if(StringUtil.isEmpty(str,true)) throw new RuntimeException("to decrypt encrypted bytecode, you need to set PUBLIC_KEY as system property or or enviroment variable");
+		
+		try {	
+			PublicKey publicKey = RSA.toPublicKey(str);
+			// first 2 bytes are just a mask to detect encrypted code, so we need to set offset 2
+			bytes=RSA.decrypt(bytes, publicKey,2);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return bytes;
+	}
+    
     
     @Override 
     public URL getResource(String name) { 
