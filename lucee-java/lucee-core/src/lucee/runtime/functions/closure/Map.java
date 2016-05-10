@@ -290,7 +290,7 @@ public class Map extends BIF {
 	
 	public static void afterCall(PageContext pc, Collection coll, List<Future<Data<Object>>> futures, ExecutorService es) throws PageException {
 		boolean isQuery=coll instanceof Query;
-		try{
+		try {
 			Iterator<Future<Data<Object>>> it = futures.iterator();
 			Data<Object> d;
 			while(it.hasNext()){
@@ -299,10 +299,12 @@ public class Map extends BIF {
 				else coll.set(KeyImpl.toKey(d.passed), d.result);
 				pc.write(d.output);
 			}
-			es.shutdown();
 		}
 		catch(Exception e){
 			throw Caster.toPageException(e);
+		}
+		finally {
+			es.shutdown();
 		}
 	}
 	
