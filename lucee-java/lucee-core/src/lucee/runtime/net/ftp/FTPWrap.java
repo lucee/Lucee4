@@ -18,13 +18,12 @@
  **/
 package lucee.runtime.net.ftp;
 
-import java.io.IOException;
-import java.net.InetAddress;
-
 import lucee.runtime.net.proxy.Proxy;
-
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+
+import java.io.IOException;
+import java.net.InetAddress;
 
 
 /**
@@ -32,7 +31,7 @@ import org.apache.commons.net.ftp.FTPClient;
  */
 public final class FTPWrap {
 
-    private FTPConnection conn;
+    private FTPConnectionPro conn;
     private AFTPClient client;
     private InetAddress address;
     private long lastAccess=0;
@@ -60,7 +59,7 @@ public final class FTPWrap {
      * @param connection
      * @throws IOException
      */
-    public FTPWrap(FTPConnection connection) throws IOException {
+    public FTPWrap(FTPConnectionPro connection) throws IOException {
         this.conn=connection;
         this.address = InetAddress.getByName(connection.getServer());
         connect();        
