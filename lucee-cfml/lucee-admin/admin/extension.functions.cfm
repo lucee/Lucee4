@@ -113,10 +113,19 @@
 		
 		<cfset local.cfcNames="">
 				
-		<cfif !failed> <cfreturn datas></cfif>
+		<cfif !failed>
+			<cfreturn datas>
+		</cfif>
+
 		<cfset var names="">
 		<cfloop array="#arguments.providers#" item="local.cfcName">
-			
+			<!--- if we can use this provider's cached data because of lastModified setting, then skip retrieval --->
+			<cfif structKeyExists(datas, cfcName) and isStruct(datas[cfcName])
+					and structKeyExists(datas[cfcName], "getInfo")
+					and structKeyExists(datas[cfcName].getInfo, "lastModified")>
+				<cfcontinue />
+			</cfif>
+
 			<!--- when was the last try to recieve this data?, we try only every  --->
 	        <cfif !forcereload and
 				StructKeyExists(session,"cfcstries") and 
@@ -126,24 +135,25 @@
 				</cfif>
 			</cfif>
 			<cfset session.cfcstries[cfcName]=now()>
-			
-			
+
 			<cfset session.cfcs[cfcName]={}>
         	<cfset request.cfcs[cfcName]={}>
 			<cfset var name="t"&createUniqueId()>
-			<cfset listAppend(names,name)>
+			<cfset names = listAppend(names,name) />
 			<cfthread name="#name#" provider="#cfcName#" sess="#session.cfcs[cfcName]#" req="#request.cfcs[cfcName]#">
 				<cfsetting requesttimeout="50000">
 				<cftry>
 					<cfset var start=getTickCount()>
 					
 					<!--- list Applications --->
-					<cfhttp url="#attributes.provider#?returnFormat=serialize&method=listApplications" result="local.http">
+					<cfhttp url="#attributes.provider#?returnFormat=serialize&method=listApplications" result="local.http"
+							throwonerror="true">
 					<cfset attributes.req.listApplications=evaluate(http.fileContent)>
 					<cfset attributes.sess.listApplications=attributes.req.listApplications>
 					
 					<!--- get Info --->
-					<cfhttp url="#attributes.provider#?returnFormat=serialize&method=getInfo" result="local.http">
+					<cfhttp url="#attributes.provider#?returnFormat=serialize&method=getInfo" result="local.http"
+							throwonerror="true">
 					<cfset attributes.req.getInfo=evaluate(http.fileContent)>
 			        <cfset attributes.req.getInfo.lastModified=now()>
 			        <cfset attributes.sess.getInfo=attributes.req.getInfo>
@@ -159,7 +169,7 @@
 			</cfthread>
 		</cfloop>
 		<!--- <cfset systemOutput('<print-stack-trace>',true,true)>--->
-		<cfif arguments.timeout GT 0>
+		<cfif arguments.timeout GT 0 and names neq "">
 			<cfthread action="join" names="#names#" timeout="#arguments.timeout#"/>
 		</cfif>
 			
@@ -298,7 +308,7 @@
 		<cfargument name="width" required="yes" type="number" default="80">
 		<cfargument name="height" required="yes" type="number" default="40">
 		
-		<cfreturn "thumbnail.cfm?img=#urlEncodedFormat(imgUrl)#&width=#width#&height=#height#">
+		<cfreturn "thumbnail.cfm?img=#urlEncodedFormat(imgUrl)#&width=#width#&height=#height#&adminType=#request.adminType#">
 	</cffunction>    
 	
 	

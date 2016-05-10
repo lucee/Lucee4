@@ -142,6 +142,22 @@
                 <cfset printError(struct(message:rst.common))>
             </cfif>
         </cfif>
+
+		<!--- For uploaded extensions: check if we need to update the image variable to point to a local file --->
+		<cfif done and structKeyExists(url, 'uploadExt')>
+			<cfset origImagePath = detail.data.image />
+			<cfif origImagePath neq "" and not refind('^https?:', origImagePath)>
+				<!--- does the file path to the image exist inside the extension zip file, and is it an image --->
+				<cfif fileExists(zip & origImagePath) and listFindNoCase("jpg,png,gif", listLast(origImagePath, '.'))
+						and not find('..', origImagePath)>
+					<cfset newImagePath = config.mixed.savePath & getFileFromPath(origImagePath) />
+					<cfif not fileExists(newImagePath)>
+						<cffile action="copy" source="#zip & origImagePath#" destination="#newImagePath#" />
+					</cfif>
+					<cfset detail.data.image = newImagePath />
+				</cfif>
+			</cfif>
+		</cfif>
         
         <cfif done>
             <cfadmin 
