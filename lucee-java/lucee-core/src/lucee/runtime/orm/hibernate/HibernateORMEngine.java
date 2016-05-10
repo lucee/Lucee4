@@ -465,7 +465,7 @@ public class HibernateORMEngine implements ORMEngine {
 		Resource[] locations = ormConf.getCfcLocations();
 		
 		throw ExceptionUtil.createException(data,null,
-				"No entity (persitent component) with name ["+entityName+"] found, available entities are ["+ListUtil.listToList(data.getEntityNames(), ", ")+"] ",
+				"No entity (persistent component) with name ["+entityName+"] found, available entities are ["+ListUtil.listToList(data.getEntityNames(), ", ")+"] ",
 				"component are searched in the following directories ["+toString(locations)+"]");
 		
 	}
