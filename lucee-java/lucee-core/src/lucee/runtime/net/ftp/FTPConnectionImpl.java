@@ -25,7 +25,7 @@ package lucee.runtime.net.ftp;
 /**
  *  
  */
-public final class FTPConnectionImpl implements FTPConnection {
+public final class FTPConnectionImpl implements FTPConnectionPro {
     
     private final String name;
     private final String server;

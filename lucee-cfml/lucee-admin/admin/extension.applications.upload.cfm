@@ -22,11 +22,11 @@
 	<cflocation url="#request.self#?action=#url.action#&noextfile=1" addtoken="no" />
 </cfif>
 
-<!--- try to upload (.zip and .re) --->
+<!--- try to upload (.zip and .lex) --->
 <cftry>
 	<cffile action="upload" filefield="extfile" destination="#GetTempDirectory()#" nameconflict="makeunique" />
-	<cfif cffile.serverfileext neq "zip" and cffile.serverfileext neq "re">
-		<cfthrow message="Only zip and re files are allowed as extensions!" />
+	<cfif cffile.serverfileext neq "zip" and cffile.serverfileext neq "lex">
+		<cfthrow message="Only .zip and .lex files are allowed as extensions!" />
 	</cfif>
 	<cfcatch>
 		<!--- try to delete the uploaded file, if any--->
@@ -42,7 +42,7 @@
 
 <cfset zipfile = "#rereplace(cffile.serverdirectory, '[/\\]$', '')##server.separator.file##cffile.serverfile#" />
 	
-<!--- re files --->
+<!--- lex files --->
 <cfif cffile.serverfileext eq "lex">
 	<!--- move to deploy directory --->
 	<cfadmin 
