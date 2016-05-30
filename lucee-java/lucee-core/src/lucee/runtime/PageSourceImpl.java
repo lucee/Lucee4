@@ -265,8 +265,7 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 						} catch (Throwable t) {t.printStackTrace();
 							this.page=page=null;
 						}
-                    	if(page==null) this.page=page=compile(config,classRootDir,Boolean.TRUE);
-                              
+                    	if(page==null) this.page=page=compile(config,classRootDir,Boolean.TRUE);     
                     }
                     
                     // check if there is a newwer version
@@ -325,9 +324,9 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 	private Page _compile(ConfigWeb config,Resource classRootDir, Boolean resetCL) throws IOException, SecurityException, IllegalArgumentException, PageException {
         ConfigWebImpl cwi=(ConfigWebImpl) config;
         
-        //long now; // TODO reenable keywods, double check, inspect template, watch 
-        //if((getPhyscalFile().lastModified()+60000)>(now=System.currentTimeMillis()))
-        //	cwi.getCompiler().watch(this,now);//SystemUtil.get
+        long now; // TODO reenable keywods, double check, inspect template, watch 
+        if((getPhyscalFile().lastModified()+60000)>(now=System.currentTimeMillis()))
+        	cwi.getCompiler().watch(this,now);//SystemUtil.get
         
         
         
