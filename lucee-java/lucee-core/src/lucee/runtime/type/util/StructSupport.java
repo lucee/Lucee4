@@ -88,7 +88,7 @@ public abstract class StructSupport implements Map,Struct,Sizeable {
 
 	@Override
 	public Set keySet() {
-		return StructUtil.keySet(this,true);
+		return StructUtil.keySet(this);
 	}
 
 	@Override

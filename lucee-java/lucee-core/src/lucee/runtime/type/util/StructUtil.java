@@ -107,9 +107,10 @@ public final class StructUtil {
 	}
 
 	public static Set<Entry<String, Object>> entrySet(Struct sct) {
+		boolean linked=sct instanceof StructImpl && ((StructImpl)sct).getType()==Struct.TYPE_LINKED;
 		Iterator<Entry<Key, Object>> it = sct.entryIterator();
 		Entry<Key, Object> e;
-		HashSet<Entry<String, Object>> set=new HashSet<Entry<String, Object>>();
+		Set<Entry<String, Object>> set=linked?new LinkedHashSet<Entry<String, Object>>():new HashSet<Entry<String, Object>>();
 		while(it.hasNext()){
 			e= it.next();
 			set.add(new StructMapEntry(sct,e.getKey(),e.getValue()));
@@ -117,7 +118,8 @@ public final class StructUtil {
 		return set;
 	}
 	
-	public static Set<String> keySet(Struct sct, boolean linked) {
+	public static Set<String> keySet(Struct sct) {
+		boolean linked=sct instanceof StructImpl && ((StructImpl)sct).getType()==Struct.TYPE_LINKED;
 		Iterator<Key> it = sct.keyIterator();
 		Set<String> set=linked?new LinkedHashSet<String>():new HashSet<String>();
 		while(it.hasNext()){
