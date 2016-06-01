@@ -145,8 +145,6 @@ public abstract class StorageScopeDatasource extends StorageScopeImpl {
 	}
 	
 	public void store(Config config) {
-		//if(!super.hasContent()) return;
-		
 		DatasourceConnection dc = null;
 		ConfigImpl ci = (ConfigImpl)config;
 		DatasourceConnectionPool pool = ci.getDatasourceConnectionPool();
