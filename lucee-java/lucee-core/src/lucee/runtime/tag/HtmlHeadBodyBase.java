@@ -101,18 +101,16 @@ public abstract class HtmlHeadBodyBase extends BodyTagTryCatchFinallyImpl {
 	@Override
 	public int doEndTag() throws PageException {
 
-		if (!StringUtil.isEmpty(text) || action.equals("flush") || action.equals("read") || action.equals("reset"))
-			processTag();
+		processTag();
 
 		return SKIP_BODY;
 	}
 
 	public int doAfterBody() throws PageException {
-
 		if (StringUtil.isEmpty(text) && bodyContent != null) {
-
 			text = bodyContent.getString();
 		}
+		if(bodyContent!=null)bodyContent.clearBody();
 
 		return SKIP_BODY;
 	}
