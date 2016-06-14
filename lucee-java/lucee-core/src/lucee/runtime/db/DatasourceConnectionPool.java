@@ -56,28 +56,40 @@ public class DatasourceConnectionPool {
 		
 		// max connection
 		int max=datasource.getConnectionLimit();
+		
+		// get an existing connection
+		DatasourceConnectionImpl rtn=null;
+		while(rtn!=null && !isValid(rtn,Boolean.TRUE)) {
+			synchronized (stack) {
+				while(max!=-1 && max<=_size(datasource)) {
+					try {
+						//stack.inc();
+						stack.wait(10000L);
+						
+					} 
+					catch (InterruptedException e) {
+						throw Caster.toPageException(e);
+					}
+				}
+				
+				while(!stack.isEmpty()) {
+					DatasourceConnectionImpl dc=(DatasourceConnectionImpl) stack.get();
+					if(dc!=null){
+						rtn=dc;
+						break;
+					}
+				}
+			}
+		}
+		
+		// create a new connection
+		if(rtn==null)
+			rtn=loadDatasourceConnection(datasource, user, pass);
+		
 		synchronized (stack) {
-			while(max!=-1 && max<=_size(datasource)) {
-				try {
-					//stack.inc();
-					stack.wait(10000L);
-					
-				} 
-				catch (InterruptedException e) {
-					throw Caster.toPageException(e);
-				}
-			}
-			
-			while(!stack.isEmpty()) {
-				DatasourceConnectionImpl dc=(DatasourceConnectionImpl) stack.get();
-				if(dc!=null && isValid(dc,Boolean.TRUE)){
-					_inc(datasource);
-					return dc.using();
-				}
-			}
 			_inc(datasource);
 		}
-		return loadDatasourceConnection(datasource, user, pass).using();
+		return rtn.using();
 	}
 
 	private DatasourceConnectionImpl loadDatasourceConnection(DataSource ds, String user, String pass) throws DatabaseException  {
