@@ -59,7 +59,11 @@ public class DatasourceConnectionPool {
 		
 		// get an existing connection
 		DatasourceConnectionImpl rtn=null;
-		while(rtn!=null && !isValid(rtn,Boolean.TRUE)) {
+		do {
+			// we have a bad connection
+			if(rtn!=null) {
+				IOUtil.closeEL(rtn.getConnection());
+			}
 			synchronized (stack) {
 				while(max!=-1 && max<=_size(datasource)) {
 					try {
@@ -80,7 +84,7 @@ public class DatasourceConnectionPool {
 					}
 				}
 			}
-		}
+		}while(rtn!=null && !isValid(rtn,Boolean.TRUE));
 		
 		// create a new connection
 		if(rtn==null)
