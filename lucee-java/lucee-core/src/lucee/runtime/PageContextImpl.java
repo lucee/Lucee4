@@ -998,8 +998,11 @@ public final class PageContextImpl extends PageContext implements Sizeable {
     }
     public synchronized void copyStateTo(PageContextImpl other) {
     	
-    	
-    	
+		// cfid (we do this that way, otherwise we only have the same cfid if the current pc has defined cfid in cookie or url)
+		getCFID(); 
+		other.cfid=cfid;
+		other.cftoken=cftoken;
+
     	// private Debugger debugger=new DebuggerImpl();
     	other.requestTimeout=requestTimeout;
     	other.locale=locale;
