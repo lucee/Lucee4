@@ -18,19 +18,26 @@
  **/
 package lucee.runtime.cache;
 
+import java.io.IOException;
+
 import lucee.commons.io.cache.Cache;
 import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.cache.CacheFilter;
+import lucee.commons.io.cache.complex.CacheComplex;
 import lucee.commons.lang.StringUtil;
+import lucee.runtime.config.Config;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.dt.TimeSpan;
 import lucee.runtime.type.dt.TimeSpanImpl;
 
 public class CacheUtil {
-
-	public static Struct getInfo(CacheEntry ce) {
-		Struct info=new StructImpl();
+ 	public static Struct getInfo(CacheEntry ce) {
+		return getInfo(new StructImpl(), ce);
+	}
+ 	
+	public static Struct getInfo(Struct info,CacheEntry ce) {
+		if(info==null) info=new StructImpl();
 		info.setEL("key", ce.getKey());
 		info.setEL("created", ce.created());
 		info.setEL("last_hit", ce.lastHit());
@@ -49,7 +56,11 @@ public class CacheUtil {
 
 
 	public static Struct getInfo(Cache c) {
-		Struct info=new StructImpl();
+		return getInfo(new StructImpl(), c);
+	}
+
+	public static Struct getInfo(Struct info, Cache c) {
+		if(info==null) info=new StructImpl();
 
 		long value = c.hitCount();
 		if(value>=0)info.setEL("hit_count", new Double(value));
@@ -88,4 +99,20 @@ public class CacheUtil {
 		String p = StringUtil.trim(filter.toPattern(),"");
 		return p.equals("*") || p.equals("");
 	}
+
+	/**
+	 * in difference to the getInstance method of the CacheConnection this method produces a wrapper Cache (if necessary) that creates Entry objects to make sure the Cache has meta data.
+	 * @param cc
+	 * @param config
+	 * @return
+	 * @throws IOException 
+	 */
+	public static Cache getInstance(CacheConnection cc, Config config) throws IOException {
+		Cache c = cc.getInstance(config);
+		if("org.lucee.extension.io.cache.memcache.MemCacheRaw".equals(c.getClass().getName())) {
+			return new CacheComplex(cc,c);
+		}
+		return c;
+	}
+
 }

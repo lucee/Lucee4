@@ -26,6 +26,7 @@ import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.log.Log;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.CacheConnection;
+import lucee.runtime.cache.CacheUtil;
 import lucee.runtime.config.Config;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
@@ -147,16 +148,11 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 			
 			CacheEntry existing = cache.getCacheEntry(key,null);
 			// cached data changed in meantime
-			print.e("store "+(existing !=null));
 			
-			if(existing!=null && existing.lastModified().getTime()>lastModified()) {
-				print.e("merge store ");
+			if(existing!=null  && existing.lastModified()!=null && existing.lastModified().getTime()>lastModified()) {
 				Struct trg=((Struct)existing.getValue());
 				StructUtil.copy(sct, trg, true);
 				sct=trg;
-			}
-			else {
-				print.e("simply store");
 			}
 			cache.put(key, sct,null,new Long(getTimeSpan()));
 		} 
@@ -179,7 +175,8 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 			CacheConnection cc = Util.getCacheConnection(config,cacheName);
 			if(!cc.isStorage()) 
 				throw new ApplicationException("storage usage for this cache is disabled, you can enable this in the lucee administrator.");
-			return cc.getInstance(config); 
+			return CacheUtil.getInstance(cc,config); //cc.getInstance(config); 
+
 		} catch (IOException e) {
 			throw Caster.toPageException(e);
 		}

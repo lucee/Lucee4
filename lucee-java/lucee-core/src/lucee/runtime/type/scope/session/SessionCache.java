@@ -18,10 +18,10 @@
  **/
 package lucee.runtime.type.scope.session;
 
-import lucee.print;
+import java.util.Date;
+
 import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.log.Log;
-import lucee.commons.lang.Pair;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Collection;
@@ -62,23 +62,20 @@ public final class SessionCache extends StorageScopeCache implements Session {
 	public synchronized static Session getInstance(String cacheName, String appName, PageContext pc, Session existing, Log log) throws PageException {
 		CacheEntry ce = _loadData(pc, cacheName, appName,"session", log);
 		if(ce!=null) {
-			print.e("has data:");
+			Date lm = ce.lastModified();
+			long time=lm!=null?lm.getTime():0;
+			
 			if(existing instanceof StorageScopeCache) {
-				print.e("has pair:"+(((StorageScopeCache)existing).lastModified())+":"+(ce.lastModified().getTime()));
-				if(((StorageScopeCache)existing).lastModified()>=ce.lastModified().getTime()) {
-					print.e("use existing:");
+				if(((StorageScopeCache)existing).lastModified()>=time) {
 					return existing;
 				}
 			}
-			return new SessionCache(pc,cacheName,appName,(Struct)ce.getValue(),ce.lastModified().getTime());
+			return new SessionCache(pc,cacheName,appName,(Struct)ce.getValue(),time);
 		}
 		else if(existing!=null) {
-			print.e("return existing");
 			return  existing;
 		}
 
-		print.e("new");
-		
 		SessionCache session = new SessionCache(pc,cacheName,appName,new StructImpl(),0);
 		session.store(pc.getConfig());
 		return session;
