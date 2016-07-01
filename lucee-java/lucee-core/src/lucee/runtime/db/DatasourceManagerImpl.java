@@ -134,8 +134,8 @@ public final class DatasourceManagerImpl implements DataSourceManager {
                 	throw new DatabaseException(
     						"can't use different connections to the same datasource inside a single transaction",null,null,newDC);
     			}
-                else if(newDC.getConnection().getAutoCommit()) {
-                	newDC.getConnection().setAutoCommit(false);
+                else if(newDC.isAutoCommit()) {
+                	newDC.setAutoCommit(false);
                 }
             } catch (SQLException e) {
                ExceptionHandler.printStackTrace(e);
