@@ -526,11 +526,12 @@ public final class ScopeContext {
 			//final boolean doMemory=isMemory || !appContext.getSessionCluster();
 			
 			Session existing=(Session) context.get(pc.getCFID());
+			if(existing!=null && (existing.isExpired() || !(existing instanceof StorageScope))) existing=null; // second should not happen
+			
 			Session session=appContext.getSessionCluster()?null:existing;
 			//Session session=doMemory?(appContext.getSessionCluster()?null:(Session) context.get(pc.getCFID())):null;
 			
-			if(session==null || !(session instanceof StorageScope) || session.isExpired() || !((StorageScope)session).getStorage().equalsIgnoreCase(storage)) {
-				if(!(existing instanceof StorageScope) || existing.isExpired()) existing=null;
+			if(session==null || !((StorageScope)session).getStorage().equalsIgnoreCase(storage)) {
 				// not necessary to check session in the same way, because it is overwritten anyway
 				
 				if(isMemory){
@@ -542,7 +543,8 @@ public final class ScopeContext {
 				}
 				else if("cookie".equals(storage))
 					session=SessionCookie.getInstance(appContext.getName(),pc,getLog());
-				else{
+				else {
+					
 					DataSource ds = ((PageContextImpl)pc).getDataSource(storage,null);
 					if(ds!=null && ds.isStorage()) session=SessionDatasource.getInstance(storage,pc,getLog(),null);
 					else session=SessionCache.getInstance(storage,appContext.getName(),pc,existing,getLog(),null);
