@@ -1087,7 +1087,7 @@ class StopThread extends Thread {
 							m.invoke(thread, new Object[]{t});
 						}
 						catch (Throwable t) {
-							LogUtil.log(log, Log.LEVEL_ERROR, "", t);
+							//LogUtil.log(log, Log.LEVEL_ERROR, "", t);
 							thread.stop();
 						}
 					}
