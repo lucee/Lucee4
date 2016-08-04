@@ -78,7 +78,16 @@ public class PageContextUtil {
 
 	public static TimeSpan remainingTime(PageContext pc, boolean throwWhenAlreadyTimeout) throws RequestTimeoutException {
 		long ms = pc.getRequestTimeout()-(System.currentTimeMillis()-pc.getStartTime());
-		if(ms>0) return TimeSpanImpl.fromMillis(ms);
+		if(ms>0) {
+			if(ms<5);
+			else if(ms<10) ms=ms-1;
+			else if(ms<50) ms=ms-5;
+			else if(ms<200) ms=ms-10;
+			else if(ms<1000) ms=ms-50;
+			else ms=ms-100;
+			
+			return TimeSpanImpl.fromMillis(ms);
+		}
 
 		if(throwWhenAlreadyTimeout)
 			throw CFMLFactoryImpl.createRequestTimeoutException(pc);

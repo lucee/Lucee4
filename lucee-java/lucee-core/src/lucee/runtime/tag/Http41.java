@@ -56,6 +56,7 @@ import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.HTTPException;
 import lucee.runtime.exp.NativeException;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.exp.RequestTimeoutException;
 import lucee.runtime.ext.tag.BodyTagImpl;
 import lucee.runtime.net.http.MultiPartResponseUtils;
 import lucee.runtime.net.http.ReqRspUtil;
@@ -943,21 +944,8 @@ public final class Http41 extends BodyTagImpl implements Http {
     			if(!HttpImpl.hasHeaderIgnoreCase(req,"User-Agent"))
     				req.setHeader("User-Agent",this.useragent);
     		
-    			//timeout not defined
-			if(this.timeout==null || ((int)timeout.getSeconds())<=0) { // not set
-				this.timeout=PageContextUtil.remainingTime(pageContext,true);
-    		}
-			// timeout bigger than remaining time
-			else {
-				TimeSpan remaining = PageContextUtil.remainingTime(pageContext,true);
-				if(timeout.getSeconds()>remaining.getSeconds())
-					timeout=remaining;
-			}
-			
-			setTimeout(builder,this.timeout);
-    		
-    		
-    		
+			setTimeout(builder,checkRemainingTimeout());
+
     	// set Username and Password
     		if(this.username!=null) {
     			if(this.password==null)this.password="";
@@ -1014,7 +1002,7 @@ public final class Http41 extends BodyTagImpl implements Http {
 			e.start();
 			try {
 				synchronized(this){//print.err(timeout);
-					this.wait(timeout.getMillis()+100);
+					this.wait(timeout.getMillis());
 				}
 			} 
 			catch (InterruptedException ie) {
@@ -1162,17 +1150,17 @@ public final class Http41 extends BodyTagImpl implements Http {
                 	}  	
                     try {
                     	try{
-                    	str = is==null?"":IOUtil.toString(is,responseCharset);
+                    	str = is==null?"":IOUtil.toString(is,responseCharset,checkRemainingTimeout().getMillis());
                     	}
                     	catch(EOFException eof){
                     		if(is instanceof CachingGZIPInputStream) {
-                    			str = IOUtil.toString(is=((CachingGZIPInputStream)is).getRawData(),responseCharset);
+                    			str = IOUtil.toString(is=((CachingGZIPInputStream)is).getRawData(),responseCharset,checkRemainingTimeout().getMillis());
                     		}
                     		else throw eof;
                     	}
                     }
                     catch (UnsupportedEncodingException uee) {
-                    	str = IOUtil.toString(is,(Charset)null);
+                    	str = IOUtil.toString(is,(Charset)null,checkRemainingTimeout().getMillis());
                     }
                 }
                 catch (IOException ioe) {
@@ -1271,6 +1259,20 @@ public final class Http41 extends BodyTagImpl implements Http {
 			if(client!=null)client.close();
 		}
 	    
+	}
+
+	private TimeSpan checkRemainingTimeout() throws RequestTimeoutException {
+		//timeout not defined
+		if(this.timeout==null || ((int)timeout.getSeconds())<=0) { // not set
+			this.timeout=PageContextUtil.remainingTime(pageContext,true);
+		}
+		// timeout bigger than remaining time
+		else {
+			TimeSpan remaining = PageContextUtil.remainingTime(pageContext,true);
+			if(timeout.getSeconds()>remaining.getSeconds())
+				timeout=remaining;
+		}
+		return timeout;
 	}
 
 	public static void setTimeout(HttpClientBuilder builder, TimeSpan timeout) {

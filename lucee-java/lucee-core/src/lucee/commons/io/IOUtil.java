@@ -1,6 +1,6 @@
 /**
- *
- * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
+ * Copyright (c) 2014, the Railo Company Ltd.
+ * Copyright (c) 2016, Lucee Assosication Switzerland
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,6 +26,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,10 +48,21 @@ import java.util.zip.ZipFile;
 
 import javax.mail.Transport;
 
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.protocol.HttpContext;
+
+import lucee.print;
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.net.URLEncoder;
+import lucee.commons.net.http.httpclient4.HTTPResponse4Impl;
+import lucee.runtime.PageContext;
+import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.op.Caster;
+import lucee.runtime.tag.Http41;
 import net.sf.jmimemagic.Magic;
 import net.sf.jmimemagic.MagicMatch;
 
@@ -291,8 +304,8 @@ public final class IOUtil {
      * @param w 
      * @throws IOException
      */
-    private static final void copy(Reader r, Writer w) throws IOException {
-        copy(r,w,0xffff);
+    private static final void copy(Reader r, Writer w, long timeout) throws IOException {
+        copy(r,w,0xffff,timeout);
     }
     
     /**
@@ -305,7 +318,7 @@ public final class IOUtil {
      */
     public static final void copy(Reader reader, Writer writer, boolean closeReader, boolean closeWriter) throws IOException {
         try {
-            copy(reader,writer,0xffff);
+            copy(reader,writer,0xffff,-1);
         }
         finally {
             if(closeReader)closeEL(reader);
@@ -320,12 +333,30 @@ public final class IOUtil {
      * @param blockSize 
      * @throws IOException
      */
-    private static final void copy(Reader r, Writer w, int blockSize) throws IOException {
-        char[] buffer = new char[blockSize];
-        int len;
-
-        while((len = r.read(buffer)) !=-1)
-          w.write(buffer, 0, len);
+    private static final void copy(Reader r, Writer w, int blockSize, long timeout) throws IOException {
+        if(timeout<1) {
+	    	char[] buffer = new char[blockSize];
+	        int len;
+	
+	        while((len = r.read(buffer)) !=-1)
+	          w.write(buffer, 0, len);
+        }
+        else {
+        	Copy c=new Copy(r, w, blockSize, timeout);
+        	c.start();
+        	
+			try {
+				synchronized(c.notifier){//print.err(timeout);
+					c.notifier.wait(timeout+1);
+				}
+			} 
+			catch (InterruptedException ie) {
+				throw ExceptionUtil.toIOException(c.t);
+			}
+			if(c.t!=null) throw ExceptionUtil.toIOException(c.t);
+			if(!c.finished) throw new IOException("reached timeout ("+timeout+"ms) while copying data");
+        	
+        }
     }
     
     /** 
@@ -646,6 +677,18 @@ public final class IOUtil {
      }
      
      /**
+     * reads string data from a InputStream
+     * @param is
+     * @param charset 
+     * @param timeout in milliseconds 
+     * @return string from inputstream
+    * @throws IOException 
+    */
+     public static String toString(InputStream is, Charset charset, long timeout) throws IOException {
+         return toString(getReader(is,charset),timeout);
+     }
+     
+     /**
       * @deprecated use instead <code>{@link #toString(byte[], Charset)}</code>
       * @param barr
       * @param charset
@@ -659,17 +702,28 @@ public final class IOUtil {
      public static String toString(byte[] barr, Charset charset) throws IOException {
          return toString(getReader(new ByteArrayInputStream(barr),charset));
      }
+
      
+     /**
+      * reads String data from a Reader
+      * @param reader
+      * @return readed string
+      * @throws IOException
+      */
+     public static String toString(Reader reader) throws IOException {
+         return toString(reader,-1);
+     }
      
    /**
     * reads String data from a Reader
     * @param reader
+    * @param timeout timeout in milliseconds
     * @return readed string
     * @throws IOException
     */
-   public static String toString(Reader reader) throws IOException {
+   public static String toString(Reader reader, long timeout) throws IOException {
        StringWriter sw=new StringWriter(512);
-       copy(toBufferedReader(reader),sw);
+       copy(toBufferedReader(reader),sw,timeout);
        sw.close();
        return sw.toString();
    }
@@ -682,8 +736,8 @@ public final class IOUtil {
     */
    public static String toString(Reader reader,boolean buffered) throws IOException {
        StringWriter sw=new StringWriter(512);
-       if(buffered)copy(toBufferedReader(reader),sw);
-       else copy(reader,sw);
+       if(buffered)copy(toBufferedReader(reader),sw,-1);
+       else copy(reader,sw,-1);
        sw.close();
        return sw.toString();
    }
@@ -1109,4 +1163,38 @@ public final class IOUtil {
 		if(rst==-1)return null;
 		return new String(carr,0,rst);
 	}
+	
+
+	private static class Copy extends Thread {
+	
+		private Reader r;
+		private Writer w;
+		private int blockSize;
+		private long timeout;
+		private boolean finished;
+		private Throwable t;
+		private Object notifier=new Object();
+
+		private Copy(Reader r, Writer w, int blockSize, long timeout) {
+			this.r=r;
+			this.w=w;
+			this.blockSize=blockSize;
+			this.timeout=timeout;
+		}
+		
+		@Override
+		public void run(){
+			try {
+				IOUtil.copy(r, w, blockSize, -1);
+			} 
+			catch(Throwable t) {
+				this.t=t;
+			}
+			finally {
+				finished=true;
+				SystemUtil.notify(notifier);
+			}
+		}
+	}
 }
+
