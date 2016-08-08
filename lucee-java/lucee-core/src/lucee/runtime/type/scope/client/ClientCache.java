@@ -18,26 +18,21 @@
  **/
 package lucee.runtime.type.scope.client;
 
-import java.util.Date;
-
-import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.log.Log;
-import lucee.commons.lang.Pair;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.scope.Client;
-import lucee.runtime.type.scope.session.SessionCache;
 import lucee.runtime.type.scope.storage.StorageScopeCache;
 
 public final class ClientCache extends StorageScopeCache implements Client {
 	
 	private static final long serialVersionUID = -875719423763891692L;
 	
-	private ClientCache(PageContext pc,String cacheName, String appName,Struct sct, long lastStored) { 
-		super(pc,cacheName,appName,"client",SCOPE_CLIENT,sct,lastStored);
+	private ClientCache(PageContext pc,String cacheName, String appName,Struct sct) { 
+		super(pc,cacheName,appName,"client",SCOPE_CLIENT,sct);
 	}
 
 	/**
@@ -64,27 +59,18 @@ public final class ClientCache extends StorageScopeCache implements Client {
 	 * @return client datasource scope
 	 * @throws PageException
 	 */
-	public static synchronized Client getInstance(String cacheName, String appName, PageContext pc, Client existing, Log log) throws PageException {
-		CacheEntry ce = _loadData(pc, cacheName, appName,"client", log);
-		if(ce!=null) {
-			Date lm = ce.lastModified();
-			long time=lm!=null?lm.getTime():0;
-
-			if(existing instanceof StorageScopeCache) {
-				if(((StorageScopeCache)existing).lastModified()>=time)
-					return existing;
-			}
-			return new ClientCache(pc,cacheName,appName,(Struct)ce.getValue(),time);
-		}
-		else if(existing!=null) return  existing;
+	public static Client getInstance(String cacheName, String appName, PageContext pc, Log log) throws PageException {
+			Struct _sct = _loadData(pc, cacheName, appName,"client",log);
+			//structOk=true;
+			if(_sct==null) _sct=new StructImpl();
 			
-		return new ClientCache(pc,cacheName,appName,new StructImpl(),0);
+		return new ClientCache(pc,cacheName,appName,_sct);
 	}
 	
 
-	public static Client getInstance(String cacheName, String appName, PageContext pc, Client existing, Log log,Client defaultValue) {
+	public static Client getInstance(String cacheName, String appName, PageContext pc, Log log,Client defaultValue) {
 		try {
-			return getInstance(cacheName, appName, pc,existing,log);
+			return getInstance(cacheName, appName, pc,log);
 		}
 		catch (PageException e) {}
 		return defaultValue;
