@@ -1,6 +1,7 @@
 /**
  *
  * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
+ * Copyright (c) 2016, Lucee Assosication Switzerland
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,6 +25,7 @@ import lucee.commons.io.cache.Cache;
 import lucee.commons.io.log.Log;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.CacheConnection;
+import lucee.runtime.cache.CacheUtil;
 import lucee.runtime.config.Config;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.PageException;
@@ -33,6 +35,7 @@ import lucee.runtime.type.Struct;
 import lucee.runtime.type.dt.DateTime;
 import lucee.runtime.type.dt.DateTimeImpl;
 import lucee.runtime.type.scope.ScopeContext;
+import lucee.runtime.type.util.StructUtil;
 
 /**
  * client scope that store it's data in a datasource
@@ -40,19 +43,14 @@ import lucee.runtime.type.scope.ScopeContext;
 public abstract class StorageScopeCache extends StorageScopeImpl {
 
 	private static final long serialVersionUID = 6234854552927320080L;
-
 	public static final long SAVE_EXPIRES_OFFSET = 60*60*1000;
 
-	//private static ScriptConverter serializer=new ScriptConverter();
-	//boolean structOk;
-	
 	private final String cacheName;
 	private final String appName;
 	private final String cfid;
 
+	private long lastModified;
 
-	
-	
 	/**
 	 * Constructor of the class
 	 * @param pc
@@ -60,7 +58,7 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 	 * @param sct
 	 * @param b 
 	 */
-	protected StorageScopeCache(PageContext pc,String cacheName, String appName,String strType,int type,Struct sct) { 
+	protected StorageScopeCache(PageContext pc,String cacheName, String appName,String strType,int type,Struct sct, long lastModified) { 
 		// !!! do not store the pagecontext or config object, this object is Serializable !!!
 		super(
 				sct,
@@ -74,6 +72,11 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 		this.appName=appName;
 		this.cacheName=cacheName;
 		this.cfid=pc.getCFID();
+		this.lastModified=lastModified;
+	}
+	
+	public long lastModified() {
+		return lastModified;
 	}
 
 	/**
@@ -86,6 +89,7 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 		this.appName=other.appName;
 		this.cacheName=other.cacheName;
 		this.cfid=other.cfid;
+		this.lastModified=other.lastModified;
 	}
 	
 	private static DateTime doNowIfNull(Config config,DateTime dt) {
@@ -112,34 +116,39 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 		super.touchBeforeRequest(pc);
 	}
 	
-	protected static Struct _loadData(PageContext pc, String cacheName, String appName, String strType, Log log) throws PageException	{
+	protected static StorageValue _loadData(PageContext pc, String cacheName, String appName, String strType, Log log) throws PageException	{
 		Cache cache = getCache(pc.getConfig(),cacheName);
 		String key=getKey(pc.getCFID(),appName,strType);
 		
-		Object o =  cache.getValue(key,null);
-		
-		if(o instanceof Struct) {
+		Object val = cache.getValue(key,null);
+		if(val instanceof StorageValue) {
 			ScopeContext.info(log,"load existing data from  cache ["+cacheName+"] to create "+strType+" scope for "+pc.getApplicationContext().getName()+"/"+pc.getCFID());
-			return (Struct)o;
+			return (StorageValue)val;
 		}
 		ScopeContext.info(log,"create new "+strType+" scope for "+pc.getApplicationContext().getName()+"/"+pc.getCFID()+" in cache ["+cacheName+"]");
 		return null;
 	}
 
-	public void store(Config config) {
+	public synchronized void store(Config config) {
 		try {
 			Cache cache = getCache(config, cacheName);
-			/*if(cache instanceof CacheEvent) {
-				CacheEvent ce=(CacheEvent) cache;
-				ce.register(new SessionEndCacheEvent());
-			}*/
 			String key=getKey(cfid, appName, getTypeAsString());
+			
+			Object existing = cache.getValue(key,null);
+			// cached data changed in meantime
+			
+			if(existing instanceof StorageValue  && ((StorageValue)existing).lastModified()>lastModified()) {
+				Struct trg=((StorageValue)existing).getValue();
+				StructUtil.copy(sct, trg, true);
+				sct=trg;
+			}
 			cache.put(key, sct,null,new Long(getTimeSpan()));
 		} 
-		catch (Exception pe) {}
+		catch (Exception pe) {pe.printStackTrace();}
 	}
 	
-	public void unstore(Config config) {
+	
+	public synchronized void unstore(Config config) {
 		try {
 			Cache cache = getCache(config, cacheName);
 			String key=getKey(cfid, appName, getTypeAsString());
@@ -154,7 +163,8 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 			CacheConnection cc = Util.getCacheConnection(config,cacheName);
 			if(!cc.isStorage()) 
 				throw new ApplicationException("storage usage for this cache is disabled, you can enable this in the lucee administrator.");
-			return cc.getInstance(config); 
+			return CacheUtil.getInstance(cc,config); //cc.getInstance(config); 
+
 		} catch (IOException e) {
 			throw Caster.toPageException(e);
 		}
@@ -164,10 +174,4 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 	public static String getKey(String cfid, String appName, String type) {
 		return new StringBuilder("lucee-storage:").append(type).append(":").append(cfid).append(":").append(appName).toString().toUpperCase();
 	}
-	
-	/*private void setTimeSpan(PageContext pc) {
-		ApplicationContext ac=(ApplicationContext) pc.getApplicationContext();
-		timespan = (getType()==SCOPE_CLIENT?ac.getClientTimeout().getMillis():ac.getSessionTimeout().getMillis())+(expiresControlFromOutside?SAVE_EXPIRES_OFFSET:0L);
-		
-	}*/
 }

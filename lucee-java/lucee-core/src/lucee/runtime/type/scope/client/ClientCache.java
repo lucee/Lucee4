@@ -1,6 +1,7 @@
 /**
  *
  * Copyright (c) 2014, the Railo Company Ltd. All rights reserved.
+ * Copyright (c) 2016, Lucee Assosication Switzerland
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,21 +19,27 @@
  **/
 package lucee.runtime.type.scope.client;
 
+import java.util.Date;
+
+import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.log.Log;
+import lucee.commons.lang.Pair;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.StructImpl;
 import lucee.runtime.type.scope.Client;
+import lucee.runtime.type.scope.session.SessionCache;
 import lucee.runtime.type.scope.storage.StorageScopeCache;
+import lucee.runtime.type.scope.storage.StorageValue;
 
 public final class ClientCache extends StorageScopeCache implements Client {
 	
 	private static final long serialVersionUID = -875719423763891692L;
 	
-	private ClientCache(PageContext pc,String cacheName, String appName,Struct sct) { 
-		super(pc,cacheName,appName,"client",SCOPE_CLIENT,sct);
+	private ClientCache(PageContext pc,String cacheName, String appName,Struct sct, long lastStored) { 
+		super(pc,cacheName,appName,"client",SCOPE_CLIENT,sct,lastStored);
 	}
 
 	/**
@@ -59,18 +66,28 @@ public final class ClientCache extends StorageScopeCache implements Client {
 	 * @return client datasource scope
 	 * @throws PageException
 	 */
-	public static Client getInstance(String cacheName, String appName, PageContext pc, Log log) throws PageException {
-			Struct _sct = _loadData(pc, cacheName, appName,"client",log);
-			//structOk=true;
-			if(_sct==null) _sct=new StructImpl();
-			
-		return new ClientCache(pc,cacheName,appName,_sct);
+	public static synchronized Client getInstance(String cacheName, String appName, PageContext pc, Client existing, Log log) throws PageException {
+		StorageValue sv = _loadData(pc, cacheName, appName,"client", log);
+		if(sv!=null) {
+			long time = sv.lastModified();
+
+			if(existing instanceof StorageScopeCache) {
+				if(((StorageScopeCache)existing).lastModified()>=time)
+					return existing;
+			}
+			return new ClientCache(pc,cacheName,appName,sv.getValue(),time);
+		}
+		else if(existing!=null) return  existing;
+		
+		ClientCache cc = new ClientCache(pc,cacheName,appName,new StructImpl(),0);
+		cc.store(pc.getConfig());
+		return cc;
 	}
 	
 
-	public static Client getInstance(String cacheName, String appName, PageContext pc, Log log,Client defaultValue) {
+	public static Client getInstance(String cacheName, String appName, PageContext pc, Client existing, Log log,Client defaultValue) {
 		try {
-			return getInstance(cacheName, appName, pc,log);
+			return getInstance(cacheName, appName, pc,existing,log);
 		}
 		catch (PageException e) {}
 		return defaultValue;
