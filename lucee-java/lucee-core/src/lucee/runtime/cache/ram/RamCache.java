@@ -61,8 +61,8 @@ public class RamCache extends CacheSupport {
 		long idleTime=Caster.toLongValue(arguments.get("timeToIdleSeconds",Constants.LONG_ZERO),Constants.LONG_ZERO)*1000;
 		Object ci = arguments.get("controlIntervall",null);
 		if(ci==null)ci = arguments.get("controlInterval",null);
-		int controlInterval=Caster.toIntValue(ci,DEFAULT_CONTROL_INTERVAL)*1000;
-		init(until,idleTime,controlInterval);
+		int intervalInSeconds=Caster.toIntValue(ci,DEFAULT_CONTROL_INTERVAL);
+		init(until,idleTime,intervalInSeconds);
 	}
 
 	public RamCache init(long until, long idleTime, int intervalInSeconds) {
