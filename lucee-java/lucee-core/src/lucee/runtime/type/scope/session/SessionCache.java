@@ -19,9 +19,6 @@
  **/
 package lucee.runtime.type.scope.session;
 
-import java.util.Date;
-
-import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.log.Log;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
@@ -63,6 +60,7 @@ public final class SessionCache extends StorageScopeCache implements Session {
 	 */
 	public synchronized static Session getInstance(String cacheName, String appName, PageContext pc, Session existing, Log log) throws PageException {
 		StorageValue sv = _loadData(pc, cacheName, appName,"session", log);
+		if(appName!=null && appName.startsWith("no-in-memory-cache-")) existing=null;
 		if(sv!=null) {
 			long time = sv.lastModified();
 			
@@ -76,7 +74,7 @@ public final class SessionCache extends StorageScopeCache implements Session {
 		else if(existing!=null) {
 			return  existing;
 		}
-
+		
 		SessionCache session = new SessionCache(pc,cacheName,appName,new StructImpl(),0);
 		session.store(pc.getConfig());
 		return session;

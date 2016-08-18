@@ -121,6 +121,7 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 		String key=getKey(pc.getCFID(),appName,strType);
 		
 		Object val = cache.getValue(key,null);
+		
 		if(val instanceof StorageValue) {
 			ScopeContext.info(log,"load existing data from  cache ["+cacheName+"] to create "+strType+" scope for "+pc.getApplicationContext().getName()+"/"+pc.getCFID());
 			return (StorageValue)val;
@@ -142,7 +143,7 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 				StructUtil.copy(sct, trg, true);
 				sct=trg;
 			}
-			cache.put(key, sct,null,new Long(getTimeSpan()));
+			cache.put(key, new StorageValue(sct),null,new Long(getTimeSpan()));
 		} 
 		catch (Exception pe) {pe.printStackTrace();}
 	}
