@@ -57,7 +57,7 @@ public final class CastString extends ExpressionBase implements ExprString,Cast 
      */
     public static ExprString toExprString(Expression expr) {
         if(expr instanceof ExprString) return (ExprString) expr;
-        if(expr instanceof Literal) return new LitString(((Literal)expr).getString(),expr.getStart(),expr.getEnd());
+        if(expr instanceof Literal) return LitString.toExprString(((Literal)expr).getString(),expr.getStart(),expr.getEnd());
         return new CastString(expr);
     }
 

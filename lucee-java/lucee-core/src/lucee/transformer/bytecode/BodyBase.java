@@ -109,7 +109,7 @@ public class BodyBase extends StatementBaseNoFinal implements Body {
 	public void addPrintOut(String str, Position start,Position end) {
 		if(concatPrintouts(str)) return;
 		
-		last=new PrintOut(new LitString(str,start,end),start,end);
+		last=new PrintOut(LitString.toExprString(str,start,end),start,end);
         last.setParent(this);
         this.statements.add(last);
 	}

@@ -1056,7 +1056,7 @@ public abstract class AbstrCFMLExprTransformer {
 					
 					ExprString exprStr=null;
 					if(str.length()!=0) {
-						exprStr=new LitString(str.toString(),line,data.cfml.getPosition());
+						exprStr=LitString.toExprString(str.toString(),line,data.cfml.getPosition());
 						if(expr!=null){
 							expr = OpString.toExprString(expr, exprStr);
 						}
@@ -1092,9 +1092,9 @@ public abstract class AbstrCFMLExprTransformer {
 			throw new TemplateException(data.cfml,"Invalid Syntax Closing ["+quoter+"] not found");
 		
 		if(expr==null)
-			expr=new LitString(str.toString(),line,data.cfml.getPosition());
+			expr=LitString.toExprString(str.toString(),line,data.cfml.getPosition());
 		else if(str.length()!=0) {
-			expr = OpString.toExprString(expr, new LitString(str.toString(),line,data.cfml.getPosition()));
+			expr = OpString.toExprString(expr, LitString.toExprString(str.toString(),line,data.cfml.getPosition()));
 		}
         comments(data);
         

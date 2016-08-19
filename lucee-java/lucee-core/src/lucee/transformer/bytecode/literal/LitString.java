@@ -18,6 +18,7 @@
  **/
 package lucee.transformer.bytecode.literal;
 
+import lucee.commons.io.CharsetUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.op.Caster;
@@ -79,6 +80,7 @@ public class LitString extends ExpressionBase implements Literal,ExprString {
     }
 
     /**
+     * @throws BytecodeException 
      * @see lucee.transformer.bytecode.expression.Expression#_writeOut(org.objectweb.asm.commons.GeneratorAdapter, int)
      */
     private static  Type _writeOut(BytecodeContext bc, int mode,String str) throws BytecodeException {
@@ -102,17 +104,31 @@ public class LitString extends ExpressionBase implements Literal,ExprString {
     		catch(Throwable t){}
     	}
     	
-    	
-    	if(str.length()>MAX_SIZE) {
-        	ExprString expr=_toExpr(str);
-        	expr.writeOut(bc, mode);
+    	if(toBig(str)) {
+        	_toExpr(str).writeOut(bc, mode);
         }
         else {
         	bc.getAdapter().push(str);
         }
         return Types.STRING;
     }
-    public Type _writeOut(BytecodeContext bc, int mode) throws BytecodeException {
+
+    private static ExprString _toExpr(String str) {
+    	int size=str.length()/2;
+    	String l = str.substring(0,size);
+    	String r = str.substring(size);
+    	ExprString left =toBig(l)? _toExpr(l):toExprString(l);
+    	ExprString right =toBig(r)? _toExpr(r):toExprString(r);
+    	return OpString.toExprString(left, right, false);
+	}
+    
+    
+    private static boolean toBig(String str) {
+		if(str.length()<(MAX_SIZE/2)) return false; // a char is max 2 bytes
+    	return str.getBytes(CharsetUtil.UTF8).length>MAX_SIZE;
+	}
+
+	public Type _writeOut(BytecodeContext bc, int mode) throws BytecodeException {
         return _writeOut(bc, mode, str);
     }
     
@@ -122,15 +138,6 @@ public class LitString extends ExpressionBase implements Literal,ExprString {
         return _writeOut(bc, mode, str);
     }
 
-    private static ExprString _toExpr(String str) {
-    	int size=MAX_SIZE-1;
-    	ExprString left = LitString.toExprString(str.substring(0,size));
-    	str = str.substring(size);
-    	
-    	ExprString right = (str.length()>size)?_toExpr(str):toExprString(str);
-
-    	return OpString.toExprString(left, right, false);
-	}
 
 
     /**

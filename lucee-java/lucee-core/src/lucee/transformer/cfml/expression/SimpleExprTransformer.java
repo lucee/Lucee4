@@ -21,6 +21,7 @@ package lucee.transformer.cfml.expression;
 import lucee.runtime.exp.TemplateException;
 import lucee.transformer.bytecode.Page;
 import lucee.transformer.bytecode.Position;
+import lucee.transformer.bytecode.expression.ExprString;
 import lucee.transformer.bytecode.expression.Expression;
 import lucee.transformer.bytecode.literal.LitString;
 import lucee.transformer.cfml.ExprTransformer;
@@ -102,7 +103,7 @@ public final class SimpleExprTransformer implements ExprTransformer {
 		if(!cfml.forwardIfCurrent(quoter))
 			throw new TemplateException(cfml,"Invalid Syntax Closing ["+quoter+"] not found");
 	
-		LitString rtn = new LitString(str.toString(),line,cfml.getPosition());
+		ExprString rtn = LitString.toExprString(str.toString(),line,cfml.getPosition());
 		cfml.removeSpace();
 		return rtn;
 	}
@@ -125,7 +126,7 @@ public final class SimpleExprTransformer implements ExprTransformer {
 		}
 		cfml.removeSpace();
 		
-		return new LitString(sb.toString(),line,cfml.getPosition());
+		return LitString.toExprString(sb.toString(),line,cfml.getPosition());
 	}
 	
 
