@@ -20,6 +20,7 @@ package lucee.runtime.interpreter.ref.var;
 
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
+import lucee.runtime.interpreter.InterpreterException;
 import lucee.runtime.interpreter.ref.Ref;
 import lucee.runtime.interpreter.ref.RefSupport;
 import lucee.runtime.interpreter.ref.Set;
@@ -36,15 +37,17 @@ public final class Variable extends RefSupport implements Set {
 	private String key;
 	private Ref parent;
     private Ref refKey;
+	private boolean limited;
 
     /**
      * @param pc
      * @param parent
      * @param key
      */
-    public Variable( Ref parent,String key) {
+    public Variable( Ref parent,String key, boolean limited) {
         this.parent=parent;
         this.key=key;
+        this.limited=limited;
     }
     
     /**
@@ -52,19 +55,22 @@ public final class Variable extends RefSupport implements Set {
      * @param parent
      * @param refKey
      */
-    public Variable(Ref parent,Ref refKey) {
+    public Variable(Ref parent,Ref refKey, boolean limited) {
         this.parent=parent;
         this.refKey=refKey;
+        this.limited=limited;
     }
     
     @Override
     public Object getValue(PageContext pc) throws PageException {
-        return pc.get(parent.getCollection(pc),getKeyAsString(pc));
+    	if(limited) throw new InterpreterException("invalid syntax, variables are not supported in a json string.");
+    	return pc.get(parent.getCollection(pc),getKeyAsString(pc));
     }
     
     @Override
     public Object touchValue(PageContext pc) throws PageException {
-        Object p = parent.touchValue(pc);
+    	if(limited) throw new InterpreterException("invalid syntax, variables are not supported in a json string.");
+    	Object p = parent.touchValue(pc);
         if(p instanceof Query) {
             Object o= ((Query)p).getColumn(getKeyAsString(pc),null);
             if(o!=null) return o;
@@ -76,7 +82,8 @@ public final class Variable extends RefSupport implements Set {
     
     @Override
     public Object getCollection(PageContext pc) throws PageException {
-        Object p = parent.getValue(pc);
+    	if(limited) throw new InterpreterException("invalid syntax, variables are not supported in a json string.");
+    	Object p = parent.getValue(pc);
         if(p instanceof Query) {
             return ((Query)p).getColumn(getKeyAsString(pc));
         }
