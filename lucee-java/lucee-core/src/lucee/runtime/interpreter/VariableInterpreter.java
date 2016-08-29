@@ -329,6 +329,14 @@ public final class VariableInterpreter {
 		if(!(coll instanceof Collection))
 			throw new InterpreterException("invalid variable ["+ListUtil.arrayToList(keys, ".")+"]");
 		return new VariableReference((Collection)coll,keys[keys.length-1]);
+	}
+	
+	public static VariableReference getVariableReference(PageContext pc,Collection.Key key, boolean keepScope) {   
+		if(keepScope) {
+			Collection coll = ((UndefinedImpl)pc.undefinedScope()).getScopeFor(key,null);
+			if(coll!=null) return new VariableReference(coll,key); 
+		}
+		return new VariableReference(pc.undefinedScope(),key); 
 	} 
 	
 	/**
