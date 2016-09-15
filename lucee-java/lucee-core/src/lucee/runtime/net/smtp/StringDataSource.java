@@ -25,6 +25,8 @@ import java.io.OutputStream;
 
 import javax.activation.DataSource;
 
+import lucee.commons.lang.StringUtil;
+
 import org.apache.commons.lang.WordUtils;
 
 public class StringDataSource implements DataSource {
@@ -46,7 +48,7 @@ public class StringDataSource implements DataSource {
 
 	@Override
 	public InputStream getInputStream() throws IOException {
-		return new ByteArrayInputStream(text.getBytes(charset));
+		return new ByteArrayInputStream(StringUtil.isEmpty(charset)?text.getBytes():text.getBytes(charset));
 	}
 
 	@Override
