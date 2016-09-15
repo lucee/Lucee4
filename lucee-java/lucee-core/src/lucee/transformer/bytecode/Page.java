@@ -450,9 +450,7 @@ public final class Page extends BodyBase {
     	else if(isInterface()) parent="lucee/runtime/InterfacePage";
     	
     	cw.visit(Opcodes.V1_6, Opcodes.ACC_PUBLIC+Opcodes.ACC_FINAL, name, null, parent, null);
-    	cw.visitSource(this.pageSource.getPhyscalFile().getAbsolutePath(),
-    			"rel:"+this.pageSource.getFullRealpath()); // when adding more use ; as delimiter
-    	//
+    	cw.visitSource(this.pageSource.getFullRealpath(),null); // when adding more use ; as delimiter
     	
     	// static constructor
         //GeneratorAdapter statConstrAdapter = new GeneratorAdapter(Opcodes.ACC_PUBLIC,STATIC_CONSTRUCTOR,null,null,cw);

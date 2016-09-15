@@ -589,9 +589,10 @@ public String getStackTraceAsString() {
 	    	if(path==null){
 				SourceInfo si=MappingUtil.getMatch(pc,config,trace);
 				if(si!=null) {
-					if(si.absolutePath!=null) {
-						res = config.getResource(si.absolutePath);
-						if(res.exists()) path=si.absolutePath;
+					String abs=si.absolutePath(pc);
+					if(!StringUtil.isEmpty(abs)) {
+						Resource r = config.getResource(abs);
+						if(r.exists()) path=abs;
 					}
 					if(path==null && si.relativePath!=null) path=si.relativePath;
 				}

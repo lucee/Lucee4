@@ -25,7 +25,9 @@ import java.util.Map;
 
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
 import lucee.commons.lang.StringUtil;
+import lucee.runtime.PageContext;
 import lucee.runtime.config.Config;
+import lucee.runtime.functions.system.ExpandPath;
 import lucee.runtime.type.util.ListUtil;
 
 import org.objectweb.asm.ClassReader;
@@ -102,7 +104,7 @@ public class SourceNameClassVisitor extends ClassVisitor {
 
 		public final String name;
 		public final  String relativePath;
-		public final  String absolutePath;
+		private String _absolutePath;
 		
 		public SourceInfo(String name,String relativePath) {
 			this(name,relativePath,null);
@@ -111,11 +113,19 @@ public class SourceNameClassVisitor extends ClassVisitor {
 		public SourceInfo(String name,String relativePath,String absolutePath) {
 			this.name=name;
 			this.relativePath=relativePath;
-			this.absolutePath=absolutePath;
+			this._absolutePath=absolutePath;
 		}
 		
 		public String toString(){
-			return new StringBuilder("absolute-path:"+absolutePath+";relative-path:"+relativePath+";name:"+name).toString();
+			return new StringBuilder("absolute-path:"+_absolutePath+";relative-path:"+relativePath+";name:"+name).toString();
+		}
+
+		public String absolutePath(PageContext pc) {
+			if(!StringUtil.isEmpty(_absolutePath)) return _absolutePath;
+			try{
+				_absolutePath=ExpandPath.call(pc, relativePath);
+			}catch(Exception e) {}
+			return _absolutePath;
 		}
 	}
 }

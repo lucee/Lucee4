@@ -34,6 +34,7 @@ import lucee.runtime.PageSource;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigWebUtil;
 import lucee.runtime.engine.ThreadLocalPageContext;
+import lucee.runtime.functions.system.ExpandPath;
 import lucee.transformer.bytecode.util.ASMUtil;
 import lucee.transformer.bytecode.util.SourceNameClassVisitor.SourceInfo;
 
@@ -185,8 +186,10 @@ public class MappingUtil {
 			// classname is not distinct, because of that we must check class content
 			try {
 				SourceInfo si = ASMUtil.getSourceInfo(config, clazz, false);
-				if(si!=null && trace.getFileName()!=null && trace.getFileName().equals(si.absolutePath))
-					return si;
+				if(si!=null) {
+					if(trace.getFileName()!=null && trace.getFileName().equals(si.absolutePath(pc)))
+						return si;
+				}
 			}
 			catch (IOException e) {}
 			
