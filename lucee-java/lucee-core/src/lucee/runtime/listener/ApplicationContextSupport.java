@@ -154,7 +154,7 @@ public abstract class ApplicationContextSupport implements ApplicationContextPro
 		if(sct.size()==0) return;
 		ConfigImpl ci = ((ConfigImpl)config);
 		
-		// first check the core lib without namesapce
+		// first check the core lib without namespace
 		TagLib lib = ci.getCoreTagLib();
 		_initTagDefaultAttributeValues(config, lib, tagDefaultAttributeValues, sct,false);
 		if(sct.size()==0) return;

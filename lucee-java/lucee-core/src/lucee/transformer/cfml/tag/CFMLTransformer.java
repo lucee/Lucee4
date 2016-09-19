@@ -494,7 +494,7 @@ public final class CFMLTransformer {
 		int start=data.cfml.getPos();
 		data.cfml.next();
 		
-		// read in namesapce of tag
+		// read in namespace of tag
 		TagLib tagLib=nameSpace(data);
 		
 		// return if no matching tag lib
