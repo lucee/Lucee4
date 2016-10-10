@@ -706,7 +706,7 @@ public final class Http41 extends BodyTagImpl implements Http {
 
     		boolean isBinary = false;
     		boolean doMultiPart=doUploadFile || this.multiPart;
-    		HttpPost post=null;
+    		HttpEntityEnclosingRequest post=null;
     		HttpEntityEnclosingRequest eem=null;
     		
     		
@@ -723,6 +723,7 @@ public final class Http41 extends BodyTagImpl implements Http {
     		else if(this.method==METHOD_PUT) {
     			isBinary=true;
     			HttpPut put = new HttpPut(url);
+    			post=put;
     		    req=put;
     		    eem=put;
     		    
@@ -743,7 +744,7 @@ public final class Http41 extends BodyTagImpl implements Http {
     		else {
     			isBinary=true;
     			post=new HttpPost(url);
-    			req=post;
+    			req=(HttpPost)post;
     			eem=post;
     		}
     		
