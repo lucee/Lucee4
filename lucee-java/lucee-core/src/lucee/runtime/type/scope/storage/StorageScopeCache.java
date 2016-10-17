@@ -135,14 +135,15 @@ public abstract class StorageScopeCache extends StorageScopeImpl {
 			Cache cache = getCache(config, cacheName);
 			String key=getKey(cfid, appName, getTypeAsString());
 			
+			/* / merge existing data if necessary ; MARK disabled merge
 			Object existing = cache.getValue(key,null);
 			// cached data changed in meantime
-			
 			if(existing instanceof StorageValue  && ((StorageValue)existing).lastModified()>lastModified()) {
 				Struct trg=((StorageValue)existing).getValue();
 				StructUtil.copy(sct, trg, true);
 				sct=trg;
-			}
+			}*/
+
 			cache.put(key, new StorageValue(sct),null,new Long(getTimeSpan()));
 		} 
 		catch (Exception pe) {pe.printStackTrace();}
