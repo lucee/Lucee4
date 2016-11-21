@@ -217,6 +217,12 @@ public abstract class PageExceptionImpl extends PageException {
 		StackTraceElement trace=null;
 		int index=-1;
 		PageSource ps;
+		
+		PageContextImpl pc=null;
+		if(config instanceof ConfigWeb) 
+			pc = (PageContextImpl) ThreadLocalPageContext.get();
+		
+		
 		for(int i=0;i<traces.length;i++) {
 			trace=traces[i];
 			tlast=template;
@@ -232,6 +238,17 @@ public abstract class PageExceptionImpl extends PageException {
 				
 				
 				Resource res = config.getResource(template);
+				if(!res.exists()) {
+					PageSource _ps = pc==null?null:pc.getPageSource(template);
+					res=_ps==null?null:_ps.getPhyscalFile();
+					if(res==null || !res.exists()) {
+						res=config.getResource(_ps.getDisplayPath());
+						if(res!=null && res.exists()) dspPath=res.getAbsolutePath();
+					}
+					else dspPath=res.getAbsolutePath();
+				}
+				else dspPath=res.getAbsolutePath();
+				
 				// template is absolute, so this is not necessary if(!res.exists()) res = ResourceUtil.toResourceNotExisting(ThreadLocalPageContext.get(), template,true,true); 
 				
 				// class was not build on the local filesystem
@@ -252,8 +269,6 @@ public abstract class PageExceptionImpl extends PageException {
 							}
 						}
 					}
-					
-					
 				}
 				 
 				if(res.exists()) {
