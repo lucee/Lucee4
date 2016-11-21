@@ -254,9 +254,6 @@ public abstract class PageExceptionImpl extends PageException {
 				// class was not build on the local filesystem
 				if(!res.exists()) {
 					// try to make a match by class name
-					PageContext pc=null;
-					if(config instanceof ConfigWeb) 
-						pc = ThreadLocalPageContext.get();
 					
 					SourceInfo si=pc!=null?MappingUtil.getMatch(pc,trace):MappingUtil.getMatch(config,trace);
 					if(si!=null && si.relativePath!=null) {
