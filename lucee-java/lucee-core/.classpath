@@ -58,7 +58,6 @@
 	<classpathentry kind="lib" path="/Lucee-Libs/jfreechart-patch.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/jfreechart.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/jmimemagic.jar"/>
-	<classpathentry kind="lib" path="/Lucee-Libs/joda-time.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/jpedal_gpl.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/jta.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/jtds.jar"/>
