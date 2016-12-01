@@ -1854,7 +1854,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 		 */
 		// Default query of query DB
 		setDatasource(config, datasources, QOQ_DATASOURCE_NAME, "org.hsqldb.jdbcDriver", "", "", -1, "jdbc:hsqldb:.", "sa", "", -1, -1, 60000, true, true, DataSource.ALLOW_ALL,
-				false, false, null, new StructImpl(), "");
+				false, false, null, new StructImpl(), "",false);
 
 		SecurityManager sm = config.getSecurityManager();
 		short access = sm.getAccess(SecurityManager.TYPE_DATASOURCE);
@@ -1905,7 +1905,9 @@ public final class ConfigWebFactory extends ConfigFactory {
 						toInt(dataSource.getAttribute("connectionTimeout"), -1), toLong(dataSource.getAttribute("metaCacheTimeout"), 60000),
 						toBoolean(dataSource.getAttribute("blob"), true), toBoolean(dataSource.getAttribute("clob"), true),
 						toInt(dataSource.getAttribute("allow"), DataSource.ALLOW_ALL), toBoolean(dataSource.getAttribute("validate"), false),
-						toBoolean(dataSource.getAttribute("storage"), false), dataSource.getAttribute("timezone"), toStruct(dataSource.getAttribute("custom")), dataSource.getAttribute("dbdriver"));
+						toBoolean(dataSource.getAttribute("storage"), false), dataSource.getAttribute("timezone"), 
+						toStruct(dataSource.getAttribute("custom")), dataSource.getAttribute("dbdriver"),
+						toBoolean(dataSource.getAttribute("literal-timestamp-with-tsoffset"), false));
 			}
 		}
 		// }
@@ -2267,20 +2269,20 @@ public final class ConfigWebFactory extends ConfigFactory {
 
 	private static void setDatasource(ConfigImpl config, Map<String, DataSource> datasources, String datasourceName, String className, String server, String databasename,
 			int port, String dsn, String user, String pass, int connectionLimit, int connectionTimeout, long metaCacheTimeout, boolean blob, boolean clob, int allow,
-			boolean validate, boolean storage, String timezone, Struct custom, String dbdriver) throws ClassException {
+			boolean validate, boolean storage, String timezone, Struct custom, String dbdriver, boolean literalTimestampWithTSOffset) throws ClassException {
 
 		datasources.put( datasourceName.toLowerCase(),
 				new DataSourceImpl(datasourceName, className, server, dsn, databasename, port, user, pass, connectionLimit, connectionTimeout, metaCacheTimeout, blob, clob, allow,
-						custom, false, validate, storage, StringUtil.isEmpty(timezone, true) ? null : TimeZoneUtil.toTimeZone(timezone, null), dbdriver) );
+						custom, false, validate, storage, StringUtil.isEmpty(timezone, true) ? null : TimeZoneUtil.toTimeZone(timezone, null), dbdriver,literalTimestampWithTSOffset) );
 
 	}
 
 	private static void setDatasourceEL(ConfigImpl config, Map<String, DataSource> datasources, String datasourceName, String className, String server, String databasename,
 			int port, String dsn, String user, String pass, int connectionLimit, int connectionTimeout, long metaCacheTimeout, boolean blob, boolean clob, int allow,
-			boolean validate, boolean storage, String timezone, Struct custom, String dbdriver) {
+			boolean validate, boolean storage, String timezone, Struct custom, String dbdriver, boolean literalTimestampWithTSOffset) {
 		try {
 			setDatasource(config, datasources, datasourceName, className, server, databasename, port, dsn, user, pass, connectionLimit, connectionTimeout, metaCacheTimeout, blob,
-					clob, allow, validate, storage, timezone, custom, dbdriver);
+					clob, allow, validate, storage, timezone, custom, dbdriver,literalTimestampWithTSOffset);
 		}
 		catch (Throwable t) {
 		}

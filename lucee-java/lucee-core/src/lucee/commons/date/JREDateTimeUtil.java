@@ -24,6 +24,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import lucee.runtime.PageContext;
+import lucee.runtime.PageContextImpl;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.op.Caster;
 import lucee.runtime.type.dt.DateTime;
@@ -148,6 +150,7 @@ public class JREDateTimeUtil extends DateTimeUtil {
 
 
 	public String toString(DateTime dt, TimeZone tz) {
+		PageContext pc=ThreadLocalPageContext.get();
 		Calendar c = _getThreadCalendar(tz);
 		c.setTimeInMillis(dt.getTime());
 			//"HH:mm:ss"
@@ -165,9 +168,30 @@ public class JREDateTimeUtil extends DateTimeUtil {
     	toString(sb,c.get(Calendar.MINUTE),2);
     	sb.append(":");
     	toString(sb,c.get(Calendar.SECOND),2);
+    	
+    	if(pc instanceof PageContextImpl) {
+    		if(((PageContextImpl)pc).getTimestampWithTSOffset()) addTimeZoneOffset(c,sb);
+    	}
     	sb.append("'}");
         	 
         return sb.toString();
+	}
+
+	private void addTimeZoneOffset(Calendar c, StringBuilder sb) {
+		int min = (c.get(Calendar.ZONE_OFFSET)+c.get(Calendar.DST_OFFSET))/60000;
+		char op;
+		if(min<0) {
+			op='-';
+			min=min-min-min;
+		}
+		else op='+';
+		
+		int hours=min/60;
+		min=min-(hours*60);
+		sb.append(op);
+		toString(sb,hours,2);
+		sb.append(':');
+		toString(sb,min,2);
 	}
 
 	public static Calendar newInstance(TimeZone tz,Locale l) {

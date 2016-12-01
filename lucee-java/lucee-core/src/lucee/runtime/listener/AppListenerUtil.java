@@ -256,7 +256,8 @@ public final class AppListenerUtil {
 					true, 
 					Caster.toBooleanValue(data.get(STORAGE,null),false), 
 					Caster.toTimeZone(data.get(TIMEZONE,null),null),
-					""
+					"",
+					Caster.toBooleanValue(data.get("literalTimestampWithTSOffset",null),false)
 			);
 
 			return ds;

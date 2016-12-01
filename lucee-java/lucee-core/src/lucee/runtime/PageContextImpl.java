@@ -336,6 +336,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 
 	private int appListenerType=AppListenerUtil.TYPE_ALL;
 
+	private boolean literalTimestampWithTSOffset;
 
 	public long sizeOf() {
 		
@@ -729,6 +730,8 @@ public final class PageContextImpl extends PageContext implements Sizeable {
     	manager.release();
     	includeOnce.clear();
     	pe=null;
+    	
+    	literalTimestampWithTSOffset=false;
 
 	}
 
@@ -3324,6 +3327,16 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	}
 	public int getAppListenerType() {
 		return appListenerType;
+	}
+
+
+
+	public void setTimestampWithTSOffset(boolean literalTimestampWithTSOffset) {
+		this.literalTimestampWithTSOffset=literalTimestampWithTSOffset;
+	}
+	
+	public boolean getTimestampWithTSOffset() {
+		return literalTimestampWithTSOffset;
 	}
 
 

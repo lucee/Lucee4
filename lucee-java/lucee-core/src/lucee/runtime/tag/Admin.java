@@ -2710,6 +2710,9 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         	throw new DatabaseException("can't find class ["+classname+"] for jdbc driver, check if driver (jar file) is inside lib folder",e.getMessage(),null,null,null);
         }*/
         
+        boolean literalTimestampWithTSOffset=getBoolV("literalTimestampWithTSOffset", false);
+        
+        
         String dsn=getString("admin",action,"dsn");
         String name=getString("admin",action,"name");
         String newName=getString("admin",action,"newName");
@@ -2733,7 +2736,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
         //config.getDatasourceConnectionPool().remove(name);
         DataSource ds=null;
 		try {
-			ds = new DataSourceImpl(name,classname,host,dsn,database,port,username,password,connLimit,connTimeout,metaCacheTimeout,blob,clob,allow,custom,false,validate,storage,null, dbdriver);
+			ds = new DataSourceImpl(name,classname,host,dsn,database,port,username,password,connLimit,connTimeout,metaCacheTimeout,blob,clob,allow,custom,false,validate,storage,null, dbdriver,literalTimestampWithTSOffset);
 		} catch (ClassException e) {
 			throw new DatabaseException(
 					"can't find class ["+classname+"] for jdbc driver, check if driver (jar file) is inside lib folder ("+e.getMessage()+")",null,null,null);
@@ -2761,7 +2764,8 @@ public final class Admin extends TagImpl implements DynamicAttributes {
                 storage,
                 timezone,
                 custom,
-		        dbdriver
+		        dbdriver,
+		        literalTimestampWithTSOffset
         );
         store();
         adminSync.broadcast(attributes, config);

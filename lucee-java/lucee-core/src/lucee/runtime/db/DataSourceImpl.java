@@ -45,6 +45,7 @@ public final class DataSourceImpl  extends DataSourceSupport {
     private Struct custom;
 	private boolean validate;
 	private String dbdriver;
+	private final boolean literalTimestampWithTSOffset;
     
 	/**
 	 * constructor of the class
@@ -67,14 +68,14 @@ public final class DataSourceImpl  extends DataSourceSupport {
 	 */
     public DataSourceImpl(String name,String className, String host, String dsn, String database, int port, String username, String password, 
             int connectionLimit, int connectionTimeout,long metaCacheTimeout, boolean blob, boolean clob, int allow, Struct custom, boolean readOnly, 
-            boolean validate, boolean storage, TimeZone timezone, String dbdriver) throws ClassException {
+            boolean validate, boolean storage, TimeZone timezone, String dbdriver, boolean literalTimestampWithTSOffset) throws ClassException {
 
-        this(name, toClass(className), host, dsn, database, port, username, password, connectionLimit, connectionTimeout,metaCacheTimeout, blob, clob, allow, custom, readOnly, validate, storage, timezone, dbdriver);
+        this(name, toClass(className), host, dsn, database, port, username, password, connectionLimit, connectionTimeout,metaCacheTimeout, blob, clob, allow, custom, readOnly, validate, storage, timezone, dbdriver,literalTimestampWithTSOffset);
 	}
 
 	private DataSourceImpl(String name, Class<?> clazz, String host, String dsn, String database, int port, String username, String password,
             int connectionLimit, int connectionTimeout, long metaCacheTimeout, boolean blob, boolean clob, int allow, Struct custom, boolean readOnly,
-            boolean validate, boolean storage, TimeZone timezone, String dbdriver) {
+            boolean validate, boolean storage, TimeZone timezone, String dbdriver, boolean literalTimestampWithTSOffset) {
 
 		super(name, clazz,username,ConfigWebFactory.decrypt(password),blob,clob,connectionLimit, connectionTimeout, metaCacheTimeout, timezone, allow<0?ALLOW_ALL:allow, storage, readOnly);
 			
@@ -90,6 +91,7 @@ public final class DataSourceImpl  extends DataSourceSupport {
         translateDsn();
 
 		this.dbdriver = dbdriver;
+		this.literalTimestampWithTSOffset=literalTimestampWithTSOffset;
         
         //	throw new DatabaseException("can't find class ["+classname+"] for jdbc driver, check if driver (jar file) is inside lib folder",e.getMessage(),null,null,null);
         
@@ -119,6 +121,8 @@ public final class DataSourceImpl  extends DataSourceSupport {
         if(!doQueryString) return src;
         if(getClazz().getName().indexOf("microsoft")!=-1 || getClazz().getName().indexOf("jtds")!=-1)
         	return src+=';'+name+'='+value;
+        else if(getClazz().getName().indexOf("teradata")!=-1)
+        	return src+='/'+name+'='+value;
         return src+=((src.indexOf('?')!=-1)?'&':'?')+name+'='+value;
     }
 
@@ -159,12 +163,12 @@ public final class DataSourceImpl  extends DataSourceSupport {
     
     @Override
     public Object clone() {
-        return new DataSourceImpl(getName(),getClazz(), host, connStr, database, port, getUsername(), getPassword(), getConnectionLimit(), getConnectionTimeout(),getMetaCacheTimeout(), isBlob(), isClob(), allow, custom, isReadOnly(),validate,isStorage(),getTimeZone(), dbdriver);
+        return new DataSourceImpl(getName(),getClazz(), host, connStr, database, port, getUsername(), getPassword(), getConnectionLimit(), getConnectionTimeout(),getMetaCacheTimeout(), isBlob(), isClob(), allow, custom, isReadOnly(),validate,isStorage(),getTimeZone(), dbdriver,literalTimestampWithTSOffset);
     }
 
     @Override
     public DataSource cloneReadOnly() {
-        return new DataSourceImpl(getName(),getClazz(), host, connStr, database, port, getUsername(), getPassword(), getConnectionLimit(), getConnectionTimeout(),getMetaCacheTimeout(), isBlob(), isClob(), allow,custom, true,validate,isStorage(),getTimeZone(), dbdriver);
+        return new DataSourceImpl(getName(),getClazz(), host, connStr, database, port, getUsername(), getPassword(), getConnectionLimit(), getConnectionTimeout(),getMetaCacheTimeout(), isBlob(), isClob(), allow,custom, true,validate,isStorage(),getTimeZone(), dbdriver,literalTimestampWithTSOffset);
     }
 
     @Override
@@ -180,6 +184,10 @@ public final class DataSourceImpl  extends DataSourceSupport {
     @Override
     public Struct getCustoms() {
         return (Struct)custom.clone();
+    }
+    
+    public boolean getLiteralTimestampWithTSOffset() {
+        return literalTimestampWithTSOffset;
     }
 
     @Override

@@ -1406,12 +1406,13 @@ public final class ConfigWebAdmin {
      * @param allow 
      * @param storage 
      * @param custom 
+     * @param literalTimestampWithTSOffset 
      * @throws ExpressionException
      * @throws SecurityException
      */
     public void updateDataSource(String name, String newName, String clazzName, String dsn, String username, String password,
             String host, String database, int port, int connectionLimit, int connectionTimeout, long metaCacheTimeout,
-            boolean blob, boolean clob, int allow, boolean validate, boolean storage, String timezone, Struct custom, String dbdriver) throws ExpressionException, SecurityException {
+            boolean blob, boolean clob, int allow, boolean validate, boolean storage, String timezone, Struct custom, String dbdriver, boolean literalTimestampWithTSOffset) throws ExpressionException, SecurityException {
 
     	checkWriteAccess();
     	SecurityManager sm = config.getSecurityManager();
@@ -1481,9 +1482,13 @@ public final class ConfigWebAdmin {
                 el.setAttribute("storage",Caster.toString(storage));
                 el.setAttribute("custom",toStringURLStyle(custom));
 
-	            if (!StringUtil.isEmpty( dbdriver ))
+                if (!StringUtil.isEmpty( dbdriver ))
 		            el.setAttribute("dbdriver", Caster.toString(dbdriver));
-
+                
+                if (literalTimestampWithTSOffset)
+		            el.setAttribute("literal-timestamp-with-tsoffset", Caster.toString(literalTimestampWithTSOffset));
+                else 
+                	el.removeAttribute("literal-timestamp-with-tsoffset");
 	      		return;
   			}
       	}
@@ -1520,7 +1525,10 @@ public final class ConfigWebAdmin {
 
 	    if (!StringUtil.isEmpty( dbdriver ))
 		    el.setAttribute("dbdriver", Caster.toString(dbdriver));
-
+	    
+	    if (literalTimestampWithTSOffset)
+            el.setAttribute("literal-timestamp-with-tsoffset", Caster.toString(literalTimestampWithTSOffset));
+        
         /*
   		    String host,String database,int port,String connectionLimit, String connectionTimeout,
             boolean blob,boolean clob,int allow,Struct custom
