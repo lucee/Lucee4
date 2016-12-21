@@ -514,15 +514,6 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 				
 		return EVAL_BODY_BUFFERED;
 	}
-	
-	@Override
-	public void doFinally() {
-		((PageContextImpl)pageContext).setTimestampWithTSOffset(previousLiteralTimestampWithTSOffset);
-		if(tmpTZ!=null) {
-			pageContext.setTimeZone(tmpTZ);
-		}
-		super.doFinally();
-	}
 
 	@Override
 
@@ -727,6 +718,12 @@ public final class Query extends BodyTagTryCatchFinallyImpl {
 					, Log.LEVEL_ERROR, "query tag", pe);
 			
 			throw pe;
+		}
+		finally {
+			((PageContextImpl)pageContext).setTimestampWithTSOffset(previousLiteralTimestampWithTSOffset);
+			if(tmpTZ!=null) {
+				pageContext.setTimeZone(tmpTZ);
+			}
 		}
 		
 		return EVAL_PAGE;
