@@ -1379,6 +1379,10 @@ public final class ConfigWebFactory extends ConfigFactory {
 		// full null support
 		sb.append(config.getFullNullSupport());
 		sb.append(';');
+		
+		// fusiondebug or not (FD uses full path name)
+		sb.append(config.allowRequestTimeout());
+		sb.append(';');
 
 		// tld
 		for (int i = 0; i < tlds.length; i++) {

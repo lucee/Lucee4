@@ -33,6 +33,8 @@ import lucee.runtime.Mapping;
 import lucee.runtime.PageSource;
 import lucee.runtime.component.ImportDefintion;
 import lucee.runtime.component.ImportDefintionImpl;
+import lucee.runtime.config.Config;
+import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.exp.TemplateException;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.UDF;
@@ -450,7 +452,13 @@ public final class Page extends BodyBase {
     	else if(isInterface()) parent="lucee/runtime/InterfacePage";
     	
     	cw.visit(Opcodes.V1_6, Opcodes.ACC_PUBLIC+Opcodes.ACC_FINAL, name, null, parent, null);
-    	cw.visitSource(this.pageSource.getFullRealpath(),null); // when adding more use ; as delimiter
+    	Mapping m = source!=null?source.getMapping():null;
+    	Config config = m!=null?m.getConfig():null;
+    	if(config==null) config=ThreadLocalPageContext.getConfig();
+    	String path=config.allowRequestTimeout()?
+    			pageSource.getFullRealpath():pageSource.getPhyscalFile().getAbsolutePath();
+  	
+    	cw.visitSource(path,null); // when adding more use ; as delimiter
     	
     	// static constructor
         //GeneratorAdapter statConstrAdapter = new GeneratorAdapter(Opcodes.ACC_PUBLIC,STATIC_CONSTRUCTOR,null,null,cw);
