@@ -446,7 +446,7 @@ public final class Admin extends TagImpl implements DynamicAttributes {
 		} 
 		finally {
 		    index.release();
-			getAdminSync()().broadcast(attributes, config);
+			getAdminSync().broadcast(attributes, config);
 		}
 	}
     
