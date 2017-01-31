@@ -1,7 +1,11 @@
 package lucee.runtime.config;
 
-/**
- * Created by CLynch on 1/27/2017.
- */
-public class AdminSyncNullObject {
+import lucee.runtime.type.Struct;
+
+public class AdminSyncNullObject implements AdminSync {
+
+    @Override
+    public void broadcast(Struct attributes, Config config) {
+        // Do nothing.
+    }
 }
