@@ -102,6 +102,7 @@ public final class PCLBlock extends ExtendableClassLoader implements Sizeable  {
             	c =pcl.loadClass(name);//if(name.indexOf("sub")!=-1)print.ds(name);
             } 
             catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
             	c = findClass(name);
             }
         }
@@ -184,11 +185,13 @@ public final class PCLBlock extends ExtendableClassLoader implements Sizeable  {
     		return defineClass(name,barr,start,barr.length-start);
 		} 
         catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			SystemUtil.sleep(1);
 			try {
 	    		return defineClass(name,barr,start,barr.length-start);
 			} 
 			catch (Throwable t2) {
+            	ExceptionUtil.rethrowIfNecessary(t2);
 				SystemUtil.sleep(1);
 				return defineClass(name,barr,start,barr.length-start);
 			}

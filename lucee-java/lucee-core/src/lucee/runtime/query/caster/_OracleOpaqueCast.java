@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import lucee.commons.lang.ExceptionUtil;
 import oracle.sql.OPAQUE;
 
 public class _OracleOpaqueCast {
@@ -44,6 +45,7 @@ public class _OracleOpaqueCast {
 			if(oracle.xml.parser.v2.XMLParseException.class==null);
 		}
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new IOException("the xdb.jar/xmlparserv2.jar is missing, please download at " +
 					"http://www.oracle.com/technology/tech/xml/xdk/xdk_java.html and copy it into the lucee lib directory");
 		}

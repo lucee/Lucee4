@@ -24,6 +24,7 @@ import lucee.commons.io.cache.Cache;
 import lucee.commons.io.cache.CacheEntry;
 import lucee.commons.io.cache.CacheEvent;
 import lucee.commons.io.cache.CacheEventListener;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.cache.CacheSupport;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.KeyConstants;
@@ -88,6 +89,7 @@ public abstract class EHCacheSupport extends CacheSupport implements Cache,Cache
 		try {
 			return new EHCacheEntry(getCache().getQuiet(key));
 		} catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}

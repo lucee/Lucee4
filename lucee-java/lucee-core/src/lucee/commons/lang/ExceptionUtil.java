@@ -114,6 +114,7 @@ public final class ExceptionUtil {
 	}
 
 	public static IOException toIOException(Throwable t) {
+		ExceptionUtil.rethrowIfNecessary(t);
 		if(t instanceof IOException) return (IOException) t;
 		if(t instanceof InvocationTargetException) return toIOException(((InvocationTargetException) t).getCause());
 		if(t instanceof NativeException) return toIOException(((NativeException)t).getCause());
@@ -138,6 +139,11 @@ public final class ExceptionUtil {
 	}
 
 	public static RuntimeException toRuntimeException(Throwable t) {
+		ExceptionUtil.rethrowIfNecessary(t);
 		return new RuntimeException(t);
+	}
+	
+	public static void rethrowIfNecessary(Throwable t) {
+		if(t instanceof ThreadDeath) throw (ThreadDeath)t; // never catch this rethrow
 	}
 }

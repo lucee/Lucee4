@@ -21,6 +21,7 @@ package lucee.runtime.orm.hibernate.tuplizer.proxy;
 import java.util.Iterator;
 import java.util.Set;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
 import lucee.runtime.component.Member;
@@ -51,6 +52,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return (Property[])m.invoke(c, new Object[]{onlyPeristent, includeBaseProperties, overrideProperties, inheritedMappedSuperClassOnly});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -65,6 +67,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return CommonUtil.toBooleanValue(m.invoke(c, new Object[]{}));
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -76,6 +79,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return CommonUtil.toBooleanValue(m.invoke(c, new Object[]{}));
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -90,6 +94,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return m.invoke(c, new Object[]{name});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -101,6 +106,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return (Set<Key>)m.invoke(c, new Object[]{access});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -112,6 +118,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return m.invoke(c, new Object[]{pc, access, name, args});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -123,6 +130,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return m.invoke(c, new Object[]{pc, access, name, args});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -134,6 +142,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return CommonUtil.toIntValue(m.invoke(c, new Object[]{access}));
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -145,6 +154,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return (Key[]) m.invoke(c, new Object[]{access});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -156,6 +166,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return (Iterator<Entry<Key, Object>>)m.invoke(c, new Object[]{access});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -167,6 +178,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return (Iterator<Object>)m.invoke(c, new Object[]{access});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -179,6 +191,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return m.invoke(c, new Object[]{access,key});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -190,6 +203,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return m.invoke(c, new Object[]{access,key,defaultValue});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -201,6 +215,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return (Iterator<Key>) m.invoke(c, new Object[]{access});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -212,6 +227,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return (Iterator<String>) m.invoke(c, new Object[]{access});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -223,6 +239,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return (DumpData) m.invoke(c, new Object[]{pageContext, maxlevel, dp, access});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -234,6 +251,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return CommonUtil.toBooleanValue(m.invoke(c, new Object[]{access, name}));
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -245,6 +263,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return (Member) m.invoke(c, new Object[]{access, key, dataMember, superAccess});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -260,6 +279,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return;
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -271,6 +291,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return CommonUtil.toBooleanValue(m.invoke(c, new Object[]{}));
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -282,6 +303,7 @@ public abstract class ComponentProReflectionProxy extends ComponentProxy {
 			return (Component)m.invoke(c, new Object[]{});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}

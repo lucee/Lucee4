@@ -24,6 +24,7 @@ import java.util.Map;
 import lucee.commons.date.TimeZoneConstants;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.ini.IniFile;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
@@ -88,7 +89,7 @@ public final class Info {
     	    patches=Caster.toIntValue(aVersion[3]);
     	} 
     	catch (Throwable t) {
-    		t.printStackTrace();
+			ExceptionUtil.rethrowIfNecessary(t);
     		throw new PageRuntimeException(Caster.toPageException(t));
 		}
     	finally{

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SystemOut;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
@@ -39,11 +40,13 @@ public abstract class PDF2Image {
 					SystemOut.printDate("using ICEpdf PDF2Image  Library");
 				}
 				catch(Throwable t){
+					ExceptionUtil.rethrowIfNecessary(t);
 					instance=new PDF2ImagePDFRenderer();
 					SystemOut.printDate("using PDFRenderer PDF2Image  Library");
 				}
 			}
 			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
 				instance=new PDF2ImageJPedal();
 				SystemOut.printDate("using JPedal PDF2Image  Library");
 			}

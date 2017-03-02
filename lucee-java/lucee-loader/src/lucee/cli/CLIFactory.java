@@ -55,7 +55,9 @@ public class CLIFactory extends Thread {
 			try{
 				idleTime=Long.parseLong(strIdle);
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+				if(t instanceof ThreadDeath) throw (ThreadDeath)t;
+			}
 		}
 	}
 	
@@ -82,6 +84,7 @@ public class CLIFactory extends Thread {
 			}
 		}
 		catch (Throwable t) {
+			if(t instanceof ThreadDeath) throw (ThreadDeath)t;
 			t.printStackTrace();
 		}
 	}

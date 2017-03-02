@@ -104,6 +104,7 @@ public final class PCLCollection {
             		return old;
     			}
     			catch(Throwable t){
+                	ExceptionUtil.rethrowIfNecessary(t);
     				t.printStackTrace();
     			}
     		}

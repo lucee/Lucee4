@@ -37,6 +37,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import lucee.commons.io.CharsetUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.Md5;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.net.URLEncoder;
@@ -153,6 +154,7 @@ public final class S3 implements S3Constants {
 		try {
 			return Caster.toB64(digest);
 		} catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			throw new IOException(t.getMessage());
 		}
 	}

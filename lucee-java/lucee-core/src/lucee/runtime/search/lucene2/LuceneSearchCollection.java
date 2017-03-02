@@ -38,6 +38,7 @@ import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.util.FileWrapper;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SerializableObject;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.config.ConfigImpl;
@@ -204,6 +205,7 @@ public final class LuceneSearchCollection extends SearchCollectionSupport {
 			writer.optimize();
 		} 
     	catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			//print.printST(t);
 		}
 	}
@@ -271,6 +273,7 @@ public final class LuceneSearchCollection extends SearchCollectionSupport {
     		try {
 				reader.flush();
 			} catch (Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				//throw new SearchException(t);
 			}
     	}
@@ -281,6 +284,7 @@ public final class LuceneSearchCollection extends SearchCollectionSupport {
     		try {
 				reader.close();
 			} catch (Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				//throw new SearchException(t);
 			}
     	}
@@ -996,7 +1000,9 @@ public final class LuceneSearchCollection extends SearchCollectionSupport {
 					children[i].remove(true);
 					continue;
 				} 
-    			catch (Throwable t) {}
+    			catch (Throwable t) {
+    				ExceptionUtil.rethrowIfNecessary(t);
+    			}
     		}
     		if(nbr>max)max=nbr;
     	}

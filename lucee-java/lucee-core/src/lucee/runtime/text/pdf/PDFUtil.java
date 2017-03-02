@@ -30,6 +30,7 @@ import java.util.Set;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.ApplicationException;
@@ -159,6 +160,7 @@ public class PDFUtil {
 					reader = docs[i].getPdfReader();
 				}
 				catch(Throwable t) {
+					ExceptionUtil.rethrowIfNecessary(t);
 					if(!stopOnError)continue;
 					throw Caster.toPageException(t);
 				}

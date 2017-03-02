@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
 
@@ -311,6 +312,7 @@ public class ConnectionProxy implements Connection {
 			conn.getClass().getMethod("setSchema", new Class[]{String.class}).invoke(conn, new Object[]{schema});
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			if(t instanceof InvocationTargetException && ((InvocationTargetException)t).getTargetException() instanceof SQLException)
 				throw (SQLException)((InvocationTargetException)t).getTargetException();
 			throw new PageRuntimeException(Caster.toPageException(t));
@@ -323,6 +325,7 @@ public class ConnectionProxy implements Connection {
 			return Caster.toString(conn.getClass().getMethod("getSchema", new Class[]{}).invoke(conn, new Object[]{}));
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			if(t instanceof InvocationTargetException && ((InvocationTargetException)t).getTargetException() instanceof SQLException)
 				throw (SQLException)((InvocationTargetException)t).getTargetException();
 			throw new PageRuntimeException(Caster.toPageException(t));
@@ -335,6 +338,7 @@ public class ConnectionProxy implements Connection {
 			conn.getClass().getMethod("abort", new Class[]{Executor.class}).invoke(conn, new Object[]{executor});
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			if(t instanceof InvocationTargetException && ((InvocationTargetException)t).getTargetException() instanceof SQLException)
 				throw (SQLException)((InvocationTargetException)t).getTargetException();
 			throw new PageRuntimeException(Caster.toPageException(t));
@@ -347,6 +351,7 @@ public class ConnectionProxy implements Connection {
 			conn.getClass().getMethod("setNetworkTimeout", new Class[]{Executor.class,int.class}).invoke(conn, new Object[]{executor,milliseconds});
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			if(t instanceof InvocationTargetException && ((InvocationTargetException)t).getTargetException() instanceof SQLException)
 				throw (SQLException)((InvocationTargetException)t).getTargetException();
 			throw new PageRuntimeException(Caster.toPageException(t));
@@ -359,6 +364,7 @@ public class ConnectionProxy implements Connection {
 			return Caster.toIntValue(conn.getClass().getMethod("getNetworkTimeout", new Class[]{}).invoke(conn, new Object[]{}));
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			if(t instanceof InvocationTargetException && ((InvocationTargetException)t).getTargetException() instanceof SQLException)
 				throw (SQLException)((InvocationTargetException)t).getTargetException();
 			throw new PageRuntimeException(Caster.toPageException(t));

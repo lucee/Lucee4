@@ -33,6 +33,7 @@ import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.type.ram.RamResourceProviderOld;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.engine.ThreadLocalPageContext;
@@ -122,7 +123,9 @@ public final class Compress {
 				if(!temp.exists())temp.createDirectory(true);
 				
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
 		}
 		
 		

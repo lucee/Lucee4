@@ -39,6 +39,7 @@ import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.mimetype.ContentType;
 import lucee.commons.net.HTTPUtil;
@@ -987,6 +988,7 @@ final class Http4 extends BodyTagImpl implements Http {
 			}
 			
 			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
 				if(!throwonerror){
 					setUnknownHost(cfhttp, t);
 					return;
@@ -1459,6 +1461,7 @@ class Executor4 extends Thread {
 			done=true;
 		} 
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			this.t=t;
 		}
 		finally {

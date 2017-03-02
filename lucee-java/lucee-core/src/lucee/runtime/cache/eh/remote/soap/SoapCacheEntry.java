@@ -23,6 +23,7 @@ import java.io.ObjectInputStream;
 import java.util.Date;
 
 import lucee.commons.io.cache.CacheEntry;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.loader.util.Util;
 import lucee.runtime.cache.CacheUtil;
 import lucee.runtime.type.Struct;
@@ -94,6 +95,7 @@ public class SoapCacheEntry implements CacheEntry {
 	    return Util.toString(bais);
 		}
 		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return null;
 		}
 	}

@@ -21,6 +21,7 @@ package lucee.runtime.net.rpc.server;
 import javax.xml.rpc.encoding.TypeMapping;
 
 import lucee.commons.lang.CFTypes;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.ApplicationException;
@@ -56,7 +57,8 @@ public final class ComponentController {
 		try {
 			return _invoke(name, args);
 		} 
-		catch (Throwable t) {t.printStackTrace();
+		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw AxisFault.makeFault((Caster.toPageException(t)));
 		}
 	}
@@ -96,6 +98,7 @@ public final class ComponentController {
 			return AxisCaster.toAxisType(tm,rtn,clazz.getComponentType()!=null?clazz:null);
 		} 
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw Caster.toPageException(t);
 		}
 	}

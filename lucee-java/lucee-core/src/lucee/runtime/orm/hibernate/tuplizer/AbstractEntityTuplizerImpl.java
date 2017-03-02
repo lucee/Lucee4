@@ -21,6 +21,7 @@ package lucee.runtime.orm.hibernate.tuplizer;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
 import lucee.runtime.ComponentScope;
@@ -97,7 +98,9 @@ public class AbstractEntityTuplizerImpl extends AbstractEntityTuplizer {
 							}
 						}
 					}
-					catch (Throwable t) {}
+					catch (Throwable t) {
+						ExceptionUtil.rethrowIfNecessary(t);
+					}
 				}
 
 				try {

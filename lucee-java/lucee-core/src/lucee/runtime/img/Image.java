@@ -87,6 +87,7 @@ import javax.swing.ImageIcon;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.CFTypes;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.font.FontUtil;
 import lucee.runtime.PageContext;
@@ -391,7 +392,9 @@ public class Image extends StructSupport implements Cloneable,Struct {
                 return meta;
             }
         }
-        catch (Throwable t) {}
+        catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
         finally{
         	ImageUtil.closeEL(iis);
 			IOUtil.closeEL(is);
@@ -1024,14 +1027,18 @@ public class Image extends StructSupport implements Cloneable,Struct {
 		try {
 			iwp.setCompressionMode(mode);
 		}
-		catch(Throwable t) {}
+		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 	}
 
 	private void setCompressionQualityEL(ImageWriteParam iwp, float quality) {
 		try {
 			iwp.setCompressionQuality(quality);
 		}
-		catch(Throwable t) {}
+		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 	}
 
 	public void convert(String format) {
@@ -1084,7 +1091,9 @@ public class Image extends StructSupport implements Cloneable,Struct {
     	try {
 			transparency=img.getTransparency();
 		} 
-    	catch (Throwable t) {}
+    	catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
     	int type = (transparency == Transparency.OPAQUE) ?BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
         
     	
@@ -1416,6 +1425,7 @@ public class Image extends StructSupport implements Cloneable,Struct {
 			return toImage(pc, obj, checkForVariables);
 		}
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -1463,6 +1473,7 @@ public class Image extends StructSupport implements Cloneable,Struct {
 							return createImage(pc, pc.getVariable(Caster.toString(obj)), false,clone,checkAccess,format);
 						}
 						catch (Throwable t) {
+							ExceptionUtil.rethrowIfNecessary(t);
 							throw ee;
 						}
 					}
@@ -1470,6 +1481,7 @@ public class Image extends StructSupport implements Cloneable,Struct {
 						return new Image(Caster.toString(obj),format);
 					}
 					catch (Throwable t) {
+						ExceptionUtil.rethrowIfNecessary(t);
 						throw ee;
 					}
 				}
@@ -1772,6 +1784,7 @@ public class Image extends StructSupport implements Cloneable,Struct {
 			if(JAI.class==null) return;
 		}
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new PageRuntimeException("the JAI extension is missing, please download [lucee-x.x.x.xxx-jars.zip] on http://www.lucee-technologies.com/en/download and copy it into the lucee lib directory");
 		}	
 	}

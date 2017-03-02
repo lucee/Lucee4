@@ -22,6 +22,7 @@ import java.io.File;
 
 import lucee.commons.io.SystemUtil;
 import lucee.commons.lang.ClassUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Info;
 import lucee.runtime.PageContext;
@@ -146,7 +147,9 @@ public final class ServerImpl extends ScopeSupport implements Server,SharedScope
 			try{
 				rootdir=ThreadLocalPageContext.getConfig(pc).getRootDirectory().getAbsolutePath();
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 			coldfusion.setEL(ROOT_DIR,rootdir);// 
 
 			
@@ -220,7 +223,9 @@ public final class ServerImpl extends ScopeSupport implements Server,SharedScope
 			try{
 				name=pc.getServletContext().getServerInfo();
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 			servlet.setEL(KeyConstants._name,name);
 			servlet.setReadOnly(true);
 			

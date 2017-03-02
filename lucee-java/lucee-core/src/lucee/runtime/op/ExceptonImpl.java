@@ -18,6 +18,7 @@
  **/
 package lucee.runtime.op;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageSource;
 import lucee.runtime.db.SQL;
@@ -154,6 +155,7 @@ public final class ExceptonImpl implements Excepton {
     
     @Override
     public PageException createNativeException(Throwable t) {
+		ExceptionUtil.rethrowIfNecessary(t);
         return new NativeException(t);
     }
     

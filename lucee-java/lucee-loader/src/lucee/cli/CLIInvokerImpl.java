@@ -66,6 +66,7 @@ public class CLIInvokerImpl implements CLIInvoker {
 			engine.cli(config, servletConfig);
 			lastAccess = System.currentTimeMillis();
 		} catch (Throwable t) {
+			if(t instanceof ThreadDeath) throw (ThreadDeath)t;
 			throw new RemoteException("failed to call CFML Engine", t);
 		}
 	}

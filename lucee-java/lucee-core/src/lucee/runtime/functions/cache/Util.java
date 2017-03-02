@@ -26,6 +26,7 @@ import java.util.Iterator;
 import lucee.commons.io.cache.Cache;
 import lucee.commons.io.cache.CacheEntryFilter;
 import lucee.commons.io.cache.exp.CacheException;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.cache.CacheConnection;
@@ -60,6 +61,7 @@ public class Util {
 		try {
 			return cc.getInstance(config);
 		} catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -115,6 +117,7 @@ public class Util {
 		try {
 			return cc.getInstance(config);
 		} catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}	
 	}
@@ -169,6 +172,7 @@ public class Util {
 			remove(config,cc);
 			return true;
 		} catch (Throwable e) {
+			ExceptionUtil.rethrowIfNecessary(e);
 			return false;
 		}
 	}

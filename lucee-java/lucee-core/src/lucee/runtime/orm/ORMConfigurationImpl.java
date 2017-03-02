@@ -49,6 +49,8 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
+import flex.messaging.util.ExceptionUtil;
+
 public class ORMConfigurationImpl implements ORMConfiguration {
 	public static final int DBCREATE_NONE=0;
 	public static final int DBCREATE_UPDATE=1;
@@ -251,7 +253,9 @@ public class ORMConfigurationImpl implements ORMConfiguration {
 					res=toResourceExisting(config,ac,it.next(),onlyDir);
 					if(res!=null) list.add(res);
 				}
-				catch(Throwable t){}
+				catch(Throwable t){
+					lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+				}
 			}
 			return list;
 		}

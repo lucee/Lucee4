@@ -50,6 +50,7 @@ import lucee.commons.io.res.type.s3.S3ResourceProvider;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.ClassUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.SystemOut;
 import lucee.commons.net.HTTPUtil;
@@ -235,6 +236,7 @@ public final class ConfigWebAdmin {
 			SystemOut.printDate(ci.getOutWriter(), "reloaded the configuration ["+file+"] automaticly");
 		} 
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			t.printStackTrace();
 		}
 	}
@@ -338,7 +340,9 @@ public final class ConfigWebAdmin {
     	try {
 	    	ConfigWebFactory.getChildByName(doc.getDocumentElement(),"cfabort",true);
     	}
-    	catch(Throwable t) {}
+    	catch(Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
     }
 
 
@@ -3153,7 +3157,9 @@ public final class ConfigWebAdmin {
         try {
 			location=HTTPUtil.toURL(location,true).toString();
 		} 
-        catch (Throwable e) {}
+        catch (Throwable e) {
+        	ExceptionUtil.rethrowIfNecessary(e);
+        }
         update.setAttribute("location",location);
     }
     
@@ -3271,6 +3277,7 @@ public final class ConfigWebAdmin {
         			factory.removeLatestUpdate(cs.getPassword().password);
         		}
         		catch(Throwable t)	{
+	            	ExceptionUtil.rethrowIfNecessary(t);
         			removeLatestUpdateOld(factory,cs.getPassword().password);
         		}
         	}
@@ -4065,12 +4072,16 @@ public final class ConfigWebAdmin {
 	        	try{
 	        		root.removeAttribute("serial-number");
 	        	}
-	        	catch(Throwable t){}
+	        	catch(Throwable t){
+	            	ExceptionUtil.rethrowIfNecessary(t);
+	            }
 	        }
         	try{
         		root.removeAttribute("serial");
         	}
-        	catch(Throwable t){}
+        	catch(Throwable t){
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
 	    }
 
 

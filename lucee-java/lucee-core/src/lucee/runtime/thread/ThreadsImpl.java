@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.lang.Thread.State;
 import java.util.Iterator;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.NullSupportHelper;
 import lucee.runtime.dump.DumpData;
@@ -158,7 +159,9 @@ public class ThreadsImpl extends StructSupport implements lucee.runtime.type.sco
 	            sb.append("\n");
 			}
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 		return sb.toString();
 	}
 
@@ -192,6 +195,7 @@ The current status of the thread; one of the following values:
 		}
 		// java 1.4 execution
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			if(ct.terminated || ct.catchBlock!=null)return "TERMINATED";
 			if(ct.completed)return "COMPLETED";
 			if(!ct.isAlive())return "WAITING";

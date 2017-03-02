@@ -38,6 +38,7 @@ import lucee.commons.io.res.filter.IgnoreSystemFiles;
 import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.type.http.HTTPResource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
@@ -810,6 +811,7 @@ public final class ResourceUtil {
     			return IOUtil.getMimeType(is, defaultValue);
 			} 
     		catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
 				return defaultValue;
 			}
     		finally {
@@ -1019,28 +1021,36 @@ public final class ResourceUtil {
 		try {
 			removeChildren(res,filter);
 		}
-		catch(Throwable e) {}
+		catch(Throwable e) {
+        	ExceptionUtil.rethrowIfNecessary(e);
+        }
 	}
 
 	public static void removeChildrenEL(Resource res,ResourceFilter filter) {
 		try {
 			removeChildren(res,filter);
 		}
-		catch(Throwable e) {}
+		catch(Throwable e) {
+        	ExceptionUtil.rethrowIfNecessary(e);
+        }
 	}
 	
 	public static void removeChildrenEL(Resource res) {
 		try {
 			removeChildren(res);
 		}
-		catch(Throwable e) {}
+		catch(Throwable e) {
+        	ExceptionUtil.rethrowIfNecessary(e);
+        }
 	}
 
 	public static void removeEL(Resource res, boolean force) {
 		try {
 			res.remove(force);
 		} 
-		catch (Throwable t) {}
+		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 	}
 
 	public static void createFileEL(Resource res, boolean force) {
@@ -1386,6 +1396,7 @@ public final class ResourceUtil {
 			return ps.getResourceTranslated(pc);
 		} 
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}

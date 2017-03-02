@@ -37,6 +37,7 @@ public class ShutdownHook extends Thread {
 			JarLoader.download(cs, Admin.UPDATE_JARS);
 		}
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			SystemOut.printDate(cs.getErrWriter(),ExceptionUtil.getStacktrace(t, true));
 		}*/
 		

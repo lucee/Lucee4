@@ -29,6 +29,7 @@ import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.AndResourceFilter;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
 import lucee.commons.io.res.filter.ResourceFilter;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.mimetype.MimeType;
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
@@ -146,6 +147,7 @@ public class Mapping {
 				}
 			}
 			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
 				if(!settings.getSkipCFCWithError()) throw Caster.toPageException(t);
 			}
 		}

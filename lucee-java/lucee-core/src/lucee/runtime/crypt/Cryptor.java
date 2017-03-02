@@ -122,8 +122,7 @@ public class Cryptor {
 
             return result;
         }
-        catch ( Throwable t ) {
-
+        catch (Throwable t ) {
             throw Caster.toPageException( t );
         }
     }
@@ -153,8 +152,7 @@ public class Cryptor {
 
             return Coder.encode( encoding, encrypted );
         }
-        catch ( Throwable t ) {
-
+        catch (Throwable t ) {
             throw Caster.toPageException( t );
         }
     }
@@ -184,8 +182,7 @@ public class Cryptor {
 
             return new String( decrypted, charset );
         }
-        catch ( Throwable t ) {
-
+        catch (Throwable t ) {
             throw Caster.toPageException( t );
         }
     }

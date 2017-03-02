@@ -18,6 +18,8 @@
  **/
 package lucee.runtime.gateway;
 
+import lucee.commons.lang.ExceptionUtil;
+
 
 public class GatewayThread extends Thread {
 
@@ -43,6 +45,7 @@ public class GatewayThread extends Thread {
 			else if(action==RESTART) gateway.doRestart();
 			}
 			catch(Throwable ge){
+				ExceptionUtil.rethrowIfNecessary(ge);
 				engine.log(gateway,GatewayEnginePro.LOGLEVEL_ERROR,ge.getMessage());
 			}
 		}

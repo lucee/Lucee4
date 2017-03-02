@@ -34,6 +34,7 @@ public abstract class BodyTagTryCatchFinallySupport extends BodyTagSupport imple
      * @see javax.servlet.jsp.tagext.TryCatchFinally#doCatch(java.lang.Throwable)
      */
     public void doCatch(Throwable t) throws Throwable {
+		if(t instanceof ThreadDeath) throw (ThreadDeath)t;
         if(t instanceof PageServletException) {
             PageServletException pse=(PageServletException)t;
             t=pse.getPageException();

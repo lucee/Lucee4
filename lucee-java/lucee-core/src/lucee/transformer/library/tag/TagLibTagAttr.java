@@ -26,6 +26,7 @@ import java.util.List;
 
 import lucee.commons.lang.CFTypes;
 import lucee.commons.lang.ClassUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.Md5;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.op.Caster;
@@ -169,7 +170,7 @@ public final class TagLibTagAttr {
             }
 	    	}
 	    	catch(Throwable t) {
-	    		
+				ExceptionUtil.rethrowIfNecessary(t);
 	    		return "string";
 	    	}
 	    }

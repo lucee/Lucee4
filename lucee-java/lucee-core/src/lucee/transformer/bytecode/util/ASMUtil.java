@@ -28,6 +28,7 @@ import lucee.aprint;
 import lucee.commons.digest.MD5;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.component.Property;
 import lucee.runtime.config.Config;
@@ -579,6 +580,7 @@ public final class ASMUtil {
     		md5=createMD5(properties);
     	}
     	catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
     		md5="";
     		t.printStackTrace();
     	}
@@ -1168,6 +1170,7 @@ public final class ASMUtil {
 			}
 		}
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			// TODO Auto-generated catch block
 			t.printStackTrace();
 		}

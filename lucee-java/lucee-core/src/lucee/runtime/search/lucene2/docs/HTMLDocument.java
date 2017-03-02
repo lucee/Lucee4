@@ -23,6 +23,7 @@ import java.io.StringReader;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.op.Caster;
 import lucee.runtime.search.lucene2.html.HTMLParser;
@@ -55,6 +56,7 @@ public final class HTMLDocument {
     	parser.parse(res,charset);
     } 
     catch (Throwable t) {
+		ExceptionUtil.rethrowIfNecessary(t);
         return doc;
     }
     addContent(doc,parser);
@@ -73,6 +75,7 @@ public final class HTMLDocument {
           parser.parse(sr);
       } 
       catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
     	  //t.printStackTrace();
           return doc;
       }

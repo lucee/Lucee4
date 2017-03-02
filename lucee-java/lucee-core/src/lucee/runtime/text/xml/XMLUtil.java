@@ -47,6 +47,7 @@ import javax.xml.transform.stream.StreamSource;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.engine.ThreadLocalPageContext;
@@ -239,6 +240,7 @@ public final class XMLUtil {
         		factory = new DocumentBuilderFactoryImpl();
         	}
         	catch(Throwable t) {
+    			ExceptionUtil.rethrowIfNecessary(t);
         		factory = DocumentBuilderFactory.newInstance();
         	}
         	
@@ -296,6 +298,7 @@ public final class XMLUtil {
 			factory.setAttribute(name, value);
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			//SystemOut.printDate("attribute ["+name+"] is not allowed for ["+factory.getClass().getName()+"]");
 		}
 	}
@@ -908,7 +911,9 @@ public final class XMLUtil {
 					count++;
 				}
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 		}
 		return count;
 	}
@@ -926,7 +931,9 @@ public final class XMLUtil {
 					rtn.add(n);
 				}
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 		}
 		return rtn;
 	}
@@ -944,7 +951,9 @@ public final class XMLUtil {
 					rtn.add(n);
 				}
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 		}
 		return rtn;
 	}
@@ -965,7 +974,9 @@ public final class XMLUtil {
 					}
 				}
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 		}
 		return null;
 	}
@@ -1195,6 +1206,7 @@ public final class XMLUtil {
 			return XMLReaderFactory.createXMLReader(oprionalDefaultSaxParser);
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			return XMLReaderFactory.createXMLReader();
 		}
 	}

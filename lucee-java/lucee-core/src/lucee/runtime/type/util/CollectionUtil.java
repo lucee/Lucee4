@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.op.Operator;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
@@ -146,6 +147,7 @@ public class CollectionUtil {
 			return list.remove(index);
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}

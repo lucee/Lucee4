@@ -166,7 +166,9 @@ public class CFCProxy {
 			if(autoFlush) {
 				try {
 					pc.getRootWriter().flush();
-				} catch (Throwable t) {}
+				} catch (Throwable t) {
+					if(t instanceof ThreadDeath) throw (ThreadDeath)t;
+				}
 			}
 			engine.registerThreadPageContext(originalPC);
 		}

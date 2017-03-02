@@ -34,6 +34,7 @@ public class FDControllerFactory {
 			Class.forName( "com.intergral.fusiondebug.server.FDSignalException" );
 		}
 		catch(Throwable t){
+			if(t instanceof ThreadDeath) throw (ThreadDeath)t;
 			t.printStackTrace();
 		}
 	}

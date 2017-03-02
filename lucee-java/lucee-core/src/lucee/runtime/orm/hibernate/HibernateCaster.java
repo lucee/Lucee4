@@ -106,6 +106,7 @@ public class HibernateCaster {
 			name=CommonUtil.toString(HibernateUtil.getMetaStructItem(cfc,CommonUtil.ENTITY_NAME),null);
 		} 
 		catch (Throwable t) {
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 			try {
 				Struct md = cfc.getMetaData(CommonUtil.pc());
 				name = CommonUtil.toString(md.get(CommonUtil.ENTITY_NAME),null);

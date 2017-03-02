@@ -25,14 +25,6 @@ import lucee.runtime.exp.ExpressionException;
  */
 public final class InterpreterException extends ExpressionException {
 
-	/* *
-	 * constructor of the Exception
-	 * @param e
-	 * /
-	public InterpreterException(Throwable e) {
-		super(e);
-	}*/
-
 	/**
 	 * constructor of the Exception
 	 * @param message

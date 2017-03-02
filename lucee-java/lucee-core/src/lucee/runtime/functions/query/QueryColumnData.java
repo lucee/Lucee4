@@ -20,6 +20,7 @@ package lucee.runtime.functions.query;
 
 import java.util.Iterator;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.NullSupportHelper;
 import lucee.runtime.db.SQLCaster;
@@ -58,7 +59,10 @@ public class QueryColumnData extends BIF {
 			try{
 				value=Caster.castTo(pc, type, column.getTypeAsString(), value);
 			}
-			catch(Throwable t){t.printStackTrace();}
+			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
+				t.printStackTrace();
+			}
 			
 			arr.append(value);
 		}

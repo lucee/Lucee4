@@ -178,6 +178,7 @@ public class SizeOf {
 		return __size(object, instances, dictionary, maxDepth, maxSize);
 		}
 		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 			t.printStackTrace();
 			return 0;
 		}

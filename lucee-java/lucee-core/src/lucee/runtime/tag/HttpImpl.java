@@ -17,6 +17,7 @@ import javax.servlet.jsp.tagext.Tag;
 import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.net.HTTPUtil;
 import lucee.commons.net.URLEncoder;
@@ -38,6 +39,7 @@ public class HttpImpl implements Http,BodyTag {
 			instance = new Http41(); // try to use the implemenation based on the newer apache library
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			instance = new Http4(); // if it fails we have a fallback to the old implementation
 		}
 	}

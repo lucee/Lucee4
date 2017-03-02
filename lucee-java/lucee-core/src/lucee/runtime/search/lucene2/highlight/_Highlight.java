@@ -33,14 +33,11 @@ import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 public class _Highlight {
 
 	public static String createContextSummary(Object highlighter, Analyzer analyzer, String text, int maxNumFragments,String defaultValue) throws IOException {
-		//try {
 		if(!(highlighter instanceof Highlighter) || analyzer==null || StringUtil.isEmpty(text))
 			return defaultValue;
 			
 		TokenStream tokenStream = analyzer.tokenStream("", new StringReader(text));
-			return ((Highlighter)highlighter).getBestFragments(tokenStream, text, maxNumFragments, "...");
-		//}catch (Throwable t) {}
-            			
+			return ((Highlighter)highlighter).getBestFragments(tokenStream, text, maxNumFragments, "...");       			
 	}
 
 	public static Object createHighlighter(Query query,String highlightBegin,String highlightEnd) {

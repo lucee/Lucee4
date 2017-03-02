@@ -22,6 +22,8 @@ import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
 
+import lucee.commons.lang.ExceptionUtil;
+
 public class InstrumentationUtil {
 
 	/**
@@ -37,7 +39,10 @@ public class InstrumentationUtil {
 	        	inst.redefineClasses(new ClassDefinition(clazz,barr));
 				return true;
 			} 
-	    	catch (Throwable t) {t.printStackTrace();}
+	    	catch (Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
+				t.printStackTrace();
+			}
 	    }
 	    return false;
 	}

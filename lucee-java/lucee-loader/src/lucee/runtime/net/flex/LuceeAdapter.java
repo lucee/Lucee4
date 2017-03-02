@@ -62,7 +62,8 @@ public class LuceeAdapter extends ServiceAdapter implements EngineChangeListener
 	            access.getPropertyAsString("method-access-level","remote");
 	        }
         }
-        catch(Throwable t){}
+        catch(Throwable t){
+			if(t instanceof ThreadDeath) throw (ThreadDeath)t;}
         
     }
 	
@@ -92,8 +93,9 @@ public class LuceeAdapter extends ServiceAdapter implements EngineChangeListener
         	try {CFMLEngineFactory.getInstance();
 				engine=CFMLEngineFactory.getInstance(FlexContext.getServletConfig(),this);
 			} 
-        	catch (Throwable e) {
-				throw new RuntimeException(e);
+        	catch (Throwable t) {
+				if(t instanceof ThreadDeath) throw (ThreadDeath)t;
+				throw new RuntimeException(t);
 			}
         }
     	return engine;

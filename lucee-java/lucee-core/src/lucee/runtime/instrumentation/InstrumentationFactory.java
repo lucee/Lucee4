@@ -29,6 +29,7 @@ import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourcesImpl;
 import lucee.commons.lang.ClassUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SystemOut;
 
 import org.objectweb.asm.ClassReader;
@@ -72,6 +73,7 @@ public class InstrumentationFactory {
 					detach(vmClass,vmObj);
 				} 
 				catch (Throwable t) {
+					ExceptionUtil.rethrowIfNecessary(t);
 					//t.printStackTrace();
 					return null;
 				}
@@ -90,6 +92,7 @@ public class InstrumentationFactory {
 			return (Instrumentation) getInstrumentation.invoke(null, new Object[0]);
 		} 
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			t.printStackTrace();
 			return null;
 		}

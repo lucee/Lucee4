@@ -166,6 +166,7 @@ final class Axis1Client extends WSClient {
             parser.run(wsdlUrl);
         }
         catch(Throwable e) {
+			ExceptionUtil.rethrowIfNecessary(e);
             throw Caster.toPageException(e);
         }
     }
@@ -198,6 +199,7 @@ final class Axis1Client extends WSClient {
             return _callMethod(pc,pc.getConfig(),methodName,null,arguments);
         } 
         catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
         	throw Caster.toPageException(t);
 		} 
     }
@@ -395,6 +397,7 @@ final class Axis1Client extends WSClient {
 	        			
 					}
 					catch (Throwable t) {
+						ExceptionUtil.rethrowIfNecessary(t);
 						t.printStackTrace();
 					}
 				//}

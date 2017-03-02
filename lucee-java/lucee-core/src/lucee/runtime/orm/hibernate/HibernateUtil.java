@@ -175,6 +175,7 @@ public class HibernateUtil {
 		
 		}
 		catch(Throwable t){
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 			return new Property[0];
 		}
 		
@@ -317,7 +318,9 @@ public class HibernateUtil {
 				return name;	
 			}
 		}
-        catch(Throwable t){}
+        catch(Throwable t){
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+		}
 		finally {
 			CommonUtil.closeEL(tables);
 		}

@@ -201,7 +201,9 @@ public final class IOUtil {
     		try{
     			skipped = in.skip(offset);
     		}
-    		catch(Throwable t){}
+    		catch(Throwable t){
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
     		
 			if(skipped<=0) {
 	    		while(true) {
@@ -245,7 +247,9 @@ public final class IOUtil {
     		try{
     			skipped = in.skip(offset);
     		}
-    		catch(Throwable t){}
+    		catch(Throwable t){
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
     		
 			if(skipped<=0) {
 	    		block = blockSize;//0xffff;
@@ -402,7 +406,9 @@ public final class IOUtil {
     		 if(is!=null)is.close();
     	 } 
     	 //catch (AlwaysThrow at) {throw at;}
-    	 catch (Throwable t) {}
+    	 catch (Throwable t) {
+         	ExceptionUtil.rethrowIfNecessary(t);
+         }
      }
      
      public static void closeEL(ZipFile zip) {
@@ -410,7 +416,9 @@ public final class IOUtil {
     		 if(zip!=null)zip.close();
     	 } 
     	 //catch (AlwaysThrow at) {throw at;}
-    	 catch (Throwable t) {}
+    	 catch (Throwable t) {
+         	ExceptionUtil.rethrowIfNecessary(t);
+         }
      }
      
      /**
@@ -422,14 +430,18 @@ public final class IOUtil {
                if(os!=null)os.close();
          } 
       	 //catch (AlwaysThrow at) {throw at;}
-         catch (Throwable e) {}
+         catch (Throwable t) {
+         	ExceptionUtil.rethrowIfNecessary(t);
+         }
        }
      
      public static void closeEL(ResultSet rs) {
          try {
              if(rs!=null)rs.close();
        } 
-       catch (Throwable e) {}
+       catch (Throwable t) {
+       	ExceptionUtil.rethrowIfNecessary(t);
+       }
      }
      
      /**
@@ -441,7 +453,9 @@ public final class IOUtil {
                if(r!=null)r.close();
          } 
          //catch (AlwaysThrow at) {throw at;}
-         catch (Throwable e) {}
+         catch (Throwable t) {
+         	ExceptionUtil.rethrowIfNecessary(t);
+         }
        }
 
      
@@ -454,7 +468,9 @@ public final class IOUtil {
                if(c!=null)c.close();
          } 
          //catch (AlwaysThrow at) {throw at;}
-         catch (Throwable e) {}
+         catch (Throwable t) {
+         	ExceptionUtil.rethrowIfNecessary(t);
+         }
        }
      
      /**
@@ -466,7 +482,9 @@ public final class IOUtil {
                if(w!=null)w.close();
          } 
       	 //catch (AlwaysThrow at) {throw at;}
-         catch (Throwable e) {}
+         catch (Throwable t) {
+         	ExceptionUtil.rethrowIfNecessary(t);
+         }
      }
      
      /**
@@ -477,7 +495,9 @@ public final class IOUtil {
            try {
                if(t!=null && t.isConnected())t.close();
          } 
-         catch (Throwable e) {}
+         catch (Throwable e) {
+         	ExceptionUtil.rethrowIfNecessary(e);
+         }
      }
      
 
@@ -485,14 +505,18 @@ public final class IOUtil {
            try {
                if(doc!=null)doc.close();
          } 
-         catch (Throwable e) {}
+         catch (Throwable t) {
+         	ExceptionUtil.rethrowIfNecessary(t);
+         }
      }
      
      public static void closeEL(Connection conn) {
          try {
              if(conn!=null)conn.close();
        } 
-       catch (Throwable e) {}
+       catch (Throwable t) {
+       	ExceptionUtil.rethrowIfNecessary(t);
+       }
    }
      
      
@@ -514,7 +538,9 @@ public final class IOUtil {
                  Method method = obj.getClass().getMethod("close",new Class[0]);
                  method.invoke(obj,new Object[0]);
              } 
-             catch (Throwable e) {}
+             catch (Throwable t) {
+             	ExceptionUtil.rethrowIfNecessary(t);
+             }
          }
      }
 
@@ -1006,6 +1032,7 @@ public final class IOUtil {
     	/*try {
 			return URLConnection.guessContentTypeFromStream(is);
 		} catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}*/
 		
@@ -1035,6 +1062,7 @@ public final class IOUtil {
             return match.getMimeType();
         } 
         catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
         }
         finally {
@@ -1188,6 +1216,7 @@ public final class IOUtil {
 				IOUtil.copy(r, w, blockSize, -1);
 			} 
 			catch(Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
 				this.t=t;
 			}
 			finally {

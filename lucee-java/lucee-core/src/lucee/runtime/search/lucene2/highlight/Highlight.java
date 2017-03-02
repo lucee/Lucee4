@@ -18,6 +18,8 @@
  **/
 package lucee.runtime.search.lucene2.highlight;
 
+import lucee.commons.lang.ExceptionUtil;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.search.Query;
 
@@ -29,7 +31,9 @@ public class Highlight {
 		try {
 			return _Highlight.createContextSummary(highlighter, analyzer, text,maxNumFragments, defaultValue);
 		}
-		catch (Throwable t) {t.printStackTrace();}	
+		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+		}	
 		return defaultValue;
 	}
 
@@ -37,7 +41,10 @@ public class Highlight {
 		try {
 			return _Highlight.createHighlighter(query,highlightBegin,highlightEnd);
 		}
-		catch (Throwable t) {t.printStackTrace();}
+		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+			t.printStackTrace();
+		}
 		return null;
 	}
 

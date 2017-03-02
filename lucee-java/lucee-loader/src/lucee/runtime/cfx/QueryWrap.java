@@ -1284,7 +1284,8 @@ public class QueryWrap implements Query {
     		Method m = rst.getClass().getMethod("getObject", new Class[]{int.class,Class.class});
     		return (T) m.invoke(rst, new Object[]{columnIndex,type});
 		} 
-    	catch (Throwable t) {}
+    	catch (Throwable t) {
+			if(t instanceof ThreadDeath) throw (ThreadDeath)t;}
     	throw notSupported();
 	}
 	
@@ -1293,7 +1294,8 @@ public class QueryWrap implements Query {
     		Method m = rst.getClass().getMethod("getObject", new Class[]{String.class,Class.class});
     		return (T) m.invoke(rst, new Object[]{columnLabel,type});
 		} 
-    	catch (Throwable t) {}
+    	catch (Throwable t) {
+			if(t instanceof ThreadDeath) throw (ThreadDeath)t;}
     	throw notSupported();
 	}
 

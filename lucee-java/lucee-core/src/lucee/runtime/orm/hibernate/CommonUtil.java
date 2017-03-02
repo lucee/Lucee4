@@ -316,6 +316,7 @@ public class CommonUtil {
 	}
 	
 	public static PageException toPageException(Throwable t) {
+		lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 		PageException pe = caster().toPageException(t);;
 		if (t instanceof org.hibernate.HibernateException) {
 			org.hibernate.HibernateException he = (org.hibernate.HibernateException)t;
@@ -554,6 +555,7 @@ public class CommonUtil {
 			return (DataSource) m.invoke(pc, new Object[]{name});
 		}
 		catch (Throwable t) {
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 			throw caster().toPageException(t);
 		}
 	}
@@ -672,7 +674,9 @@ public class CommonUtil {
 			try {
 				os.close();
 			}
-			catch (Throwable t) {}
+			catch (Throwable t) {
+				lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+			}
 		}
 	}
 	
@@ -681,7 +685,9 @@ public class CommonUtil {
 			try {
 				w.close();
 			}
-			catch (Throwable t) {}
+			catch (Throwable t) {
+				lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+			}
 		}
 	}
 
@@ -690,7 +696,9 @@ public class CommonUtil {
 			try {
 				rs.close();
 			}
-			catch (Throwable t) {}
+			catch (Throwable t) {
+				lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+			}
 		}
 	}
 	
@@ -698,13 +706,17 @@ public class CommonUtil {
    	 try {
    		 if(is!=null)is.close();
    	 } 
-   	 catch (Throwable t) {}
+   	 catch (Throwable t) {
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+	}
     }
 	
 	public static void closeEL(Reader r) {
    	 try {
    		 if(r!=null)r.close();
    	 } 
-   	 catch (Throwable t) {}
+   	 catch (Throwable t) {
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+	}
     }
 }

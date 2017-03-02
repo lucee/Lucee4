@@ -29,6 +29,7 @@ import java.util.zip.ZipFile;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SizeOf;
 import lucee.runtime.type.Sizeable;
 
@@ -140,7 +141,9 @@ public final class RCL extends ClassLoader implements Sizeable,Closeable {
             try {
                 return defineClass(name,barr,0,barr.length);
             }
-            catch(Throwable t) {}
+            catch(Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
         }
         return null;
     }

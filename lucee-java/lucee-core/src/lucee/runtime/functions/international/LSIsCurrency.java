@@ -21,6 +21,7 @@
  */
 package lucee.runtime.functions.international;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.ext.function.Function;
 import lucee.runtime.i18n.LocaleFactory;
@@ -34,6 +35,7 @@ public final class LSIsCurrency implements Function {
 			LSParseCurrency.toDoubleValue(pc.getLocale(),string,true);
 			return true;
 		} catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return false;
 		}		
 	}
@@ -42,6 +44,7 @@ public final class LSIsCurrency implements Function {
 			LSParseCurrency.toDoubleValue(LocaleFactory.getLocale(strLocale),string,false);
 			return true;
 		} catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return false;
 		}
 	}

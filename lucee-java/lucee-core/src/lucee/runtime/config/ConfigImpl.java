@@ -1813,6 +1813,7 @@ public abstract class ConfigImpl implements Config {
 			return Md5.getDigestAsString(key+token);
 		} 
     	catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -3364,7 +3365,9 @@ public abstract class ConfigImpl implements Config {
 				it.next().close();
 			}
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 		loggers.clear();
 	}
 	

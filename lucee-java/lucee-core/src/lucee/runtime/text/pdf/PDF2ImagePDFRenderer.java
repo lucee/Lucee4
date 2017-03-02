@@ -30,6 +30,7 @@ import java.util.Set;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.exp.ExpressionException;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.img.Image;
@@ -139,7 +140,9 @@ public class PDF2ImagePDFRenderer extends PDF2Image {
 		try{
 		if(!file.delete())file.deleteOnExit();
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 	}
 
 	private void copy(byte[] input, File file) throws IOException {

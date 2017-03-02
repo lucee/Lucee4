@@ -59,6 +59,7 @@ public abstract class ConfigFactory {
 			}
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 		}
 		return false;
 	}
@@ -197,6 +198,7 @@ public abstract class ConfigFactory {
 			createFileFromResource(resource, file, null);
 		}
 		catch (Throwable e) {
+        	ExceptionUtil.rethrowIfNecessary(e);
 			SystemOut.printDate(ExceptionUtil.getStacktrace(e, true), SystemUtil.ERR);
 		}
 	}

@@ -37,6 +37,7 @@ import lucee.commons.io.SystemUtil;
 import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SizeOf;
 import lucee.commons.lang.SystemOut;
 import lucee.runtime.config.ConfigImpl;
@@ -215,7 +216,9 @@ public final class CFMLFactoryImpl extends CFMLFactory {
                     try {
                     	pc.getThread().setPriority(Thread.MIN_PRIORITY);
                     }
-                    catch(Throwable t) {}
+                    catch(Throwable t) {
+            			ExceptionUtil.rethrowIfNecessary(t);
+            		}
                 }
             }
         //}
@@ -242,7 +245,9 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 	        	strLocks=" open locks at this time ("+ListUtil.arrayToList(locks, ", ")+").";
 	        //LockManagerImpl.unlockAll(pc.getId());
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 		return strLocks;
 	}
 
@@ -258,6 +263,7 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 			return "path: "+base+" ("+current+")";
 		}
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return "(fail to retrieve path:"+t.getClass().getName()+":"+t.getMessage()+")";
 		}
 	}
@@ -281,6 +287,7 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 		}
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			return length;
 		}
 	    return length;

@@ -29,6 +29,7 @@ import java.util.List;
 import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.HTMLUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.SystemOut;
@@ -184,6 +185,7 @@ public final class WebCrawler {
                 		ci.start();
                     }
                     catch(Throwable t) {
+            			ExceptionUtil.rethrowIfNecessary(t);
                     	//print.printST(t);
                     }
                 }
@@ -269,6 +271,7 @@ public final class WebCrawler {
                     	}
                     }
                     catch(Throwable t) {
+						ExceptionUtil.rethrowIfNecessary(t);
                     }
                 }
             }

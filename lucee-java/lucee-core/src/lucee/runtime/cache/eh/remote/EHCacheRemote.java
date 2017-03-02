@@ -25,6 +25,7 @@ import java.util.List;
 import javax.xml.rpc.ServiceException;
 
 import lucee.commons.io.cache.CacheEntry;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.loader.engine.CFMLEngineFactory;
 import lucee.runtime.cache.CacheSupport;
 import lucee.runtime.cache.eh.remote.rest.RESTClient;
@@ -91,6 +92,7 @@ public class EHCacheRemote extends CacheSupport {
 			return soap.getKeysWithExpiryCheck(name);
 		} 
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -110,6 +112,7 @@ public class EHCacheRemote extends CacheSupport {
 			return soap.getQuiet(name, key);
 		} 
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -128,6 +131,7 @@ public class EHCacheRemote extends CacheSupport {
 			return soap.get(name, key);
 		} 
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -148,6 +152,7 @@ public class EHCacheRemote extends CacheSupport {
 			info.setEL(KeyConstants._name, conf.getName());
 		}
 		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 			//print.printST(t);
 		}
 		
@@ -182,6 +187,7 @@ public class EHCacheRemote extends CacheSupport {
 		
 			soap.put(name,el);
 		} catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 		

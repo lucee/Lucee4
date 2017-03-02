@@ -18,6 +18,7 @@
  **/
 package lucee.runtime.type.util;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.Component;
 import lucee.runtime.ComponentPro;
 import lucee.runtime.component.Member;
@@ -39,6 +40,7 @@ public class ComponentProUtil {
 			return (Property[]) getProperties.invoke(c, new Object[]{onlyPeristent,includeBaseProperties,preferBaseProperties,inheritedMappedSuperClassOnly});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -53,6 +55,7 @@ public class ComponentProUtil {
 			return (Component) getBaseComponent.invoke(c, new Object[]{});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -67,6 +70,7 @@ public class ComponentProUtil {
 			return Caster.toBooleanValue(isPersistent.invoke(c, new Object[]{}));
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -81,6 +85,7 @@ public class ComponentProUtil {
 			return (Key[]) keys.invoke(c, new Object[]{access});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -95,6 +100,7 @@ public class ComponentProUtil {
 			return (Member)getMember.invoke(c, new Object[]{access,key,dataMember,superAccess});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -109,6 +115,7 @@ public class ComponentProUtil {
 			return getMember.invoke(c, new Object[]{access,key,defaultValue});
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}
@@ -122,6 +129,7 @@ public class ComponentProUtil {
 			return toComponentPro((Component) getComponent.invoke(cfc, new Object[]{}));
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new RuntimeException(t);
 		}
 	}

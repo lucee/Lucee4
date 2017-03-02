@@ -20,6 +20,7 @@ package lucee.commons.io;
 
 import java.nio.charset.Charset;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.PageContextImpl;
@@ -57,6 +58,7 @@ public class CharsetUtil {
 			return Charset.forName(charset);
 		}
 		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}

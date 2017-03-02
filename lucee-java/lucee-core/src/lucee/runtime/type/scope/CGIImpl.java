@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.NullSupportHelper;
@@ -146,7 +147,10 @@ public final class CGIImpl extends StructSupport implements CGI,ScriptProtected 
 	    		if(alias!=null)aliases.put(alias, httpKey);
 	    	}
 		}
-		catch(Throwable t){t.printStackTrace();}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+			t.printStackTrace();
+		}
 		//}
 	}
 	
@@ -314,7 +318,9 @@ public final class CGIImpl extends StructSupport implements CGI,ScriptProtected 
             		return store(key,doScriptProtect(toString(ReqRspUtil.getQueryString(req))));
             }
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
         }
         return other(key,defaultValue);
 	}
@@ -333,7 +339,9 @@ public final class CGIImpl extends StructSupport implements CGI,ScriptProtected 
 			PageContext pc = ThreadLocalPageContext.get();
 			return pc.getBasePageSource().getResourceTranslated(pc).toString();
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 		return "";
 	}
 

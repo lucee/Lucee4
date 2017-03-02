@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.loader.util.Util;
 import lucee.runtime.text.xml.XMLUtil;
 
@@ -202,6 +203,7 @@ public class CacheFactory extends DefaultHandler {
 			return Double.parseDouble(str);
 		}
 		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -210,6 +212,7 @@ public class CacheFactory extends DefaultHandler {
 			return Integer.parseInt(str);
 		}
 		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}

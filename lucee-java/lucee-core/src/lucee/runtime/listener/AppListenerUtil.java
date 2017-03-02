@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.ClassException;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefBoolean;
 import lucee.runtime.Mapping;
@@ -187,6 +188,7 @@ public final class AppListenerUtil {
 		try {
 			return toDataSources(o);
 		} catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -268,6 +270,7 @@ public final class AppListenerUtil {
 		try {
 			return toMappings(cw, o,source);
 		} catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -349,6 +352,7 @@ public final class AppListenerUtil {
 		try {
 			return toMappings(cw,"custom", o,false,source);
 		} catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -362,6 +366,7 @@ public final class AppListenerUtil {
 		try {
 			return toMappings(cw,"component", o,true,source);
 		} catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}

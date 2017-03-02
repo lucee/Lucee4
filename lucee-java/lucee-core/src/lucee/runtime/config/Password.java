@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import lucee.commons.digest.Hash;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.crypt.BlowfishEasy;
 import lucee.runtime.exp.PageException;
@@ -200,6 +201,7 @@ public class Password {
 			}
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			// Optinal functionality, ignore failures
 			t.printStackTrace();
 		}

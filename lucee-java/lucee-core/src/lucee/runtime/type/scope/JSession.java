@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.listener.ApplicationContext;
@@ -83,6 +84,7 @@ public final class JSession extends ScopeSupport implements Session,HttpSessionB
 		    
 		}
 	    catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 	    	
 	    }
          
@@ -116,7 +118,9 @@ public final class JSession extends ScopeSupport implements Session,HttpSessionB
 	    		httpSession=null;
 	    		lastAccess=-1;
 	    	}
-	    	catch(Throwable t) {}
+	    	catch(Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
     	}
         super.release(pc);
     }

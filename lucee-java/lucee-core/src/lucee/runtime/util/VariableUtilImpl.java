@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import lucee.commons.lang.CFTypes;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.ExpressionException;
@@ -183,7 +184,9 @@ public final class VariableUtilImpl implements VariableUtil {
 				//if(rtn==null)rtn=((Map)coll).get(MapAsStruct.getCaseSensitiveKey((Map)coll, key.getString()));
 				if(rtn!=null) return rtn;
 			}
-			catch(Throwable t) {}
+			catch(Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 			return Reflector.getField(coll,key.getString(),defaultValue);
 			//return rtn;
 		} 
@@ -218,7 +221,9 @@ public final class VariableUtilImpl implements VariableUtil {
 				//if(rtn==null)rtn=((Map)coll).get(MapAsStruct.getCaseSensitiveKey((Map)coll, key));
 				if(rtn!=null) return rtn;
 			}
-			catch(Throwable t) {}
+			catch(Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 			return Reflector.getProperty(coll,key,defaultValue);
 			//return rtn;
 		} 
@@ -268,7 +273,9 @@ public final class VariableUtilImpl implements VariableUtil {
 					rtn=((Map)coll).get(MapAsStruct.getCaseSensitiveKey((Map)coll, key.getString()));
 				if(rtn!=null) return rtn;
 			}
-			catch(Throwable t) {}
+			catch(Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 			rtn = Reflector.getProperty(coll,key.getString(),null);
 			if(rtn!=null) return rtn;
 			
@@ -346,7 +353,9 @@ public final class VariableUtilImpl implements VariableUtil {
 				if(rtn!=null) return rtn;
 				
 			}
-			catch(Throwable t) {}
+			catch(Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 			rtn = Reflector.getProperty(coll,key,null);
 			if(rtn!=null) return rtn;
 			throw new ExpressionException("Key ["+key+"] doesn't exist in Map ("+Caster.toClassName(coll)+")","keys are ["+keyList(((Map)coll))+"]");
@@ -404,12 +413,6 @@ public final class VariableUtilImpl implements VariableUtil {
         }
 		// Map
 		else if(coll instanceof Map) {
-			/* no idea why this is here
-			try {
-				Reflector.setProperty(coll,key.getString(),value);
-				return value;
-			}
-			catch(Throwable t) {t.printStackTrace();}*/
 			((Map)coll).put(key.getString(),value);
 			return value;
 		} 
@@ -464,11 +467,6 @@ public final class VariableUtilImpl implements VariableUtil {
         }
 		// Map
 		else if(coll instanceof Map) {
-			/*try {
-				Reflector.setProperty(coll,key,value);
-				return value;
-			}
-			catch(Throwable t) {}*/
 			((Map)coll).put(key,value);
 			return value;
 		} 
@@ -527,7 +525,9 @@ public final class VariableUtilImpl implements VariableUtil {
 				Reflector.setProperty(coll,key,value);
 				return value;
 			}
-			catch(Throwable t) {}
+			catch(Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 			((Map)coll).put(key,value);
 			return value;
 		} 
@@ -579,7 +579,9 @@ public final class VariableUtilImpl implements VariableUtil {
 				Reflector.setProperty(coll,key.getString(),value);
 				return value;
 			}
-			catch(Throwable t) {}
+			catch(Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 			((Map)coll).put(key,value);
 			return value;
 		} 

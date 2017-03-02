@@ -59,6 +59,7 @@ public class ActionMonitorCollectorImpl implements ActionMonitorCollector {
 			try {
 				it.next().log(pc, type, label, executionTime, data);
 			} catch (Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				t.printStackTrace();
 			}
 		}
@@ -71,6 +72,7 @@ public class ActionMonitorCollectorImpl implements ActionMonitorCollector {
 			try {
 				it.next().log(config, type, label, executionTime, data);
 			} catch (Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				t.printStackTrace();
 			}
 		}

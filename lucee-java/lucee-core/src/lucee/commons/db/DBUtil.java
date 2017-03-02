@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.db.driver.ConnectionProxy;
 import lucee.runtime.db.driver.state.StateFactory;
 
@@ -58,35 +59,45 @@ public final class DBUtil {
 			
 			if(conn!=null)conn.setAutoCommit(b);
         } 
-        catch (Throwable e) {}
+        catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 	}
 
 	public static void setReadOnlyEL(Connection conn, boolean b) {
 		try {
 			if(conn!=null)conn.setReadOnly(b);
 		} 
-		catch (Throwable e) {}
+		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 	}
 
 	public static void commitEL(Connection conn) {
 		try {
 			if(conn!=null)conn.commit();
 		} 
-		catch (Throwable e) {}
+		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 	}
 
 	public static void setTransactionIsolationEL(Connection conn,int level) {
 		try {
 			if(conn!=null)conn.setTransactionIsolation(level);
 		} 
-		catch (Throwable e) {}
+		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 	}
 
 	public static void closeEL(Statement stat) {
 		if(stat!=null) {
             try {
                 stat.close();
-            } catch (Throwable t) {}
+            } catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
         }
 	}
 
@@ -94,7 +105,9 @@ public final class DBUtil {
 		if(rs!=null) {
             try {
                 rs.close();
-            } catch (Throwable t) {}
+            } catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
         }
 	}
 

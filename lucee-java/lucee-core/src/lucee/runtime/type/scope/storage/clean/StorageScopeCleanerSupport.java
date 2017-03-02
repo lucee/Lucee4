@@ -76,6 +76,7 @@ public abstract class StorageScopeCleanerSupport implements StorageScopeCleaner 
 	}
 	
 	public void error(Throwable t) {
+		ExceptionUtil.rethrowIfNecessary(t);
 		engine.getFactory().getScopeContext().error(t);
 		engine._getLog().error(application,ExceptionUtil.getStacktrace(t, true));
 	}

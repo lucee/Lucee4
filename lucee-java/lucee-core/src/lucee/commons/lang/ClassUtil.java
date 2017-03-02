@@ -263,6 +263,7 @@ public final class ClassUtil {
 			return clazz.newInstance();
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -354,7 +355,8 @@ public final class ClassUtil {
 			return c.newInstance(args);
 			
 		}
-		catch (Throwable t) {//print.printST(t);
+		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 		
@@ -592,7 +594,9 @@ public final class ClassUtil {
 			result = SystemUtil.fixWindowsPath(result);
 			return result;
 		}
-		catch (Throwable t) {}
+		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 
 		return defaultValue;
 	}
@@ -621,7 +625,9 @@ public final class ClassUtil {
 			if(loc!=null) return loc.toExternalForm();
 			
 		}
-		catch (Throwable t) {}
+		catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
+        }
 		return "";
 	}*/
 	
@@ -637,10 +643,11 @@ public final class ClassUtil {
 	public static String getSourcePathForClass(String className, String defaultValue) {
 
 		try {
-
 			return  getSourcePathForClass(ClassUtil.loadClass(className), defaultValue);
 		}
-		catch (Throwable t) {}
+		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 
 		return defaultValue;
 	}

@@ -163,6 +163,7 @@ public class HibernateORMSession implements ORMSession {
 			
 		}
 		catch(Throwable t) {
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 			throw CommonUtil.toPageException(t);
 		}
 		
@@ -205,6 +206,7 @@ public class HibernateORMSession implements ORMSession {
 					}
 				}
 				catch(Throwable t){
+					lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 					if(trans!=null)trans.rollback();
 					throw CommonUtil.toPageException(t);
 				}
@@ -221,6 +223,7 @@ public class HibernateORMSession implements ORMSession {
 			getSession(dsn).delete(HibernateCaster.getEntityName(cfc), cfc);
 		}
 		catch(Throwable t){
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 			throw CommonUtil.toPageException(t);
 		}
 	}
@@ -241,6 +244,7 @@ public class HibernateORMSession implements ORMSession {
 				session.saveOrUpdate(name, cfc);
 		}
 		catch(Throwable t){
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 			throw ExceptionUtil.createException(this,null,t);
 		}
 	}
@@ -360,7 +364,10 @@ public class HibernateORMSession implements ORMSession {
 				try{
 					return __executeQuery(pc, s, dsn, hql, CommonUtil.toArray((Argument)params), unique, queryOptions);
 				}
-				catch(Throwable t){t.printStackTrace();}
+				catch(Throwable t){
+					lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+					t.printStackTrace();
+				}
 			}
 			throw qe;
 		}
@@ -514,6 +521,7 @@ public class HibernateORMSession implements ORMSession {
 			throw CommonUtil.toPageException(e);
 		}
 		catch(Throwable t){
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 			throw CommonUtil.toPageException(t);
 		}
 	}
@@ -627,6 +635,7 @@ public class HibernateORMSession implements ORMSession {
 			obj=sess.get(name,oId);
 		}
 		catch(Throwable t){
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 			throw CommonUtil.toPageException(t);
 		}
 		
@@ -678,6 +687,7 @@ public class HibernateORMSession implements ORMSession {
 			}
 		 }
 		 catch(Throwable t){
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 			// trans.rollback();
 			throw CommonUtil.toPageException(t);
 		 }
@@ -791,6 +801,7 @@ public class HibernateORMSession implements ORMSession {
 			
 		}
 		catch(Throwable t){
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
 			throw CommonUtil.toPageException(t);
 		}
 		

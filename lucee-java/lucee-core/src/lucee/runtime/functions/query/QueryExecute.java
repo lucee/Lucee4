@@ -21,6 +21,7 @@
  */
 package lucee.runtime.functions.query;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.FunctionException;
 import lucee.runtime.exp.PageException;
@@ -57,6 +58,7 @@ public final class QueryExecute extends BIF {
 				qry.doAfterBody();
 			}
 			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
 				try {
 					qry.doCatch(t);
 				}

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.ConfigServer;
 import lucee.runtime.config.ConfigWeb;
@@ -80,6 +81,7 @@ public class ActionMonitorCollectorRefImpl implements ActionMonitorCollector {
 				getName=am.getClass().getMethod("getName", new Class[]{});
 			} 
 			catch(Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				t.printStackTrace();
 				return null;
 			}
@@ -89,6 +91,7 @@ public class ActionMonitorCollectorRefImpl implements ActionMonitorCollector {
 			return (String) getName.invoke(am, new Object[]{});
 		}
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			t.printStackTrace();
 		}
 		return null;
@@ -100,6 +103,7 @@ public class ActionMonitorCollectorRefImpl implements ActionMonitorCollector {
 				logpc=monitor.getClass().getMethod("log", new Class[]{PageContext.class,String.class,String.class,long.class,Object.class});
 			} 
 			catch (Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				t.printStackTrace();
 				return;
 			}
@@ -109,6 +113,7 @@ public class ActionMonitorCollectorRefImpl implements ActionMonitorCollector {
 			logpc.invoke(monitor, new Object[]{pc,type,label,executionTime,data});
 		}
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			t.printStackTrace();
 		}
 	}
@@ -119,6 +124,7 @@ public class ActionMonitorCollectorRefImpl implements ActionMonitorCollector {
 				logc=monitor.getClass().getMethod("log", new Class[]{ConfigWeb.class,String.class,String.class,long.class,Object.class});
 			} 
 			catch (Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				t.printStackTrace();
 				return;
 			}
@@ -128,6 +134,7 @@ public class ActionMonitorCollectorRefImpl implements ActionMonitorCollector {
 			logc.invoke(monitor, new Object[]{config,type,label,executionTime,data});
 		}
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			t.printStackTrace();
 		}
 	}
@@ -139,6 +146,7 @@ public class ActionMonitorCollectorRefImpl implements ActionMonitorCollector {
 				init=monitor.getClass().getMethod("init", new Class[]{ConfigServer.class,String.class,boolean.class});
 			} 
 			catch (Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				t.printStackTrace();
 				return null;
 			}
@@ -148,6 +156,7 @@ public class ActionMonitorCollectorRefImpl implements ActionMonitorCollector {
 			return init.invoke(monitor, new Object[]{cs,name,log});
 		}
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			t.printStackTrace();
 			return null;
 		}

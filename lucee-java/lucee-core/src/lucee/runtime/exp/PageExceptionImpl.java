@@ -32,6 +32,7 @@ import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.ClassUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.MappingUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Info;
@@ -289,6 +290,7 @@ public abstract class PageExceptionImpl extends PageException {
 				}	
 			} 
 			catch (Throwable th) {
+				ExceptionUtil.rethrowIfNecessary(th);
 				th.printStackTrace();
 			}
 			

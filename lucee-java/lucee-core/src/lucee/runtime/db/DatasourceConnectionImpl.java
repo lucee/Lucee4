@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
@@ -157,6 +158,7 @@ public final class DatasourceConnectionImpl implements DatasourceConnection,Task
 			try {
 				supportsGetGeneratedKeys=Caster.toBoolean(getConnection().getMetaData().supportsGetGeneratedKeys());
 			} catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
 				return false;
 			}
 		}

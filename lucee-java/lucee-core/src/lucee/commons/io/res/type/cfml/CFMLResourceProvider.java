@@ -27,6 +27,7 @@ import lucee.commons.io.res.ResourceProviderPro;
 import lucee.commons.io.res.Resources;
 import lucee.commons.io.res.util.ResourceLockImpl;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
@@ -254,7 +255,9 @@ public class CFMLResourceProvider implements ResourceProviderPro {
 			String str=callStringRTE(null,component,"getSeparator",ZERO_ARGS);
 			if(StringUtil.length(str,true)==1) return str.charAt(0);
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 		return '/';
 	}
 

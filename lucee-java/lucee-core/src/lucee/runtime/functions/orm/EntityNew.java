@@ -22,6 +22,7 @@ package lucee.runtime.functions.orm;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.Component;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageException;
@@ -64,7 +65,9 @@ public class EntityNew {
 				try {
 					cfc.call(pc, "set"+e.getKey().getString(), new Object[]{e.getValue()});
 				}
-				catch(Throwable t){}
+				catch(Throwable t){
+					ExceptionUtil.rethrowIfNecessary(t);
+				}
 			}
 			else {
 				cfc.call(pc, "set"+e.getKey().getString(), new Object[]{e.getValue()});

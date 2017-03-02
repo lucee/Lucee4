@@ -25,6 +25,7 @@ import java.util.Date;
 
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 
 import org.apache.lucene.document.DateField;
@@ -238,7 +239,9 @@ public final class PDFDocument
                 document.add( FieldUtil.Text( "Trapped", info.getTrapped() ) );
             }
         }
-        catch(Throwable t) {}
+        catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
         finally {
             if( pdfDocument != null ) {
                 try {

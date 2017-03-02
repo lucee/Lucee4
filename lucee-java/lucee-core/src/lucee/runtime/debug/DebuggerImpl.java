@@ -31,6 +31,7 @@ import java.util.Map;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.util.ResourceSnippet;
 import lucee.commons.io.res.util.ResourceSnippetsMap;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
 import lucee.runtime.Page;
@@ -734,7 +735,9 @@ public final class DebuggerImpl implements DebuggerPro {
 		try {
 			exceptions.add(((PageExceptionImpl)pe).getCatchBlock(config));
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 	}
 	
 	@Override
@@ -758,7 +761,9 @@ public final class DebuggerImpl implements DebuggerPro {
 			else 
 				implicitAccesses.put(key,new ImplicitAccessImpl(scope,name,tl.template,tl.line));
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 	}
 
 	@Override

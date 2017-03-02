@@ -113,7 +113,9 @@ public class HBMCreator {
 				Component base = data.getEntityByCFCName(ext, false);
 				ext = HibernateCaster.getEntityName(base);
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+				lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+			}
 			
 			
 			String discriminatorValue = toString(cfc,null,meta,"discriminatorValue",data);
@@ -754,7 +756,9 @@ public class HBMCreator {
 						}
 					}
 				}
-				catch(Throwable t){}
+				catch(Throwable t){
+					lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+				}
 			}
 			return "string";
 		}

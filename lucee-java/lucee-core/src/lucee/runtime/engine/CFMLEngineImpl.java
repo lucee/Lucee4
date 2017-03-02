@@ -53,6 +53,7 @@ import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.ResourcesImpl;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.io.res.util.ResourceUtilImpl;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.Pair;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.SystemOut;
@@ -303,7 +304,10 @@ public final class CFMLEngineImpl implements CFMLEngine {
 					CompressUtil.compress(CompressUtil.FORMAT_ZIP, railoRoot, p.getRealResource("railo-web-context-old.zip"), false, -1);
 					ResourceUtil.removeEL(railoRoot, true);
 				}
-				catch(Throwable t){t.printStackTrace();}
+				catch(Throwable t){
+	            	ExceptionUtil.rethrowIfNecessary(t);
+	            	t.printStackTrace();
+	            }
         	}
         	else {
             	try {
@@ -564,10 +568,20 @@ public final class CFMLEngineImpl implements CFMLEngine {
 		            if(configId!=null && !configId.equals(cfmlFactory.getConfigWebImpl().getId())) continue;
 		            	
 		            // scopes
-		            try{cfmlFactory.getScopeContext().clear();}catch(Throwable t){t.printStackTrace();}
+		            try{
+		            	cfmlFactory.getScopeContext().clear();
+		            }catch(Throwable t){
+		            	ExceptionUtil.rethrowIfNecessary(t);
+		            	t.printStackTrace();
+		            }
 		            
 		            // PageContext
-		            try{cfmlFactory.resetPageContext();}catch(Throwable t){t.printStackTrace();}
+		            try{
+		            	cfmlFactory.resetPageContext();
+		            }catch(Throwable t){
+		            	ExceptionUtil.rethrowIfNecessary(t);
+		            	t.printStackTrace();
+		            }
 		            
 		            // Query Cache
 		            try{ 
@@ -578,13 +592,17 @@ public final class CFMLEngineImpl implements CFMLEngine {
 		            		ConfigWebUtil.getCacheHandlerFactories(pc.getConfig()).include.clear(pc);
 		            	}
 		            	//cfmlFactory.getDefaultQueryCache().clear(null);
-		            }catch(Throwable t){t.printStackTrace();}
+		            }catch(Throwable t){
+		            	ExceptionUtil.rethrowIfNecessary(t);
+		            	t.printStackTrace();
+		            }
 		            
 		            // Gateway
-		            try{ cfmlFactory.getConfigWebImpl().getGatewayEngine().reset();}catch(Throwable t){t.printStackTrace();}
+		            try{ cfmlFactory.getConfigWebImpl().getGatewayEngine().reset();}catch(Throwable t){ExceptionUtil.rethrowIfNecessary(t);t.printStackTrace();}
 		            
 	        	}
 	        	catch(Throwable t){
+	            	ExceptionUtil.rethrowIfNecessary(t);
 	        		t.printStackTrace();
 	        	}
 	        }
@@ -690,7 +708,9 @@ public final class CFMLEngineImpl implements CFMLEngine {
 				return false;
 			}
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 		return controlerState.toBooleanValue();
 	}
 

@@ -47,6 +47,7 @@ public class Closer extends Thread {
 			reg.unbind(name);
 			UnicastRemoteObject.unexportObject(invoker,true);
 		} catch (Throwable t) {
+			if(t instanceof ThreadDeath) throw (ThreadDeath)t;
 			t.printStackTrace();
 		}
 		
@@ -55,7 +56,10 @@ public class Closer extends Thread {
 	private void sleepEL(long millis) {
 		try {
 			sleep(millis);
-		} catch (Throwable t) {t.printStackTrace();}
+		} catch (Throwable t) {
+			if(t instanceof ThreadDeath) throw (ThreadDeath)t;
+			t.printStackTrace();
+		}
 	}
 
 }

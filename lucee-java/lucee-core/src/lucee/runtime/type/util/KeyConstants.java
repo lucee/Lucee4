@@ -22,6 +22,7 @@ import java.lang.reflect.Field;
 
 import lucee.commons.collection.MapPro;
 import lucee.commons.collection.concurrent.ConcurrentHashMapPro;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.type.Collection.Key;
 import lucee.runtime.type.KeyImpl;
 
@@ -918,6 +919,7 @@ public class KeyConstants {
 					_____keys.put(fields[i].getName().substring(1),(Key)fields[i].get(null));
 				}
 				catch (Throwable t) {
+					ExceptionUtil.rethrowIfNecessary(t);
 					t.printStackTrace();
 				}
 			}

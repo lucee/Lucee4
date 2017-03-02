@@ -43,6 +43,7 @@ import javax.xml.soap.SOAPMessage;
 import lucee.commons.io.IOUtil;
 import lucee.commons.lang.ClassException;
 import lucee.commons.lang.ClassUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.Component;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.exp.PageServletException;
@@ -142,6 +143,7 @@ public final class RPCServer{
 			}
 		} 
 		catch (Throwable e) {
+			ExceptionUtil.rethrowIfNecessary(e);
 			if(e instanceof InvocationTargetException)
 				e= ((InvocationTargetException)e).getTargetException();
 			if(e instanceof PageException)
@@ -353,6 +355,7 @@ public final class RPCServer{
 							getMessage().setMessageContext(msgContext);
 				}
 			} catch (Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				if(t instanceof InvocationTargetException)
 					t=((InvocationTargetException)t).getTargetException();
 				// Exception

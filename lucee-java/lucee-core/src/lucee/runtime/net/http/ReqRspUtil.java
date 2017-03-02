@@ -167,6 +167,7 @@ public final class ReqRspUtil {
 			return new Cookie(name,value);
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -191,6 +192,7 @@ public final class ReqRspUtil {
 			return request.getHeader(name);
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -355,6 +357,7 @@ public final class ReqRspUtil {
 			return isThis(req, HTTPUtil.toURL(url,true));
 		} 
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return false;
 		}
 	}
@@ -384,7 +387,9 @@ public final class ReqRspUtil {
 			if(reqAddr.getHostName().equalsIgnoreCase(urlAddr.getHostName())) return true;
 			if(reqAddr.getHostAddress().equalsIgnoreCase(urlAddr.getHostAddress())) return true;
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 		return false;
 	}
 	
@@ -604,6 +609,7 @@ public final class ReqRspUtil {
 			return rsp.encodeRedirectURL(url);
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			return url;
 		}
 	}

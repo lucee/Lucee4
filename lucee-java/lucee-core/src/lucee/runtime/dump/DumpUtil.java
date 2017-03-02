@@ -38,6 +38,7 @@ import javax.servlet.http.HttpSession;
 
 import lucee.commons.date.TimeZoneUtil;
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.IDGenerator;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
@@ -130,7 +131,9 @@ public class DumpUtil {
 					table.appendRow(1,new SimpleDumpData("raw"),new SimpleDumpData(str));
 					return table;
 				}
-				catch(Throwable t) {}
+				catch(Throwable t) {
+	            	ExceptionUtil.rethrowIfNecessary(t);
+	            }
 			}
 			DumpTable table = new DumpTable("string","#ff6600","#ffcc99","#000000");
 			table.appendRow(1,new SimpleDumpData("string"),new SimpleDumpData(str));
@@ -413,18 +416,15 @@ public class DumpUtil {
 						value=null;
 						try {
 							value=method.invoke(o, new Object[0]);
-							
 							if(exName==null && value instanceof String && ((String)value).length()<20) {
 								exName=propName;
 								exValue=value.toString();
 							}
-							
 						}
-						catch (Throwable t) {value="not able to retrieve the data:"+t.getMessage();}
-						
-						
-						
-						
+						catch (Throwable t) {
+			            	ExceptionUtil.rethrowIfNecessary(t);
+			            	value="not able to retrieve the data:"+t.getMessage();
+			            }
 						table.appendRow(0,
 								new SimpleDumpData(propName),
 								toDumpData(value, pageContext, maxlevel, props)

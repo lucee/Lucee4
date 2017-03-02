@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.cache.CacheEntry;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.cache.CacheSupport;
 import lucee.runtime.config.Config;
 import lucee.runtime.op.Caster;
@@ -161,6 +162,7 @@ public class RamCache extends CacheSupport {
 					_run();
 				}
 				catch(Throwable t){
+	            	ExceptionUtil.rethrowIfNecessary(t);
 					t.printStackTrace();
 				}
 				SystemUtil.sleep(ramCache.controlInterval);

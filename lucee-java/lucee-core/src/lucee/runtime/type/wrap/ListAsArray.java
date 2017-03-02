@@ -27,6 +27,7 @@ import java.util.ListIterator;
 import java.util.Map.Entry;
 
 import lucee.commons.lang.CFTypes;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.converter.LazyConverter;
 import lucee.runtime.dump.DumpData;
@@ -94,6 +95,7 @@ public class ListAsArray implements Array,List,Sizeable {
 			return rtn;
 		}
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -106,6 +108,7 @@ public class ListAsArray implements Array,List,Sizeable {
 			return rtn;
 		}
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new ExpressionException("Element at position ["+key+"] does not exist in list",t.getMessage());
 		}
 	}
@@ -120,6 +123,7 @@ public class ListAsArray implements Array,List,Sizeable {
 		list.add(key-1, value);
 		}
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new ExpressionException("can't insert value to array at position "+key+", array goes from 1 to "+size());
 		}
 		return true;
@@ -156,6 +160,7 @@ public class ListAsArray implements Array,List,Sizeable {
 		return list.remove(key-1);
 		}
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new ExpressionException("can not remove Element at position ["+key+"]",t.getMessage());
 		}
 	}
@@ -180,6 +185,7 @@ public class ListAsArray implements Array,List,Sizeable {
 			list.set(key-1, value);
 			}
 			catch(Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				throw new ExpressionException("can not set Element at position ["+key+"]",t.getMessage());
 			}
 			
@@ -195,7 +201,9 @@ public class ListAsArray implements Array,List,Sizeable {
 	public Object setEL(int key, Object value) {
 		try {
 			return setE(key, value);
-		} catch (Throwable t) {}
+		} catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 		return value;
 	}
 

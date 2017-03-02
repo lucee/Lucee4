@@ -128,7 +128,8 @@ public class Util {
            try {
              if(is!=null)is.close();
          } 
-         catch (Throwable e) {}
+         catch (Throwable e) {
+				if(e instanceof ThreadDeath) throw (ThreadDeath)e;}
        }
 
       /**
@@ -139,7 +140,8 @@ public class Util {
             try {
               if(r!=null)r.close();
           } 
-          catch (Throwable e) {}
+          catch (Throwable e) {
+				if(e instanceof ThreadDeath) throw (ThreadDeath)e;}
         }
 
        /**
@@ -150,7 +152,8 @@ public class Util {
            try {
                if(w!=null)w.close();
            } 
-           catch (Throwable e) {}
+           catch (Throwable t) {
+				if(t instanceof ThreadDeath) throw (ThreadDeath)t;}
          }
 
      
@@ -162,7 +165,8 @@ public class Util {
            try {
                if(os!=null)os.close();
          } 
-         catch (Throwable e) {}
+         catch (Throwable t) {
+				if(t instanceof ThreadDeath) throw (ThreadDeath)t;}
        }
      
     /**

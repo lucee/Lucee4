@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 import javax.servlet.jsp.tagext.BodyContent;
 
 import lucee.commons.lang.CFTypes;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SizeOf;
 import lucee.runtime.Component;
 import lucee.runtime.ComponentImpl;
@@ -329,6 +330,7 @@ public class UDFImpl extends MemberSupport implements UDFPlus,Sizeable,Externali
 				if(ownerComponent!=null)pci.setActiveUDF(parent);
 			}
 	        catch(Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 	        	if(ownerComponent!=null)pci.setActiveUDF(parent);
 	        	if(!getOutput()) {
 	        		if(bufferOutput)BodyContentUtil.flushAndPop(pc,bc);

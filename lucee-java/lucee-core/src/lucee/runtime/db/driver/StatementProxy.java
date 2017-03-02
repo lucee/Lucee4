@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.exp.PageRuntimeException;
 import lucee.runtime.op.Caster;
@@ -305,6 +306,7 @@ public class StatementProxy implements StatementPro {
 			stat.getClass().getMethod("closeOnCompletion", new Class[0]).invoke(stat, new Object[0]);
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			if(t instanceof InvocationTargetException && ((InvocationTargetException)t).getTargetException() instanceof SQLException)
 				throw (SQLException)((InvocationTargetException)t).getTargetException();
 			throw new PageRuntimeException(Caster.toPageException(t));
@@ -317,6 +319,7 @@ public class StatementProxy implements StatementPro {
 			return Caster.toBooleanValue(stat.getClass().getMethod("isCloseOnCompletion", new Class[0]).invoke(stat, new Object[0]));
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			if(t instanceof InvocationTargetException && ((InvocationTargetException)t).getTargetException() instanceof SQLException)
 				throw (SQLException)((InvocationTargetException)t).getTargetException();
 			throw new PageRuntimeException(Caster.toPageException(t));

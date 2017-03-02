@@ -132,6 +132,7 @@ public final class PhysicalClassLoader extends ExtendableClassLoader implements 
             	c =parent.loadClass(name);
             } 
             catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
             	c = findClass(name);
             }
         }
@@ -205,6 +206,7 @@ public final class PhysicalClassLoader extends ExtendableClassLoader implements 
     		return defineClass(name,barr,start,barr.length-start);
 		} 
         catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			SystemUtil.sleep(1);
 			return defineClass(name,barr,start,barr.length-start);
 		}

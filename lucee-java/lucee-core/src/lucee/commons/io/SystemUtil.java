@@ -27,6 +27,7 @@ import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.MemoryType;
 import java.lang.management.MemoryUsage;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -51,6 +52,7 @@ import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.ResourcesImpl;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.commons.lang.ClassUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.loader.TP;
 import lucee.loader.engine.CFMLEngineFactory;
@@ -737,6 +739,7 @@ public final class SystemUtil {
 		    return Caster.toIntValue(res,0);
 		}
 		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return 0;
 		}
 	    
@@ -899,7 +902,9 @@ public final class SystemUtil {
 			}
 			
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 		return null;
 	}
 	public static long microTime() {
@@ -992,7 +997,10 @@ public final class SystemUtil {
 					Field f = cVersion.getField("VERSION");
 					loaderVersion=f.getDouble(null);
 				} 
-				catch (Throwable t) {t.printStackTrace();}
+				catch (Throwable t) {
+	            	ExceptionUtil.rethrowIfNecessary(t);
+	            	t.printStackTrace();
+	            }
 			}
 		}
 		return loaderVersion;
@@ -1010,7 +1018,9 @@ public final class SystemUtil {
 				}
 				macAddress= sb.toString();
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
 			
 		}
 		return macAddress;
@@ -1019,14 +1029,6 @@ public final class SystemUtil {
 	@Deprecated
 	public static void stop(Thread thread,Log log) {
 		new StopThread(thread,new StopException(thread),null).start();
-		/*if(thread.isAlive()){
-			try{
-				thread.stop(new StopException(thread));
-			}
-			catch(UnsupportedOperationException uoe){// Java 8 does not support Thread.stop(Throwable)
-				thread.stop();
-			}
-		}*/
 	}
 
 	public static void stop(PageContext pc,Log log) {
@@ -1065,40 +1067,53 @@ class StopThread extends Thread {
 			pci.stop(t);
 		}
 		int count=0;
-		if(thread.isAlive()) {
-			do{
+		if(thread!=null && thread.isAlive()) {
+			////do{
 				try{
 					if(count>0 && log!=null) {
 						LogUtil.log(log, Log.LEVEL_ERROR, "", "could not stop the thread on the "+count+" approach", thread.getStackTrace());
 					}
-					if(count++>10) {
+					if(count++>4) {
 						if(log!=null)LogUtil.log(log, Log.LEVEL_ERROR, "", "could not terminate the thread", thread.getStackTrace());
 						aprint.e(thread.getStackTrace());
-						break; // should never happen
+						////break; // should never happen
 					}
 					try{
 						thread.stop(t);
 					}
-					catch(UnsupportedOperationException uoe){
+					catch(UnsupportedOperationException uoe) {
 						LogUtil.log(log, Log.LEVEL_INFO, "", "Thread.stop(Throwable) is not supported by this JVM and failed with UnsupportedOperationException", thread.getStackTrace());
 						try {
 							Method m = thread.getClass().getMethod("stop0", new Class[]{Object.class});
 							m.setAccessible(true); // allow to access private method
 							m.invoke(thread, new Object[]{t});
 						}
-						catch (Throwable t) {
-							//LogUtil.log(log, Log.LEVEL_ERROR, "", t);
-							thread.stop();
+						catch (Exception e) {
+							if(
+									e instanceof IllegalAccessException || 
+									e instanceof IllegalArgumentException || 
+									e instanceof InvocationTargetException ||
+									e instanceof NoSuchMethodException ||
+									e instanceof SecurityException) {
+								thread.stop();
+							}
+							else throw e;
 						}
 					}
 				}
 				// catch any exception
-				catch(Throwable t){
-					LogUtil.log(log, Log.LEVEL_ERROR, "", t);
+				catch(Exception e){
+					LogUtil.log(log, Log.LEVEL_ERROR, "", e);
 				}
-				SystemUtil.sleep(1000);
-			}
-			while(thread.isAlive() && (pc==null || ((PageContextImpl)pc).isInitialized()));
+				
+				/*if(!(thread.isAlive() && (pc==null || ((PageContextImpl)pc).isInitialized()))) break;
+				print.e("sleep-10:"+thread.isAlive());
+				SystemUtil.sleep(10);
+				
+				if(!(thread.isAlive() && (pc==null || ((PageContextImpl)pc).isInitialized()))) break;
+				print.e("sleep-100");
+				SystemUtil.sleep(100);*/
+			////}while(thread.isAlive() && (pc==null || ((PageContextImpl)pc).isInitialized()));
 		}
 
 	}

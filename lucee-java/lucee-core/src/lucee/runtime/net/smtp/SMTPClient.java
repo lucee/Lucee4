@@ -785,7 +785,9 @@ public final class SMTPClient implements Serializable  {
                 		try{
                 			if(sender.isAlive())sender.stop();
                 		}
-                		catch(Throwable t2){}
+                		catch(Throwable t2){
+                			ExceptionUtil.rethrowIfNecessary(t2);
+                		}
                 		
                 		// after thread is stopped check sent flag again
                 		if(!sender.isSent()){

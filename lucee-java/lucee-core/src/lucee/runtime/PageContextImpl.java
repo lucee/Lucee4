@@ -60,6 +60,7 @@ import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceClassLoader;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.PhysicalClassLoader;
 import lucee.commons.lang.SizeOf;
 import lucee.commons.lang.StringUtil;
@@ -594,6 +595,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 				ormSession.closeAll(this);
 			} 
         	catch (Throwable t) {
+    			ExceptionUtil.rethrowIfNecessary(t);
         		//print.printST(t);
         	}
         	ormSession=null;
@@ -1874,6 +1876,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 					doInclude(ep.getTemplate());
 					return;
 				} catch (Throwable t) {
+					ExceptionUtil.rethrowIfNecessary(t);
 					if(Abort.isSilentAbort(t)) return;
 					pe=Caster.toPageException(t);
 				}
@@ -1949,11 +1952,13 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 
 	@Override
 	public void handlePageException(Exception e) {
-		handlePageException(Caster.toPageException(e));		
+		// DO NOT rethrow ThreadDeath
+        handlePageException(Caster.toPageException(e));		
 	}
 
 	@Override
 	public void handlePageException(Throwable t) {
+		// DO NOT rethrow ThreadDeath
         handlePageException(Caster.toPageException(t));
 	}
 
@@ -2279,15 +2284,15 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	    		if(fdEnabled){
 	        		FDSignal.signal(pe, false);
 	        	}
-	    		listener.onError(this,pe);	
+		    	listener.onError(this,pe);
 	    	}
 	    	else log(false);
-
-	    	if(throwExcpetion) throw pe;
+	    	if(throwExcpetion) {
+	    		ExceptionUtil.rethrowIfNecessary(t);
+	    		throw pe;
+	    	}
 	    }
 	    finally {
-	    	
-	    	
             if(enablecfoutputonly>0){
             	setCFOutputOnly((short)0);
             }
@@ -2311,7 +2316,9 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 	            	try {
 	            		monitors[i].log(this,error);
 	        		} 
-	        		catch (Throwable e) {}
+	        		catch (Throwable e) {
+	        			ExceptionUtil.rethrowIfNecessary(e);
+	        		}
 	            }
             }
 		}
@@ -2690,6 +2697,7 @@ public final class PageContextImpl extends PageContext implements Sizeable {
 
     @Override
     public PageException setCatch(Throwable t) {
+		ExceptionUtil.rethrowIfNecessary(t);
     	if(t==null) {
     		exception=null;
     		undefinedScope().removeEL(KeyConstants._cfcatch);

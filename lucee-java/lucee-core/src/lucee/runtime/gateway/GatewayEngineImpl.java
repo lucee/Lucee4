@@ -30,6 +30,7 @@ import lucee.commons.io.DevNullOutputStream;
 import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.lang.ClassException;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.Md5;
 import lucee.commons.lang.Pair;
 import lucee.loader.util.Util;
@@ -119,7 +120,9 @@ public class GatewayEngineImpl implements GatewayEnginePro {
 			try{
 				if(g.getState()==GatewayPro.RUNNING) g.doStop();
 			}
-			catch(Throwable t){}
+			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
+			}
 		}
 	}
 

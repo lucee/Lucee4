@@ -346,7 +346,9 @@ public class ORMUtil {
 				if(ds!=null) return ds;
 			}
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+		}
 		return getDefaultDataSource(pc, defaultValue);
 	}
 	

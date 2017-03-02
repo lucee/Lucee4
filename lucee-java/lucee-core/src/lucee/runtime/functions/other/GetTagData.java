@@ -24,6 +24,7 @@ package lucee.runtime.functions.other;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
 import lucee.runtime.ComponentSpecificAccess;
@@ -72,7 +73,9 @@ public final class GetTagData implements Function {
 		try{
 			clazz=tag.getClazz();
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 		
 		if(clazz==CFTagCore.class){
 			PageContextImpl pci=(PageContextImpl) pc;

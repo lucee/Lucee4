@@ -41,6 +41,7 @@ import javax.servlet.http.HttpSession;
 import lucee.commons.collection.MapFactory;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.Pair;
 import lucee.runtime.config.Config;
 import lucee.runtime.exp.PageException;
@@ -723,7 +724,9 @@ public final class HttpServletRequestDummy implements HttpServletRequest,Seriali
 		try{
 			return req.getSession();
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 		return null;
 	}
 	public void setAttributes(Struct attributes) {

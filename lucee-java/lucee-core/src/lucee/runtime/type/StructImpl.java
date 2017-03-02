@@ -28,6 +28,7 @@ import lucee.commons.collection.MapPro;
 import lucee.commons.collection.MapProWrapper;
 import lucee.commons.collection.SyncMap;
 import lucee.commons.collection.WeakHashMapPro;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SerializableObject;
 import lucee.runtime.config.NullSupportHelper;
 import lucee.runtime.exp.ExpressionException;
@@ -142,6 +143,7 @@ public class StructImpl extends StructSupport {
 			return map.keySet().toArray(new Key[map.size()]);
 		}
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			MapPro<Key, Object> old = map;
 			try{	
 				map = new lucee.commons.collection.SyncMap(map);

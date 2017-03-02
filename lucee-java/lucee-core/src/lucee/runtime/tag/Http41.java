@@ -42,6 +42,7 @@ import lucee.commons.io.IOUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.mimetype.ContentType;
 import lucee.commons.net.HTTPUtil;
@@ -999,6 +1000,7 @@ public final class Http41 extends BodyTagImpl implements Http {
 			}
 			
 			catch(Throwable t){
+				ExceptionUtil.rethrowIfNecessary(t);
 				if(!throwonerror){
 					if(t instanceof SocketTimeoutException)setRequestTimeout(cfhttp);
 					else setUnknownHost(cfhttp, t);
@@ -1510,6 +1512,7 @@ class Executor41 extends Thread {
 			done=true;
 		} 
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			this.t=t;
 		}
 		finally {

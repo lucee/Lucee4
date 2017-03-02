@@ -20,6 +20,7 @@ package lucee.runtime.type.scope.storage;
 
 import java.io.Serializable;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.CFMLFactoryImpl;
 import lucee.runtime.exp.ExceptionHandler;
 import lucee.runtime.listener.AppListenerSupport;
@@ -39,6 +40,7 @@ public class SessionEndListener implements StorageScopeListener,Serializable {
 			listener.onSessionEnd(factory, appName, cfid);
 		} 
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			ExceptionHandler.log(factory.getConfig(),Caster.toPageException(t));
 		}
 	}
@@ -55,6 +57,7 @@ public class SessionEndListener implements StorageScopeListener,Serializable {
 			return als.hasOnSessionEnd(appName);
 		} 
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			ExceptionHandler.log(factory.getConfig(),Caster.toPageException(t));
 			return false;
 		}

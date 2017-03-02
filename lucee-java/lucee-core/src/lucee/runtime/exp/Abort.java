@@ -18,6 +18,8 @@
  **/
 package lucee.runtime.exp;
 
+import lucee.commons.lang.ExceptionUtil;
+
 
 /**
  * This Exception will be Throwed, when page Excecution will be aborted (tag abort).
@@ -48,6 +50,7 @@ public class Abort extends AbortException {
     }
 	
 	public static boolean isSilentAbort(Throwable t){
+		ExceptionUtil.rethrowIfNecessary(t);
 		if(t instanceof  PageExceptionBox) {
 			return isSilentAbort(((PageExceptionBox)t).getPageException());
 		}
@@ -55,6 +58,7 @@ public class Abort extends AbortException {
 	}
 	
 	public static boolean isAbort(Throwable t) {
+		ExceptionUtil.rethrowIfNecessary(t);
 		if(t instanceof Abort) return true;
 		if(t instanceof  PageExceptionBox) {
 			return (((PageExceptionBox)t).getPageException() instanceof Abort);
@@ -63,6 +67,7 @@ public class Abort extends AbortException {
 	}
 
 	public static boolean isAbort(Throwable t, int scope) {
+		ExceptionUtil.rethrowIfNecessary(t);
 		if(t instanceof  PageExceptionBox) {
 			return isAbort(((PageExceptionBox)t).getPageException(),scope);
 		}

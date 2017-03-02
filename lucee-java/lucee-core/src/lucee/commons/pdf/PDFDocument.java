@@ -36,6 +36,7 @@ import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.ContentType;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.HTMLEntities;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.net.HTTPUtil;
@@ -341,7 +342,9 @@ public final class PDFDocument {
     		URL base = getBase(pc);
     		try {
     			body=beautifyHTML(new InputSource(new StringReader(body)),base);
-			}catch (Throwable t) {}
+			}catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
 			
     		pd4ml.render(body, os,base);
 			
@@ -373,7 +376,9 @@ public final class PDFDocument {
     			//URL base = localUrl?new URL("file://"+srcfile):getBase();
     			render(pd4ml, is,os,base);
 			} 
-    		catch (Throwable t) {}
+    		catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
     		finally {
     			IOUtil.closeEL(is);
     		}
@@ -456,7 +461,9 @@ public final class PDFDocument {
 					InputSource input = new InputSource(IOUtil.getReader(is,CharsetUtil.toCharset(strCharset)));
 					body=beautifyHTML(input,base);
 				} 
-				catch (Throwable t) {}
+				catch (Throwable t) {
+	            	ExceptionUtil.rethrowIfNecessary(t);
+	            }
 				//else if(body==null)body =IOUtil.toString(is,strCharset); 
 				pd4ml.render(body, os,base);
 			}

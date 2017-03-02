@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SizeOf;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.NullSupportHelper;
@@ -620,6 +621,7 @@ public class QueryColumnImpl implements QueryColumnPro,Sizeable,Objects {
 			try {
 				return mi.invoke(this);
 			} catch (Throwable t) {
+				ExceptionUtil.rethrowIfNecessary(t);
 				try {
 					return pc.getFunction(QueryUtil.getValue(this,query.getCurrentrow(pc.getId())), methodName, arguments);
 				} catch (PageException pe) {

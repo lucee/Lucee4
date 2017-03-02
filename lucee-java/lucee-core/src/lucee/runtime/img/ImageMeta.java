@@ -22,6 +22,7 @@ package lucee.runtime.img;
 import java.io.PrintWriter;
 
 import lucee.commons.io.res.Resource;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SystemOut;
 import lucee.runtime.engine.ThreadLocalPageContext;
 import lucee.runtime.type.Struct;
@@ -41,13 +42,16 @@ public class ImageMeta {
 			ImageMetaDrew.test();
 		}
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			PrintWriter pw = ThreadLocalPageContext.getConfig().getErrWriter();
 			SystemOut.printDate(pw, "cannot load addional pic info, library metadata-extractor.jar is missed"); 
 		}
 		try{
 			ImageMetaDrew.addInfo(format, res, info);
 		}
-		catch(Throwable t) {}
+		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 	}
 
 	

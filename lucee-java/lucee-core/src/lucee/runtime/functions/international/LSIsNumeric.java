@@ -21,6 +21,7 @@
  */
 package lucee.runtime.functions.international;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.ext.function.Function;
 
@@ -37,6 +38,7 @@ public final class LSIsNumeric implements Function {
 			LSParseNumber.call(pc,string,strLocale);
 			return true;
 		} catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			return false;
 		}
 	}

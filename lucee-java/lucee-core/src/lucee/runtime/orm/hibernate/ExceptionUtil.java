@@ -111,12 +111,14 @@ public class ExceptionUtil {
 	}
 	
 	private static StackTraceElement[] getStackTraceElements(Throwable t) {
+		lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
     	StackTraceElement[] st=getStackTraceElements(t,true);
     	if(st==null) st= getStackTraceElements(t,false);
     	return st;
     }
     
     private static StackTraceElement[] getStackTraceElements(Throwable t, boolean onlyWithCML) {
+		lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
     	StackTraceElement[] st;
     	Throwable cause=t.getCause();
     	if(cause!=null){
@@ -147,6 +149,8 @@ public class ExceptionUtil {
 			}
 			setAdditional.invoke(pe, new Object[]{name,value});
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			lucee.commons.lang.ExceptionUtil.rethrowIfNecessary(t);
+		}
 	}
 }

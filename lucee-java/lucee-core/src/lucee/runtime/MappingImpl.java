@@ -27,6 +27,7 @@ import javax.servlet.ServletContext;
 import lucee.commons.io.FileUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.ArchiveClassLoader;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.MappingUtil;
 import lucee.commons.lang.PCLCollection;
 import lucee.commons.lang.StringUtil;
@@ -149,6 +150,7 @@ public final class MappingImpl implements Mapping {
                 archiveClassLoader = new ArchiveClassLoader(archive,getClass().getClassLoader());
             } 
             catch (Throwable t) {
+    			ExceptionUtil.rethrowIfNecessary(t);
                 archive=null;
             }
         }
@@ -190,7 +192,8 @@ public final class MappingImpl implements Mapping {
     	try{
 			return archiveClassLoader.loadClass(className);
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);}
 		return null;
 	}
     
@@ -200,7 +203,8 @@ public final class MappingImpl implements Mapping {
 		try{
 			return pclCollection.loadClass(className);
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);}
 		
 		return null;
 	}

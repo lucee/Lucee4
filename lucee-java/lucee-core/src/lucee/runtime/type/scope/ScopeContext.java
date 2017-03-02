@@ -118,7 +118,10 @@ public final class ScopeContext {
 	
 	public void info(String msg) {info(getLog(), msg);}
 	public void error(String msg) {error(getLog(),msg);}
-	public void error(Throwable t) {error(getLog(), t);}
+	public void error(Throwable t) {
+		ExceptionUtil.rethrowIfNecessary(t);
+		error(getLog(), t);
+	}
 	
 	public static void info(Log log,String msg) {
 		if(log!=null)log.log(Log.LEVEL_INFO,"scope-context", msg);
@@ -741,6 +744,7 @@ public final class ScopeContext {
         clearUnusedApplications(factory);
     	}
     	catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
     		error(t);
     	}
     }
@@ -790,7 +794,10 @@ public final class ScopeContext {
 	    	}
     	
     	}
-    	catch(Throwable t){t.printStackTrace();}
+    	catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+			t.printStackTrace();
+		}
     }
 
     
@@ -871,7 +878,9 @@ public final class ScopeContext {
     					try {
     						if(type==Scope.SCOPE_SESSION)listener.onSessionEnd(cfmlFactory,(String)applicationName,(String)cfid);
     					} 
-    					catch (Throwable t) {t.printStackTrace();
+    					catch (Throwable t) {
+    						ExceptionUtil.rethrowIfNecessary(t);
+    						t.printStackTrace();
     						ExceptionHandler.log(cfmlFactory.getConfig(),Caster.toPageException(t));
     					}
     					finally {
@@ -905,6 +914,7 @@ public final class ScopeContext {
 					listener.onApplicationEnd(jspFactory,(String)arrContextes[i]);
 				} 
 				catch (Throwable t) {
+					ExceptionUtil.rethrowIfNecessary(t);
 					ExceptionHandler.log(jspFactory.getConfig(),Caster.toPageException(t));
 				}
 				finally {

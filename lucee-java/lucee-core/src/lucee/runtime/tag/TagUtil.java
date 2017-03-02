@@ -27,6 +27,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.jsp.tagext.Tag;
 
 import lucee.commons.io.DevNullOutputStream;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.Pair;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
@@ -242,6 +243,7 @@ public class TagUtil {
     		
     	}
     	catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
     		return;
     	}
     	PageContext orgPC = ThreadLocalPageContext.get();
@@ -273,6 +275,7 @@ public class TagUtil {
     		}
     	}
     	catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
     		//t.printStackTrace();
     	}
     	finally{
@@ -309,6 +312,7 @@ public class TagUtil {
 			
 		} 
 		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			//t.printStackTrace();
 		}
     }

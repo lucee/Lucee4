@@ -208,9 +208,7 @@ public class MethodCleaner extends ClassVisitor implements Opcodes {
 	}
 	
 	public static void modifie(String path, String methodName,String[] argNames, String rtnName, String msg) throws IOException, ExpressionException{
-		print.e("->"+path);
 		Resource res = ResourceUtil.toResourceExisting(ThreadLocalPageContext.getConfig(), path);
-		print.e(res);
 		Class[] args=new Class[argNames.length];
 		for(int i=0;i<argNames.length;i++){
 			args[i]=ClassUtil.loadClass(argNames[i]);

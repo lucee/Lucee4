@@ -162,6 +162,7 @@ public class DeployHandler {
 		    
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			moveToFailedFolder(archive);
 			LogUtil.log(logger, Log.LEVEL_ERROR,"archive",t);
 		}
@@ -190,6 +191,7 @@ public class DeployHandler {
 	        }
         }
         catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
         	LogUtil.log(logger, Log.LEVEL_ERROR,"extension", t);
 			moveToFailedFolder(ext);
 			return;
@@ -268,6 +270,7 @@ public class DeployHandler {
 			ResourceUtil.moveTo(ext, trgFile,true);
 		}
 	    catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 	    	LogUtil.log(logger, Log.LEVEL_ERROR,"extension", t);
 			moveToFailedFolder(ext);
 			return;
@@ -338,6 +341,7 @@ public class DeployHandler {
 	        
         }
 	    catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 	    	// installation failed
 	    	
 	    	LogUtil.log(logger, Log.LEVEL_ERROR,"extension",t);
@@ -358,6 +362,7 @@ public class DeployHandler {
 			return new Manifest(new ByteArrayInputStream(str.getBytes(cs)));
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -382,7 +387,9 @@ public class DeployHandler {
 			if(dst.exists()) dst.remove(true);
 			ResourceUtil.moveTo(archive, dst,true);
 		}
-		catch (Throwable t) {}
+		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
+        }
 		
 		// TODO Auto-generated method stub
 		

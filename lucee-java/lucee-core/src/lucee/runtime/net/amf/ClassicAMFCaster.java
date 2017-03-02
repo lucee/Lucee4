@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import lucee.commons.lang.CFTypes;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Component;
 import lucee.runtime.ComponentSpecificAccess;
@@ -134,6 +135,7 @@ public class ClassicAMFCaster implements AMFCaster {
 			return img.getImageBytes(null);
 		}
 		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
 			return img.getImageBytes("png");
 		}
 	}

@@ -20,6 +20,7 @@ package lucee.transformer.cfml.evaluator;
 
 import java.util.Vector;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.runtime.exp.TemplateException;
 import lucee.transformer.bytecode.statement.tag.Tag;
 import lucee.transformer.library.function.FunctionLib;
@@ -76,6 +77,7 @@ public final class EvaluatorPool {
 			    v.clear();//print.printST(e);
 				throw new TemplateException(cfml,e);
 			}catch (Throwable e) {
+				ExceptionUtil.rethrowIfNecessary(e);
 			    v.clear();
 				throw new TemplateException(cfml,e);
 			}

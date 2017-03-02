@@ -322,6 +322,7 @@ public final class UDFPropertiesImpl implements UDFProperties {
 			
 		} 
 		catch (Throwable e) {
+			ExceptionUtil.rethrowIfNecessary(e);
 			e.printStackTrace();
 			throw ExceptionUtil.toIOException(e);
 		}

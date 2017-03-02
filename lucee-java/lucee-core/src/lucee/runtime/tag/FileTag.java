@@ -41,6 +41,7 @@ import lucee.commons.io.res.type.s3.S3;
 import lucee.commons.io.res.type.s3.S3Resource;
 import lucee.commons.io.res.util.ModeObjectWrap;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.mimetype.MimeType;
 import lucee.runtime.PageContext;
@@ -456,7 +457,9 @@ public final class FileTag extends BodyTagImpl {
 			source.moveTo(destination);
 				
 		}
-		catch(Throwable t) {t.printStackTrace();
+		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+			t.printStackTrace();
 			throw new ApplicationException(t.getMessage());
 		}
 		setACL(destination,acl);
@@ -579,6 +582,7 @@ public final class FileTag extends BodyTagImpl {
 			if(!file.delete()) throw new ApplicationException("can't delete file ["+file+"]");
 		}
 		catch(Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
 			throw new ApplicationException(t.getMessage());
 		}
 	}
@@ -751,7 +755,9 @@ public final class FileTag extends BodyTagImpl {
 	            sct.setEL(KeyConstants._img,img);
             }
         } 
-		catch (Throwable t) {}
+		catch (Throwable t) {
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 	}
 
 	private static String getFileAttribute(Resource file){

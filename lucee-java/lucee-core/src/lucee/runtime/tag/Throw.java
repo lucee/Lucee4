@@ -21,6 +21,7 @@ package lucee.runtime.tag;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.exp.ApplicationException;
 import lucee.runtime.exp.CatchBlock;
@@ -146,6 +147,7 @@ public final class Throw extends TagImpl {
 		if(object instanceof PageException) return (PageException)object;
 		if(object instanceof Throwable) {
 			Throwable t=(Throwable)object;
+			ExceptionUtil.rethrowIfNecessary(t);
 			return new CustomTypeException(t.getMessage(),"","",t.getClass().getName(),"");
 		}
 		if(object instanceof Struct){

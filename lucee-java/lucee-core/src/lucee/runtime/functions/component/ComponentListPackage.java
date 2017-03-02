@@ -30,6 +30,7 @@ import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.filter.ExtensionResourceFilter;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Mapping;
 import lucee.runtime.PageContext;
@@ -197,7 +198,9 @@ public class ComponentListPackage implements Function {
 						Class<?> clazz = mapping.getClassLoaderForArchive().loadClass(className);
 						sourceName=ASMUtil.getSourceInfo(pc.getConfig(),clazz,true).name;
 					}
-					catch (Throwable t) {}
+					catch (Throwable t) {
+						ExceptionUtil.rethrowIfNecessary(t);
+					}
 					
 					if(StringUtil.isEmpty(sourceName)) {
 						c=IOUtil.toString(children[i],(Charset)null);

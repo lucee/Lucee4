@@ -539,6 +539,7 @@ public class EHCache extends EHCacheSupport {
 			return getCache().remove(key);
 		}
 		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return false;
 		}
 	}
@@ -569,6 +570,7 @@ public class EHCache extends EHCacheSupport {
 			}
 		}
 		catch(Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			misses++;
 		}
 		return defaultValue;
@@ -602,6 +604,7 @@ public class EHCache extends EHCacheSupport {
 			}
 		}
 		catch(Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			misses++;
 		}
 		return defaultValue;
@@ -650,6 +653,7 @@ public class EHCache extends EHCacheSupport {
 		return Integer.parseInt(o.toString());
 		}
 		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}
@@ -660,6 +664,7 @@ public class EHCache extends EHCacheSupport {
 			return Long.parseLong(o.toString());
 		}
 		catch(Throwable t){
+        	ExceptionUtil.rethrowIfNecessary(t);
 			return defaultValue;
 		}
 	}

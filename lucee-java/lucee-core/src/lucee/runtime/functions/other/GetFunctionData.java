@@ -24,6 +24,7 @@ package lucee.runtime.functions.other;
 import java.util.ArrayList;
 
 import lucee.commons.lang.CFTypes;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.PageContext;
 import lucee.runtime.config.ConfigImpl;
@@ -77,7 +78,9 @@ public final class GetFunctionData implements Function {
 		try{
 			clazz=function.getClazz();
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 		if(clazz==lucee.runtime.functions.system.CFFunction.class){
 			return cfmlBasedFunction(pc,function);
 		}

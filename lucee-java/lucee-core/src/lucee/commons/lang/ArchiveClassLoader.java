@@ -136,7 +136,9 @@ public final class ArchiveClassLoader extends ClassLoader implements Sizeable,Cl
             	barr = toRaw(barr);
                 return defineClass(name,barr,0,barr.length);
             }
-            catch(Throwable t) {}
+            catch(Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
+            }
         }
         return null;
     }

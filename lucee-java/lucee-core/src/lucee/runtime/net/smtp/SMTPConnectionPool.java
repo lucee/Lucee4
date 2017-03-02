@@ -32,6 +32,8 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Transport;
 
+import lucee.commons.lang.ExceptionUtil;
+
 public class SMTPConnectionPool {
 
 	//private static final long MAX_AGE = 5*60*1000;
@@ -160,7 +162,9 @@ public class SMTPConnectionPool {
 		try{
 			return satStack.pop();
 		}
-		catch(Throwable t){}
+		catch(Throwable t){
+			ExceptionUtil.rethrowIfNecessary(t);
+		}
 		return null;
 	}
 	

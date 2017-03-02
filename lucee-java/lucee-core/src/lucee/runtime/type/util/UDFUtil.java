@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.runtime.Page;
 import lucee.runtime.PageContext;
@@ -295,6 +296,7 @@ public class UDFUtil {
                 try {
                     oa = UDFUtil.getDefaultValue(pageContext, (UDFPlus)udf, i, null);//udf.getDefaultValue(pageContext,i,null);
                 } catch (Throwable t) {
+        			ExceptionUtil.rethrowIfNecessary(t);
                 }
                 if(oa==null)oa="null";
 				def=new SimpleDumpData(Caster.toString(oa));

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.IDGenerator;
 import lucee.commons.lang.Md5;
 import lucee.runtime.exp.PageRuntimeException;
@@ -105,6 +106,7 @@ public final class Sprite extends EvaluatorSupport {
 			
 		} 
         catch (Throwable e) {// TODO handle Excpetion much more precise
+			ExceptionUtil.rethrowIfNecessary(e);
 			throw new PageRuntimeException(Caster.toPageException(e));
 		}
 		   

@@ -196,6 +196,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 			new LabelBlockImpl("aa");
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 
 		}
 
@@ -281,6 +282,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 				IOUtil.copy(new ByteArrayInputStream(content.getBytes()), htAccess, true);
 			}
 			catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
 			}
 		}
 	}
@@ -678,6 +680,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 					}
 				}
 				catch (Throwable t) {
+	            	ExceptionUtil.rethrowIfNecessary(t);
 					t.printStackTrace(config.getErrWriter());
 
 				}
@@ -950,6 +953,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 			createFileFromResourceCheckSizeDiff(resource, file);
 		}
 		catch (Throwable e) {
+        	ExceptionUtil.rethrowIfNecessary(e);
 			aprint.err(resource);
 			aprint.err(file);
 			//e.printStackTrace();
@@ -1786,6 +1790,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 				}
 			}
 			catch (Throwable e) {
+            	ExceptionUtil.rethrowIfNecessary(e);
 				e.printStackTrace();
 				clazz = ConsoleExecutionLog.class;
 			}
@@ -2133,6 +2138,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 					SystemOut.print(config.getErrWriter(), "missing method [public static init(Config,String[],Struct[]):void] for class [" + clazz.getName() + "] ");
 				}
 				catch (Throwable e) {
+	            	ExceptionUtil.rethrowIfNecessary(e);
 					e.printStackTrace();
 				}
 			}
@@ -2167,6 +2173,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 			loadGateway(configServer, config, doc);
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 			t.printStackTrace();
 		}
 	}
@@ -2289,6 +2296,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 					clob, allow, validate, storage, timezone, custom, dbdriver,literalTimestampWithTSOffset);
 		}
 		catch (Throwable t) {
+        	ExceptionUtil.rethrowIfNecessary(t);
 		}
 	}
 
@@ -2897,6 +2905,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 				clazz = ClassUtil.loadClass(config.getClassLoader(), str);
 			}
 			catch (Throwable t) {
+            	ExceptionUtil.rethrowIfNecessary(t);
 				t.printStackTrace();
 			}
 			if (clazz==null)
@@ -3175,6 +3184,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 					return (PrintWriter) ClassUtil.loadInstance(classname);
 				}
 				catch (Throwable t) {
+	            	ExceptionUtil.rethrowIfNecessary(t);
 					t.printStackTrace();
 				}
 			}
@@ -3187,6 +3197,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 						return new PrintWriter(res.getOutputStream(), true);
 				}
 				catch (Throwable t) {
+	            	ExceptionUtil.rethrowIfNecessary(t);
 					t.printStackTrace();
 				}
 			}
@@ -3800,6 +3811,7 @@ public final class ConfigWebFactory extends ConfigFactory {
 					}
 				}
 				catch (Throwable t) {
+	            	ExceptionUtil.rethrowIfNecessary(t);
 					SystemOut.printDate(config.getErrWriter(), ExceptionUtil.getStacktrace(t, true));
 				}
 			}
