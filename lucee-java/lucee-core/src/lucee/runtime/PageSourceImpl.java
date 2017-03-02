@@ -28,6 +28,7 @@ import lucee.commons.io.CharsetUtil;
 import lucee.commons.io.IOUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
+import lucee.commons.lang.ExceptionUtil;
 import lucee.commons.lang.SizeOf;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.lang.types.RefBoolean;
@@ -210,12 +211,10 @@ public final class PageSourceImpl implements PageSource, Sizeable {
         try {
             Class clazz=mapping.getClassLoaderForArchive().loadClass(getClazz());
             page=newInstance(clazz);
-            synchronized(this) {
-                page.setPageSource(this);
-                page.setLoadType(LOAD_ARCHIVE);
-    			this.page=page;
-            }
-    		return page;
+            page.setPageSource(this);
+            page.setLoadType(LOAD_ARCHIVE);
+    		this.page=page;
+            return page;
         } 
         catch (Exception e) {
         	return null;
@@ -261,7 +260,9 @@ public final class PageSourceImpl implements PageSource, Sizeable {
                     else {
                     	try {
 							this.page=page=newInstance(mapping.touchPCLCollection().getClass(this));
-						} catch (Throwable t) {t.printStackTrace();
+						} catch (Throwable t) {
+							ExceptionUtil.rethrowIfNecessary(t);
+							t.printStackTrace();
 							this.page=page=null;
 						}
                     	if(page==null) this.page=page=compile(config,classRootDir,Boolean.TRUE);     
@@ -328,7 +329,7 @@ public final class PageSourceImpl implements PageSource, Sizeable {
         	cwi.getCompiler().watch(this,now);//SystemUtil.get
         
         
-        synchronized (this) {
+        //synchronized (this) {
 	        byte[] barr = cwi.getCompiler().
 	        	compile(cwi,this,cwi.getTLDs(),cwi.getFLDs(),classRootDir,getJavaName());
 	        Class<?> clazz = mapping.touchPCLCollection().loadClass(getClazz(), barr,isComponent());
@@ -340,7 +341,7 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 	        	pe.setExtendedInfo("failed to load template "+getDisplayPath());
 	        	throw pe;
 	        }
-		}
+		//}
     }
 
     private Page newInstance(Class clazz) throws SecurityException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
@@ -622,13 +623,12 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 			javaName.append('/');
 			javaName.append(varName);
 		}
-		synchronized (this) {
 			this.fileName=fileName;
 			this.className=className;
 			this.packageName=packageName.toString().toLowerCase();
 			this.javaName=javaName.toString().toLowerCase();
 			
-		}
+		
 
 		
 		
@@ -673,9 +673,8 @@ public final class PageSourceImpl implements PageSource, Sizeable {
 			}
 			else compName.append(arr[i]);
 		}
-		synchronized (arr) {
-			this.compName=compName.toString();
-		}
+		this.compName=compName.toString();
+		
 	}
 
     @Override
