@@ -52,6 +52,7 @@ import lucee.commons.activation.ResourceDataSource;
 import lucee.commons.digest.MD5;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.log.Log;
+import lucee.commons.io.log.LogAndSource;
 import lucee.commons.io.log.LogUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -374,8 +375,8 @@ public final class SMTPClient implements Serializable  {
 	
 	public static SessionAndTransport getSessionAndTransport(lucee.runtime.config.Config config,String hostName, int port,
 			String username, String password, long lifeTimesan, long idleTimespan,int socketTimeout,
-			boolean tls,boolean ssl, boolean newConnection) throws NoSuchProviderException, MessagingException {
-		Properties props = createProperties(config,hostName,port,username,password,tls,ssl,socketTimeout);
+			boolean tls,boolean ssl,boolean sendPartial, boolean newConnection) throws NoSuchProviderException, MessagingException {
+		Properties props = createProperties(config,hostName,port,username,password,tls,ssl,sendPartial,socketTimeout);
 		Authenticator auth=null;
 	    if(!StringUtil.isEmpty(username)) 
 	    	auth=new SMTPAuthenticator( username, password );
@@ -386,9 +387,10 @@ public final class SMTPClient implements Serializable  {
 	}
 	private MimeMessageAndSession createMimeMessage(lucee.runtime.config.Config config,String hostName, int port, 
 			String username, String password, long lifeTimesan, long idleTimespan,
-			boolean tls,boolean ssl, boolean newConnection) throws MessagingException {
+			boolean tls,boolean ssl, boolean sendPartial, boolean newConnection) throws MessagingException {
 		
-		SessionAndTransport sat = getSessionAndTransport(config, hostName, port, username, password, lifeTimesan, idleTimespan, timeout, tls, ssl, newConnection);
+		SessionAndTransport sat = getSessionAndTransport(config, hostName, port, username, password, lifeTimesan, 
+				idleTimespan, timeout, tls, ssl, sendPartial, newConnection);
 		/*Properties props = createProperties(config,hostName,port,username,password,tls,ssl,timeout);
 		Authenticator auth=null;
 	    if(!StringUtil.isEmpty(username)) 
@@ -499,20 +501,21 @@ public final class SMTPClient implements Serializable  {
 		return new MimeMessageAndSession(msg,sat);
 	}
 
-	private static Properties createProperties(Config config, String hostName, int port, String username,String password, boolean tls, boolean ssl, int timeout) {
+	private static Properties createProperties(Config config, String hostName, int port, String username,String password, 
+			boolean tls, boolean ssl, boolean sendPartial,int timeout) {
 		Properties props = (Properties) System.getProperties().clone();
 	      String strTimeout = Caster.toString(getTimeout(config,timeout));
 	      
 	      props.put("mail.smtp.host", hostName);
 	      props.put("mail.smtp.timeout", strTimeout);
 	      props.put("mail.smtp.connectiontimeout", strTimeout);
+	      props.put("mail.smtp.sendpartial", Caster.toString(sendPartial));
 	      if(port>0){
 	    	  props.put("mail.smtp.port", Caster.toString(port));
 	      }
 	      if(ssl)	{
             props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 	    	  props.put("mail.smtp.socketFactory.port", Caster.toString(port));
-            props.put("mail.smtp.socketFactory.fallback", "false");
         }
         else {
       	  props.put("mail.smtp.socketFactory.class", "javax.net.SocketFactory");
@@ -522,6 +525,7 @@ public final class SMTPClient implements Serializable  {
 	      if(!StringUtil.isEmpty(username)) {
 	    	  props.put("mail.smtp.auth", "true"); 
 	    	  props.put("mail.smtp.starttls.enable",tls?"true":"false");
+	    	  props.put("mail.smtp.socketFactory.fallback", "true");
 	    	  
 	    	  props.put("mail.smtp.user", username);
 	    	  props.put("mail.smtp.password", password);
@@ -535,6 +539,7 @@ public final class SMTPClient implements Serializable  {
 	    	  props.remove("mail.smtp.password");
 	    	  props.remove("password");
 	      }
+	      props.put("mail.smtp.socketFactory.fallback", "true");
 		return props;
 	}
 
@@ -755,12 +760,9 @@ public final class SMTPClient implements Serializable  {
 			boolean recyleConnection=((ServerImpl)server).reuseConnections();
 			{//synchronized(LOCK) { no longer necessary we have a proxy lock now
 				try {
-					
-					
-					
 					msgSess = createMimeMessage(config,server.getHostName(),server.getPort(),_username,_password,
 							((ServerImpl)server) .getLifeTimeSpan(),((ServerImpl)server).getIdleTimeSpan(),
-							_tls,_ssl,!recyleConnection);
+							_tls,_ssl,((ConfigImpl)config).isMailSendPartial(),!recyleConnection);
 
 				} catch (MessagingException e) {
 					// listener
@@ -794,6 +796,14 @@ public final class SMTPClient implements Serializable  {
                 			throw new MessagingException("timeout occurred after "+(_timeout/1000)+" seconds while sending mail message");
                 		}
                 	}
+            		
+            		// could have an exception but was send anyway
+            		if(sender.getThrowable()!=null) {
+            			Throwable t = sender.getThrowable();
+	                	LogAndSource logger = config.getMailLogger();
+	                	if(logger!=null) LogUtil.log(logger, Log.LEVEL_ERROR, "send mail", t);
+            		}
+            		
                 	clean(config,attachmentz);
                 	
                 	listener(config,server,log,null,System.nanoTime()-start);

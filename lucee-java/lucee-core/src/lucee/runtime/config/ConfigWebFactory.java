@@ -3682,7 +3682,17 @@ public final class ConfigWebFactory extends ConfigFactory {
 
 		boolean hasCS = configServer != null;
 		Element mail = getChildByName(doc.getDocumentElement(), "mail");
+		
 
+		// Send partial 
+		String strSendPartial = mail.getAttribute("send-partial");
+		if (!StringUtil.isEmpty(strSendPartial) && hasAccess) {
+			config.setMailSendPartial(toBoolean(strSendPartial, false));
+		}
+		else if (hasCS)
+			config.setMailSendPartial(configServer.isMailSendPartial());
+
+		
 		// Spool Interval
 		String strSpoolInterval = mail.getAttribute("spool-interval");
 		if (!StringUtil.isEmpty(strSpoolInterval) && hasAccess) {
