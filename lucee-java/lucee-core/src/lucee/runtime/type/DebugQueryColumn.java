@@ -96,9 +96,9 @@ public final class DebugQueryColumn extends QueryColumnImpl implements QueryColu
 	}
 	
     
-	public synchronized QueryColumnPro cloneColumn(QueryImpl query, boolean deepCopy) {
+	public DebugQueryColumn cloneColumnImpl(boolean deepCopy) {
         DebugQueryColumn clone=new DebugQueryColumn();
-        populate(this, clone, deepCopy);
+        populate(clone, deepCopy);
         return clone;
     }
 

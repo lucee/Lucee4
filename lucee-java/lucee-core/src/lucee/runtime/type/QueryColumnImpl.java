@@ -520,37 +520,37 @@ public class QueryColumnImpl implements QueryColumnPro,Sizeable,Objects {
 	}
 
     @Override
-    public synchronized Object clone() {
-        return duplicate(true);
+    public Object clone() {
+        return cloneColumnImpl(true);
     }
 
-    public synchronized Collection duplicate(boolean deepCopy) {
-        return cloneColumn(query,deepCopy);
-    }
-    
-    public synchronized QueryColumnPro cloneColumn(Query query, boolean deepCopy) {
+    public Collection duplicate(boolean deepCopy) {
         return cloneColumnImpl(deepCopy);
     }
     
-    public synchronized QueryColumnImpl cloneColumnImpl(boolean deepCopy) {
+    public QueryColumnPro cloneColumn(Query query, boolean deepCopy) {
+        return cloneColumnImpl(deepCopy);
+    }
+    
+    public QueryColumnImpl cloneColumnImpl(boolean deepCopy) {
         QueryColumnImpl clone=new QueryColumnImpl();
-        populate(this, clone, deepCopy);
+        populate(clone, deepCopy);
         return clone;
     }
     
-    protected static void populate(QueryColumnImpl src,QueryColumnImpl trg, boolean deepCopy) {
+    protected synchronized void populate(QueryColumnImpl trg, boolean deepCopy) {
         
-        boolean inside=ThreadLocalDuplication.set(src, trg);
+        boolean inside=ThreadLocalDuplication.set(this, trg);
         try{
-	        trg.key=src.key;
-	        trg.query=src.query;
-	        trg.size=src.size;
-	        trg.type=src.type;
-	        trg.key=src.key;
+	        trg.key=this.key;
+	        trg.query=this.query;
+	        trg.size=this.size;
+	        trg.type=this.type;
+	        trg.key=this.key;
 	        
-	        trg.data=new Object[src.data.length];
-	        for(int i=0;i<src.data.length;i++) {
-	            trg.data[i]=deepCopy?Duplicator.duplicate(src.data[i],true):src.data[i];
+	        trg.data=new Object[this.data.length];
+	        for(int i=0;i<this.data.length;i++) {
+	            trg.data[i]=deepCopy?Duplicator.duplicate(this.data[i],true):this.data[i];
 	        }
         }
         finally {
