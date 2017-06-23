@@ -64,6 +64,7 @@ public class DatasourceConnectionPool {
 			// we have a bad connection
 			if(rtn!=null) {
 				IOUtil.closeEL(rtn.getConnection());
+				rtn=null;
 			}
 			synchronized (stack) {
 				while(max!=-1 && max<=_size(datasource)) {
