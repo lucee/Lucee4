@@ -662,18 +662,18 @@ public final class StringUtil {
         
         return content.substring(0,max)+dotDotDot;
     }
-    
 
-    /**
-     * performs a replace operation on a string
-     *  
-     * @param input - the string input to work on 
-     * @param find - the substring to find
-     * @param repl - the substring to replace the matches with
-     * @param firstOnly - if true then only the first occurrence of {@code find} will be replaced
-     * @param ignoreCase - if true then matches will not be case sensitive
-     * @return
-     */
+
+	/**
+	 * performs a replace operation on a string
+	 *
+	 * @param input - the string input to work on
+	 * @param find - the substring to find
+	 * @param repl - the substring to replace the matches with
+	 * @param firstOnly - if true then only the first occurrence of {@code find} will be replaced
+	 * @param ignoreCase - if true then matches will not be case sensitive
+	 * @return
+	 */
 	public static String replace( String input, String find, String repl, boolean firstOnly, boolean ignoreCase ) {
 
 		int findLen = find.length();
@@ -681,23 +681,31 @@ public final class StringUtil {
 		if ( findLen == 0 )
 			return input;
 
-		String scan = input;
+		//String scan = input;
 
-        if ( ignoreCase ) {
-            
+        /*if ( ignoreCase ) {
             scan = scan.toLowerCase();
             find = find.toLowerCase();
         }
-        else if ( findLen == repl.length() ) {
+        else*/ if (!ignoreCase &&  findLen == repl.length() ) {
 
-        	if ( find.equals( repl ) )
-        		return input;
-        	
-        	if ( !firstOnly && findLen == 1 )
-        		return input.replace( find.charAt(0), repl.charAt(0) );
-        }
+			if ( find.equals( repl ) )
+				return input;
+			if ( !firstOnly && findLen == 1 )
+				return input.replace( find.charAt(0), repl.charAt(0) );
+		}
 
-		int pos = scan.indexOf( find );
+        /*print.e(input);
+        print.e(input.length());
+        print.e(scan);
+        print.e(scan.length());*/
+
+        /*for(int i=0;i<scan.length();i++) {
+        	print.e(scan.charAt(i));
+        }*/
+
+
+		int pos = ignoreCase ? indexOfIgnoreCase(input, find) : input.indexOf( find );
 
 		if (pos == -1)
 			return input;
@@ -706,23 +714,23 @@ public final class StringUtil {
 		StringBuilder sb = new StringBuilder( repl.length() > find.length() ? (int)Math.ceil( input.length() * 1.2 ) : input.length() );
 
 		while ( pos != -1 ) {
-            
-            sb.append( input.substring( start, pos ) );
-            sb.append( repl );
-            
-            start = pos + findLen;
 
-            if ( firstOnly )
-            	break;
+			sb.append( input.substring( start, pos ) );
+			sb.append( repl );
 
-			pos = scan.indexOf( find, start );
-        }
-                
-        if ( input.length() > start )
-        	sb.append( input.substring( start ) );
+			start = pos + findLen;
 
-        return sb.toString();
-    }
+			if ( firstOnly )
+				break;
+
+			pos = ignoreCase ? indexOfIgnoreCase(input, find, start ) : input.indexOf(find, start );
+		}
+
+		if ( input.length() > start )
+			sb.append( input.substring( start ) );
+
+		return sb.toString();
+	}
     
 	
 	/**
@@ -783,14 +791,21 @@ public final class StringUtil {
 		if(haystack==null) return -1;
 		return haystack.indexOf(needle);
 	}
-	
+
 	public static int indexOfIgnoreCase(String haystack, String needle) {
+		return indexOfIgnoreCase(haystack, needle, 0);
+	}
+
+	public static int indexOfIgnoreCase(String haystack, String needle, int offset) {
 		if(StringUtil.isEmpty(haystack) || StringUtil.isEmpty(needle)) return -1;
 		needle=needle.toLowerCase();
-		
+
+		if(offset>0) haystack=haystack.substring(offset);
+		else offset=0;
+
 		int lenHaystack=haystack.length();
 		int lenNeedle=needle.length();
-		
+
 		char lastNeedle=needle.charAt(lenNeedle-1);
 		char c;
 		outer:for(int i=lenNeedle-1;i<lenHaystack;i++) {
@@ -798,13 +813,12 @@ public final class StringUtil {
 			if(c==lastNeedle) {
 				for(int y=0;y<lenNeedle-1;y++) {
 					if(needle.charAt(y)!=Character.toLowerCase(haystack.charAt(i-(lenNeedle-1)+y)))
-							continue outer;
+						continue outer;
 				}
-				return i-(lenNeedle-1);
+				return (i-(lenNeedle-1))+offset;
 			}
 		}
-		
-		
+
 		return -1;
 	}
     
