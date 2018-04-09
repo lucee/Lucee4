@@ -41,7 +41,7 @@ public class DatasourceConnectionPool {
 	
 	private ConcurrentHashMap<String,DCStack> dcs=new ConcurrentHashMap<String,DCStack>();
 	private Map<String,RefInteger> counter=new ConcurrentHashMap<String,RefInteger>();
-	
+
 	public DatasourceConnection getDatasourceConnection(DataSource datasource, String user, String pass) throws PageException {
 		// pc=ThreadLocalPageContext.get(pc);
 		if(StringUtil.isEmpty(user)) {
@@ -49,35 +49,50 @@ public class DatasourceConnectionPool {
             pass=datasource.getPassword();
         }
         if(pass==null)pass="";
-		
+
 		// get stack
 		DCStack stack=getDCStack(datasource,user,pass);
-		
-		
+
 		// max connection
-		int max=datasource.getConnectionLimit();
+		int max = datasource.getConnectionLimit();
+
+		// get an existing connection
+		DatasourceConnectionImpl rtn = null;
+		do {
+			// we have a bad connection
+			if (rtn != null) {
+				IOUtil.closeEL(rtn.getConnection());
+				rtn = null;
+			}
+			synchronized (stack) {
+				while (max != -1 && max <= _size(datasource)) {
+					try {
+						//stack.inc();
+						stack.wait(10000L);
+
+					} catch (InterruptedException e) {
+						throw Caster.toPageException(e);
+					}
+				}
+
+				while (!stack.isEmpty()) {
+					DatasourceConnectionImpl dc = (DatasourceConnectionImpl) stack.get();
+					if (dc != null) {
+						rtn = dc;
+						break;
+					}
+				}
+			}
+		} while (rtn != null && !isValid(rtn, Boolean.TRUE));
+
+		// create a new connection
+		if (rtn == null)
+			rtn = loadDatasourceConnection(datasource, user, pass);
+
 		synchronized (stack) {
-			while(max!=-1 && max<=_size(datasource)) {
-				try {
-					//stack.inc();
-					stack.wait(10000L);
-					
-				} 
-				catch (InterruptedException e) {
-					throw Caster.toPageException(e);
-				}
-			}
-			
-			while(!stack.isEmpty()) {
-				DatasourceConnectionImpl dc=(DatasourceConnectionImpl) stack.get();
-				if(dc!=null && isValid(dc,Boolean.TRUE)){
-					_inc(datasource);
-					return dc.using();
-				}
-			}
 			_inc(datasource);
 		}
-		return loadDatasourceConnection(datasource, user, pass).using();
+		return rtn.using();
 	}
 
 	private DatasourceConnectionImpl loadDatasourceConnection(DataSource ds, String user, String pass) throws DatabaseException  {
