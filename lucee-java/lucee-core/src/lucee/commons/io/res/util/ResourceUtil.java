@@ -189,15 +189,14 @@ public final class ResourceUtil {
     	Resource res = pc.getConfig().getResource(path);
         
         // not allow relpath
-        if(res.exists()) 
-        	return res;
-        else if(!allowRelpath)
-        	throw new ExpressionException("file or directory "+path+" not exist");
-    	
+        if(!allowRelpath){
+        	if(res.exists()) return res;
+        	throw new ExpressionException("file or directory "+path+" not exist");  
+        }
         
-    	/*if(res.isAbsolute() && res.exists()) {
+    	if(res.isAbsolute() && res.exists()) {
             return res;
-        }*/
+        }
     	
         //if(allowRelpath){
 	        if(StringUtil.startsWith(path,'/')) {
@@ -305,11 +304,11 @@ public final class ResourceUtil {
     }
     
     public static Resource toResourceNotExisting(PageContext pc ,String destination,boolean allowRelpath, boolean checkComponentMappings) {
-    	destination=destination.replace('\\','/');
+    	Resource res=null;
+        destination=destination.replace('\\','/');  
     	
-        Resource res=pc.getConfig().getResource(destination);
-		
-    	if(!allowRelpath || res.exists()){
+    	if(!allowRelpath){
+    		res=pc.getConfig().getResource(destination);
     		return res;
     	}
     	
