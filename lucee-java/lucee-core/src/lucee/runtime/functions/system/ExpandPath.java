@@ -47,7 +47,7 @@ public final class ExpandPath implements Function {
 		relPath=prettifyPath(pc,relPath);
 		
         String contextPath = pc.getHttpServletRequest().getContextPath();
-        if ( !StringUtil.isEmpty( contextPath ) && relPath.startsWith( contextPath ) ) {
+        if ( !StringUtil.isEmpty( contextPath ) && relPath.startsWith( contextPath+"/" ) ) {
             boolean sws=StringUtil.startsWith(relPath, '/');
         	relPath = relPath.substring( contextPath.length() );
             if(sws && !StringUtil.startsWith(relPath, '/'))
