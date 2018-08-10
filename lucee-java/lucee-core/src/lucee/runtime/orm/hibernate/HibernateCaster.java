@@ -4,17 +4,17 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  **/
 package lucee.runtime.orm.hibernate;
 
@@ -46,18 +46,18 @@ import lucee.runtime.type.Query;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.QueryUtil;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.type.Type;
+import org.luceehibernate.SessionFactory;
+import org.luceehibernate.metadata.ClassMetadata;
+import org.luceehibernate.type.Type;
 
 public class HibernateCaster {
-	
+
 	private static final int NULL = -178696;
 
 	public static Object toCFML(Object src) {
 		if(src==null) return null;
 		if(src instanceof Collection) return src;
-		
+
 		if(src instanceof List){
 			return toCFML((List) src);
 		}
@@ -66,27 +66,27 @@ public class HibernateCaster {
 		}*/
 		return src;
 	}
-	
+
 	public static Array toCFML(List src)  {
         int size=src.size();
-        
+
         Array trg = CommonUtil.createArray();
         for(int i=0;i<size;i++) {
             trg.setEL(i+1,toCFML(src.get(i)));
         }
         return trg;
 	}
-	
+
 	/*public static Object toCFML(PageContext pc,Map src) throws PageException {
-		
+
 		Object type =src.remove("$type$");
 		if(type instanceof String){
-			
+
 			Component cfc = toComponent(pc, (String)type);
 			return toCFML(pc,src, cfc);
 		}
-		
-		
+
+
 		Iterator<Map.Entry<String, Object>> it = src.entrySet().iterator();
         Struct trg=CommonUtil.createStruct();
         Map.Entry<String, Object> entry;
@@ -96,29 +96,29 @@ public class HibernateCaster {
         }
         return trg;
 	}*/
-	
 
-	
+
+
 	public static String getEntityName(Component cfc) {
-		
+
 		String name=null;
 		try {
 			name=CommonUtil.toString(HibernateUtil.getMetaStructItem(cfc,CommonUtil.ENTITY_NAME),null);
-		} 
+		}
 		catch (Throwable t) {
 			try {
 				Struct md = cfc.getMetaData(CommonUtil.pc());
 				name = CommonUtil.toString(md.get(CommonUtil.ENTITY_NAME),null);
-				
+
 			}catch (PageException e) {}
 		}
-		
+
 		if(!Util.isEmpty(name)) {
 			return name;
 		}
 		return getName(cfc);
-		
-		
+
+
 	}
 
 	private static String getName(Component cfc) {
@@ -136,17 +136,17 @@ public class HibernateCaster {
 		if(c!=-1) return c;
 		throw ExceptionUtil.createException(session,null,"invalid cascade defintion ["+cascade+"], valid values are [all,all-delete-orphan,delete,delete-orphan,refresh,save-update]",null);
 	}
-	
+
 	public static int cascade(String cascade, int defaultValue) {
 		cascade=cascade.trim().toLowerCase();
 		if("all".equals(cascade)) return HibernateConstants.CASCADE_ALL;
-		
+
 		if("save-update".equals(cascade)) return HibernateConstants.CASCADE_SAVE_UPDATE;
 		if("save_update".equals(cascade)) return HibernateConstants.CASCADE_SAVE_UPDATE;
 		if("saveupdate".equals(cascade)) return HibernateConstants.CASCADE_SAVE_UPDATE;
-		
+
 		if("delete".equals(cascade)) return HibernateConstants.CASCADE_DELETE;
-		
+
 		if("delete-orphan".equals(cascade)) return HibernateConstants.CASCADE_DELETE_ORPHAN;
 		if("delete_orphan".equals(cascade)) return HibernateConstants.CASCADE_DELETE_ORPHAN;
 		if("deleteorphan".equals(cascade)) return HibernateConstants.CASCADE_DELETE_ORPHAN;
@@ -154,9 +154,9 @@ public class HibernateCaster {
 		if("all-delete-orphan".equals(cascade)) return HibernateConstants.CASCADE_ALL_DELETE_ORPHAN;
 		if("all_delete_orphan".equals(cascade)) return HibernateConstants.CASCADE_ALL_DELETE_ORPHAN;
 		if("alldeleteorphan".equals(cascade)) return HibernateConstants.CASCADE_ALL_DELETE_ORPHAN;
-		
+
 		if("refresh".equals(cascade)) return HibernateConstants.REFRESH;
-		
+
 		return defaultValue;
 	}
 
@@ -169,30 +169,30 @@ public class HibernateCaster {
 		strCollectionType=strCollectionType.trim().toLowerCase();
 		if("struct".equals(strCollectionType)) return HibernateConstants.COLLECTION_TYPE_STRUCT;
 		if("array".equals(strCollectionType)) return HibernateConstants.COLLECTION_TYPE_ARRAY;
-		
+
 		return defaultValue;
 	}
 
 	public static String toHibernateType(ColumnInfo info, String type, String defaultValue)	{
-		
+
 		// no type defined
 		if(Util.isEmpty(type,true)) {
 			return HibernateCaster.toHibernateType(info,defaultValue);
 		}
-		
+
 		// type defined
 		String tmp=HibernateCaster.toHibernateType(type,null);
 		if(tmp!=null) return tmp;
-		
+
 		if(info!=null){
 			tmp=HibernateCaster.toHibernateType(info,defaultValue);
 			return tmp;
 		}
 		return defaultValue;
-		
-		
+
+
 	}
-	
+
 	public static int toSQLType(String type,int defaultValue) 	{
 		type=type.trim().toLowerCase();
 		type=toHibernateType(type,type);
@@ -215,18 +215,18 @@ public class HibernateCaster {
 		if("time".equals(type)) return Types.TIME;
 		if("timestamp".equals(type)) return Types.TIMESTAMP;
 		if("byte".equals(type)) return Types.TINYINT;
-		
+
 		return defaultValue;
 	}
-	
+
 	public static String toHibernateType(ColumnInfo info, String defaultValue)	{
 		if(info==null)return defaultValue;
-		
+
 		String rtn = toHibernateType(info.getType(),info.getSize(), null);
 		if(rtn!=null) return rtn;
 		return toHibernateType(info.getTypeName(),defaultValue);
 	}
-	
+
 	public static String toHibernateType(int type, int size, String defaultValue) {
 		// MUST do better
 		switch(type){
@@ -267,14 +267,14 @@ public class HibernateCaster {
 		}
 		return defaultValue;
 	}
-	
+
 	public static String toHibernateType(ORMSession session,String type) throws PageException	{
 		String res=toHibernateType(type, null);
 		if(res==null) throw ExceptionUtil.createException(session,null,"the type ["+type+"] is not supported",null);
 		return res;
 	}
-	
-	
+
+
 	// calendar_date: A type mapping for a Calendar object that represents a date
 	//calendar: A type mapping for a Calendar object that represents a datetime.
 	public static String toHibernateType(String type, String defaultValue)	{
@@ -282,7 +282,7 @@ public class HibernateCaster {
 		type=Util.replace(type, "java.lang.", "", true);
 		type=Util.replace(type, "java.util.", "", true);
 		type=Util.replace(type, "java.sql.", "", true);
-		
+
 		// return same value
 		if("long".equals(type)) return type;
 		if("binary".equals(type)) return type;
@@ -311,7 +311,7 @@ public class HibernateCaster {
 		if("locale".equals(type)) return type;
 		if("timezone".equals(type)) return type;
 		if("currency".equals(type)) return type;
-		
+
 		if("imm_date".equals(type)) return type;
 		if("imm_time".equals(type)) return type;
 		if("imm_timestamp".equals(type)) return type;
@@ -319,14 +319,14 @@ public class HibernateCaster {
 		if("imm_calendar_date".equals(type)) return type;
 		if("imm_serializable".equals(type)) return type;
 		if("imm_binary".equals(type)) return type;
-		
+
 		// return different value
 		if("bigint".equals(type)) 						return "long";
 		if("bit".equals(type)) 						return "boolean";
-		
+
 		if("int".equals(type)) 						return "integer";
 		if("char".equals(type)) 					return "character";
-		
+
 		if("bool".equals(type)) 					return "boolean";
 		if("yes-no".equals(type)) 					return "yes_no";
 		if("yesno".equals(type)) 					return "yes_no";
@@ -344,7 +344,7 @@ public class HibernateCaster {
 		if("java.math.biginteger".equals(type)) 	return "big_integer";
 		if("byte[]".equals(type)) 					return "binary";
 		if("serializable".equals(type)) 			return "serializable";
-		
+
 		if("datetime".equals(type)) 				return "timestamp";
 		if("numeric".equals(type)) 					return "double";
 		if("number".equals(type)) 					return "double";
@@ -357,15 +357,15 @@ public class HibernateCaster {
 		if("int".equals(type)) 						return "integer";
 		if("varchar".equals(type)) 						return "string";
 		if("nvarchar".equals(type)) 						return "string";
-		
+
 		return defaultValue;
-		
+
 		// FUTURE
 		/*
-		
-		add support for 
+
+		add support for
 		- any, object,other
-		
+
 		add support for custom types https://issues.jboss.org/browse/LUCEE-1341
 		- array
 	    - base64
@@ -377,28 +377,28 @@ public class HibernateCaster {
         - uuid
         - variablename, variable_name
 	    - variablestring, variable_string
-	    
+
 		*/
-		
+
     }
 	public static Object toHibernateValue(PageContext pc,Object value,String type) throws PageException	{
 		type=toHibernateType(type, null);
 		// return same value
-		if("long".equals(type)) 
+		if("long".equals(type))
 			return Caster.toLong(value);
 		if("binary".equals(type) || "imm_binary".equals(type))
 			return Caster.toBinary(value);
-		if("boolean".equals(type) || "yes_no".equals(type) || "true_false".equals(type)) 
+		if("boolean".equals(type) || "yes_no".equals(type) || "true_false".equals(type))
 			return Caster.toBoolean(value);
-		if("character".equals(type)) 
+		if("character".equals(type))
 			return Caster.toCharacter(value);
-		if("date".equals(type) || "imm_date".equals(type)) 
+		if("date".equals(type) || "imm_date".equals(type))
 			return Caster.toDatetime(value,pc.getTimeZone());
-		if("big_decimal".equals(type)) 
+		if("big_decimal".equals(type))
 			return Caster.toBigDecimal(value);
-		if("double".equals(type)) 
+		if("double".equals(type))
 			return Caster.toDouble(value);
-		if("float".equals(type)) 
+		if("float".equals(type))
 			return Caster.toFloat(value);
 		if("integer".equals(type))
 			return Caster.toInteger(value);
@@ -406,9 +406,9 @@ public class HibernateCaster {
 			return Caster.toString(value);
 		if("big_integer".equals(type))
 			return new BigInteger(Caster.toString(value));
-		if("short".equals(type)) 
+		if("short".equals(type))
 			return Caster.toShort(value);
-		if("time".equals(type) || "imm_time".equals(type)) 
+		if("time".equals(type) || "imm_time".equals(type))
 			return new Time(Caster.toDate(value,pc.getTimeZone()).getTime());
 		if("timestamp".equals(type) || "imm_timestamp".equals(type))
 			return new Timestamp(Caster.toDate(value,pc.getTimeZone()).getTime());
@@ -416,7 +416,7 @@ public class HibernateCaster {
 			return Caster.toBinary(value);
 		if("text".equals(type))
 			return Caster.toString(value);
-		if("calendar".equals(type) || "calendar_date".equals(type) || "imm_calendar".equals(type) || "imm_calendar_date".equals(type)) 
+		if("calendar".equals(type) || "calendar_date".equals(type) || "imm_calendar".equals(type) || "imm_calendar_date".equals(type))
 			return Caster.toCalendar(Caster.toDateTime(value, pc.getTimeZone()),  pc.getTimeZone(),  pc.getLocale());
 		if("locale".equals(type))
 			return Caster.toLocale(Caster.toString(value));
@@ -424,12 +424,12 @@ public class HibernateCaster {
 			return Caster.toTimeZone(value,null);
 		if("currency".equals(type))
 			return value;
-		
+
 		if("imm_serializable".equals(type))
 			return value;
 		if("serializable".equals(type))
 			return "serializable";
-		
+
 		return value;
     }
 
@@ -444,7 +444,7 @@ public class HibernateCaster {
 	public static Object toSQL(ColumnInfo ci, Object value, RefBoolean isArray) throws PageException {
 		return toSQL(ci.getType(), value,isArray);
 	}
-	
+
 	/**
 	 * translate CFMl specific types to Hibernate/SQL specific types
 	 * @param engine
@@ -474,7 +474,7 @@ public class HibernateCaster {
 			return SQLCaster.toSqlType(item);
 		}
 		catch(PageException pe){
-			// pherhaps it is a array of this type 
+			// pherhaps it is a array of this type
 			if(isArray!=null && CommonUtil.isArray(value)) {
 				Object[] src = CommonUtil.toNativeArray(value);
 				ArrayList<Object> trg = new ArrayList<Object>();
@@ -488,11 +488,11 @@ public class HibernateCaster {
 				}
 				isArray.setValue(true);
 				return CommonUtil.toArray(trg);
-				
+
 			}
 			throw pe;
 		}
-		
+
 	}
 
 
@@ -502,7 +502,7 @@ public class HibernateCaster {
 		if(!CommonUtil.isArray(obj)){
 			qry= toQuery(pc,session,HibernateCaster.toComponent(obj),name,null,1,1);
 		}
-		
+
 		// a array of entities
 		else {
 			Array arr=CommonUtil.toArray(obj);
@@ -514,10 +514,10 @@ public class HibernateCaster {
 					qry=toQuery(pc,session,HibernateCaster.toComponent(it.next()),name,qry,len,row++);
 				}
 			}
-			else 
+			else
 				qry=CommonUtil.createQuery(new Collection.Key[0],0,"orm");
 		}
-		
+
 		if(qry==null) {
 			if(!Util.isEmpty(name))
 				throw ExceptionUtil.createException(session,null,"there is no entity inheritance that match the name ["+name+"]",null);
@@ -525,7 +525,7 @@ public class HibernateCaster {
 		}
 		return qry;
 	}
-	
+
 	private static Query toQuery(PageContext pc,HibernateORMSession session,Component cfc, String entityName,Query qry, int rowcount, int row) throws PageException {
 		// inheritance mapping
 		if(!Util.isEmpty(entityName)){
@@ -543,7 +543,7 @@ public class HibernateCaster {
 		String dsn = ORMUtil.getDataSourceName(pc, cfc);
 		ComponentScope scope = cfc.getComponentScope();
 		HibernateORMEngine engine=(HibernateORMEngine) session.getEngine();
-		
+
 		// init
 		if(qry==null){
 			SessionFactory factory = session.getRawSessionFactory(dsn);
@@ -561,39 +561,39 @@ public class HibernateCaster {
 				if(obj instanceof Struct) {
 					sct=(Struct) obj;
 					fieldType = CommonUtil.toString(sct.get(CommonUtil.FIELDTYPE,null),null);
-					if("one-to-many".equalsIgnoreCase(fieldType) || "many-to-many".equalsIgnoreCase(fieldType) || "many-to-one".equalsIgnoreCase(fieldType) || "one-to-one".equalsIgnoreCase(fieldType)) 
+					if("one-to-many".equalsIgnoreCase(fieldType) || "many-to-many".equalsIgnoreCase(fieldType) || "many-to-one".equalsIgnoreCase(fieldType) || "one-to-one".equalsIgnoreCase(fieldType))
 						continue;
-					
+
 				}
-				
+
 				name=HibernateUtil.validateColumnName(md, properties[i].getName(),null);
 				//if(columnsInfo!=null)ci=(ColumnInfo) columnsInfo.get(name,null);
 				//else ci=null;
 				names.append(name);
 				if(name!=null){
-					
+
 					t=HibernateCaster.toSQLType(HibernateUtil.getPropertyType(md, name).getName(), NULL);
 					if(t==NULL)
 						types.append("object");
 					else
 						types.append(SQLCaster.toStringType(t));
 				}
-				else 
+				else
 					types.append("object");
 			}
-			
+
 			qry=CommonUtil.createQuery(names,types,0,getEntityName(cfc));
-			
+
 		}
 		// check
 		else if(engine.getMode() == ORMEngine.MODE_STRICT){
 			if(!qry.getName().equals(getEntityName(cfc)))
 				throw ExceptionUtil.createException(session,null,"can only merge entities of the same kind to a query",null);
 		}
-		
+
 		// populate
 		Key[] names=QueryUtil.getColumnNames(qry);
-		
+
 		int row=qry.addRow();
 		for(int i=0;i<names.length;i++){
 			qry.setAtEL(names[i], row, scope.get(names[i],null));
@@ -646,7 +646,7 @@ public class HibernateCaster {
 	public static String toComponentName(Component cfc) {
 		return cfc.getPageSource().getComponentName();
 	}
-	
+
 	public static Component toComponent(Object obj) throws PageException {
 		return CommonUtil.toComponent(obj);
 	}

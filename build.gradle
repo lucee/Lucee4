@@ -40,17 +40,13 @@ buildscript {
 
 repositories {
     maven {
-        url "${artifactory_contextUrl}"
         credentials {
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
+            username "${artifactory_user}"
+            password "${artifactory_password}"
         }
+        url "${artifactory_contextUrl}"
     }
-    maven {
-        url 'http://cfmlprojects.org/artifacts'
-    }
-    mavenCentral()
-
+    mavenLocal()
 }
 configurations {
     compile.extendsFrom provided
@@ -83,7 +79,7 @@ dependencies {
     compile 'org.lucee.lib:fonts:1.0.0' // for cfdocument
     compile 'org.lucee.lib:fusiondebug-api-server:1.0.20'
     compile 'com.h2database:h2:1.3.172' // a database lucee supports out of the box
-    compile 'org.hibernate:hibernate-core:3.5.5-Final' //ORM
+    compile(group: 'org.luceehibernate', name: 'hibernate-core', version: '3.5.5.1-Final')
     compile 'org.lucee:hsqldb:2.3.3' // a database lucee supports out of the box
     compile 'org.lucee.lib:icepdf-core:3.1.0_3'
     compile 'org.lucee.lib:javasysmon:0.3.3' // tool behind getCPUUsage()
@@ -179,8 +175,6 @@ artifactory {
             }
             username = "${artifactory_user}"
             password = "${artifactory_password}"
-            maven = true
-
         }
         defaults {
             publications('LuceeCore')
@@ -191,8 +185,6 @@ artifactory {
             repoKey = 'libs-release'
             username = "${artifactory_user}"
             password = "${artifactory_password}"
-            maven = true
-
         }
     }
 }

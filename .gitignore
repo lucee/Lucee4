@@ -47,3 +47,4 @@ sample.mov
 **/db.properties
 **/db.log
 **/db.script
+gradle.properties

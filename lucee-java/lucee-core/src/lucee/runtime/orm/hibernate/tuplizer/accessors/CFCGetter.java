@@ -4,17 +4,17 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  **/
 package lucee.runtime.orm.hibernate.tuplizer.accessors;
 
@@ -35,12 +35,12 @@ import lucee.runtime.orm.hibernate.HibernateUtil;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
 
-import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
-import org.hibernate.engine.SessionImplementor;
-import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.property.Getter;
-import org.hibernate.type.Type;
+import org.luceehibernate.HibernateException;
+import org.luceehibernate.SessionFactory;
+import org.luceehibernate.engine.SessionImplementor;
+import org.luceehibernate.metadata.ClassMetadata;
+import org.luceehibernate.property.Getter;
+import org.luceehibernate.type.Type;
 
 public class CFCGetter implements Getter {
 
@@ -53,16 +53,16 @@ public class CFCGetter implements Getter {
 	public CFCGetter(String key){
 		this(CommonUtil.createKey(key));
 	}
-	
+
 	/**
 	 * Constructor of the class
-	 * @param engine 
+	 * @param engine
 	 * @param key
 	 */
 	public CFCGetter( Collection.Key key){
 		this.key=key;
 	}
-	
+
 	@Override
 	public Object get(Object trg) throws HibernateException {
 		try {
@@ -78,23 +78,23 @@ public class CFCGetter implements Getter {
 
 			Object rtn = cfc.getComponentScope().get(key,null);
 			return HibernateCaster.toSQL(type, rtn,null);
-		} 
+		}
 		catch (PageException pe) {
 			throw new HibernatePageException(pe);
 		}
 	}
-	
+
 
 	public HibernateORMEngine getHibernateORMEngine(){
 		try {
 			// TODO better impl
 			return HibernateUtil.getORMEngine(CommonUtil.pc());
-		} 
+		}
 		catch (PageException e) {}
-			
+
 		return null;
 	}
-	
+
 
 	@Override
 	public Object getForInsert(Object trg, Map arg1, SessionImplementor arg2)throws HibernateException {

@@ -4,43 +4,43 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  **/
 package lucee.runtime.orm.hibernate.event;
 
 import lucee.runtime.Component;
 import lucee.runtime.orm.hibernate.CommonUtil;
 
-import org.hibernate.event.PostDeleteEvent;
-import org.hibernate.event.PostDeleteEventListener;
-import org.hibernate.event.PostInsertEvent;
-import org.hibernate.event.PostInsertEventListener;
-import org.hibernate.event.PostLoadEvent;
-import org.hibernate.event.PostLoadEventListener;
-import org.hibernate.event.PostUpdateEvent;
-import org.hibernate.event.PostUpdateEventListener;
-import org.hibernate.event.PreDeleteEvent;
-import org.hibernate.event.PreDeleteEventListener;
-import org.hibernate.event.PreInsertEvent;
-import org.hibernate.event.PreInsertEventListener;
-import org.hibernate.event.PreLoadEvent;
-import org.hibernate.event.PreLoadEventListener;
-import org.hibernate.event.PreUpdateEvent;
-import org.hibernate.event.PreUpdateEventListener;
+import org.luceehibernate.event.PostDeleteEvent;
+import org.luceehibernate.event.PostDeleteEventListener;
+import org.luceehibernate.event.PostInsertEvent;
+import org.luceehibernate.event.PostInsertEventListener;
+import org.luceehibernate.event.PostLoadEvent;
+import org.luceehibernate.event.PostLoadEventListener;
+import org.luceehibernate.event.PostUpdateEvent;
+import org.luceehibernate.event.PostUpdateEventListener;
+import org.luceehibernate.event.PreDeleteEvent;
+import org.luceehibernate.event.PreDeleteEventListener;
+import org.luceehibernate.event.PreInsertEvent;
+import org.luceehibernate.event.PreInsertEventListener;
+import org.luceehibernate.event.PreLoadEvent;
+import org.luceehibernate.event.PreLoadEventListener;
+import org.luceehibernate.event.PreUpdateEvent;
+import org.luceehibernate.event.PreUpdateEventListener;
 
 public class AllEventListener extends EventListener implements PreDeleteEventListener, PreInsertEventListener, PreLoadEventListener, PreUpdateEventListener,
 PostDeleteEventListener, PostInsertEventListener, PostLoadEventListener, PostUpdateEventListener {
-	
+
 	private static final long serialVersionUID = 8969282190912098982L;
 
 
@@ -48,7 +48,7 @@ PostDeleteEventListener, PostInsertEventListener, PostLoadEventListener, PostUpd
 	public AllEventListener(Component component) {
 	    super(component, null, true);
 	}
-	
+
 
 	public void onPostInsert(PostInsertEvent event) {
 		invoke(CommonUtil.POST_INSERT, event.getEntity());

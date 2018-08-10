@@ -4,17 +4,17 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  **/
 package lucee.runtime.orm.hibernate;
 
@@ -45,41 +45,41 @@ import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Struct;
 import lucee.runtime.type.util.ListUtil;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.engine.query.QueryPlanCache;
+import org.luceehibernate.SessionFactory;
+import org.luceehibernate.cfg.Configuration;
+import org.luceehibernate.engine.SessionFactoryImplementor;
+import org.luceehibernate.engine.query.QueryPlanCache;
 
 public class SessionFactoryData {
 
 	public List<Component> tmpList;
-	
+
 	private final Map<Key,DataSource> sources=new HashMap<Key, DataSource>();
 	private final Map<Key,Map<String, CFCInfo>> cfcs=new HashMap<Key, Map<String,CFCInfo>>();
 	private final Map<Key,Configuration> configurations=new HashMap<Key,Configuration>();
 	private final Map<Key,SessionFactory> factories=new HashMap<Key,SessionFactory>();
 	private final Map<Key,QueryPlanCache> queryPlanCaches=new HashMap<Key,QueryPlanCache>();
-	
+
 	private final ORMConfiguration ormConf;
 	private NamingStrategy namingStrategy;
 	private final HibernateORMEngine engine;
 	private Struct tableInfo=CommonUtil.createStruct();
 	private String cfcNamingStrategy;
 
-	
-	
+
+
 	public SessionFactoryData(HibernateORMEngine engine,ORMConfiguration ormConf) {
 		this.engine=engine;
 		this.ormConf=ormConf;
 	}
-	
+
 	public ORMConfiguration getORMConfiguration(){
 		return ormConf;
 	}
 	public HibernateORMEngine getEngine(){
 		return engine;
 	}
-	
+
 	public QueryPlanCache getQueryPlanCache(Key datasSourceName) {
 		QueryPlanCache qpc = queryPlanCaches.get(datasSourceName);
 		if(qpc==null){
@@ -88,7 +88,7 @@ public class SessionFactoryData {
 		return qpc;
 	}
 
-	
+
 	public NamingStrategy getNamingStrategy() throws PageException {
 		if(namingStrategy==null) {
 			String strNamingStrategy=ormConf.namingStrategy();
@@ -97,30 +97,30 @@ public class SessionFactoryData {
 			}
 			else {
 				strNamingStrategy=strNamingStrategy.trim();
-				if("default".equalsIgnoreCase(strNamingStrategy)) 
+				if("default".equalsIgnoreCase(strNamingStrategy))
 					namingStrategy=DefaultNamingStrategy.INSTANCE;
-				else if("smart".equalsIgnoreCase(strNamingStrategy)) 
+				else if("smart".equalsIgnoreCase(strNamingStrategy))
 					namingStrategy=SmartNamingStrategy.INSTANCE;
 				else {
 					CFCNamingStrategy cfcNS = new CFCNamingStrategy(cfcNamingStrategy==null?strNamingStrategy:cfcNamingStrategy);
 					cfcNamingStrategy=cfcNS.getComponent().getPageSource().getComponentName();
 					namingStrategy=cfcNS;
-					
+
 				}
 			}
 		}
 		if(namingStrategy==null) return DefaultNamingStrategy.INSTANCE;
 		return namingStrategy;
 	}
-	
-	
+
+
 	public CFCInfo checkExistent(PageContext pc,Component cfc) throws PageException {
 		CFCInfo info = getCFC(HibernateCaster.getEntityName(cfc), null);
 		if(info!=null) return info;
-		
+
 		throw ExceptionUtil.createException(this,null,"there is no mapping definition for component ["+cfc.getAbsName()+"]","");
 	}
-	
+
 	public List<String> getEntityNames() {
 		Iterator<Map<String, CFCInfo>> it = cfcs.values().iterator();
 		List<String> names=new ArrayList<String>();
@@ -136,14 +136,14 @@ public class SessionFactoryData {
 
 	public Component getEntityByEntityName(String entityName,boolean unique) throws PageException {
 		Component cfc;
-		
+
 		// first check cfcs for this entity
 		CFCInfo info = getCFC(entityName,null);
 		if(info!=null) {
 			cfc=info.getCFC();
 			return unique?(Component)cfc.duplicate(false):cfc;
 		}
-		
+
 		// if parsing is in progress, the cfc can be found here
 		if(tmpList!=null){
 			Iterator<Component> it = tmpList.iterator();
@@ -155,7 +155,7 @@ public class SessionFactoryData {
 		}
 		throw ExceptionUtil.createException((ORMSession)null,null,"entity ["+entityName+"] does not exist","");
 	}
-	
+
 
 
 	public Component getEntityByCFCName(String cfcName,boolean unique) throws PageException {
@@ -164,14 +164,14 @@ public class SessionFactoryData {
 		if(pointIndex!=-1) {
 			name=cfcName.substring(pointIndex+1);
 		}
-		else 
+		else
 			cfcName=null;
-		
-		
-		
+
+
+
 		Component cfc;
 		List<String> names=new ArrayList<String>();
-		
+
 		List<Component> list = tmpList;
 		if(list!=null){
 			int index=0;
@@ -198,15 +198,15 @@ public class SessionFactoryData {
 				}
 			}
 		}
-		
+
 		CFCInfo info = getCFC(name,null);
 		if(info!=null) {
 			cfc=info.getCFC();
 			return unique?(Component)cfc.duplicate(false):cfc;
 		}
-		
+
 		throw ExceptionUtil.createException((ORMSession)null,null,"entity ["+name+"] "+(Util.isEmpty(cfcName)?"":"with cfc name ["+cfcName+"] ")+"does not exist, existing  entities are ["+ListUtil.listToList(names, ", ")+"]","");
-		
+
 	}
 
 	// Datasource specific
@@ -234,7 +234,7 @@ public class SessionFactoryData {
 		if(factory==null && getConfiguration(datasSourceName)!=null) buildSessionFactory(datasSourceName);// this should never be happen
 		return factory;
 	}
-	
+
 
 	public void reset() {
 		configurations.clear();
@@ -246,30 +246,30 @@ public class SessionFactoryData {
 		//namingStrategy=null; because the ormconf not change, this has not to change as well
 		tableInfo=CommonUtil.createStruct();
 	}
-	
+
 
 	public Struct getTableInfo(DatasourceConnection dc, String tableName) throws PageException {
 		Collection.Key keyTableName=CommonUtil.createKey(tableName);
 		Struct columnsInfo = (Struct) tableInfo.get(keyTableName,null);
 		if(columnsInfo!=null) return columnsInfo;
-		
+
 		columnsInfo = HibernateUtil.checkTable(dc,tableName,this);
     	tableInfo.setEL(keyTableName,columnsInfo);
     	return columnsInfo;
 	}
 
-	
+
 	// CFC methods
 	public void addCFC(String entityName, CFCInfo info) {
 		DataSource ds = info.getDataSource();
 		Key dsn=KeyImpl.init(ds.getName());
-				
+
 		Map<String, CFCInfo> map = cfcs.get(dsn);
 		if(map==null) cfcs.put(dsn, map=new HashMap<String, CFCInfo>());
 		map.put(HibernateUtil.id(entityName), info);
 		sources.put(dsn, ds);
 	}
-	
+
 
 	CFCInfo getCFC(String entityName, CFCInfo defaultValue) {
 		Iterator<Map<String, CFCInfo>> it = cfcs.values().iterator();
@@ -290,13 +290,13 @@ public class SessionFactoryData {
 		if(rtn==null) return new HashMap<String, CFCInfo>();
 		return rtn;
 	}*/
-	
+
 	public Map<String, CFCInfo> getCFCs(Key datasSourceName) {
 		Map<String, CFCInfo> rtn = cfcs.get(datasSourceName);
 		if(rtn==null) return new HashMap<String, CFCInfo>();
 		return rtn;
 	}
-	
+
 	public void clearCFCs() {
 		cfcs.clear();
 	}
@@ -320,7 +320,7 @@ public class SessionFactoryData {
 			getFactory(it.next());
 		}
 	}
-	
+
 	public Map<Key, SessionFactory> getFactories() {
 		Iterator<Key> it = cfcs.keySet().iterator();
 		Map<Key,SessionFactory> map=new HashMap<Key, SessionFactory>();

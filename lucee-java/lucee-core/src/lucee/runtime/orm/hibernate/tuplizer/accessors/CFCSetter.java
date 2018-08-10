@@ -4,17 +4,17 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  **/
 package lucee.runtime.orm.hibernate.tuplizer.accessors;
 
@@ -27,12 +27,12 @@ import lucee.runtime.orm.hibernate.HibernatePageException;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Collection.Key;
 
-import org.hibernate.HibernateException;
-import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.property.Setter;
+import org.luceehibernate.HibernateException;
+import org.luceehibernate.engine.SessionFactoryImplementor;
+import org.luceehibernate.property.Setter;
 
 public final class CFCSetter implements Setter {
-	
+
 	private Key key;
 
 	/**
@@ -42,7 +42,7 @@ public final class CFCSetter implements Setter {
 	public CFCSetter(String key){
 		this(CommonUtil.createKey(key));
 	}
-	
+
 	/**
 	 * Constructor of the class
 	 * @param key
@@ -68,7 +68,7 @@ public final class CFCSetter implements Setter {
 		try {
 			Component cfc = CommonUtil.toComponent(trg);
 			cfc.getComponentScope().set(key,value);
-		} 
+		}
 		catch (PageException pe) {
 			throw new HibernatePageException(pe);
 		}

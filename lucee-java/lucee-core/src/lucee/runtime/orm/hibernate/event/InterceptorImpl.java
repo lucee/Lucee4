@@ -4,17 +4,17 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  **/
 package lucee.runtime.orm.hibernate.event;
 
@@ -28,8 +28,8 @@ import lucee.runtime.orm.hibernate.HibernateCaster;
 import lucee.runtime.type.Collection;
 import lucee.runtime.type.Struct;
 
-import org.hibernate.EmptyInterceptor;
-import org.hibernate.type.Type;
+import org.luceehibernate.EmptyInterceptor;
+import org.luceehibernate.type.Type;
 
 public class InterceptorImpl extends EmptyInterceptor {
 
@@ -55,7 +55,7 @@ public class InterceptorImpl extends EmptyInterceptor {
 	@Override
 	public boolean onSave(Object entity, Serializable id, Object[] state,
 			String[] propertyNames, Type[] types) {
-		
+
 		return on(entity, id, state, null, propertyNames, types, CommonUtil.PRE_INSERT, hasPreInsert);
 		//return super.onSave(entity, id, state, propertyNames, types);
 	}
@@ -67,20 +67,20 @@ public class InterceptorImpl extends EmptyInterceptor {
 		return on(entity, id, currentState, toStruct(propertyNames, previousState), propertyNames, types, CommonUtil.PRE_UPDATE, hasPreUpdate);
 		//return super.onFlushDirty(entity, id, currentState, previousState, propertyNames, types);
 	}
-	
+
 
 	private boolean on(Object entity, Serializable id,
 			Object[] state, Struct data,
 			String[] propertyNames, Type[] types, Collection.Key eventType, boolean hasMethod) {
-		
+
 		Component cfc = CommonUtil.toComponent(entity,null);
 		if(cfc!=null && EventListener.hasEventType(cfc, eventType)){
 			EventListener.invoke(eventType, cfc, data, null);
 		}
-		if(hasMethod) 
+		if(hasMethod)
 			EventListener.invoke(eventType, listener.getCFC(), data, entity);
-		
-		
+
+
 		boolean rtn=false;
 		String prop;
 		Object before,current;
@@ -89,12 +89,12 @@ public class InterceptorImpl extends EmptyInterceptor {
 		try {
 			session=ORMUtil.getSession(ThreadLocalPageContext.get());
 		} catch (PageException pe) {}*/
-		
+
         for(int i = 0; i < propertyNames.length; i++)	{
             prop = propertyNames[i];
             before = state[i];
             current = ORMUtil.getPropertyValue(/* jira2049 session,*/cfc, prop,null);
-            
+
             if(before != current && (current == null || !CommonUtil.equalsComplexEL(before, current))) {
             	try {
 					state[i] = HibernateCaster.toSQL(types[i], current,null);
@@ -104,13 +104,13 @@ public class InterceptorImpl extends EmptyInterceptor {
 				rtn = true;
             }
         }
-        return rtn;	
+        return rtn;
 	}
-	
-    
-	
-	
-	
+
+
+
+
+
 
     private static Struct toStruct(String propertyNames[], Object state[])  {
         Struct sct = CommonUtil.createStruct();

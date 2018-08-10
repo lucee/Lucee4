@@ -4,17 +4,17 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  **/
 package lucee.runtime.orm.hibernate;
 
@@ -74,14 +74,14 @@ import lucee.runtime.util.Cast;
 import lucee.runtime.util.Creation;
 import lucee.runtime.util.Decision;
 
-import org.hibernate.JDBCException;
-import org.hibernate.exception.ConstraintViolationException;
+import org.luceehibernate.JDBCException;
+import org.luceehibernate.exception.ConstraintViolationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 public class CommonUtil {
-	
+
 	public static final Key ENTITY_NAME = CommonUtil.createKey("entityname");
 	public static final Key FIELDTYPE = CommonUtil.createKey("fieldtype");
 	public static final Key POST_INSERT=CommonUtil.createKey("postInsert");
@@ -94,20 +94,20 @@ public class CommonUtil {
 	public static final Key PRE_INSERT=CommonUtil.createKey("preInsert");
 	public static final Key INIT=CommonUtil.createKey("init");
 	private static final short INSPECT_UNDEFINED = (short)4; /*ConfigImpl.INSPECT_UNDEFINED*/
-	
+
 	private static Charset charset;
-	
+
 	public static final Charset UTF8;
 	public static final Charset ISO88591;
 	public static final Charset UTF16BE;
 	public static final Charset UTF16LE;
-	
+
 	static {
 		UTF8=Charset.forName("utf-8");
 		ISO88591=Charset.forName("iso-8859-1");
 		UTF16BE=Charset.forName("utf-16BE");
 		UTF16LE=Charset.forName("UTF-16LE");
-		
+
 		String strCharset=System.getProperty("file.encoding");
 		if(strCharset==null || strCharset.equalsIgnoreCase("MacRoman"))
 			strCharset="cp1252";
@@ -115,9 +115,9 @@ public class CommonUtil {
 		if(strCharset.equalsIgnoreCase("utf-8")) charset=UTF8;
 		else charset=Charset.forName(strCharset);
 	}
-	
 
-	
+
+
 	private static Cast caster;
 	private static Decision decision;
 	private static Creation creator;
@@ -126,7 +126,7 @@ public class CommonUtil {
 	public static Object castTo(PageContext pc, Class trgClass, Object obj) throws PageException {
 		return Caster.castTo(pc, trgClass, obj);
 	}
-	
+
 	public static Array toArray(Object obj) throws PageException {
 		return caster().toArray(obj);
 	}
@@ -167,10 +167,10 @@ public class CommonUtil {
 		return Caster.toComponent(obj,defaultValue);
 	}
 
-	public static Object toList(String[] arr, String delimiter) { 
+	public static Object toList(String[] arr, String delimiter) {
 		return ListUtil.arrayToList(arr, delimiter);
 	}
-	
+
 	public static String toString(Object obj, String defaultValue) {
 		return caster().toString(obj,defaultValue);
 	}
@@ -192,8 +192,8 @@ public class CommonUtil {
 
 	/**
 	    * reads String data from File
-	     * @param file 
-	     * @param charset 
+	     * @param file
+	     * @param charset
 	     * @return readed string
 	    * @throws IOException
 	    */
@@ -208,23 +208,23 @@ public class CommonUtil {
 	           closeEL(r);
 	       }
 	   }
-	
+
 	   public static String toString(Reader reader) throws IOException {
 	       StringWriter sw=new StringWriter(512);
 	       copy(toBufferedReader(reader),sw);
 	       sw.close();
 	       return sw.toString();
 	   }
-	   
+
 	   public static BufferedReader toBufferedReader(Reader r) {
 			if(r instanceof BufferedReader) return (BufferedReader) r;
 			return new BufferedReader(r);
 		}
-	   
+
 	   private static final void copy(Reader r, Writer w) throws IOException {
 	        copy(r,w,0xffff);
 	    }
-	   
+
 	   private static final void copy(Reader r, Writer w, int blockSize) throws IOException {
 	        char[] buffer = new char[blockSize];
 	        int len;
@@ -232,7 +232,7 @@ public class CommonUtil {
 	        while((len = r.read(buffer)) !=-1)
 	          w.write(buffer, 0, len);
 	    }
-	
+
  	public static Reader getReader(Resource res, Charset charset) throws IOException {
  		InputStream is=null;
  		try {
@@ -249,7 +249,7 @@ public class CommonUtil {
 	        if (first == 0xFF && second == 0xFE)    {
 	        	return _getReader(is, UTF16LE);
 	        }
-	        
+
 	        int third=is.read();
 	        // EF BB BF 	UTF-8
 	        if (first == 0xEF && second == 0xBB && third == 0xBF)    {
@@ -266,7 +266,7 @@ public class CommonUtil {
  			closeEL(is);
  			throw ioe;
  		}
- 		
+
  	// when mark not supported return new reader
         closeEL(is);
         is=null;
@@ -277,21 +277,21 @@ public class CommonUtil {
  			closeEL(is);
  			throw ioe;
  		}
-        return _getReader(is, charset);             
+        return _getReader(is, charset);
    }
- 	
+
  	private static Reader _getReader(InputStream is, Charset cs)  {
 		 if(cs==null) cs=charset;
 	     return new BufferedReader(new InputStreamReader(is,cs));
 	 }
 
-	public static String[] toStringArray(String list, char delimiter) { 
+	public static String[] toStringArray(String list, char delimiter) {
 		return ListUtil.listToStringArray(list, delimiter);
 	}
-	public static String[] toStringArray(String list, String delimiter) { 
+	public static String[] toStringArray(String list, String delimiter) {
 		return ListUtil.toStringArray(ListUtil.listToArray(list,delimiter),""); //TODO better
 	}
-	
+
 	public static Integer toInteger(Object obj) throws PageException {
 		return caster().toInteger(obj);
 	}
@@ -304,7 +304,7 @@ public class CommonUtil {
 	public static int toIntValue(Object obj, int defaultValue) {
 		return caster().toIntValue(obj,defaultValue);
 	}
-	
+
 	public static Array toArray(Argument arg) {
 		Array trg=createArray();
 		int[] keys = arg.intKeys();
@@ -314,11 +314,11 @@ public class CommonUtil {
 		}
 		return trg;
 	}
-	
+
 	public static PageException toPageException(Throwable t) {
 		PageException pe = caster().toPageException(t);;
-		if (t instanceof org.hibernate.HibernateException) {
-			org.hibernate.HibernateException he = (org.hibernate.HibernateException)t;
+		if (t instanceof org.luceehibernate.HibernateException) {
+			org.luceehibernate.HibernateException he = (org.luceehibernate.HibernateException)t;
 			Throwable cause = he.getCause();
 			if(cause != null) {
 				pe = caster().toPageException( cause );
@@ -336,7 +336,7 @@ public class CommonUtil {
 			}
 		}
 		return pe;
-		
+
 	}
 	public static Serializable toSerializable(Object obj) throws PageException {
 		return caster().toSerializable(obj);
@@ -355,11 +355,11 @@ public class CommonUtil {
 	public static SQLItem toSQLItem(Object value, int type) {
 		return new SQLItemImpl(value,type);
 	}
-	
+
 	public static Object[] toNativeArray(Object obj) throws PageException {
 		return Caster.toNativeArray(obj);
 	}
-	
+
 	public static String toTypeName(Object obj) {
 		return caster().toTypeName(obj);
 	}
@@ -369,23 +369,23 @@ public class CommonUtil {
 	public static Node toXML(Object obj, Node defaultValue) {
 		return caster().toXML(obj,defaultValue);
 	}
-	
+
 
 	public static Document toDocument(Resource res, Charset cs) throws IOException, SAXException {
 		return XMLUtil.parse(XMLUtil.toInputSource(res,cs), null, false);
 	}
-	
-	
-	
+
+
+
 
 	public static boolean isArray(Object obj) {
 		return decision().isArray(obj);
 	}
-	
+
 	public static boolean isStruct(Object obj) {
 		return decision().isStruct(obj);
 	}
-	
+
 	public static Array createArray(){
 		return creator().createArray();
 	}
@@ -400,7 +400,7 @@ public class CommonUtil {
 		pi.setType(type);
 		return pi;
 	}
-	
+
 	public static Struct createStruct(){
 		return creator().createStruct();
 	}
@@ -410,15 +410,15 @@ public class CommonUtil {
 	public static Query createQuery(Collection.Key[] columns, int rows, String name) throws PageException{
 		return creator().createQuery(columns, rows, name);
 	}
-	public static Query createQuery(Array names, Array types, int rows, String name) throws PageException{ 
+	public static Query createQuery(Array names, Array types, int rows, String name) throws PageException{
 		return new QueryImpl(names,types,rows,name);
 	}
 
 	public static RefBoolean createRefBoolean() {
 		return new RefBooleanImpl();
 	}
-	
-	public static Key[] keys(Collection coll) { 
+
+	public static Key[] keys(Collection coll) {
 		if(coll==null) return new Key[0];
 		Iterator<Key> it = coll.keyIterator();
 		List<Key> rtn=new ArrayList<Key>();
@@ -427,9 +427,9 @@ public class CommonUtil {
 		}
 		return rtn.toArray(new Key[rtn.size()]);
 	}
-	
-	
-	
+
+
+
 	private static Creation creator() {
 		if(creator==null)
 			creator=CFMLEngineFactory.getInstance().getCreationUtil();
@@ -446,15 +446,15 @@ public class CommonUtil {
 			caster=CFMLEngineFactory.getInstance().getCastUtil();
 		return caster;
 	}
-	
+
 
 	/**
 	 * represents a SQL Statement with his defined arguments for a prepared statement
 	 */
 	static class SQLImpl implements SQL {
-	    
+
 	    private String strSQL;
-	    
+
 	    /**
 	     * Constructor only with SQL String
 	     * @param strSQL SQL String
@@ -462,12 +462,12 @@ public class CommonUtil {
 	    public SQLImpl(String strSQL) {
 	        this.strSQL=strSQL;
 	    }
-	    
-	    
+
+
 	    public void addItems(SQLItem item) {
-	    	
+
 	    }
-	    
+
 	    @Override
 	    public SQLItem[] getItems() {
 	        return new SQLItem[0];
@@ -477,17 +477,17 @@ public class CommonUtil {
 	    public int getPosition() {
 	        return 0;
 	    }
-	    
+
 	    @Override
 	    public void setPosition(int position) {
-	    }    
-	    
+	    }
+
 
 	    @Override
 	    public String getSQLString() {
 	        return strSQL;
 	    }
-	    
+
 	    @Override
 	    public void setSQLString(String strSQL) {
 	        this.strSQL= strSQL;
@@ -496,14 +496,14 @@ public class CommonUtil {
 	    @Override
 	    public String toString() {
 	        return strSQL;
-	    }    
-	    
+	    }
+
 	    @Override
 	    public String toHashString() {
 	        return strSQL;
 	    }
 	}
-	
+
 	/**
 	 * Integer Type that can be modified
 	 */
@@ -513,35 +513,35 @@ public class CommonUtil {
 
 
 	    public RefBooleanImpl() {}
-	    
+
 	    /**
 	     * @param value
 	     */
 	    public RefBooleanImpl(boolean value) {
 	        this.value=value;
 	    }
-	    
+
 	    /**
 	     * @param value
 	     */
 	    public void setValue(boolean value) {
 	        this.value = value;
 	    }
-	    
+
 	    /**
 	     * @return returns value as Boolean Object
 	     */
 	    public Boolean toBoolean() {
 	        return value?Boolean.TRUE:Boolean.FALSE;
 	    }
-	    
+
 	    /**
 	     * @return returns value as boolean value
 	     */
 	    public boolean toBooleanValue() {
 	        return value;
 	    }
-	    
+
 	    @Override
 	    public String toString() {
 	        return value?"true":"false";
@@ -561,7 +561,7 @@ public class CommonUtil {
 	public static DatasourceConnection getDatasourceConnection(PageContext pc, DataSource ds) throws PageException {
 		return ((ConfigWebImpl)pc.getConfig()).getDatasourceConnectionPool().getDatasourceConnection(ds,null,null); // TODO use reflection
 	}
-	
+
 	public static void releaseDatasourceConnection(PageContext pc, DatasourceConnection dc) {
 		((ConfigWebImpl)pc.getConfig()).getDatasourceConnectionPool().releaseDatasourceConnection(pc.getConfig(),dc,true); // TODO use reflection
 	}
@@ -573,26 +573,26 @@ public class CommonUtil {
 				null,INSPECT_UNDEFINED,true,false,false,false,true,true,null
 				);
 	}
-	
+
 	public static String last(String list, char delimiter) {
 		return ListUtil.last(list, delimiter);
 	}
-	
+
 	public static String last(String list, String delimiter) {
 		return ListUtil.last(list, delimiter,true);
 	}
-	
+
 	public static int listFindNoCaseIgnoreEmpty(String list, String value, char delimiter) {
 		return ListUtil.listFindNoCaseIgnoreEmpty(list,value,delimiter);
 	}
-	
+
 	public static String[] trimItems(String[] arr) {
 		for(int i=0;i<arr.length;i++) {
 			arr[i]=arr[i].trim();
 		}
 		return arr;
 	}
-	
+
 	public static Document getDocument(Node node) {
 		return XMLUtil.getDocument(node);
 	}
@@ -619,7 +619,7 @@ public class CommonUtil {
 			closeEL(writer);
 		}
 	}
-	
+
 	public static Writer getWriter(Resource res, Charset charset, boolean append) throws IOException {
  		OutputStream os=null;
  		try {
@@ -631,7 +631,7 @@ public class CommonUtil {
  		}
  		return getWriter(os, charset);
  	}
-	
+
 	public static Writer getWriter(OutputStream os, Charset cs) {
 		if(cs==null) cs=charset;
 		return new BufferedWriter(new OutputStreamWriter(os,charset));
@@ -640,12 +640,12 @@ public class CommonUtil {
 	public static BufferedReader toBufferedReader(Resource res, Charset charset) throws IOException {
 		return toBufferedReader(getReader(res,(Charset)null));
 	}
-	
+
 	public static boolean equalsComplexEL(Object left, Object right) {
 		return Operator.equalsComplexEL(left, right, false,true);
 	}
 
-	public static void setEntity(Component c, boolean entity) { 
+	public static void setEntity(Component c, boolean entity) {
 		ComponentProProxy.setEntity(c,entity);
 	}
 
@@ -654,7 +654,7 @@ public class CommonUtil {
 		return ThreadLocalPageContext.get();
 	}
 
-	public static Config config() { 
+	public static Config config() {
 		//return CFMLEngineFactory.getInstance().getThreadPageContext().getConfig();
 		return ThreadLocalPageContext.getConfig();
 	}
@@ -666,7 +666,7 @@ public class CommonUtil {
 	public static Object getMetaStructItem(Component c, Key name) {
 		return ComponentProProxy.getMetaStructItem(c,name);
 	}
-	
+
 	public static void closeEL(OutputStream os) {
 		if(os!=null) {
 			try {
@@ -675,7 +675,7 @@ public class CommonUtil {
 			catch (Throwable t) {}
 		}
 	}
-	
+
 	public static void closeEL(Writer w) {
 		if(w!=null) {
 			try {
@@ -693,18 +693,18 @@ public class CommonUtil {
 			catch (Throwable t) {}
 		}
 	}
-	
+
 	public static void closeEL(InputStream is) {
    	 try {
    		 if(is!=null)is.close();
-   	 } 
+   	 }
    	 catch (Throwable t) {}
     }
-	
+
 	public static void closeEL(Reader r) {
    	 try {
    		 if(r!=null)r.close();
-   	 } 
+   	 }
    	 catch (Throwable t) {}
     }
 }

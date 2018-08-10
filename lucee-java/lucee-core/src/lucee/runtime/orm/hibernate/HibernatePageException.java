@@ -4,17 +4,17 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public 
+ *
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  **/
 package lucee.runtime.orm.hibernate;
 
@@ -31,15 +31,15 @@ import lucee.runtime.exp.PageException;
 import lucee.runtime.exp.PageExceptionBox;
 import lucee.runtime.type.Struct;
 
-import org.hibernate.HibernateException;
+import org.luceehibernate.HibernateException;
 
 public class HibernatePageException extends HibernateException implements IPageException,PageExceptionBox  {
 
 	private static final long serialVersionUID = -7745292875775743390L;
-	
+
 	private PageException pe;
 
-	
+
 	/**
 	 * constructor of the class
 	 * @param pe page exception to hold
@@ -48,38 +48,38 @@ public class HibernatePageException extends HibernateException implements IPageE
 		super(pe.getMessage());
 		this.pe=pe;
 	}
-	
+
 
 	@Override
 	public String getDetail() {
 		return pe.getDetail();
 	}
-	
+
 	@Override
 	public String getErrorCode() {
 		return pe.getErrorCode();
 	}
-	
+
 	@Override
 	public String getExtendedInfo() {
 		return pe.getExtendedInfo();
 	}
-	
+
 	@Override
 	public Struct getCatchBlock(PageContext pc) {
 		return getCatchBlock(pc.getConfig());
 	}
-	
+
 	public Struct getCatchBlock() {
 		// TLPC
 		return pe.getCatchBlock(CommonUtil.config());
 	}
-	
+
 
 	public CatchBlock getCatchBlock(Config config) {
 		return pe.getCatchBlock(config);
 	}
-	
+
 	@Override
 	public Struct getErrorBlock(PageContext pc,ErrorPage ep) {
 		return pe.getErrorBlock(pc,ep);
@@ -88,7 +88,7 @@ public class HibernatePageException extends HibernateException implements IPageE
 	public void addContext(PageSource template, int line, int column,StackTraceElement ste) {
 		pe.addContext(template,line,column,ste);
 	}
-	
+
 	@Override
 	public DumpData toDumpData(PageContext pageContext, int maxlevel, DumpProperties dp) {
 		return pe.toDumpData(pageContext, maxlevel,dp);
@@ -106,19 +106,19 @@ public class HibernatePageException extends HibernateException implements IPageE
 
 	@Override
 	public void setErrorCode(String errorCode) {
-			 pe.setErrorCode(errorCode);		
+			 pe.setErrorCode(errorCode);
 	}
 
 	@Override
 	public void setExtendedInfo(String extendedInfo) {
-			 pe.setExtendedInfo(extendedInfo);		
+			 pe.setExtendedInfo(extendedInfo);
 	}
-	
+
 	@Override
 	public boolean typeEqual(String type) {
 		return 	pe.typeEqual(type);
 	}
-	
+
 	@Override
 	public String getTypeAsString() {
 		return pe.getTypeAsString();
