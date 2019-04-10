@@ -35,6 +35,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import lucee.aprint;
+import lucee.commons.io.compress.ZipUtil;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.ResourcesImpl;
@@ -268,7 +269,7 @@ public final class CompressUtil {
 	        zis = new ZipInputStream( IOUtil.toBufferedInputStream(zipFile.getInputStream()) ) ;     
 	        ZipEntry entry;
 	        while ( ( entry = zis.getNextEntry()) != null ) {
-	        	Resource target=targetDir.getRealResource(entry.getName());
+	        	Resource target=ZipUtil.toResource(targetDir, entry);
 	            if(entry.isDirectory()) {
 	                target.mkdirs();
 	            }
@@ -321,7 +322,7 @@ public final class CompressUtil {
 	        Enumeration en = zf.entries();
 	        while(en.hasMoreElements()){
 	        	entry = (ZipEntry) en.nextElement();
-	        	Resource target=targetDir.getRealResource(entry.getName());
+	        	Resource target=ZipUtil.toResource(targetDir, entry);
 	            if(entry.isDirectory()) {
 	                target.mkdirs();
 	            }
