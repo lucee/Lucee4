@@ -106,6 +106,11 @@ public final class SystemUtil {
 	public static final int JAVA_VERSION_1_7 = 7;
 	public static final int JAVA_VERSION_1_8 = 8;
 	public static final int JAVA_VERSION_1_9 = 9;
+    public static final int JAVA_VERSION_10 = 10;
+    public static final int JAVA_VERSION_11 = 11;
+    public static final int JAVA_VERSION_12 = 12;
+    public static final int JAVA_VERSION_13 = 13;
+    public static final int JAVA_VERSION_14 = 14;
 	
 
 	public static final int OUT = 0;
@@ -122,17 +127,21 @@ public final class SystemUtil {
     
     private static final String JAVA_VERSION_STRING = System.getProperty("java.version");
     public static final int JAVA_VERSION;
+    private static final Class[] EMPTY_CLASS = new Class[0];
+    private static final Object[] EMPTY_OBJ = new Object[0];
+    private static Boolean booted=null;
+
     static {
-    	if(JAVA_VERSION_STRING.startsWith("1.9.")) 		JAVA_VERSION=JAVA_VERSION_1_9;
-    	else if(JAVA_VERSION_STRING.startsWith("1.8."))	JAVA_VERSION=JAVA_VERSION_1_8;
-    	else if(JAVA_VERSION_STRING.startsWith("1.7.")) JAVA_VERSION=JAVA_VERSION_1_7;
-    	else if(JAVA_VERSION_STRING.startsWith("1.6.")) JAVA_VERSION=JAVA_VERSION_1_6;
-    	else if(JAVA_VERSION_STRING.startsWith("1.5.")) JAVA_VERSION=JAVA_VERSION_1_5;
-    	else if(JAVA_VERSION_STRING.startsWith("1.4.")) JAVA_VERSION=JAVA_VERSION_1_4;
-    	else if(JAVA_VERSION_STRING.startsWith("1.3.")) JAVA_VERSION=JAVA_VERSION_1_3;
-    	else if(JAVA_VERSION_STRING.startsWith("1.2.")) JAVA_VERSION=JAVA_VERSION_1_2;
-    	else if(JAVA_VERSION_STRING.startsWith("1.1.")) JAVA_VERSION=JAVA_VERSION_1_1;
-    	else JAVA_VERSION=JAVA_VERSION_1_0;
+        if (JAVA_VERSION_STRING.startsWith("1.14.") || JAVA_VERSION_STRING.startsWith("14")) JAVA_VERSION = JAVA_VERSION_14;
+        else if (JAVA_VERSION_STRING.startsWith("1.13.") || JAVA_VERSION_STRING.startsWith("13")) JAVA_VERSION = JAVA_VERSION_13;
+        else if (JAVA_VERSION_STRING.startsWith("1.12.") || JAVA_VERSION_STRING.startsWith("12")) JAVA_VERSION = JAVA_VERSION_12;
+        else if (JAVA_VERSION_STRING.startsWith("1.11.") || JAVA_VERSION_STRING.startsWith("11")) JAVA_VERSION = JAVA_VERSION_11;
+        else if (JAVA_VERSION_STRING.startsWith("1.10.") || JAVA_VERSION_STRING.startsWith("10")) JAVA_VERSION = JAVA_VERSION_10;
+        else if (JAVA_VERSION_STRING.startsWith("1.9.") || JAVA_VERSION_STRING.startsWith("9.")) JAVA_VERSION = JAVA_VERSION_1_9;
+        else if (JAVA_VERSION_STRING.startsWith("1.8.")) JAVA_VERSION = JAVA_VERSION_1_8;
+        else if (JAVA_VERSION_STRING.startsWith("1.7.")) JAVA_VERSION = JAVA_VERSION_1_7;
+        else if (JAVA_VERSION_STRING.startsWith("1.6.")) JAVA_VERSION = JAVA_VERSION_1_6;
+        else JAVA_VERSION = 0;
     }
 	
     private static Resource tempFile;
@@ -160,8 +169,23 @@ public final class SystemUtil {
 		MemoryPoolMXBean tmp = getPermGenSpaceBean();
 		if(tmp!=permGenSpaceBean)permGenSpaceBean=null;
 	}
-	
-	
+
+    public static boolean isBooted() {
+        if(Boolean.TRUE.equals(booted)) return true;
+
+        Class clazz = ClassUtil.loadClass("jdk.internal.misc.VM",null); // Java == 9
+        if(clazz==null)  clazz = ClassUtil.loadClass("sun.misc.VM",null); // Java < 9
+
+        if(clazz!=null) {
+            try {
+                Method m = clazz.getMethod("isBooted", EMPTY_CLASS);
+                booted = Caster.toBoolean(m.invoke(null, EMPTY_OBJ));
+                return booted.booleanValue();
+            }
+            catch(Exception e) {}
+        }
+        return true;
+    }
 	
 	public static MemoryPoolMXBean getPermGenSpaceBean() {
 		java.util.List<MemoryPoolMXBean> manager = ManagementFactory.getMemoryPoolMXBeans();
