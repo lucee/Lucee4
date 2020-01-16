@@ -122,33 +122,6 @@ public class SFTPClientImpl extends AFTPClient {
 		return session.getHostKey().getFingerPrint(jsch);
 	}
 
-	
-	public static void main(String[] args) throws SocketException, IOException, PageException {
-		SFTPClientImpl client=new SFTPClientImpl();
-		InetAddress host = InetAddress.getByName("virola.viviotech.net");
-		String user = "root";
-		String pass="Eunn:.TidkiWaj3";
-		String fingerprint="aa:e8:43:3e:6b:44:91:a3:d3:da:07:34:90:2a:c8:5b";
-		int port=10022;
-		
-		client.init(host, port, user, pass,null,true);
-		client.connect();
-		
-		// fingerprint
-		print.e("fingerprint: "+client.fingerprint());
-		
-		// list files
-		FTPFile[] files = client.listFiles("/");
-		print.e(Ftp.toQuery(files, "sftp","/", host.getHostAddress()));
-		
-		
-		client.disconnect();
-		print.e("done!");
-		
-		// UnknownHostKey: 205.210.189.210. RSA key fingerprint is aa:e8:43:3e:6b:44:91:a3:d3:da:07:34:90:2a:c8:5b
-		
-	}
-
 	@Override
 	public boolean rename(String from, String to) throws IOException {
 		try {
