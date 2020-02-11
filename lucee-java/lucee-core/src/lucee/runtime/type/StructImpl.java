@@ -18,16 +18,15 @@
  **/
 package lucee.runtime.type;
 
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
-import lucee.commons.collection.HashMapPro;
-import lucee.commons.collection.LinkedHashMapPro;
 import lucee.commons.collection.MapFactory;
-import lucee.commons.collection.MapPro;
-import lucee.commons.collection.MapProWrapper;
-import lucee.commons.collection.SyncMap;
-import lucee.commons.collection.WeakHashMapPro;
+
 import lucee.commons.lang.SerializableObject;
 import lucee.runtime.config.NullSupportHelper;
 import lucee.runtime.exp.ExpressionException;
@@ -46,15 +45,18 @@ import org.apache.commons.collections.map.ReferenceMap;
 public class StructImpl extends StructSupport {
 	private static final long serialVersionUID = 1421746759512286393L;
 
-	public static final int TYPE_UNDEFINED = -1;// FUTURE add to interface Struct 
+	public static final int TYPE_UNDEFINED = -1;// FUTURE add to interface Struct
+	private static final int DEFAULT_INITIAL_CAPACITY = 32;
+	public static final Object NULL = new Object();
 
-	private MapPro<Collection.Key,Object> map;
+	private Map<Key,Object> map;
+	private final int type;
 	
 	/**
 	 * default constructor
 	 */
 	public StructImpl() {
-		this(StructImpl.TYPE_UNDEFINED,HashMapPro.DEFAULT_INITIAL_CAPACITY);//asx
+		this(StructImpl.TYPE_UNDEFINED, DEFAULT_INITIAL_CAPACITY);//asx
 	}
 	
 	/**
@@ -65,7 +67,7 @@ public class StructImpl extends StructSupport {
      * @param type
      */
     public StructImpl(int type) {
-    	this(type,HashMapPro.DEFAULT_INITIAL_CAPACITY);
+    	this(type, DEFAULT_INITIAL_CAPACITY);
     }
 	
     /**
@@ -77,26 +79,20 @@ public class StructImpl extends StructSupport {
      * @param initialCapacity initial capacity - MUST be a power of two.
      */
     public StructImpl(int type, int initialCapacity) {
-    	if(type==TYPE_WEAKED)	map=new SyncMap<Collection.Key, Object>(new WeakHashMapPro<Collection.Key,Object>(initialCapacity));
-    	else if(type==TYPE_SOFT)	map=new SyncMap<Collection.Key, Object>(new MapProWrapper<Collection.Key, Object>(new ReferenceMap(ReferenceMap.HARD,ReferenceMap.SOFT,initialCapacity,0.75f),new SerializableObject()));
-    	else if(type==TYPE_LINKED)		map=new SyncMap<Collection.Key, Object>(new LinkedHashMapPro<Collection.Key,Object>(initialCapacity));
-    	else 						map=MapFactory.getConcurrentMap(initialCapacity);
+    	if (type == TYPE_WEAKED) map = Collections.synchronizedMap(new WeakHashMap<>(initialCapacity));
+    	else if (type == TYPE_SOFT) map = Collections.synchronizedMap(new ReferenceMap(ReferenceMap.HARD, ReferenceMap.SOFT, initialCapacity, 0.75f));
+    	else if (type == TYPE_LINKED) map = Collections.synchronizedMap(new LinkedHashMap<>(initialCapacity));
+    	else map = MapFactory.getConcurrentMap(initialCapacity);
+    	this.type = type;
     }
-    
-    
-    
-    
+
     public int getType(){
-    	return StructUtil.getType(map);
+    	return type;
     }
-    
-    
-    
-    
-	
+
 	@Override
 	public Object get(Collection.Key key, Object defaultValue) {
-		if(NullSupportHelper.full())return map.g(key, defaultValue);
+		if(NullSupportHelper.full())return map.getOrDefault(key, defaultValue);
 		
 		Object rtn=map.get(key);
 		if(rtn!=null) return rtn;
@@ -105,19 +101,22 @@ public class StructImpl extends StructSupport {
 	
 
 	public Object g(Collection.Key key, Object defaultValue) {
-		return map.g(key, defaultValue);
+		return map.getOrDefault(key, defaultValue);
 	}
 	public Object g(Collection.Key key) throws PageException {
-		return map.g(key);
+    	Object res = map.getOrDefault(key, NULL);
+    	if (res != NULL) return res;
+    	throw StructSupport.invalidKey(null, this, key);
 	}
 
 	@Override
 	public Object get(Collection.Key key) throws PageException {
-		if(NullSupportHelper.full()) return map.g(key);
-		
-		Object rtn=map.get(key);
-		if(rtn!=null) return rtn;
-		throw StructSupport.invalidKey(null,this,key);
+    	Object res = map.getOrDefault(key, NULL);
+    	if (res == NULL) throw StructSupport.invalidKey(null, this, key);
+    	if (res == null && !NullSupportHelper.full()) {
+    		throw StructSupport.invalidKey(null, this, key);
+		}
+    	return res;
 	}
 	
 	@Override
@@ -142,9 +141,9 @@ public class StructImpl extends StructSupport {
 			return map.keySet().toArray(new Key[map.size()]);
 		}
 		catch(Throwable t) {
-			MapPro<Key, Object> old = map;
+			Map<Key, Object> old = map;
 			try{	
-				map = new lucee.commons.collection.SyncMap(map);
+				map = Collections.synchronizedMap(map);
 				Set<Key> set = map.keySet();
 				Collection.Key[] keys = new Collection.Key[size()];
 				synchronized(map){
@@ -164,10 +163,11 @@ public class StructImpl extends StructSupport {
 
 	@Override
 	public Object remove(Collection.Key key) throws PageException {
-		if(NullSupportHelper.full())return map.r(key);
-		Object obj= map.remove(key);
-		if(obj==null) throw new ExpressionException("can't remove key ["+key+"] from struct, key doesn't exist");
-		return obj;
+		if (!map.containsKey(key)) throw new ExpressionException("can't remove key [" + key + "] from struct, key does not exist");
+
+		Object res = map.remove(key);
+		if (res != null || NullSupportHelper.full()) return res;
+		throw new ExpressionException("can't remove key [" + key + "] from struct, key value is [null] what is equal do not existing in case full null support is not enabled");
 	}
 	
 	@Override
@@ -176,10 +176,11 @@ public class StructImpl extends StructSupport {
 	}
 	
 	public Object remove(Collection.Key key, Object defaultValue) {
-		if(NullSupportHelper.full())return map.r(key,defaultValue);
-		Object obj= map.remove(key);
-		if(obj==null) return defaultValue;
-		return obj;
+    	if (!map.containsKey(key)) return defaultValue;
+
+    	Object res = map.remove(key);
+    	if (res != null || NullSupportHelper.full()) return res;
+    	return defaultValue;
 	}
 	
 	

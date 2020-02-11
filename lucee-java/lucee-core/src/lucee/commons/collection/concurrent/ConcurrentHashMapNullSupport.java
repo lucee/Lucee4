@@ -32,13 +32,12 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 import lucee.commons.collection.AbstractCollection;
-import lucee.commons.collection.AbstractMapPro;
 import lucee.commons.collection.AbstractSet;
-import lucee.commons.collection.HashMapPro;
 import lucee.commons.lang.types.RefBoolean;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.type.KeyImpl;
 import lucee.runtime.type.Null;
+import lucee.runtime.type.util.StructSupport;
 
 /**
  * A hash table supporting full concurrency of retrievals and
@@ -98,7 +97,7 @@ import lucee.runtime.type.Null;
  * @param <K> the type of keys maintained by this map
  * @param <V> the type of mapped values
  */
-public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.type.Collection.Key, V>
+public class ConcurrentHashMapNullSupport<K, V> extends AbstractMap<K, V>
         implements Serializable {
     private static final long serialVersionUID = 7249069246763182397L;
 
@@ -166,10 +165,10 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
     /**
      * The segments, each of which is a specialized hash table
      */
-    final Segment<V>[] segments;
+    final Segment<K,V>[] segments;
 
-    transient Set<lucee.runtime.type.Collection.Key> keySet;
-    transient Set<Map.Entry<lucee.runtime.type.Collection.Key,V>> entrySet;
+    transient Set<K> keySet;
+    transient Set<Map.Entry<K,V>> entrySet;
     transient Collection<V> values;
 
     /* ---------------- Small Utilities -------------- */
@@ -193,7 +192,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * @param hash the hash code for the key
      * @return the segment
      */
-    final Segment<V> segmentFor(int hash) {
+    final Segment<K,V> segmentFor(int hash) {
     	return segments[(hash >>> segmentShift) & segmentMask];
     }
 
@@ -211,13 +210,13 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * backup in case a null (pre-initialized) value is ever seen in
      * an unsynchronized access method.
      */
-    static final class HashEntry<V> {
-        final lucee.runtime.type.Collection.Key key;
+    static final class HashEntry<K,V> {
+        final K key;
         final int hash;
         volatile V value;
-        final HashEntry<V> next;
+        final HashEntry<K,V> next;
 
-        HashEntry(lucee.runtime.type.Collection.Key key, int hash, HashEntry<V> next, V value) {
+        HashEntry(K key, int hash, HashEntry<K,V> next, V value) {
             this.key = key;
             this.hash = hash;
             this.next = next;
@@ -225,7 +224,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
         }
 
         @SuppressWarnings("unchecked")
-        static final <V> HashEntry<V>[] newArray(int i) {
+        static final <K,V> HashEntry<K,V>[] newArray(int i) {
             return new HashEntry[i];
         }
     }
@@ -235,7 +234,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * subclasses from ReentrantLock opportunistically, just to
      * simplify some locking and avoid separate construction.
      */
-    static final class Segment<V> extends ReentrantLock implements Serializable {
+    static final class Segment<K,V> extends ReentrantLock implements Serializable {
         /*
          * Segments maintain a table of entry lists that are ALWAYS
          * kept in a consistent state, so can be read without locking.
@@ -300,7 +299,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
         /**
          * The per-segment table.
          */
-        transient volatile HashEntry<V>[] table;
+        transient volatile HashEntry<K,V>[] table;
 
         /**
          * The load factor for the hash table.  Even though this value
@@ -312,11 +311,11 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
 
         Segment(int initialCapacity, float lf) {
             loadFactor = lf;
-            setTable(HashEntry.<V>newArray(initialCapacity));
+            setTable(HashEntry.<K,V>newArray(initialCapacity));
         }
 
         @SuppressWarnings("unchecked")
-        static final <V> Segment<V>[] newArray(int i) {
+        static final <K,V> Segment<K,V>[] newArray(int i) {
             return new Segment[i];
         }
 
@@ -324,7 +323,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
          * Sets table to new HashEntry array.
          * Call only while holding lock or in constructor.
          */
-        void setTable(HashEntry<V>[] newTable) {
+        void setTable(HashEntry<K,V>[] newTable) {
             threshold = (int)(newTable.length * loadFactor);
             table = newTable;
         }
@@ -332,8 +331,8 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
         /**
          * Returns properly casted first entry of bin for given hash.
          */
-        HashEntry<V> getFirst(int hash) {
-            HashEntry<V>[] tab = table;
+        HashEntry<K,V> getFirst(int hash) {
+            HashEntry<K,V>[] tab = table;
             return tab[hash & (tab.length - 1)];
         }
 
@@ -344,7 +343,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
          * its table assignment, which is legal under memory model
          * but is not known to ever occur.
          */
-        V readValueUnderLock(HashEntry<V> e) {
+        V readValueUnderLock(HashEntry<K,V> e) {
             lock();
             //return e.value;
             try {
@@ -362,7 +361,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
         
         V get(Object key, int hash, V defaultValue) {
             if (count != 0) { // read-volatile
-                HashEntry<V> e = getFirst(hash);
+                HashEntry<K,V> e = getFirst(hash);
                 while (e != null) {
                     if (e.hash == hash && (key==e.key || key.equals(e.key))) {
                         V v = e.value;
@@ -376,9 +375,9 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             return defaultValue;
         }
         
-        V getE(Map<lucee.runtime.type.Collection.Key,V> map,Object key, int hash) throws PageException {
+        V getE(Map<K,V> map,Object key, int hash) throws PageException {
             if (count != 0) { // read-volatile
-                HashEntry<V> e = getFirst(hash);
+                HashEntry<K,V> e = getFirst(hash);
                 while (e != null) {
                     if (e.hash == hash && key.equals(e.key)) {
                         V v = e.value;
@@ -389,12 +388,12 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
                     e = e.next;
                 }
             }
-            throw HashMapPro.invalidKey(map, key,false);
+            throw StructSupport.invalidKey(map, key,false);
         }
 
         boolean containsKey(Object key, int hash) {
             if (count != 0) { // read-volatile
-                HashEntry<V> e = getFirst(hash);
+                HashEntry<K,V> e = getFirst(hash);
                 while (e != null) {
                     if (e.hash == hash && key.equals(e.key))
                         return true;
@@ -406,10 +405,10 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
 
         boolean containsValue(Object value) {
             if (count != 0) { // read-volatile
-                HashEntry<V>[] tab = table;
+                HashEntry<K,V>[] tab = table;
                 int len = tab.length;
                 for (int i = 0 ; i < len; i++) {
-                    for (HashEntry<V> e = tab[i]; e != null; e = e.next) {
+                    for (HashEntry<K,V> e = tab[i]; e != null; e = e.next) {
                         V v = e.value;
                         if (v == null) // recheck ; possible unnecessary double check then value can be null
                             v = readValueUnderLock(e);
@@ -424,10 +423,10 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             return false;
         }
 
-        boolean replace(lucee.runtime.type.Collection.Key key, int hash, V oldValue, V newValue) {
+        boolean replace(K key, int hash, V oldValue, V newValue) {
             lock();
             try {
-                HashEntry<V> e = getFirst(hash);
+                HashEntry<K,V> e = getFirst(hash);
                 while (e != null && (e.hash != hash || !key.equals(e.key)))
                     e = e.next;
 
@@ -442,10 +441,10 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             }
         }
 
-        V replace(lucee.runtime.type.Collection.Key key, int hash, V newValue) {
+        V replace(K key, int hash, V newValue) {
             lock();
             try {
-                HashEntry<V> e = getFirst(hash);
+                HashEntry<K,V> e = getFirst(hash);
                 while (e != null && (e.hash != hash || !key.equals(e.key)))
                     e = e.next;
 
@@ -460,10 +459,10 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             }
         }
 
-        V repl(lucee.runtime.type.Collection.Key key, int hash, V newValue, RefBoolean replaced) {
+        V repl(K key, int hash, V newValue, RefBoolean replaced) {
             lock();
             try {
-                HashEntry<V> e = getFirst(hash);
+                HashEntry<K,V> e = getFirst(hash);
                 while (e != null && (e.hash != hash || !key.equals(e.key)))
                     e = e.next;
 
@@ -478,16 +477,16 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             }
         }
 
-        V put(lucee.runtime.type.Collection.Key key, int hash, V value, boolean onlyIfAbsent) {
+        V put(K key, int hash, V value, boolean onlyIfAbsent) {
             lock();
             try {
                 int c = count;
                 if (c++ > threshold) // ensure capacity
                     rehash();
-                HashEntry<V>[] tab = table;
+                HashEntry<K,V>[] tab = table;
                 int index = hash & (tab.length - 1);
-                HashEntry<V> first = tab[index];
-                HashEntry<V> e = first;
+                HashEntry<K,V> first = tab[index];
+                HashEntry<K,V> e = first;
                 while (e != null && (e.hash != hash || !key.equals(e.key)))
                     e = e.next;
 
@@ -500,7 +499,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
                 else {
                     oldValue = null;
                     ++modCount;
-                    tab[index] = new HashEntry<V>(key, hash, first, value);
+                    tab[index] = new HashEntry<K,V>(key, hash, first, value);
                     count = c; // write-volatile
                 }
                 return oldValue;
@@ -510,7 +509,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
         }
 
         void rehash() {
-            HashEntry<V>[] oldTable = table;
+            HashEntry<K,V>[] oldTable = table;
             int oldCapacity = oldTable.length;
             if (oldCapacity >= MAXIMUM_CAPACITY)
                 return;
@@ -529,16 +528,16 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
              * right now.
              */
 
-            HashEntry<V>[] newTable = HashEntry.newArray(oldCapacity<<1);
+            HashEntry<K,V>[] newTable = HashEntry.newArray(oldCapacity<<1);
             threshold = (int)(newTable.length * loadFactor);
             int sizeMask = newTable.length - 1;
             for (int i = 0; i < oldCapacity ; i++) {
                 // We need to guarantee that any existing reads of old Map can
                 //  proceed. So we cannot yet null out each bin.
-                HashEntry<V> e = oldTable[i];
+                HashEntry<K,V> e = oldTable[i];
 
                 if (e != null) {
-                    HashEntry<V> next = e.next;
+                    HashEntry<K,V> next = e.next;
                     int idx = e.hash & sizeMask;
 
                     //  Single node on list
@@ -547,9 +546,9 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
 
                     else {
                         // Reuse trailing consecutive sequence at same slot
-                        HashEntry<V> lastRun = e;
+                        HashEntry<K,V> lastRun = e;
                         int lastIdx = idx;
-                        for (HashEntry<V> last = next;
+                        for (HashEntry<K,V> last = next;
                              last != null;
                              last = last.next) {
                             int k = last.hash & sizeMask;
@@ -561,10 +560,10 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
                         newTable[lastIdx] = lastRun;
 
                         // Clone all remaining nodes
-                        for (HashEntry<V> p = e; p != lastRun; p = p.next) {
+                        for (HashEntry<K,V> p = e; p != lastRun; p = p.next) {
                             int k = p.hash & sizeMask;
-                            HashEntry<V> n = newTable[k];
-                            newTable[k] = new HashEntry<V>(p.key, p.hash,
+                            HashEntry<K,V> n = newTable[k];
+                            newTable[k] = new HashEntry<K,V>(p.key, p.hash,
                                                              n, p.value);
                         }
                     }
@@ -580,10 +579,10 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             lock();
             try {
                 int c = count - 1;
-                HashEntry<V>[] tab = table;
+                HashEntry<K,V>[] tab = table;
                 int index = hash & (tab.length - 1);
-                HashEntry<V> first = tab[index];
-                HashEntry<V> e = first;
+                HashEntry<K,V> first = tab[index];
+                HashEntry<K,V> e = first;
                 while (e != null && (e.hash != hash || !key.equals(e.key)))
                     e = e.next;
                 
@@ -592,9 +591,9 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
                 V v = e.value;
                 if ((value == null && v==null) || value.equals(v)) {
                     ++modCount;
-                    HashEntry<V> newFirst = e.next;
-                    for (HashEntry<V> p = first; p != e; p = p.next)
-                        newFirst = new HashEntry<V>(p.key, p.hash,
+                    HashEntry<K,V> newFirst = e.next;
+                    for (HashEntry<K,V> p = first; p != e; p = p.next)
+                        newFirst = new HashEntry<K,V>(p.key, p.hash,
                                                       newFirst, p.value);
                     tab[index] = newFirst;
                     count = c; // write-volatile
@@ -611,10 +610,10 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             lock();
             try {
                 int c = count - 1;
-                HashEntry<V>[] tab = table;
+                HashEntry<K,V>[] tab = table;
                 int index = hash & (tab.length - 1);
-                HashEntry<V> first = tab[index];
-                HashEntry<V> e = first;
+                HashEntry<K,V> first = tab[index];
+                HashEntry<K,V> e = first;
                 while (e != null && (e.hash != hash || !key.equals(e.key)))
                     e = e.next;
                 
@@ -622,9 +621,9 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
                 V v = e.value;
                 V oldValue = v;
                 ++modCount;
-                HashEntry<V> newFirst = e.next;
-                for (HashEntry<V> p = first; p != e; p = p.next)
-                    newFirst = new HashEntry<V>(p.key, p.hash,
+                HashEntry<K,V> newFirst = e.next;
+                for (HashEntry<K,V> p = first; p != e; p = p.next)
+                    newFirst = new HashEntry<K,V>(p.key, p.hash,
                                                   newFirst, p.value);
                 tab[index] = newFirst;
                 count = c; // write-volatile
@@ -639,20 +638,20 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             lock();
             try {
                 int c = count - 1;
-                HashEntry<V>[] tab = table;
+                HashEntry<K,V>[] tab = table;
                 int index = hash & (tab.length - 1);
-                HashEntry<V> first = tab[index];
-                HashEntry<V> e = first;
+                HashEntry<K,V> first = tab[index];
+                HashEntry<K,V> e = first;
                 while (e != null && (e.hash != hash || !key.equals(e.key)))
                     e = e.next;
                 
-                if (e == null) throw HashMapPro.invalidKey(map, key,false);
+                if (e == null) throw StructSupport.invalidKey(map, key,false);
                 V v = e.value;
                 V oldValue = v;
                 ++modCount;
-                HashEntry<V> newFirst = e.next;
-                for (HashEntry<V> p = first; p != e; p = p.next)
-                    newFirst = new HashEntry<V>(p.key, p.hash,
+                HashEntry<K,V> newFirst = e.next;
+                for (HashEntry<K,V> p = first; p != e; p = p.next)
+                    newFirst = new HashEntry<K,V>(p.key, p.hash,
                                                   newFirst, p.value);
                 tab[index] = newFirst;
                 count = c; // write-volatile
@@ -667,7 +666,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             if (count != 0) {
                 lock();
                 try {
-                    HashEntry<V>[] tab = table;
+                    HashEntry<K,V>[] tab = table;
                     for (int i = 0; i < tab.length ; i++)
                         tab[i] = null;
                     ++modCount;
@@ -699,8 +698,8 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * negative or the load factor or concurrencyLevel are
      * nonpositive.
      */
-    public KeyConcurrentHashMapPro(int initialCapacity,
-                             float loadFactor, int concurrencyLevel) {
+    public ConcurrentHashMapNullSupport(int initialCapacity,
+                                        float loadFactor, int concurrencyLevel) {
         if (!(loadFactor > 0) || initialCapacity < 0 || concurrencyLevel <= 0)
             throw new IllegalArgumentException();
 
@@ -728,7 +727,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             cap <<= 1;
 
         for (int i = 0; i < this.segments.length; ++i)
-            this.segments[i] = new Segment<V>(cap, loadFactor);
+            this.segments[i] = new Segment<K,V>(cap, loadFactor);
     }
 
     /**
@@ -745,7 +744,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      *
      * @since 1.6
      */
-    public KeyConcurrentHashMapPro(int initialCapacity, float loadFactor) {
+    public ConcurrentHashMapNullSupport(int initialCapacity, float loadFactor) {
         this(initialCapacity, loadFactor, DEFAULT_CONCURRENCY_LEVEL);
     }
 
@@ -758,7 +757,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * @throws IllegalArgumentException if the initial capacity of
      * elements is negative.
      */
-    public KeyConcurrentHashMapPro(int initialCapacity) {
+    public ConcurrentHashMapNullSupport(int initialCapacity) {
         this(initialCapacity, DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL);
     }
 
@@ -766,7 +765,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * Creates a new, empty map with a default initial capacity (16),
      * load factor (0.75) and concurrencyLevel (16).
      */
-    public KeyConcurrentHashMapPro() {
+    public ConcurrentHashMapNullSupport() {
         this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL);
     }
 
@@ -778,7 +777,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      *
      * @param m the map
      */
-    public KeyConcurrentHashMapPro(Map<? extends lucee.runtime.type.Collection.Key, ? extends V> m) {
+    public ConcurrentHashMapNullSupport(Map<? extends K, ? extends V> m) {
         this(Math.max((int) (m.size() / DEFAULT_LOAD_FACTOR) + 1,
                       DEFAULT_INITIAL_CAPACITY),
              DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL);
@@ -791,7 +790,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * @return <tt>true</tt> if this map contains no key-value mappings
      */
     public boolean isEmpty() {
-        final Segment<V>[] segments = this.segments;
+        final Segment<K,V>[] segments = this.segments;
         /*
          * We keep track of per-segment modCounts to avoid ABA
          * problems in which an element in one segment was added and
@@ -829,7 +828,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * @return the number of key-value mappings in this map
      */
     public int size() {
-        final Segment<V>[] segments = this.segments;
+        final Segment<K,V>[] segments = this.segments;
         long sum = 0;
         long check = 0;
         int[] mc = new int[segments.length];
@@ -884,25 +883,19 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
     	int hash = hash(key);
     	return segmentFor(hash).get(key, hash);
     }
-    
-	@Override
-	public V g(lucee.runtime.type.Collection.Key key) throws PageException {
-		int hash = hash(key);
-		return segmentFor(hash).getE(this,key, hash);
-	}
+
 	private V ge(Object key) throws PageException {
 		int hash = hash(key);
 		return segmentFor(hash).getE(this,key, hash);
 	}
 
-	@Override
-	public V g(lucee.runtime.type.Collection.Key key, V defaultValue) {
-		int hash = hash(key);
-		//int hash = hash(key.hashCode());
-		return segmentFor(hash).get(key, hash,defaultValue);
-	}
-    
-    
+
+    @Override
+    public V getOrDefault(Object key, V defaultValue) {
+        int hash = hash(key);
+        //int hash = hash(key.hashCode());
+        return segmentFor(hash).get(key, hash,defaultValue);
+    }
 
     /**
      * Tests if the specified object is a key in this table.
@@ -931,7 +924,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      */
     public boolean containsValue(Object value) {
         
-        final Segment<V>[] segments = this.segments;
+        final Segment<K,V>[] segments = this.segments;
         int[] mc = new int[segments.length];
 
         // Try a few times without locking
@@ -1007,7 +1000,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      *         <tt>null</tt> if there was no mapping for <tt>key</tt>
      * @throws NullPointerException if the specified key or value is null
      */
-    public V put(lucee.runtime.type.Collection.Key key, V value) {
+    public V put(K key, V value) {
         int hash = hash(key);
         return segmentFor(hash).put(key, hash, value, false);
     }
@@ -1019,8 +1012,8 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      *
      * @param m mappings to be stored in this map
      */
-    public void putAll(Map<? extends lucee.runtime.type.Collection.Key, ? extends V> m) {
-        for (Map.Entry<? extends lucee.runtime.type.Collection.Key, ? extends V> e : m.entrySet())
+    public void putAll(Map<? extends K, ? extends V> m) {
+        for (Map.Entry<? extends K, ? extends V> e : m.entrySet())
             put(e.getKey(), e.getValue());
     }
 
@@ -1037,23 +1030,10 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
         int hash = hash(key);
         return segmentFor(hash).r(key, hash, null);
     }
-
-
-	@Override
-	public V r(lucee.runtime.type.Collection.Key key) throws PageException {
-		int hash = hash(key);
-        return segmentFor(hash).r(this,key, hash);
-	}
 	
 	public V rem(Object key) throws PageException {
 		int hash = hash(key);
         return segmentFor(hash).r(this,key, hash);
-	}
-
-	@Override
-	public V r(lucee.runtime.type.Collection.Key key, V defaultValue) {
-		int hash = hash(key);
-        return segmentFor(hash).r(key, hash, defaultValue);
 	}
 
     private boolean remove(Map.Entry e) {
@@ -1087,8 +1067,8 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * construction of the iterator, and may (but is not guaranteed to)
      * reflect any modifications subsequent to construction.
      */
-    public Set<lucee.runtime.type.Collection.Key> keySet() {
-        Set<lucee.runtime.type.Collection.Key> ks = keySet;
+    public Set<K> keySet() {
+        Set<K> ks = keySet;
         return (ks != null) ? ks : (keySet = new KeySet());
     }
 
@@ -1129,8 +1109,8 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * construction of the iterator, and may (but is not guaranteed to)
      * reflect any modifications subsequent to construction.
      */
-    public Set<Map.Entry<lucee.runtime.type.Collection.Key,V>> entrySet() {
-        Set<Map.Entry<lucee.runtime.type.Collection.Key,V>> es = entrySet;
+    public Set<Map.Entry<K,V>> entrySet() {
+        Set<Map.Entry<K,V>> es = entrySet;
         return (es != null) ? es : (entrySet = new EntrySet());
     }
 
@@ -1140,7 +1120,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * @return an enumeration of the keys in this table
      * @see #keySet()
      */
-    public Enumeration<lucee.runtime.type.Collection.Key> keys() {
+    public Enumeration<K> keys() {
         return new KeyIterator();
     }
 
@@ -1159,9 +1139,9 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
     abstract class HashIterator {
         int nextSegmentIndex;
         int nextTableIndex;
-        HashEntry<V>[] currentTable;
-        HashEntry<V> nextEntry;
-        HashEntry<V> lastReturned;
+        HashEntry<K,V>[] currentTable;
+        HashEntry<K, V> nextEntry;
+        HashEntry<K, V> lastReturned;
 
         HashIterator() {
             nextSegmentIndex = segments.length - 1;
@@ -1181,7 +1161,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             }
 
             while (nextSegmentIndex >= 0) {
-                Segment<V> seg = segments[nextSegmentIndex--];
+                Segment<K,V> seg = segments[nextSegmentIndex--];
                 if (seg.count != 0) {
                     currentTable = seg.table;
                     for (int j = currentTable.length - 1; j >= 0; --j) {
@@ -1196,7 +1176,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
 
         public boolean hasNext() { return nextEntry != null; }
 
-        HashEntry<V> nextEntry() {
+        HashEntry<K,V> nextEntry() {
             if (nextEntry == null)
                 throw new NoSuchElementException();
             lastReturned = nextEntry;
@@ -1207,17 +1187,17 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
         public void remove() {
             if (lastReturned == null)
                 throw new IllegalStateException();
-            KeyConcurrentHashMapPro.this.remove(lastReturned.key);
+            ConcurrentHashMapNullSupport.this.remove(lastReturned.key);
             lastReturned = null;
         }
     }
 
     final class KeyIterator
         extends HashIterator
-        implements Iterator<lucee.runtime.type.Collection.Key>, Enumeration<lucee.runtime.type.Collection.Key>
+        implements Iterator<K>, Enumeration<K>
     {
-        public lucee.runtime.type.Collection.Key next()        { return super.nextEntry().key; }
-        public lucee.runtime.type.Collection.Key nextElement() { return super.nextEntry().key; }
+        public K next()        { return super.nextEntry().key; }
+        public K nextElement() { return super.nextEntry().key; }
     }
 
     final class ValueIterator
@@ -1233,9 +1213,9 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
      * setValue changes to the underlying map.
      */
     final class WriteThroughEntry
-        extends AbstractMap.SimpleEntry<lucee.runtime.type.Collection.Key,V>
+        extends AbstractMap.SimpleEntry<K,V>
     {
-        WriteThroughEntry(lucee.runtime.type.Collection.Key k, V v) {
+        WriteThroughEntry(K k, V v) {
             super(k,v);
         }
 
@@ -1250,37 +1230,37 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
          */
         public V setValue(V value) {
             V v = super.setValue(value);
-            KeyConcurrentHashMapPro.this.put(getKey(), value);
+            ConcurrentHashMapNullSupport.this.put(getKey(), value);
             return v;
         }
     }
 
     final class EntryIterator
         extends HashIterator
-        implements Iterator<Entry<lucee.runtime.type.Collection.Key,V>>
+        implements Iterator<Entry<K,V>>
     {
-        public Map.Entry<lucee.runtime.type.Collection.Key,V> next() {
-            HashEntry<V> e = super.nextEntry();
+        public Map.Entry<K,V> next() {
+            HashEntry<K,V> e = super.nextEntry();
             return new WriteThroughEntry(e.key, e.value);
         }
     }
 
-    final class KeySet extends AbstractSet<lucee.runtime.type.Collection.Key> {
-        public Iterator<lucee.runtime.type.Collection.Key> iterator() {
+    final class KeySet extends AbstractSet<K> {
+        public Iterator<K> iterator() {
             return new KeyIterator();
         }
         public int size() {
-            return KeyConcurrentHashMapPro.this.size();
+            return ConcurrentHashMapNullSupport.this.size();
         }
         public boolean isEmpty() {
-            return KeyConcurrentHashMapPro.this.isEmpty();
+            return ConcurrentHashMapNullSupport.this.isEmpty();
         }
         public boolean contains(Object o) {
-            return KeyConcurrentHashMapPro.this.containsKey(o);
+            return ConcurrentHashMapNullSupport.this.containsKey(o);
         }
         public boolean remove(Object o) {
             try{
-            	KeyConcurrentHashMapPro.this.rem(o);
+            	ConcurrentHashMapNullSupport.this.rem(o);
             	return true;
             }
             catch(Throwable t){
@@ -1288,7 +1268,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             }
         }
         public void clear() {
-            KeyConcurrentHashMapPro.this.clear();
+            ConcurrentHashMapNullSupport.this.clear();
         }
     }
 
@@ -1297,21 +1277,21 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             return new ValueIterator();
         }
         public int size() {
-            return KeyConcurrentHashMapPro.this.size();
+            return ConcurrentHashMapNullSupport.this.size();
         }
         public boolean isEmpty() {
-            return KeyConcurrentHashMapPro.this.isEmpty();
+            return ConcurrentHashMapNullSupport.this.isEmpty();
         }
         public boolean contains(Object o) {
-            return KeyConcurrentHashMapPro.this.containsValue(o);
+            return ConcurrentHashMapNullSupport.this.containsValue(o);
         }
         public void clear() {
-            KeyConcurrentHashMapPro.this.clear();
+            ConcurrentHashMapNullSupport.this.clear();
         }
     }
 
-    final class EntrySet extends AbstractSet<Map.Entry<lucee.runtime.type.Collection.Key,V>> {
-        public Iterator<Map.Entry<lucee.runtime.type.Collection.Key,V>> iterator() {
+    final class EntrySet extends AbstractSet<Map.Entry<K,V>> {
+        public Iterator<Map.Entry<K,V>> iterator() {
             return new EntryIterator();
         }
         public boolean contains(Object o) {
@@ -1319,7 +1299,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
                 return false;
             Map.Entry<?,?> e = (Map.Entry<?,?>)o;
             try {
-            	V v = KeyConcurrentHashMapPro.this.ge(e.getKey());
+            	V v = ge(e.getKey());
             	if(v==null) {
             		return e.getValue()==null;
             	}
@@ -1333,16 +1313,16 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
             if (!(o instanceof Map.Entry))
                 return false;
             Map.Entry<?,?> e = (Map.Entry<?,?>)o;
-            return KeyConcurrentHashMapPro.this.remove(e);
+            return ConcurrentHashMapNullSupport.this.remove(e);
         }
         public int size() {
-            return KeyConcurrentHashMapPro.this.size();
+            return ConcurrentHashMapNullSupport.this.size();
         }
         public boolean isEmpty() {
-            return KeyConcurrentHashMapPro.this.isEmpty();
+            return ConcurrentHashMapNullSupport.this.isEmpty();
         }
         public void clear() {
-            KeyConcurrentHashMapPro.this.clear();
+            ConcurrentHashMapNullSupport.this.clear();
         }
     }
 
@@ -1361,12 +1341,12 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
         s.defaultWriteObject();
 
         for (int k = 0; k < segments.length; ++k) {
-            Segment<V> seg = segments[k];
+            Segment<K,V> seg = segments[k];
             seg.lock();
             try {
-                HashEntry<V>[] tab = seg.table;
+                HashEntry<K,V>[] tab = seg.table;
                 for (int i = 0; i < tab.length; ++i) {
-                    for (HashEntry<V> e = tab[i]; e != null; e = e.next) {
+                    for (HashEntry<K,V> e = tab[i]; e != null; e = e.next) {
                         s.writeObject(e.key);
                         s.writeObject(e.value);
                     }
@@ -1395,7 +1375,7 @@ public class KeyConcurrentHashMapPro<V> extends AbstractMapPro<lucee.runtime.typ
 
         // Read the keys and values, and put the mappings in the table
         for (;;) {
-        	lucee.runtime.type.Collection.Key key = (lucee.runtime.type.Collection.Key) s.readObject();
+            K key = (K) s.readObject();
             V value = (V) s.readObject();
             if (key == null)
                 break;

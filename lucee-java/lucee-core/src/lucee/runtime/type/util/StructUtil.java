@@ -27,11 +27,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import lucee.commons.collection.LinkedHashMapPro;
-import lucee.commons.collection.MapPro;
-import lucee.commons.collection.MapProWrapper;
-import lucee.commons.collection.SyncMap;
-import lucee.commons.collection.WeakHashMapPro;
 import lucee.commons.digest.HashUtil;
 import lucee.commons.lang.SizeOf;
 import lucee.commons.lang.StringUtil;
@@ -279,17 +274,6 @@ public final class StructUtil {
 		}
 		return sct;
 	}
-    
-    public static int getType(MapPro m){
-    	if(m instanceof SyncMap)
-    		return ((SyncMap)m).getType();
-    	
-    	if(m instanceof LinkedHashMapPro) return Struct.TYPE_LINKED;
-    	if(m instanceof WeakHashMapPro) return Struct.TYPE_WEAKED;
-    	//if(map instanceof SyncMap) return TYPE_SYNC;
-    	if(m instanceof MapProWrapper) return Struct.TYPE_SOFT;
-    	return Struct.TYPE_REGULAR;
-    }
 
     /**
      * creates a hash based on the keys of the Map/Struct

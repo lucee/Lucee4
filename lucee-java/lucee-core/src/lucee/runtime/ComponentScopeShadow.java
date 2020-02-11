@@ -19,9 +19,9 @@
 package lucee.runtime;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import lucee.commons.collection.MapFactory;
-import lucee.commons.collection.MapPro;
 import lucee.commons.lang.CFTypes;
 import lucee.runtime.component.Member;
 import lucee.runtime.config.NullSupportHelper;
@@ -54,7 +54,7 @@ public class ComponentScopeShadow extends StructSupport implements ComponentScop
 
 	private final ComponentImpl component;
 	private static final int access=Component.ACCESS_PRIVATE;
-	private final MapPro<Key,Object> shadow;
+	private final Map<Key,Object> shadow;
 
 
 	/**
@@ -62,7 +62,7 @@ public class ComponentScopeShadow extends StructSupport implements ComponentScop
 	 * @param component
 	 * @param shadow
 	 */
-	public ComponentScopeShadow(ComponentImpl component, MapPro shadow) {
+	public ComponentScopeShadow(ComponentImpl component, Map<Key, Object> shadow) {
         this.component=component;
         this.shadow=shadow;
         
@@ -75,7 +75,7 @@ public class ComponentScopeShadow extends StructSupport implements ComponentScop
 	 */
 	public ComponentScopeShadow(ComponentImpl component, ComponentScopeShadow scope,boolean cloneShadow) {
         this.component=component;
-        this.shadow=cloneShadow?(MapPro)Duplicator.duplicateMap(scope.shadow,MapFactory.getConcurrentMap(), false):scope.shadow;
+		this.shadow = cloneShadow ? Duplicator.duplicateMap(scope.shadow, MapFactory.getConcurrentMap(), false) : scope.shadow;
 	}
 
 
@@ -135,7 +135,7 @@ public class ComponentScopeShadow extends StructSupport implements ComponentScop
 		}
 		if(key.equalsIgnoreCase(KeyConstants._THIS)) return component.top;
 		
-		if(NullSupportHelper.full())return shadow.g(key,defaultValue); 
+		if(NullSupportHelper.full())return shadow.getOrDefault(key,defaultValue);
 		
 		Object o=shadow.get(key);
 		if(o!=null) return o;
@@ -179,7 +179,11 @@ public class ComponentScopeShadow extends StructSupport implements ComponentScop
 	public Object remove(Collection.Key key) throws PageException {
 		if(key.equalsIgnoreCase(KeyConstants._this) || key.equalsIgnoreCase(KeyConstants._super))
 			throw new ExpressionException("key ["+key.getString()+"] is part of the component and can't be removed");
-		if(NullSupportHelper.full())return shadow.r(key);
+
+		if (NullSupportHelper.full()) {
+			if (!shadow.containsKey(key)) throw new ExpressionException("can't remove key [" + key.getString() + "] from struct, key doesn't exist");
+			return shadow.remove(key);
+		}
 		
 		Object o=shadow.remove(key);
 		if(o!=null) return o;
@@ -362,7 +366,7 @@ public class ComponentScopeShadow extends StructSupport implements ComponentScop
 		return get(key);
 	}
 
-	public MapPro<Key,Object> getShadow() {
+	public Map<Key,Object> getShadow() {
 		return shadow;
 	}
 

@@ -37,6 +37,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import lucee.commons.collection.MapFactory;
 import lucee.commons.io.IOUtil;
 import lucee.commons.lang.StringUtil;
 import lucee.commons.net.URLItem;
@@ -348,7 +349,7 @@ public final class HTTPServletRequestWrap implements HttpServletRequest,Serializ
 		// attributes
 		{
 			Enumeration<String> attrNames = req.getAttributeNames();
-			disconnectData.attributes=new HashMap<String, Object>();
+			disconnectData.attributes= MapFactory.getConcurrentMap();
 			String k;
 			while(attrNames.hasMoreElements()){
 				k=attrNames.nextElement();
@@ -359,7 +360,7 @@ public final class HTTPServletRequestWrap implements HttpServletRequest,Serializ
 		// headers
 		{
 			Enumeration headerNames = req.getHeaderNames();
-			disconnectData.headers=new HashMap<Collection.Key, LinkedList<String>>();
+			disconnectData.headers= MapFactory.getConcurrentMap();
 			
 			String k;
 			Enumeration e;
