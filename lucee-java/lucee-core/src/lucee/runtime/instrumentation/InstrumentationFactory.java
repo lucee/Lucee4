@@ -140,15 +140,6 @@ public class InstrumentationFactory {
 		return res;
 	}
 	private static String getPid() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-		RuntimeMXBean mxbean = ManagementFactory.getRuntimeMXBean();
-	    Field jvmField = mxbean.getClass().getDeclaredField("jvm");
-
-	    jvmField.setAccessible(true);
-	    sun.management.VMManagement management = (sun.management.VMManagement) jvmField.get(mxbean);
-	    Method method = management.getClass().getDeclaredMethod("getProcessId");
-	    method.setAccessible(true);
-	    Integer processId = (Integer) method.invoke(management);
-
-	    return processId.toString();
+		return ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
 	}
 }

@@ -1135,7 +1135,7 @@ class StopThread extends Thread {
 						break; // should never happen
 					}
 					try{
-						thread.stop(t);
+						thread.stop();
 					}
 					catch(UnsupportedOperationException uoe){
 						LogUtil.log(log, Log.LEVEL_INFO, "", "Thread.stop(Throwable) is not supported by this JVM and failed with UnsupportedOperationException", thread.getStackTrace());

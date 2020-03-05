@@ -47,8 +47,6 @@ import lucee.runtime.type.Query;
 import lucee.runtime.type.QueryImpl;
 import lucee.runtime.type.util.ListUtil;
 
-import com.sun.net.ssl.internal.ssl.Provider;
-
 
 /**
  * Ldap Client
@@ -137,7 +135,7 @@ public final class LDAPClient {
             //Class.orName("com.sun.net.ssl.internal.ssl.Provider");
             ClassUtil.loadClass("com.sun.net.ssl.internal.ssl.Provider");
             
-            Security.addProvider(new Provider());
+            //Security.addProvider(new Provider());
             
         } 
         else if(secureLevel==SECURE_CFSSL_CLIENT_AUTH) {
