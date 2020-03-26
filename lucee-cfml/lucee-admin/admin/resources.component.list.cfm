@@ -67,7 +67,7 @@
 						<cfif hasAccess>
 							<input type="checkbox" class="checkbox" name="componentDeepSearchDesc" value="yes" <cfif component.deepsearch>checked</cfif>>
 						<cfelse>
-							<b>#yesNoFormat(setting.deepsearch)#</b>
+							<b>#yesNoFormat(component.deepsearch)#</b>
 						</cfif>
 						<div class="comment">#stText.Components.componentDeepSearchDesc#</div>
 					</td>

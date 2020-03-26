@@ -29,7 +29,7 @@
 	password="#session["password"&request.adminType]#"
 	returnVariable="access"
 	secType="debugging">
-<cfset hasAccess=access>
+<cfset hasAccess=(access EQ "yes")>
 
 
 <cftry>
