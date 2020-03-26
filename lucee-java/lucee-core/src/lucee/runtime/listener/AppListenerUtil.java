@@ -83,6 +83,7 @@ public final class AppListenerUtil {
 	public static final Collection.Key ALLOW = KeyImpl.intern("allow");
 	public static final Collection.Key STORAGE = KeyImpl.intern("storage");
 	public static final Collection.Key READ_ONLY = KeyImpl.intern("readOnly");
+	public static final Collection.Key VALIDATE = KeyImpl.intern("validate");
 	public static final Collection.Key DATABASE = KeyConstants._database;
 	
 	public static PageSource getApplicationPageSource(PageContext pc,PageSource requestedPage, int mode,int type, RefBoolean isCFC) {
@@ -233,7 +234,8 @@ public final class AppListenerUtil {
 					Caster.toTimeZone(data.get(TIMEZONE,null),null), 
 					Caster.toIntValue(data.get(ALLOW,null),DataSource.ALLOW_ALL),
 					Caster.toBooleanValue(data.get(STORAGE,null),false),
-					Caster.toBooleanValue(data.get(READ_ONLY,null),false));
+					Caster.toBooleanValue(data.get(READ_ONLY,null),false),
+					Caster.toBooleanValue(data.get(VALIDATE,null),false));
 			
 			// then for {type:... , host:... , ...}
 			String type=Caster.toString(data.get(KeyConstants._type));
