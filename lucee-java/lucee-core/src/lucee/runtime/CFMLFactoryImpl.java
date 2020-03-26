@@ -51,6 +51,8 @@ import lucee.runtime.exp.PageExceptionImpl;
 import lucee.runtime.exp.RequestTimeoutException;
 import lucee.runtime.functions.string.Hash;
 import lucee.runtime.lock.LockManager;
+import lucee.runtime.net.http.HTTPServletRequestWrap;
+import lucee.runtime.net.http.HttpServletRequestDummy;
 import lucee.runtime.op.Caster;
 import lucee.runtime.query.QueryCache;
 import lucee.runtime.type.Array;
@@ -140,28 +142,36 @@ public final class CFMLFactoryImpl extends CFMLFactory {
         //runningCount++;
         return getPageContextImpl(servlet, req, rsp, errorPageURL, needsSession, bufferSize, autoflush,true,false);
 	}
-	
+
 	public PageContextImpl getPageContextImpl(
 			HttpServlet servlet,
 			HttpServletRequest req,
 			HttpServletResponse rsp,
-		        String errorPageURL,
-				boolean needsSession,
-				int bufferSize,
-				boolean autoflush,boolean registerPageContext2Thread,boolean isChild)  {
-		        //runningCount++;
-				PageContextImpl pc;
-        		synchronized (pcs) {
-		            if(pcs.isEmpty()) pc=new PageContextImpl(scopeContext,config,idCounter++,servlet);
-		            else pc=((PageContextImpl)pcs.pop());
-		            runningPcs.put(Integer.valueOf(pc.getId()),pc);
-		            this.servlet=servlet;
-		            if(registerPageContext2Thread)ThreadLocalPageContext.register(pc);
-		    		
-		        }
-		        pc.initialize(servlet,req,rsp,errorPageURL,needsSession,bufferSize,autoflush,isChild);
-		        return pc;
+			String errorPageURL,
+			boolean needsSession,
+			int bufferSize,
+			boolean autoflush,boolean registerPageContext2Thread,boolean isChild)  {
+		//runningCount++;
+		PageContextImpl pc;
+		synchronized (pcs) {
+			if(luceeShouldNotMonitor(req)) {
+				pc=new PageContextImpl(scopeContext,config,idCounter++,servlet);
+			} else {
+				if(pcs.isEmpty()) pc=new PageContextImpl(scopeContext,config,idCounter++,servlet);
+				else pc=((PageContextImpl)pcs.pop());
+				runningPcs.put(Integer.valueOf(pc.getId()),pc);
 			}
+			this.servlet=servlet;
+			if(registerPageContext2Thread)ThreadLocalPageContext.register(pc);
+		}
+		pc.initialize(servlet,req,rsp,errorPageURL,needsSession,bufferSize,autoflush,isChild);
+		return pc;
+	}
+
+	private boolean luceeShouldNotMonitor(HttpServletRequest req) {
+		return req instanceof HTTPServletRequestWrap
+				&& ((HTTPServletRequestWrap)req).getOriginalRequest() instanceof HttpServletRequestDummy;
+	}
 
     @Override
 	public void releasePageContext(javax.servlet.jsp.PageContext pc) {
@@ -182,7 +192,7 @@ public final class CFMLFactoryImpl extends CFMLFactory {
 	            if(pcs.size()<100 && ((PageContextImpl)pc).getStopPosition()==null)// not more than 100 PCs
 	            	pcs.push(pc);
 	            //SystemOut.printDate(config.getOutWriter(),"Release: (id:"+pc.getId()+";running-requests:"+config.getThreadQueue().size()+";)");
-	        
+
        /*}
         else {
         	 SystemOut.printDate(config.getOutWriter(),"Unlink: ("+pc.getId()+")");
@@ -203,7 +213,7 @@ public final class CFMLFactoryImpl extends CFMLFactory {
             while(it.hasNext()) {
             	e = it.next();
             	pc=e.getValue();
-                
+
                 long timeout=pc.getRequestTimeout();
                 if(pc.getStartTime()+timeout<System.currentTimeMillis()) {
                     terminate(pc);
