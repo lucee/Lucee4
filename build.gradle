@@ -1,13 +1,40 @@
-apply plugin: 'idea' // allows us to make an intelliJ IDEA project
-apply plugin: "com.jfrog.artifactory"
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'maven-publish'
+//apply plugin: 'idea' // allows us to make an intelliJ IDEA project
+//apply plugin: "com.jfrog.artifactory"
+//apply plugin: 'java'
+//apply plugin: 'maven'
+//apply plugin: 'maven-publish'
+buildscript {
+    repositories {
+        maven {
+            credentials {
+                username = artifactory_user
+                password = artifactory_api_key
+            }
+            url "${artifactory_context_url}/repo"
+            metadataSources {
+                mavenPom()
+                artifact()
+            }
+        }
+        dependencies {
+            classpath 'org.gradle:gradle-tooling-api:4.3'
+            //classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1"
+        }
+    }
+}
+
+plugins {
+    id 'idea'
+    id 'java'
+    id 'maven'
+    id 'maven-publish'
+    id 'com.jfrog.artifactory' version '4.15.1'
+}
 buildDir = 'builddir'
 group = 'lucee'
 
 idea.project {
-    languageLevel = '1.8'
+    languageLevel = '11'
     vcs = 'Git'
 }
 idea {
@@ -19,40 +46,30 @@ idea {
 
     }
 }
-buildscript {
-    repositories {
-        maven {
-            url 'https://labs.mastercontrol.com/artifactory/plugins-release'
-            credentials {
-                username = "${artifactory_user}"
-                password = "${artifactory_password}"
-            }
-        }
-    }
-    dependencies {
-        //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1"
-    }
-}
-
-
 
 
 repositories {
+    mavenLocal()
+
     maven {
         credentials {
-            username "${artifactory_user}"
-            password "${artifactory_password}"
+            username = artifactory_user
+            password = artifactory_api_key
         }
-        url "${artifactory_contextUrl}"
+        url "${artifactory_context_url}/repo"
+        metadataSources {
+            mavenPom()
+            artifact()
+        }
     }
-    mavenLocal()
 }
 configurations {
     compile.extendsFrom provided
 }
 
 dependencies {
+    compile 'com.mastercontrol:s3-no-op-resource:0.1.0'
+    compile 'com.amazonaws:aws-java-sdk-s3:1.11.823'
     compile 'antlr:antlr:2.7.6'
     compile 'org.apache.sanselan:sanselan:0.97-incubator'
     compile 'org.apache.commons:commons-compress:1.3'
@@ -85,7 +102,9 @@ dependencies {
     compile 'org.lucee.lib:javasysmon:0.3.3' // tool behind getCPUUsage()
     compile 'org.lucee.lib:jcifs:1.3.17' //SMB:// protocol for file operations
     compile 'org.jfree:jfreechart:1.0.19' //cfchart
-    compile 'net.sf.jmimemagic:jmimemagic:0.1.4'
+    compile('net.sf.jmimemagic:jmimemagic:0.1.4') {
+        exclude(group: 'log4j', module: 'log4j')
+    }
     compile 'org.lucee.lib:jpedal_gpl:3.51b12' //looks like it makes thumbnails from pdfs
     compile(group: "org.safehaus.jug", name: "jug", version: "2.0.0", classifier: "lgpl") //used for UUID creation
     compile 'org.ow2.asm:asm-all:4.0' //cfml compilation
@@ -117,7 +136,7 @@ dependencies {
     compile 'org.lucee.lib:xmlparserv2:1.2.2'
     compile 'org.ccil.cowan.tagsoup:tagsoup:1.2.1'
     compile 'org.textmining:tm-extractors:0.4'
-    compile 'log4j:log4j:1.2.16'
+    compile group: 'io.confluent', name: 'confluent-log4j', version: '1.2.17-cp9'
 	compile 'org.lucee.lib:sun-jndi-ldap:1.2.4'
 	compile 'org.lucee.lib:sun-jndi-ldapbp:1.2.4'
 	compile 'org.lucee.lib:sun-jndi-ldapsec:1.2.4'
@@ -152,9 +171,9 @@ build.dependsOn {
     renameFile
 }
 
-artifactoryPublish.dependsOn {
-    build
-}
+//artifactoryPublish.dependsOn {
+//    build
+//}
 
 task renameFile(dependsOn: 'core') {
     doLast {
@@ -165,7 +184,7 @@ task renameFile(dependsOn: 'core') {
 
 
 artifactory {
-    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+    contextUrl = "${artifactory_context_url}"   //The base Artifactory URL if not overridden by the publisher/resolver
     publish {
         repository {
             if (release == "true") {
@@ -173,8 +192,8 @@ artifactory {
             } else {
                 repoKey = "libs-snapshot-local"
             }
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
+            username = artifactory_user
+            password = artifactory_api_key
         }
         defaults {
             publications('LuceeCore')
@@ -183,8 +202,8 @@ artifactory {
     resolve {
         repository {
             repoKey = 'libs-release'
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
+            username = artifactory_user
+            password = artifactory_api_key
         }
     }
 }

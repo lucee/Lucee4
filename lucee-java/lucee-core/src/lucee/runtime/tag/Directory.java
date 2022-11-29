@@ -38,7 +38,6 @@ import lucee.commons.io.res.filter.OrResourceFilter;
 import lucee.commons.io.res.filter.ResourceFilter;
 import lucee.commons.io.res.filter.ResourceNameFilter;
 import lucee.commons.io.res.type.file.FileResource;
-import lucee.commons.io.res.type.s3.S3;
 import lucee.commons.io.res.type.s3.S3Constants;
 import lucee.commons.io.res.type.s3.S3Exception;
 import lucee.commons.io.res.type.s3.S3Resource;
@@ -135,7 +134,7 @@ public final class Directory extends TagImpl  {
 	private int listInfo=LIST_INFO_QUERY_ALL;
 	//private int acl=S3Constants.ACL_UNKNOW;
 	private Object acl=null;
-	private int storage=S3Constants.STORAGE_UNKNOW;
+	private int storage=S3Constants.STORAGE_UNKNOWN;
 	private String destination; 
 
 	private int nameconflict = NAMECONFLICT_DEFAULT;
@@ -147,7 +146,7 @@ public final class Directory extends TagImpl  {
 	public void release()	{
 		super.release();
 		acl=null;
-		storage=S3Constants.STORAGE_UNKNOW;
+		storage=S3Constants.STORAGE_UNKNOWN;
 
 
 		type=TYPE_ALL;
@@ -228,25 +227,7 @@ public final class Directory extends TagImpl  {
 	public void setStoreacl(Object acl) 	{
 		this.acl=acl;
 	}
-	
-	/** set the value storage
-	*  used only for s3 resources, for all others ignored
-	* @param storage value to set
-	 * @throws PageException 
-	**/
-	public void setStorage(String storage) throws PageException	{
-		try {
-			this.storage=S3.toIntStorage(storage);
-		} catch (S3Exception e) {
-			throw Caster.toPageException(e);
-		}
-	}
-	public void setStorelocation(String storage) throws PageException	{
-		setStorage(storage);
-	}
-	
-	
-	
+
 	public void setServerpassword(String serverPassword)	{
 	    this.serverPassword=serverPassword;
 	}
@@ -498,7 +479,6 @@ public final class Directory extends TagImpl  {
                 query.setAt(KeyConstants._size,count,new Double(isDir?0:list[i].length()));
                 query.setAt(KeyConstants._type,count,isDir?"Dir":"File");
                 if(directory.getResourceProvider().isModeSupported()){
-                        	
                 	query.setAt(MODE,count,new ModeObjectWrap(list[i]));
                 }
                 query.setAt(DATE_LAST_MODIFIED,count,new Date(list[i].lastModified()));
@@ -599,9 +579,6 @@ public final class Directory extends TagImpl  {
 		} catch (IOException ioe) {
 			throw Caster.toPageException(ioe);
 		}
-		
-		// set S3 stuff
-		setS3Attrs(directory,acl,storage);
 	    
 		// Set Mode
 		if(mode!=-1) {
@@ -613,33 +590,6 @@ public final class Directory extends TagImpl  {
             }
 		}
 	}
-	
-	private static void setS3Attrs(Resource res,Object acl,int storage) throws PageException {
-		String scheme = res.getResourceProvider().getScheme();
-		
-		if("s3".equalsIgnoreCase(scheme)){
-			S3Resource s3r=(S3Resource) res;
-			if(acl!=null){
-				try {
-					// old way
-					if(Decision.isString(acl)) {
-						if(Decision.isInteger(acl)) s3r.setACL(Caster.toIntValue(acl));
-						else s3r.setACL(S3.toIntACL(Caster.toString(acl)));
-					}
-					// new way
-					else {
-						StoreSetACL.invoke(s3r, acl);
-					}
-				} catch (IOException e) {
-					throw Caster.toPageException(e);
-				}
-			}
-			
-			if(storage!=S3Constants.STORAGE_UNKNOW) s3r.setStorage(storage);
-		}
-	}
-
-
 
 	/**
 	 * delete directory
@@ -707,10 +657,6 @@ public final class Directory extends TagImpl  {
 		catch(Throwable t) {
 			throw Caster.toPageException(t);
 		}
-		
-		// set S3 stuff
-		setS3Attrs(directory,acl,storage);
-	    
 	}
 	
 	
@@ -776,10 +722,6 @@ public final class Directory extends TagImpl  {
 		catch(Throwable t) {
 			throw new ApplicationException(t.getMessage());
 		}
-		
-		// set S3 stuff
-		setS3Attrs(directory,acl,storage);
-	    
 	}
 
 	

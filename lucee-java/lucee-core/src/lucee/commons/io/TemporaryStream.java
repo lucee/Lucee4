@@ -28,7 +28,7 @@ import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.runtime.engine.ThreadLocalPageContext;
 
-public final class TemporaryStream extends OutputStream {
+public final class TemporaryStream extends OutputStream implements StreamWithSize{
 
 	private static final int MAX_MEMORY = 1024*1024;
 	private static int index=1;
@@ -96,7 +96,12 @@ public final class TemporaryStream extends OutputStream {
 	public InputStream getInputStream() throws IOException {
 		return new InpuStreamWrap(this);
 	}
-	
+
+	@Override
+	public long getSize() {
+		return length();
+	}
+
 	class InpuStreamWrap extends InputStream {
 
 		private TemporaryStream ts;
