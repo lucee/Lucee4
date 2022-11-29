@@ -22,10 +22,10 @@ idea {
 buildscript {
     repositories {
         maven {
-            url 'https://labs.mastercontrol.com/artifactory/plugins-release'
+            url "${artifactory_context_url}/repo"
             credentials {
-                username = "${artifactory_user}"
-                password = "${artifactory_password}"
+                username = artifactory_user
+                password = artifactory_api_key
             }
         }
     }
@@ -41,10 +41,10 @@ buildscript {
 repositories {
     maven {
         credentials {
-            username "${artifactory_user}"
-            password "${artifactory_password}"
+            username artifactory_user
+            password artifactory_api_key
         }
-        url "${artifactory_contextUrl}"
+        url "${artifactory_context_url}/repo"
     }
     mavenLocal()
 }
@@ -83,9 +83,13 @@ dependencies {
     compile 'org.lucee:hsqldb:2.3.3' // a database lucee supports out of the box
     compile 'org.lucee.lib:icepdf-core:3.1.0_3'
     compile 'org.lucee.lib:javasysmon:0.3.3' // tool behind getCPUUsage()
-    compile 'org.lucee.lib:jcifs:1.3.17' //SMB:// protocol for file operations
+    compile('eu.agno3.jcifs:jcifs-ng:2.1.5') {
+        exclude(group: 'javax.servlet', module: 'servlet-api')
+    }
     compile 'org.jfree:jfreechart:1.0.19' //cfchart
-    compile 'net.sf.jmimemagic:jmimemagic:0.1.4'
+    compile('net.sf.jmimemagic:jmimemagic:0.1.4') {
+        exclude(group: 'log4j', module: 'log4j')
+    }
     compile 'org.lucee.lib:jpedal_gpl:3.51b12' //looks like it makes thumbnails from pdfs
     compile(group: "org.safehaus.jug", name: "jug", version: "2.0.0", classifier: "lgpl") //used for UUID creation
     compile 'org.ow2.asm:asm-all:4.0' //cfml compilation
@@ -117,7 +121,7 @@ dependencies {
     compile 'org.lucee.lib:xmlparserv2:1.2.2'
     compile 'org.ccil.cowan.tagsoup:tagsoup:1.2.1'
     compile 'org.textmining:tm-extractors:0.4'
-    compile 'log4j:log4j:1.2.16'
+    compile 'io.confluent:confluent-log4j:1.2.17-cp9'
 	compile 'org.lucee.lib:sun-jndi-ldap:1.2.4'
 	compile 'org.lucee.lib:sun-jndi-ldapbp:1.2.4'
 	compile 'org.lucee.lib:sun-jndi-ldapsec:1.2.4'
@@ -165,7 +169,7 @@ task renameFile(dependsOn: 'core') {
 
 
 artifactory {
-    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+    contextUrl = "${artifactory_context_url}"   //The base Artifactory URL if not overridden by the publisher/resolver
     publish {
         repository {
             if (release == "true") {
@@ -173,8 +177,8 @@ artifactory {
             } else {
                 repoKey = "libs-snapshot-local"
             }
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
+            username = artifactory_user
+            password = artifactory_api_key
         }
         defaults {
             publications('LuceeCore')
@@ -183,8 +187,8 @@ artifactory {
     resolve {
         repository {
             repoKey = 'libs-release'
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
+            username = artifactory_user
+            password = artifactory_api_key
         }
     }
 }

@@ -26,7 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
 
-import jcifs.smb.NtlmPasswordAuthentication;
+import jcifs.smb.NtlmPasswordAuthenticator;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileOutputStream;
@@ -44,7 +44,7 @@ public class SMBResource extends ResourceSupport implements Resource{
 
 	private SMBResourceProvider provider;
 	private String path;
-	private NtlmPasswordAuthentication auth;
+	private NtlmPasswordAuthenticator auth;
 	private SmbFile _smbFile;
 	private SmbFile _smbDir;
 	
@@ -58,7 +58,7 @@ public class SMBResource extends ResourceSupport implements Resource{
 		_init(_stripAuth(path), _extractAuth(path));
 	}
 	
-	public SMBResource(SMBResourceProvider provider, String path, NtlmPasswordAuthentication auth) {
+	public SMBResource(SMBResourceProvider provider, String path, NtlmPasswordAuthenticator auth) {
 		this(provider);
 		_init(path, auth);
 	}
@@ -68,13 +68,13 @@ public class SMBResource extends ResourceSupport implements Resource{
 		_init(ResourceUtil.merge(_stripAuth(parent), child), _extractAuth(parent));
 	}
 
-	public SMBResource(SMBResourceProvider provider, String parent, String child, NtlmPasswordAuthentication auth) {
+	public SMBResource(SMBResourceProvider provider, String parent, String child, NtlmPasswordAuthenticator auth) {
 		this(provider);
 		_init(ResourceUtil.merge(_stripAuth(parent), child), auth);
 		
 	}
 	
-	private void _init (String path, NtlmPasswordAuthentication auth ) {
+	private void _init (String path, NtlmPasswordAuthenticator auth ) {
 		//String[] pathName=ResourceUtil.translatePathName(path);
 		this.path = _stripScheme(path);
 		this.auth = auth;
@@ -84,8 +84,8 @@ public class SMBResource extends ResourceSupport implements Resource{
 	private String _stripScheme(String path) {
 		return path.replace(_scheme(), "/");
 	}
-	
-	private String _userInfo (String path) {
+
+	private SMBUserInfo _extractUserInfoFromPath (String path) {
 		
 		try {
 			//use http scheme just so we can parse the url and get the user info out
@@ -95,16 +95,16 @@ public class SMBResource extends ResourceSupport implements Resource{
 			return SMBResourceProvider.unencryptUserInfo(result);
 		}
 		catch (MalformedURLException e) {
-			return "";
+			return null;
 		}
 	}
 	
 	
-	private static String _userInfo (NtlmPasswordAuthentication auth,boolean addAtSign) {
+	private static String _userInfo (NtlmPasswordAuthenticator auth) {
 		String result = "";
 		if( auth != null) {
-			if( !StringUtils.isEmpty( auth.getDomain() ) ) {
-				result += auth.getDomain() + ";";
+			if( !StringUtils.isEmpty( auth.getUserDomain() ) ) {
+				result += auth.getUserDomain() + ";";
 			}
 			if( !StringUtils.isEmpty( auth.getUsername() ) ) {
 				result += auth.getUsername() + ":";
@@ -112,15 +112,16 @@ public class SMBResource extends ResourceSupport implements Resource{
 			if( !StringUtils.isEmpty( auth.getPassword() ) ) {
 				result += auth.getPassword();
 			}
-			if( addAtSign && !StringUtils.isEmpty( result ) ) {
-				result += "@";
-			}
 		}
 		return result;
 	}
 	
-	private NtlmPasswordAuthentication _extractAuth(String path) {
-		return new NtlmPasswordAuthentication( _userInfo(path) );
+	private NtlmPasswordAuthenticator _extractAuth(String path) {
+		SMBUserInfo userInfo = _extractUserInfoFromPath(path);
+		if (userInfo == null) {
+			return new NtlmPasswordAuthenticator();
+		}
+		return new NtlmPasswordAuthenticator(userInfo.getDomain(), userInfo.getUsername(), userInfo.getPassword());
 	}
 	
 	private String _stripAuth(String path) {
@@ -153,14 +154,14 @@ public class SMBResource extends ResourceSupport implements Resource{
 		return _calculatePath(path,null);
 	}
 	
-	private String _calculatePath(String path, NtlmPasswordAuthentication auth) {
+	private String _calculatePath(String path, NtlmPasswordAuthenticator auth) {
 		
 		if ( !path.startsWith( _scheme() ) ) {
 			if(path.startsWith("/") || path.startsWith("\\")) {
 				path = path.substring(1);
 			}
 			if (auth != null) {
-				path = SMBResourceProvider.encryptUserInfo(_userInfo(auth,false)).concat("@").concat(path);
+				path = SMBResourceProvider.encryptUserInfo(_userInfo(auth)).concat("@").concat(path);
 			}
 			path = _scheme().concat( path );
 		}
@@ -223,7 +224,7 @@ public class SMBResource extends ResourceSupport implements Resource{
 		}
 	}
 
-	private SmbFile _getTempFile(SmbFile directory, NtlmPasswordAuthentication auth) throws SmbException {
+	private SmbFile _getTempFile(SmbFile directory, NtlmPasswordAuthenticator auth) throws SmbException {
 		if (!directory.isDirectory()) return null;
 		Random r = new Random();
 		

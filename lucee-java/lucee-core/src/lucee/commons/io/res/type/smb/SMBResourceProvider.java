@@ -18,21 +18,25 @@
  **/
 package lucee.commons.io.res.type.smb;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.charset.Charset;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import jcifs.smb.NtlmPasswordAuthentication;
+import jcifs.CIFSContext;
+import jcifs.context.SingletonContext;
+import jcifs.smb.NtlmPasswordAuthenticator;
 import jcifs.smb.SmbFile;
 import lucee.commons.io.res.Resource;
 import lucee.commons.io.res.ResourceProvider;
 import lucee.commons.io.res.Resources;
 import lucee.commons.io.res.util.ResourceLockImpl;
 import lucee.commons.lang.StringUtil;
-
 import org.apache.commons.codec.binary.Base32;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class SMBResourceProvider implements ResourceProvider{
 
@@ -42,6 +46,7 @@ public class SMBResourceProvider implements ResourceProvider{
 	private final static Charset UTF8 = Charset.forName("UTF-8");
 	private final ResourceLockImpl lock=new ResourceLockImpl(10000,false);
 	private final static Base32 Base32DecEnc = new Base32();
+
 	@Override
 	public ResourceProvider init(String scheme, Map arguments) {
 		_setProperties(arguments);
@@ -60,11 +65,9 @@ public class SMBResourceProvider implements ResourceProvider{
 		if (dfsDisabled == null) dfsDisabled = "true";
 		System.setProperty("jcifs.resolveOrder", resolveOrder);
 		System.setProperty("jcifs.smb.client.dfs.disabled", dfsDisabled);
-		
-		
 	}
 
-	public Resource getResource(String path, NtlmPasswordAuthentication auth) {
+	public Resource getResource(String path, NtlmPasswordAuthenticator auth) {
 		return new SMBResource( this, path, auth );
 	}
 	
@@ -118,9 +121,9 @@ public class SMBResourceProvider implements ResourceProvider{
 		return false;
 	}
 
-	public SmbFile getFile(String path, NtlmPasswordAuthentication auth) {
+	public SmbFile getFile(String path, NtlmPasswordAuthenticator auth) {
 		try {
-			return new SmbFile(path,auth);
+			return new SmbFile(path, baseContext().withCredentials(auth));
 		}
 		catch (MalformedURLException e) {
 			return null; //null means it is a bad SMBFile
@@ -131,16 +134,36 @@ public class SMBResourceProvider implements ResourceProvider{
 		return userInfo.startsWith(ENCRYPTED_PREFIX);
 	}
 
-	public static String unencryptUserInfo(String userInfo) {
-		if(!isEncryptedUserInfo(userInfo)) return userInfo; 
+	public static SMBUserInfo unencryptUserInfo(String userInfo) {
+		if(!isEncryptedUserInfo(userInfo)) return extractUserInfo(userInfo);
 		String encrypted = userInfo.replaceAll(Pattern.quote(ENCRYPTED_PREFIX),"");
 		byte[] unencryptedBytes = Base32DecEnc.decode(encrypted.toUpperCase());
-		return new String(unencryptedBytes, UTF8);
-		
+		try {
+			return extractUserInfo(URLDecoder.decode(new String(unencryptedBytes, UTF8), StandardCharsets.UTF_8.name()));
+		} catch (UnsupportedEncodingException e) {
+			throw new UnsupportedOperationException(e.getMessage());
+		}
 	}
-	
+
+	private static SMBUserInfo extractUserInfo(String userInfo) {
+		if (userInfo != null) {
+			String[] result = userInfo.split(";",2);
+			if (result.length == 2) {
+				String[] remaining = result[1].split(":", 2);
+				if (remaining.length == 2) {
+					return new SMBUserInfo(result[0], remaining[0], remaining[1]);
+				}
+			}
+		}
+		return null;
+	}
+
 	public static String encryptUserInfo(String userInfo) {
 		byte[] bytes = Base32DecEnc.encode( userInfo.getBytes(UTF8) );
 		return ENCRYPTED_PREFIX.concat(new String(bytes, UTF8));
+	}
+
+	public static CIFSContext baseContext() {
+		return SingletonContext.getInstance();
 	}
 }
