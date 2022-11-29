@@ -9,8 +9,8 @@
 - Add a file name `gradle.properties` to the root of the project with the following contents:
 ```
 artifactory_user=<artifactory_user_name>
-artifactory_password=<artifactory_password>
-artifactory_contextUrl=<path_to_labs_artifactory>
+artifactory_api_key=<artifactory_api_key>
+artifactory_context_url=<path_to_labs_artifactory>
 release=false    
 ```
 - Run the gradle `build` task

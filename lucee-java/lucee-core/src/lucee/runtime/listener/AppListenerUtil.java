@@ -481,8 +481,6 @@ public final class AppListenerUtil {
 		PropertiesImpl s3 = new PropertiesImpl();
 		if(!StringUtil.isEmpty(accessKeyId))s3.setAccessKeyId(accessKeyId);
 		if(!StringUtil.isEmpty(awsSecretKey))s3.setSecretAccessKey(awsSecretKey);
-		if(!StringUtil.isEmpty(defaultLocation))s3.setDefaultLocation(defaultLocation);
-		if(!StringUtil.isEmpty(host))s3.setHost(host);
 		return s3;
 	}
 

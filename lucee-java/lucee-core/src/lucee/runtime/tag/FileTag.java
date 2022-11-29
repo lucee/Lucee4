@@ -37,7 +37,6 @@ import lucee.commons.io.IOUtil;
 import lucee.commons.io.ModeUtil;
 import lucee.commons.io.SystemUtil;
 import lucee.commons.io.res.Resource;
-import lucee.commons.io.res.type.s3.S3;
 import lucee.commons.io.res.type.s3.S3Resource;
 import lucee.commons.io.res.util.ModeObjectWrap;
 import lucee.commons.io.res.util.ResourceUtil;
@@ -459,7 +458,6 @@ public final class FileTag extends BodyTagImpl {
 		catch(Throwable t) {t.printStackTrace();
 			throw new ApplicationException(t.getMessage());
 		}
-		setACL(destination,acl);
 		setMode(destination,mode);
         setAttributes(destination,attributes);
 	}
@@ -522,37 +520,8 @@ public final class FileTag extends BodyTagImpl {
             ae.setStackTrace(e.getStackTrace());
             throw ae;
 		}
-		setACL(destination,acl);
 		setMode(destination,mode);
         setAttributes(destination,attributes);
-	}
-
-	private static void setACL(Resource res,Object acl) throws PageException {
-		String scheme = res.getResourceProvider().getScheme();
-		
-		if("s3".equalsIgnoreCase(scheme)){
-			S3Resource s3r=(S3Resource) res;
-			
-			if(acl!=null){
-				try {
-					// old way
-					if(Decision.isString(acl)) {
-						s3r.setACL(S3.toIntACL(Caster.toString(acl)));
-					}
-					// new way
-					else {
-						StoreSetACL.invoke(s3r, acl);
-					}
-				} catch (IOException e) {
-					throw Caster.toPageException(e);
-				}
-			}
-			
-		}
-		// set acl for s3 resource
-		/*if(res instanceof S3Resource) {
-			((S3Resource)res).setACL(acl);
-		}*/
 	}
 
 	private static Resource makeUnique(Resource res) {
@@ -574,7 +543,6 @@ public final class FileTag extends BodyTagImpl {
 	 */
 	private void actionDelete() throws PageException {
 		checkFile(false,false,false,false);
-		setACL(file,acl);
 		try {
 			if(!file.delete()) throw new ApplicationException("can't delete file ["+file+"]");
 		}
@@ -660,7 +628,6 @@ public final class FileTag extends BodyTagImpl {
             
             throw new ApplicationException("can't write file "+file.getAbsolutePath(),e.getMessage());
         }
-        setACL(file,acl);
         setMode(file,mode);
         setAttributes(file,attributes);
     }
@@ -679,8 +646,7 @@ public final class FileTag extends BodyTagImpl {
             
             throw new ApplicationException("can't touch file "+file.getAbsolutePath(),e.getMessage());
         }
-        
-        setACL(file,acl);
+
         setMode(file,mode);
         setAttributes(file,attributes);
     }
@@ -711,7 +677,6 @@ public final class FileTag extends BodyTagImpl {
         catch (IOException e) {
             throw new ApplicationException("can't write file",e.getMessage());
         }
-        setACL(file,acl);
 		setMode(file,mode);
         setAttributes(file,attributes);
 	}
@@ -951,9 +916,7 @@ public final class FileTag extends BodyTagImpl {
 			cffile.set("filewasoverwritten",Caster.toBoolean(fileWasOverwritten));
 			cffile.set("filewasrenamed",Caster.toBoolean(fileWasRenamed));
 			cffile.set("filewassaved",Boolean.TRUE);
-			
 
-			setACL(destination,acl);
 			setMode(destination,mode);
 	        setAttributes(destination, attributes);
 	        return cffile;
