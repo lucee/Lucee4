@@ -54,7 +54,7 @@
 	<classpathentry exported="true" kind="lib" path="jffmpeg.jar"/>
 	<classpathentry exported="true" kind="lib" path="jfreechart-patch.jar"/>
 	<classpathentry exported="true" kind="lib" path="jfreechart.jar"/>
-	<classpathentry exported="true" kind="lib" path="jmimemagic.jar"/>
+	<classpathentry exported="true" kind="lib" path="tika-core.jar"/>
 	<classpathentry exported="true" kind="lib" path="jpedal_gpl.jar"/>
 	<classpathentry exported="true" kind="lib" path="jta.jar"/>
 	<classpathentry exported="true" kind="lib" path="jtds.jar"/>
