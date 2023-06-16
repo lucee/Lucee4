@@ -102,9 +102,7 @@ dependencies {
     compile 'org.lucee.lib:javasysmon:0.3.3' // tool behind getCPUUsage()
     compile 'org.lucee.lib:jcifs:1.3.17' //SMB:// protocol for file operations
     compile 'org.jfree:jfreechart:1.0.19' //cfchart
-    compile('net.sf.jmimemagic:jmimemagic:0.1.4') {
-        exclude(group: 'log4j', module: 'log4j')
-    }
+    compile 'org.apache.tika:tika-core:2.8.0'
     compile 'org.lucee.lib:jpedal_gpl:3.51b12' //looks like it makes thumbnails from pdfs
     compile(group: "org.safehaus.jug", name: "jug", version: "2.0.0", classifier: "lgpl") //used for UUID creation
     compile 'org.ow2.asm:asm-all:4.0' //cfml compilation
@@ -144,7 +142,6 @@ dependencies {
 	compile 'org.lucee.lib:sun-security-jaas:1.2.4'
 	compile 'org.lucee.lib:sun-mail:1.3.3_01'
 	compile 'org.lucee.lib:sun-xml-saaj:1.2.1'
-
 }
 
 
@@ -181,7 +178,6 @@ task renameFile(dependsOn: 'core') {
         file('dist/' + libversion + '.lco').renameTo(file('dist/' + libversion + snapshotText + '.jar'))
     }
 }
-
 
 artifactory {
     contextUrl = "${artifactory_context_url}"   //The base Artifactory URL if not overridden by the publisher/resolver
