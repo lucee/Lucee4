@@ -8,7 +8,7 @@
 	<classpathentry kind="lib" path="/Lucee-Libs/apache-jakarta-commons-collections.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/apache-jakarta-commons-compress.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/apache-jakarta-commons-discovery.jar"/>
-	<classpathentry kind="lib" path="/Lucee-Libs/apache-jakarta-commons-email.jar"/>
+	<classpathentry kind="lib" path="/Lucee-Libs/apache-commons-email.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/apache-jakarta-commons-fileupload.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/apache-jakarta-commons-httpclient.jar"/>
 	<classpathentry kind="lib" path="/Lucee-Libs/apache-jakarta-commons-io.jar"/>

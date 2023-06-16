@@ -5,7 +5,7 @@
 	<classpathentry exported="true" kind="lib" path="apache-jakarta-commons-collections.jar"/>
 	<classpathentry exported="true" kind="lib" path="apache-jakarta-commons-compress.jar"/>
 	<classpathentry exported="true" kind="lib" path="apache-jakarta-commons-discovery.jar"/>
-	<classpathentry exported="true" kind="lib" path="apache-jakarta-commons-email.jar"/>
+	<classpathentry exported="true" kind="lib" path="apache-commons-email.jar"/>
 	<classpathentry exported="true" kind="lib" path="apache-jakarta-commons-fileupload.jar"/>
 	<classpathentry exported="true" kind="lib" path="apache-jakarta-commons-httpclient.jar"/>
 	<classpathentry exported="true" kind="lib" path="apache-jakarta-commons-io.jar"/>

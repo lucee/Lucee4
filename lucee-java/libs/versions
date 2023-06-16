@@ -103,6 +103,7 @@
 	<jar version="3.8" path="apache-poi-tm-extractors.jar" comment=""/>
 	<jar version="4.5" path="apache-commons-httpclient.jar" comment=""/>
 	<jar version="4.4.1" path="apache-commons-httpcore.jar" comment=""/>
+	<jar version="1.5" path="apache-commons-email.jar" comment=""/>
 	<jar version="4.5" path="apache-commons-httpmime.jar" comment=""/>
 	<jar version="2.3.0" path="xmlbeans.jar" comment=""/>
 	<jar version="0.3.3" path="javasysmon.jar" comment=""/>
