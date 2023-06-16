@@ -19,6 +19,9 @@ release=false
 #### How to publish:
 - Run the `artifactoryPublish` gradle task.
 
+#### Incrementing version:
+- Increment the version inside of `Info.ini`
+
 #### Major Differences Between Mainline Lucee and MasterControl's:
 - This fork uses a custom version of [Hibernate 3.5](https://github.com/MasterControlInc/hibernate-orm/tree/lucee-hibernate) which has all the hibernate packages changed from `org.hibernate` to `org.luceehibernate`. The purpose for this is so that a different version of Hibernate can also sit on the classpath at the same time. In order to accomodate this all references to Hibernate in this fork reference `org.luceehibernate`.
 - Secondary cache fallback option of EHCache has been removed due to incompatibility with previous change.
