@@ -326,11 +326,13 @@ public final class SchedulerImpl implements Scheduler {
 
 	private static void logPausedScheduledTask(Config config, String name) {
 		Log logger = getLog(config);
-		Date currentTime = new Date();
+		String currentTime = new Date().toInstant().toString();
 
-		logger.log(Log.LEVEL_ERROR, "", "Test");
+		logger.log(Log.LEVEL_ERROR, "", "");
 
 		//TODO: use DateTimeImpl, or more useful date format
+		logger.log(Log.LEVEL_INFO, "", "This one should work");
+		logger.log(Log.LEVEL_INFO, "", currentTime);
 //		logger.log(Log.LEVEL_INFO, "", "Scheduled task " + name + " paused at " + currentTime.toInstant().toString());
 //		logger.log(Log.LEVEL_INFO, "", "EmailSender scheduled task paused at " + currentTime.toInstant().toString());
 	}
