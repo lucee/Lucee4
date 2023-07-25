@@ -323,14 +323,14 @@ public final class SchedulerImpl implements Scheduler {
 		return ((ConfigImpl) config).getLog("scheduler");
 	}
 
-	private static void logPausedScheduledTask(Config config, String name) {
+	private void logPausedScheduledTask(Config config, String name) throws ScheduleException {
 		Log logger = getLog(config);
 		String currentTime = new Date().toInstant().toString();
+		String scheduledTaskUrl = getScheduleTask(name).getUrl().toString();
 
-		logger.log(Log.LEVEL_ERROR, "", "");
+		logger.log(Log.LEVEL_ERROR, "", scheduledTaskUrl);
 
 		//TODO: use DateTimeImpl, or more useful date format
-		logger.log(Log.LEVEL_INFO, "", "This one should work");
 //		logger.log(Log.LEVEL_INFO, "", "Scheduled task " + name + " paused at " + currentTime.toInstant().toString());
 //		logger.log(Log.LEVEL_INFO, "", "EmailSender scheduled task paused at " + currentTime.toInstant().toString());
 	}
