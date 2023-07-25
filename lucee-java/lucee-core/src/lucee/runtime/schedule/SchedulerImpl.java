@@ -329,16 +329,17 @@ public final class SchedulerImpl implements Scheduler {
 		Log logger = getLog(config);
 		String currentTime = new Date().toInstant().toString();
 		String scheduledTaskUrl = getScheduleTask(name).getUrl().toString();
-		String regex = ".*EmailSender\\.cfc$";
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(scheduledTaskUrl);
-		String desiredPortion = matcher.group();
+		boolean isEmailSenderTask = scheduledTaskUrl.endsWith("ScheduledTasks/EmailSender.cfc");
 
-		logger.log(Log.LEVEL_ERROR, "", desiredPortion);
+//		String regex = ".*EmailSender\\.cfc$";
+//		Pattern pattern = Pattern.compile(regex);
+//		Matcher matcher = pattern.matcher(scheduledTaskUrl);
+//		String desiredPortion = matcher.group();
 
-		//TODO: use DateTimeImpl, or more useful date format
-//		logger.log(Log.LEVEL_INFO, "", "Scheduled task " + name + " paused at " + currentTime.toInstant().toString());
-//		logger.log(Log.LEVEL_INFO, "", "EmailSender scheduled task paused at " + currentTime.toInstant().toString());
+		logger.log(Log.LEVEL_ERROR, "", scheduledTaskUrl);
+		if (isEmailSenderTask) {
+			logger.log(Log.LEVEL_ERROR, "", "This is an emailsender task");
+		}
 	}
 
 	@Override
