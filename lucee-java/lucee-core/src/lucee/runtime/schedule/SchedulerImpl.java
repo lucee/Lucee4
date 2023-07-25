@@ -20,12 +20,15 @@ package lucee.runtime.schedule;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
+import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogAndSource;
 import lucee.commons.io.res.Resource;
 import lucee.commons.lang.StringUtil;
 import lucee.loader.engine.CFMLEngine;
 import lucee.runtime.config.Config;
+import lucee.runtime.config.ConfigImpl;
 import lucee.runtime.engine.CFMLEngineImpl;
 import lucee.runtime.exp.PageException;
 import lucee.runtime.net.proxy.ProxyData;
@@ -59,7 +62,6 @@ public final class SchedulerImpl implements Scheduler {
      * constructor of the sheduler
      * @param config 
      * @param schedulerDir schedule file
-     * @param log
      * @throws IOException
      * @throws SAXException
      * @throws PageException
@@ -80,7 +82,6 @@ public final class SchedulerImpl implements Scheduler {
      * creates a empty Scheduler, used for event gateway context
      * @param engine
      * @param config
-     * @param log
      * @throws SAXException
      * @throws IOException
      * @throws PageException
@@ -301,8 +302,8 @@ public final class SchedulerImpl implements Scheduler {
 
 	    for(int i=0;i<tasks.length;i++) {
 	        if(tasks[i].getTask().equalsIgnoreCase(name)) {
+				logTasksName(config, name);
 	        	tasks[i].setPaused(pause);
-	            
 	        }
 	    }
 	    
@@ -316,6 +317,23 @@ public final class SchedulerImpl implements Scheduler {
 	    
 	    //init();
 	    su.store(doc,schedulerFile);
+	}
+
+	private static Log getLog(Config config) {
+		return ((ConfigImpl) config).getLog("scheduler");
+	}
+
+	private static void logEmailSender(Config config, String name) {
+		Log logger = getLog(config);
+		Date currentTime = new Date();
+
+		//TODO: use DateTimeImpl, or more useful date format
+		logger.log(Log.LEVEL_INFO, "", "EmailSender scheduled task paused at " + currentTime.toInstant().toString());
+	}
+
+	private static void logTasksName(Config config, String name) {
+		Log logger = getLog(config);
+		logger.log(Log.LEVEL_ERROR, "", "Task name: " + name);
 	}
 
 	@Override
