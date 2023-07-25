@@ -327,18 +327,17 @@ public final class SchedulerImpl implements Scheduler {
 
 	private void logPausedScheduledTask(Config config, String name) throws ScheduleException {
 		Log logger = getLog(config);
-		String currentTime = new Date().toInstant().toString();
 		String scheduledTaskUrl = getScheduleTask(name).getUrl().toString();
 		boolean isEmailSenderTask = scheduledTaskUrl.endsWith("ScheduledTasks/EmailSender.cfc");
 
+		//TODO: Why does this regex break everything?
 //		String regex = ".*EmailSender\\.cfc$";
 //		Pattern pattern = Pattern.compile(regex);
 //		Matcher matcher = pattern.matcher(scheduledTaskUrl);
 //		String desiredPortion = matcher.group();
 
-		logger.log(Log.LEVEL_ERROR, "", scheduledTaskUrl);
 		if (isEmailSenderTask) {
-			logger.log(Log.LEVEL_ERROR, "", "This is an emailsender task");
+			logger.log(Log.LEVEL_INFO, "", "The EmailSender scheduled task was paused");
 		}
 	}
 
