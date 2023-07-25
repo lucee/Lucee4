@@ -302,8 +302,8 @@ public final class SchedulerImpl implements Scheduler {
 
 	    for(int i=0;i<tasks.length;i++) {
 	        if(tasks[i].getTask().equalsIgnoreCase(name)) {
-				logTasksName(config, name);
 	        	tasks[i].setPaused(pause);
+				logPausedScheduledTask(config, name);
 	        }
 	    }
 	    
@@ -323,17 +323,13 @@ public final class SchedulerImpl implements Scheduler {
 		return ((ConfigImpl) config).getLog("scheduler");
 	}
 
-	private static void logEmailSender(Config config, String name) {
+	private static void logPausedScheduledTask(Config config, String name) {
 		Log logger = getLog(config);
 		Date currentTime = new Date();
 
 		//TODO: use DateTimeImpl, or more useful date format
-		logger.log(Log.LEVEL_INFO, "", "EmailSender scheduled task paused at " + currentTime.toInstant().toString());
-	}
-
-	private static void logTasksName(Config config, String name) {
-		Log logger = getLog(config);
-		logger.log(Log.LEVEL_ERROR, "", "IT CHANGED AGAIN: " + name);
+		logger.log(Log.LEVEL_INFO, "", "Scheduled task " + name + " paused at " + currentTime.toInstant().toString());
+//		logger.log(Log.LEVEL_INFO, "", "EmailSender scheduled task paused at " + currentTime.toInstant().toString());
 	}
 
 	@Override
