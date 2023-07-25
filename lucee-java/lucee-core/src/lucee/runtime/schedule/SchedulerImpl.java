@@ -303,9 +303,10 @@ public final class SchedulerImpl implements Scheduler {
 	    for(int i=0;i<tasks.length;i++) {
 	        if(tasks[i].getTask().equalsIgnoreCase(name)) {
 	        	tasks[i].setPaused(pause);
-				logPausedScheduledTask(config, name);
 	        }
 	    }
+
+		logPausedScheduledTask(config, name);
 	    
 	    NodeList list = doc.getDocumentElement().getChildNodes();
 	    Element el=su.getElement(list,"name", name);
@@ -327,8 +328,10 @@ public final class SchedulerImpl implements Scheduler {
 		Log logger = getLog(config);
 		Date currentTime = new Date();
 
+		logger.log(Log.LEVEL_ERROR, "", "Test");
+
 		//TODO: use DateTimeImpl, or more useful date format
-		logger.log(Log.LEVEL_INFO, "", "Scheduled task " + name + " paused at " + currentTime.toInstant().toString());
+//		logger.log(Log.LEVEL_INFO, "", "Scheduled task " + name + " paused at " + currentTime.toInstant().toString());
 //		logger.log(Log.LEVEL_INFO, "", "EmailSender scheduled task paused at " + currentTime.toInstant().toString());
 	}
 
