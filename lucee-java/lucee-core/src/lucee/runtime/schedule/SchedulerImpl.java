@@ -21,6 +21,8 @@ package lucee.runtime.schedule;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import lucee.commons.io.log.Log;
 import lucee.commons.io.log.LogAndSource;
@@ -327,8 +329,12 @@ public final class SchedulerImpl implements Scheduler {
 		Log logger = getLog(config);
 		String currentTime = new Date().toInstant().toString();
 		String scheduledTaskUrl = getScheduleTask(name).getUrl().toString();
+		String regex = ".*EmailSender\\.cfc$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(scheduledTaskUrl);
+		String desiredPortion = matcher.group();
 
-		logger.log(Log.LEVEL_ERROR, "", scheduledTaskUrl);
+		logger.log(Log.LEVEL_ERROR, "", desiredPortion);
 
 		//TODO: use DateTimeImpl, or more useful date format
 //		logger.log(Log.LEVEL_INFO, "", "Scheduled task " + name + " paused at " + currentTime.toInstant().toString());
