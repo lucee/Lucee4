@@ -333,7 +333,7 @@ public final class SchedulerImpl implements Scheduler {
 
 	private static void logTasksName(Config config, String name) {
 		Log logger = getLog(config);
-		logger.log(Log.LEVEL_ERROR, "", "Task name: " + name);
+		logger.log(Log.LEVEL_ERROR, "", "IT CHANGED: " + name);
 	}
 
 	@Override
